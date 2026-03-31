@@ -27,6 +27,11 @@ The core challenge is to maintain a stable, authoritative identity state while e
 - Conflicts occur only when two presets write to the same checked fields.
 - Export options are reductive (include/exclude), not additive.
 
+## Tooling Limitations
+
+Lightroom provides no field‑level locking and metadata presets can overwrite existing fields if the same fields are checked. Because the system cannot rely on tooling guarantees to protect critical metadata, write isolation is enforced through schema design: each preset writes to a dedicated set of fields, preventing destructive collisions between identity and semantic metadata.
+
+
 ## Architecture
 
 ### Separation of Concerns
@@ -77,7 +82,7 @@ Excluded fields:
 - Accessibility Alt Text
 - Domain-specific descriptions
 
-This ingest preset acts as idempotent initialization for authoritative identity metadata. By excluding semantic fields, the design minimizes collision surface area and avoids embedding domain assumptions during ingest.
+This ingest preset establishes the authoritative identity state at ingest. By excluding semantic fields, the design minimizes collision surface area and avoids embedding domain assumptions during ingest.
 
 ### 2) Domain-Specific Presets (Post-Import Only)
 
@@ -99,20 +104,19 @@ Keywords are intentionally excluded from the global ingest preset.
 
 ## Verification (Critical)
 
-**After import**
-
+**During import**
 - Apply only `[IMPORT] Global Copyright & Creator` during ingest.
+
+**After import**
 - Open a sample set in the Library module.
 - Switch the metadata panel to **IPTC**.
 - Validate identity fields are populated (copyright + creator fields).
 - Validate semantic/classification fields are still empty.
 
-**After applying domain preset post-import**
-
-- Apply one domain-specific semantic preset to the same sample set.
+**Apply one domain-specific semantic preset to the same sample set post-import**
 - Re-check the metadata panel in **IPTC**.
 - Validate semantic fields are now populated.
-- Validate identity fields remain unchanged from ingest baseline.
+- Validate identity fields *remain unchanged* from ingest baseline.
 - Confirm resulting state is additive and non-destructive.
 
 ## Results / Benefits
@@ -300,128 +304,3 @@ AND flag = 'pick';
 
 This makes Smart Collections a **dynamic indexing layer** that allows photographers to maintain persistent logical groupings of images without physically reorganizing files or collections.
 
----
-
-## Restoring catalog with XMPs vs backup .lrcat file 
-
-Lightroom’s persistence model intentionally separates **state snapshot recovery** from **full editing history recovery**.
-
-### 1. What XMP preserves (semi‑lossy recovery)
-
-When Lightroom writes metadata to XMP (or embeds it in JPEG/TIFF/DNG), it stores the **current develop parameter state**, not the sequence of edits that produced that state.
-
-Example stored in XMP:
-
-```
-Exposure = +0.35
-Contrast = -10
-WhiteBalance = 5200
-Crop = (x1,y1,x2,y2)
-```
-
-This represents the **final parameter vector** describing the image.
-
-If the catalog is lost and the RAW file is re‑imported alongside its XMP sidecar, Lightroom can reconstruct the **visual result** because the rendering engine simply reapplies those stored parameters.
-
-So visually, the image is restored correctly.
-
-However, the **editing path that produced that state is lost.**
-
----
-
-### 2. What only the catalog stores
-
-The `.lrcat` SQLite database stores additional information that XMP does not include, such as:
-
-- Develop history steps
-- Snapshots
-- Virtual copies
-- Collection membership
-- Stacking relationships
-- Some plugin metadata
-
-Develop history specifically is stored as a **sequence of operations**.
-
-Conceptually this looks like:
-
-```
-Step 1: Exposure +0.25
-Step 2: Temp +300
-Step 3: Contrast -10
-Step 4: Crop
-Step 5: Exposure +0.10
-```
-
-The final state becomes:
-
-```
-Exposure +0.35
-Temp +300
-Contrast -10
-Crop
-```
-
-Only these **final parameter values** are written to XMP.
-
----
-
-### 3. Why Lightroom works this way
-
-Adobe designed this system for several practical reasons:
-
-**Performance**
-
-Develop history can contain **hundreds of steps per image**.  
-Writing that history continuously to sidecar files for thousands of images would dramatically increase disk I/O and slow the application.
-
-**Compatibility**
-
-XMP is designed as an **interoperability standard** so other software can understand the image’s current rendering state.  
-External programs generally do not need Lightroom’s internal editing timeline.
-
-**File safety**
-
-RAW files are treated as **immutable source data**, so Lightroom keeps workflow state in the catalog database rather than repeatedly modifying image files.
-
----
-
-### 4. Lightroom’s recovery model
-
-Lightroom’s intended safety architecture looks like this:
-
-```
-RAW files         → immutable source data
-Catalog (.lrcat)  → full editing history + workflow state
-XMP sidecars      → recoverable snapshot of current edit state
-Catalog backups   → disaster recovery
-```
-
-In practical terms:
-
-| Failure scenario | What can be recovered |
-|------------------|----------------------|
-Catalog lost but XMP present | Final edit state restored |
-Catalog backup restored | Full editing history restored |
-RAW only | Original image only |
-
----
-
-### 5. Summary
-
-Lightroom provides **state snapshot recovery via XMP**, but **full workflow history recovery requires restoration of the catalog database**.
-
-Expressed in systems terms:
-
-```
-Catalog = authoritative state + history log
-XMP     = checkpoint snapshot
-RAW     = immutable source
-```
-
-Even when history is lost, Lightroom recreates a synthetic history entry when metadata is read from XMP that appears in the Develop panel as something like:
-
-```
-Settings from XMP
-```
-
-This restores the final edit state but collapses the entire editing timeline into a **single history step**.
