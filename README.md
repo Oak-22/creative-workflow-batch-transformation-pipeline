@@ -81,21 +81,6 @@ Focus areas:
 - failure analysis for model drift, mask instability, and domain mismatch
 - evaluation of when AI assistance remains deterministic enough for pipeline use
 
-## Naming Conventions
-
-Recommended file and folder naming conventions:
-
-- Use kebab-case for directories and portfolio-facing markdown files.
-- Remove dates from primary artifact names unless the date is analytically important.
-- Reserve dates for version history, changelogs, or appendix material.
-- Prefer `README.md` inside each case-study folder so each study opens cleanly in GitHub and local editors.
-
-Examples:
-
-- `Image_Metadata_Pipeline_2026-02-26.md` -> `case-studies/metadata-ingestion-and-enrichment/README.md`
-- `Baseline_Image_Noramlization_Pipeline_2026-03-03_.md` -> `case-studies/baseline-image-normalization/README.md`
-- Future diagrams: `system-context.png`, `stage-1-luminance-normalization.png`, `mask-rebinding-flow.png`
-- Future appendices: `appendix-validation-checklist.md`, `appendix-failure-modes.md`
 
 ## Asset Placement Guidance
 
