@@ -1,4 +1,6 @@
-## Case Study: Designing a Deterministic Image Metadata System Under Tooling Constraints
+# Case Study: Metadata Ingestion and Enrichment Pipeline
+
+Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project.
 
 ## Executive Summary
 
@@ -20,11 +22,10 @@ The core challenge is to maintain a stable, authoritative identity state while e
 
 ## Key Constraints and Observations
 
-- The system/tooling allows only one metadata preset at import.
+- The system/tooling allows only one metadata preset at import, no native preset stacking.
 - Post-import presets are additive when checked fields do not overlap.
 - Conflicts occur only when two presets write to the same checked fields.
 - Export options are reductive (include/exclude), not additive.
-- There is no native preset stacking at ingest.
 
 ## Architecture
 
@@ -192,7 +193,7 @@ Smart Collections are best treated as a lightweight declarative indexing layer o
 
 ## Keyword Lists – Hierarchical Taxonomies for Scalable Metadata Management
 
-![Screenshot of Lightroom Classic keyword panel interface showing keyword hierarchies and management tools organized in a tree structure with parent and child keyword entries](images/lightroom-keyword-panel.png)
+![Screenshot of Lightroom Classic keyword panel interface showing keyword hierarchies and management tools organized in a tree structure with parent and child keyword entries](assets/images/lightroom-keyword-panel.png)
 
 
 ---

@@ -3,7 +3,13 @@ Date: 2026-02-26<br/>
 Category: Systems Design Case Study<br/>
 Domain: Image Processing Pipeline
 
-# Case Study: Designing a Baseline Image Normalization Pipeline for Heterogeneous Input Distributions
+# Case Study: Baseline Image Normalization Pipeline
+
+Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project.
+
+## Original Framing
+
+Designing a baseline image normalization pipeline for heterogeneous input distributions.
 
 ## Executive Summary
 
@@ -79,7 +85,6 @@ Stage 2 precomputes semantic masks to accelerate localized edits. Frequently use
 
 Stage 3 applies [exemplar](#exemplar-image)-driven batch adjustments (e.g., foliage, clothing, and skin tones) to achieve gallery-wide visual coherence. Key visual domains should remain perceptually consistent across the [dataset](#dataset) even as lighting conditions change throughout the shoot. For example, a subject with tan skin should retain that tone across images rather than appearing significantly lighter or darker due to exposure and color shifts. Exemplar calibration prevents these artifacts by defining a canonical reference for each domain and propagating that correction across the dataset.
 
-
 ---
 
 ## Pipeline Diagrams
@@ -97,9 +102,6 @@ Global Luminance Normalization
 Normalized Baseline Images
 (reduced luminance variance)
 ```
-
-
-
 ---
 
 ### Stage 2 — AI Semantic Segmentation
