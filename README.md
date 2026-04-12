@@ -64,7 +64,7 @@ creative-workflow-batch-transformation-pipeline/
 ## Pipeline Stages
 
 ### 1. Metadata Ingestion, Enrichment, and Query Pipeline
-Location: [pipeline_stages/001_metadata-ingestion-enrichment-query-pipeline/README.md](/Users/julianbuccat/Projects/dev/creative_workflow_batch_transformation_pipeline/pipeline_stages/001_metadata-ingestion-enrichment-query-pipeline/README.md)
+Location: [Stage 1 README](pipeline_stages/001_metadata-ingestion-enrichment-query-pipeline/README.md)
 
 Focus areas:
 - deterministic ingest behavior under single-preset constraints
@@ -73,7 +73,7 @@ Focus areas:
 - metadata-driven indexing and retrieval patterns enabling rapid ad-hoc queries and declarative views over image records
 
 ### 2. Baseline Image Normalization Pipeline
-Location: [pipeline_stages/002_baseline-image-normalization/README.md](/Users/julianbuccat/Projects/dev/creative_workflow_batch_transformation_pipeline/pipeline_stages/002_baseline-image-normalization/README.md)
+Location: [Stage 2 README](pipeline_stages/002_baseline-image-normalization/README.md)
 
 - luminance and color normalization across heterogeneous images with varying capture conditions
 - staged preprocessing establishing a normalized baseline before downstream pixel-level and further semantic operations
@@ -81,13 +81,11 @@ Location: [pipeline_stages/002_baseline-image-normalization/README.md](/Users/ju
 - increased workflow throughput while reducing operator cognitive load
 
 ### 3. Bulk AI Mask Definition Propagation 
-Location: [pipeline_stages/003_bulk-ai-mask-definition-propagation/README.md](/Users/julianbuccat/Projects/dev/creative_workflow_batch_transformation_pipeline/pipeline_stages/003_bulk-ai-mask-definition-propagation/README.md)
+Location: [Stage 3 README](pipeline_stages/003_bulk-ai-mask-definition-propagation/README.md)
 
 Focus areas:
 - procedural mask definitions propagated across datasets rather than copying pixel regions
 - dataset-scale application of semantic segmentation outputs to batch edit operations
 - qualitative evaluation of mask boundary accuracy and subject-detection completeness against manual editing results
 - analysis of when AI-assisted segmentation remains reliable enough for deterministic pipeline workflows
-
-
 
