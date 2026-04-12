@@ -25,15 +25,10 @@ This case study will evaluate whether AI-generated semantic masks can be treated
 - Validation Methodology
 - Results and Tradeoffs
 
-## Planned Assets
-
-- `assets/diagrams/mask-rebinding-flow.png`
-- `assets/diagrams/validation-gates.png`
-- `assets/images/example-mask-overlays.png`
-
 
 
 ----
+
 
 ## Deep Dive
 
@@ -130,3 +125,75 @@ Only a subset of the theoretical 448 mask operations were generated.
 
 The final mask set applied to each image depended entirely on the semantic content of that image, confirming that Lightroom’s masking pipeline copies procedural mask definitions and recomputes them per image using AI-driven segmentation.
 
+
+
+## Example Walkthroughs
+
+The following examples document the observed behavior described in the
+deep-dive section above.
+
+### Example 1: Subject Masking
+￼
+
+People Mask Aggregation
+
+
+
+￼
+
+
+
+
+￼
+
+
+
+
+
+￼
+
+Synchronize the People + Environment operation across all selected images. The operation is fault-tolerant, allowing it to be applied indiscriminately across the dataset—images without dust remain unaffected. Any remaining artifacts are verified and refined later during the manual editing stage that follows luminance normalization and batch AI mask segmentation.
+
+
+￼
+
+Lightroom copies mask definitions, not pixel masks. When pasted across multiple images, Lightroom runs AI-driven semantic segmentation on each image to recompute masks such as people, sky, and vegetation.
+
+The “Updating AI Settings” progress indicator represents the batch execution of these models across the selected photos.
+
+Conceptually, this resembles a machine learning inference pipeline:
+mask := detect_people(image)
+apply_adjustment(mask)
+
+Instead of copying results, the system copies the procedure and executes it across a dataset.
+
+If a mask does not apply to a given image (e.g., fewer detected people), Lightroom simply omits that mask rather than failing.
+
+
+￼
+
+For example above, we see that Foilage, Sky, and Background were successfully generated and apploed to one of the batched photos below, where Mask 1 -3 are not accessible (note: Since I, as an end user, dont have access to Lightroom’s AI Masking Tool internals, I can not say with certainty if the computation occurred for Mask 1 -3 partially, not at all, or entirely, but we can infer it was one of the first two possibilities. 
+
+
+
+￼
+￼
+￼
+
+In the 3 images above we see that the batch mask propagation correctly identified the 3 most important person subjects as desired. 
+
+
+---
+
+
+Back-of-the-envelope time savings:
+
+Manual Correction:
+Per image (~45 seconds) x 500 images = 375 mins
+
+Batch Correction:
+Tested across 3 photos. Batch application took roughly 20 seconds in
+practice, despite Lightroom estimating a longer duration.
+
+Per image (~10 seconds) x 500 images = 83.33 minutes at near
+full-automation, compared to 375 minutes for fully manual correction.

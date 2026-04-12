@@ -79,6 +79,26 @@ Stage 1 reduces this disparity by normalizing luminance first. Once tonal distri
 
 ---
 
+## Example: Local Corrective Cleanup Before Dataset-Wide Normalization
+
+The local corrective cleanup portion of this stage includes operations
+such as dust removal before dataset-wide normalization is applied.
+
+The images in this example show visible dust that is either on the
+camera body sensor or the camera lens, lowering image quality.
+
+Here we manually apply the Dust Distraction Removal feature to a single
+image under Lightroom's Develop module.
+
+Synchronize the Dust Removal operation across all selected images.
+Because the operation is fault-tolerant, it can be applied
+indiscriminately across the dataset, while images without dust are left
+unaffected. This enables efficient batch cleanup before the later
+normalization and downstream editing passes.
+
+
+---
+
 Stage 2 precomputes semantic masks to accelerate localized edits. Frequently used masks (such as skin, hair, clothing, and sky/ground) are generated automatically across the dataset. This eliminates the need to manually compute masks per image during editing, reducing repetitive actions and improving editing throughput.
 
 ---

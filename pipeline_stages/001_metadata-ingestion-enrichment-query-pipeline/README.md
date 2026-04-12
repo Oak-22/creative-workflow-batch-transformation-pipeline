@@ -6,8 +6,8 @@ Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project
 
 - **Constraint:** The system/tooling supports only one metadata preset at ingest.
 - **Risk:** Metadata collisions occur when multiple presets write the same fields, risking ownership overwrite.
-- **Architecture:** Split metadata into an immutable Identity Layer and a mutable Semantic Layer.
-- **Ingest:** Use a single authoritative preset to initialize ownership fields idempotently.
+- **Architecture:** Split metadata into a protected Identity Layer and a revisable Semantic Layer.
+- **Ingest:** Use a single authoritative preset to establish a stable ownership baseline at ingest.
 - **Enrichment:** Apply domain-specific presets post-ingest that write only classification fields.
 - **Safety:** Field-level write boundaries prevent overwrites by design, not by operator caution.
 - **Validation:** Deterministic IPTC-panel checklist used after ingest and after enrichment.
@@ -36,16 +36,16 @@ Lightroom provides no field‑level locking and metadata presets can overwrite e
 
 ### Separation of Concerns
 
-- **Identity Layer**: immutable, authoritative ownership/authorship state initialized at ingest.
+- **Identity Layer**: protected, authoritative ownership/authorship state initialized at ingest.
 - **Semantic Layer**: mutable, revisable classification/context state enriched post-ingest.
 - **Query Layer**: declarative logical views derived from metadata predicates (Smart Collections).
 
 ```text
 RAW Image
    ↓
-[Global Import Preset]
+[Copyright & Creator Import Preset]
    ↓
-Identity Layer (Immutable)
+Identity Layer (Protected)
 
    ↓ (post-import)
 [Domain Presets]
@@ -62,7 +62,7 @@ Derived Logical Views
 
 ### 1) Single Global Import Preset (Authoritative)
 
-**Preset name:** `[IMPORT] Global Copyright & Creator`
+**Metadata Preset name:** `[IMPORT] Global Copyright & Creator`
 
 Included identity fields:
 - IPTC Copyright
@@ -86,6 +86,8 @@ This ingest preset establishes the authoritative identity state at ingest. By ex
 
 ### 2) Domain-Specific Presets (Post-Import Only)
 
+**Metadata Preset name(s):** `Graduation — CSU Sacramento` | `Wedding`
+
 Domain presets are semantic enrichment presets applied after ingestion.
 
 - All identity/authorship/copyright fields are unchecked.
@@ -97,10 +99,17 @@ This enables safe batch enrichment while protecting authoritative metadata from 
 ### 3) Keywords Managed Separately
 
 Keywords are intentionally excluded from the global ingest preset.
-
-- Taxonomy evolves incrementally during selection and review.
+- Taxonomy evolves incrementally as the culled image set is reviewed and
+  the keyword hierarchy is refined over time.
 - Keyword assignment is explicit and post-ingest (Keyword List/Keyword Sets or semantic presets).
 - This preserves deliberate classification rather than implicit ingest-time tagging.
+
+#### Keyword Tags, Keyword Sets, and Keyword Lists
+
+Keyword Lists function as hierarchical taxonomies for scalable
+semantic metadata management.
+
+![Screenshot of Lightroom Classic keyword panel interface showing keyword hierarchies and management tools organized in a tree structure with parent and child keyword entries](assets/images/lightroom-keyword-panel.png)
 
 ## Verification (Critical)
 
@@ -108,7 +117,8 @@ Keywords are intentionally excluded from the global ingest preset.
 - Apply only `[IMPORT] Global Copyright & Creator` during ingest.
 
 **After import**
-- Open a sample set in the Library module.
+- Review 1-2 sample images from the ingested batch in the Library
+  module.
 - Switch the metadata panel to **IPTC**.
 - Validate identity fields are populated (copyright + creator fields).
 - Validate semantic/classification fields are still empty.
@@ -130,46 +140,79 @@ Keywords are intentionally excluded from the global ingest preset.
 ## Engineering Concepts Demonstrated
 
 - Constraint-driven design
-- Idempotent ingestion
 - Separation of concerns
-- Immutable vs mutable metadata layers
-- Conflict avoidance via field-level write boundaries
 - Deterministic initialization under tooling limits
+- Protected identity vs revisable semantic metadata
+- Conflict avoidance through non-overlapping field writes
 - Post-ingest enrichment pipeline design
 - Declarative views / logical indexing
-- Non-destructive state transitions
+- Non-destructive enrichment when field boundaries are respected
 - Auditability through explicit validation steps
 - Reproducibility via stable ingest baseline
-- Derived dataset modeling from metadata predicates
 
 ## Guiding Principle
 
 > **Authorship metadata should be automatic and irreversible.**
 > **Semantic metadata should be deliberate and revisable.**
 
-## Addendum: Smart Collections as a Declarative Indexing Layer
+## Downstream Querying: Smart Collections as Declarative Views
 
-### Motivation
+### Two Query Modes
 
-Smart Collections can be modeled as a query/indexing abstraction over stable source data, not just an organizational UI feature. This framing makes their behavior legible in systems terms.
+After establishing a repeatable metadata schema strategy, the catalog
+supports two distinct query modes:
+
+- **Ad-hoc Library filtering** = temporary, exploratory queries over
+  catalog metadata
+- **Smart Collections** = persistent, reusable saved predicates over
+  the same metadata store
+
+Both depend on the same enriched metadata foundation. The difference is
+whether the query is transient or saved as a reusable view.
+
+### Systems Framing
+
+Smart Collections can be understood as a query and indexing layer over
+stable metadata-backed source records, not just as an organizational UI
+feature. This makes their behavior more legible in systems terms.
 
 ### Conceptual Model
 
-- Photos = immutable source records
+- Photos = source records
 - Metadata fields (ratings, flags, keywords, dates, capture attributes) = structured columns
 - Smart Collections = saved predicates / declarative views
 
-Collections store selection logic, not copies of records. Membership is computed dynamically as metadata changes.
+Collections store selection logic, not copies of records. Membership is recomputed as metadata changes.
 
 ### Example: Highlights as Derived Dataset
 
 A “Highlights” view can be defined as:
 - Rating ≥ 4
-- Flag = Pick
-- Capture date within a target window
-- Optional keyword/domain filters
+- Flag = Pick (retained in the culled working set for downstream editing
+  and delivery)
+- Capture date range (e.g., 2024, 2025)
+- Optional keyword/domain filters (e.g., Events > Wedding, Details > Flower)
 
-This is equivalent to defining a curated high-signal derived dataset for downstream review.
+This produces a highly contextualized derived dataset for downstream
+review.
+
+Conceptual SQL equivalent:
+
+```sql
+SELECT *
+FROM photo_catalog
+WHERE rating >= 4
+  AND rejected = false
+  AND capture_year IN (2024, 2025)
+  AND (
+    keyword_path LIKE 'Events > Wedding%'
+    OR keyword_path LIKE 'Details > Flower%'
+  );
+```
+
+This is a conceptual analogue, not a literal Lightroom query surface.
+The point is that Smart Collections behave like saved declarative
+predicates over enriched metadata.
 
 ### Why This Matters
 
@@ -187,70 +230,10 @@ This is equivalent to defining a curated high-signal derived dataset for downstr
 
 ### Takeaway
 
-Smart Collections are best treated as a lightweight declarative indexing layer over metadata, enabling non-destructive, query-driven retrieval of image records.
+Smart Collections are best treated as a lightweight declarative
+indexing layer over metadata, enabling non-destructive, query-driven
+retrieval of image records.
 
-
----
-
-#  Keyword Tags, Keyword Sets, and Keyword Lists
-
-
-## Keyword Lists – Hierarchical Taxonomies for Scalable Metadata Management
-
-![Screenshot of Lightroom Classic keyword panel interface showing keyword hierarchies and management tools organized in a tree structure with parent and child keyword entries](assets/images/lightroom-keyword-panel.png)
-
-
----
-
-# Lightroom Catalog's Database Structure (SQL-Lite)
-
-## Filesystem-Sturcture
-
-Lightroom does **not store image pixel data inside the catalog**. Instead, the catalog functions as a metadata index that references image files stored on disk (local drives, external volumes, or network locations).
-
-Image files remain in their filesystem locations, for example:
-
-```
-/Volumes/Photos/2025/Weddings/Juan_Nicole/RAW/DSC01234.ARW
-```
-
-The Lightroom catalog (`.lrcat`) stores structured metadata describing those files.  
-This metadata can be divided into two broad categories: **pre‑import camera metadata** and **post‑import catalog metadata**
-
-**1. Pre‑import metadata (camera‑generated EXIF/IPTC)**  
-This metadata is written by the camera at shutter time and embedded directly in the image file. Lightroom reads these fields during import but does not originate them.
-
-Examples include:
-
-- Capture timestamp (`DateTimeOriginal`)
-- Camera make and model
-- Lens model and focal length
-- Exposure settings (ISO, shutter speed, aperture)
-- GPS coordinates (if enabled)
-
-**2. Post‑import catalog metadata (Lightroom‑generated)**  
-This metadata is created or modified after import and is stored in the Lightroom catalog (and optionally written to XMP sidecar files or embedded metadata) where:
-
-Catalog = primary metadata store
-
-XMP/embedded = optional synchronization layer
-
-
-
-Examples include:
-
-- File path references
-- Ratings and flags
-- Keyword associations
-- Collection membership
-- Editing history and develop settings
-
-In systems terms, the catalog behaves like a **relational metadata database** that indexes external assets rather than storing the assets themselves. This design allows Lightroom to organize and query very large photo libraries without duplicating image data.
-
-
-## Ad-hoc Library filtering vs Smart Collections 
-
-After establishing a repeatable metadata schema strategy, users can query the catalog in two primary ways: **interactive ad-hoc filtering** and **Smart Collections**. This is similar in function to interactive one-off sql qeuries using database clients and views containing defined, saved predicate / conditional logic.  
 
 ### Ad‑hoc Library Filtering
 
@@ -276,31 +259,5 @@ AND capture_year = 2023;
 
 The filter is evaluated immediately and the results are displayed, but the query definition is not saved. Changing the filter simply executes a different query against the catalog.
 
-### Smart Collections
 
-Smart Collections store **query definitions** inside the catalog and automatically evaluate them against the metadata store.
-
-Rather than storing copies of images, a Smart Collection stores a set of predicate rules such as:
-
-- Keyword contains "rings"
-- capture data between 2025-01-01 – 2025-12-31
-
-
-Whenever metadata changes, Lightroom re-evaluates those rules and updates the collection membership automatically.
-
-Conceptually this behaves similarly to a saved database view:
-
-[INSERT IMAGE OF GUI]
-
-
-```
-CREATE VIEW rings_highlights AS
-SELECT image_id
-FROM images
-WHERE keyword = 'rings'
-AND rating >= 4
-AND flag = 'pick';
-```
-
-This makes Smart Collections a **dynamic indexing layer** that allows photographers to maintain persistent logical groupings of images without physically reorganizing files or collections.
 

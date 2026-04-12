@@ -1,6 +1,24 @@
 # Creative Workflow Batch Transformation Pipeline
 
-A systems engineering portfolio project demonstrating how creative-production workflows can be structured as deterministic, scalable batch pipelines rather than ad hoc, non-repeatable editing sequences.
+Systems engineering project showing how creative-production workflows can be structured as deterministic, scalable pipelines rather than ad hoc editing sequences.
+
+## Project Framing
+
+This repository models creative-production work as a reproducible
+workflow with explicit stages, non-destructive state transitions, and
+validation checkpoints
+
+Even when executed inside GUI-based tools, the process is treated as a
+production system rather than an ad hoc editing sequence.
+
+Across the documented stages, the shared engineering themes are:
+
+- deterministic, stage-bounded workflow design
+- batch-safe operations under tooling constraints
+- reproducibility through clear validation checkpoints
+- structured automation with human review at defined boundaries
+
+## Project Structure
 
 This repository is organized as a single multi-stage pipeline with supporting documentation for each major stage:
 
@@ -8,55 +26,47 @@ This repository is organized as a single multi-stage pipeline with supporting do
 2. Baseline Image Normalization Pipeline
 3. Bulk AI Mask Definition Propagation
 
-Within the image-processing portion of the pipeline, transformations currently follow this progression:
+Stage 1 establishes the metadata and query foundation for the workflow.
 
-- **Preprocessing:** Dust removal batch pass
-- **Normalization:** Luminance + color normalization
+Stages 2 and 3 form the image-processing portion of the pipeline, which currently follows this progression:
+
+- **Preprocessing:** Local corrective cleanup (for example dust removal and chromatic aberration correction)
+- **Normalization:** Dataset-wide luminance and color standardization
 - **Semantic operations:** Batch AI masking
 - **Human review:** Manual refinement pass
 
-## Project Framing
 
-The portfolio treats image workflow operations as pipeline systems with clear boundaries, failure modes, validation points, and downstream dependencies.
-
-Even when transformation steps are executed inside GUI-based creative tools, the pipeline is framed as a real production workflow with explicit stage boundaries, operator checkpoints, validation gates, and reproducible state transitions.
-
-Across the documented stages, the shared engineering themes are:
-
-- deterministic initialization of asset state
-- separation of identity, semantic, and transformation layers
-- batch-safe operations under tooling constraints
-- reproducibility through explicit validation and operator-visible checkpoints
-- reduction of manual editing time through structured automation
 
 ## Repository Structure
 
 ```text
 creative-workflow-batch-transformation-pipeline/
+├── .gitignore
 ├── README.md
+├── package-lock.json
+├── docs/
+│   ├── README.md
+│   ├── architecure/
+│   └── diagrams/
 ├── pipeline_stages/
 │   ├── 001_metadata-ingestion-enrichment-query-pipeline/
 │   │   ├── README.md
 │   │   └── assets/
+│   │       ├── diagrams/
 │   │       └── images/
 │   ├── 002_baseline-image-normalization/
 │   │   ├── README.md
 │   │   └── assets/
+│   │       ├── diagrams/
+│   │       └── images/
 │   └── 003_bulk-ai-mask-definition-propagation/
 │       ├── README.md
 │       └── assets/
-├── docs/
-│   ├── README.md
-│   ├── architecure
-│   └── diagrams
-├── notes/
-│   ├── git_learn.md
-│   └── ssh_learn.md
+│           ├── diagrams/
+│           └── images/
 ├── scripts/
 │   └── python/
 │       └── README.md
-├── analysis/
-│   └── metrics/
 └── tests/
     └── README.md
 ```
@@ -68,15 +78,13 @@ Location: [Stage 1 README](pipeline_stages/001_metadata-ingestion-enrichment-que
 
 Focus areas:
 - deterministic ingest behavior under single-preset constraints
-- schema-level protection of identity metadata via non-overlapping field assignments
-- post-ingest enrichment without destructive metadata overwrites
-- metadata-driven indexing and retrieval patterns enabling rapid ad-hoc queries and declarative views over image records
+- non-destructive metadata enrichment through non-overlapping field assignments
+- metadata-driven indexing and retrieval patterns enabling both rapid ad-hoc queries and declarative views over image records
 
 ### 2. Baseline Image Normalization Pipeline
 Location: [Stage 2 README](pipeline_stages/002_baseline-image-normalization/README.md)
 
-- luminance and color normalization across heterogeneous images with varying capture conditions
-- staged preprocessing establishing a normalized baseline before downstream pixel-level and further semantic operations
+- local corrective cleanup and luminance/color normalization across heterogeneous images with varying capture conditions
 - exemplar-based calibration to propagate consistent transformations across heterogeneous data
 - increased workflow throughput while reducing operator cognitive load
 
@@ -85,7 +93,5 @@ Location: [Stage 3 README](pipeline_stages/003_bulk-ai-mask-definition-propagati
 
 Focus areas:
 - procedural mask definitions propagated across datasets rather than copying pixel regions
-- dataset-scale application of semantic segmentation outputs to batch edit operations
-- qualitative evaluation of mask boundary accuracy and subject-detection completeness against manual editing results
-- analysis of when AI-assisted segmentation remains reliable enough for deterministic pipeline workflows
-
+- dataset-scale application of AI-generated semantic masks to batch edit operations
+- qualitative evaluation of mask quality and workflow reliability against manual editing results
