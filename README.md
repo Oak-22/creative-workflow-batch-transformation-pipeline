@@ -74,7 +74,7 @@ creative-workflow-batch-transformation-pipeline/
 ## Pipeline Stages
 
 ### 1. Metadata Ingestion, Enrichment, and Query Pipeline
-Location: [Stage 1 README](pipeline_stages/001_metadata-ingestion-enrichment-query-pipeline/README.md)
+Location: `pipeline_stages/001_metadata-ingestion-enrichment-query-pipeline/` ([README](pipeline_stages/001_metadata-ingestion-enrichment-query-pipeline/README.md))
 
 Focus areas:
 - deterministic ingest behavior under single-preset constraints
@@ -82,14 +82,14 @@ Focus areas:
 - metadata-driven indexing and retrieval patterns enabling both rapid ad-hoc queries and declarative views over image records
 
 ### 2. Baseline Image Normalization Pipeline
-Location: [Stage 2 README](pipeline_stages/002_baseline-image-normalization/README.md)
+Location: `pipeline_stages/002_baseline-image-normalization/` ([README](pipeline_stages/002_baseline-image-normalization/README.md))
 
 - local corrective cleanup and luminance/color normalization across heterogeneous images with varying capture conditions
 - exemplar-based calibration to propagate consistent transformations across heterogeneous data
 - increased workflow throughput while reducing operator cognitive load
 
 ### 3. Bulk AI Mask Definition Propagation 
-Location: [Stage 3 README](pipeline_stages/003_bulk-ai-mask-definition-propagation/README.md)
+Location: `pipeline_stages/003_bulk-ai-mask-definition-propagation/` ([README](pipeline_stages/003_bulk-ai-mask-definition-propagation/README.md))
 
 Focus areas:
 - procedural mask definitions propagated across datasets rather than copying pixel regions
