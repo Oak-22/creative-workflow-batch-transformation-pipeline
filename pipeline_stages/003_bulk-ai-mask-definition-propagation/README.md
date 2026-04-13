@@ -1,29 +1,42 @@
 # Case Study: Bulk AI Masking Batch Rebinding Experiment
 
-## Status
+Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project.
 
-Planned case study under the Creative Workflow Batch Transformation Pipeline umbrella project.
+## Executive Summary
 
-## Proposed Focus
+This stage evaluates whether AI-generated semantic masks can be treated
+as reusable batch artifacts rather than one-off, image-specific edits.
+The workflow defines mask logic once on a canonical image, then applies
+that logic across a full gallery to test whether Lightroom recomputes
+the masks per image reliably enough for production-scale use. The value
+is reduced repetitive masking effort while preserving a clear boundary
+for operator review when semantic detection fails or degrades.
 
-This case study will evaluate whether AI-generated semantic masks can be treated as reusable batch artifacts that are rebound to downstream edit operations at scale.
+## Problem
 
-## Core Questions
+Manual semantic masking is expensive at gallery scale. When similar
+adjustments are needed across many photos, recreating subject masks
+image by image becomes a throughput bottleneck. The challenge is to
+determine whether AI-generated masks can be propagated safely across a
+heterogeneous dataset without copying brittle pixel selections or
+introducing silent failures that would require extensive rework.
 
-- How should mask generation outputs be represented so they can be rebound safely in batch workflows?
-- Which parts of the workflow are deterministic enough for automation, and which require operator review?
-- What failure modes emerge when masks are reused across scenes, subjects, or lighting conditions?
-- How should confidence thresholds, rollback paths, and validation checkpoints be designed?
+## Solution Overview
 
-## Planned Sections
+The workflow selects a canonical image containing many relevant
+semantic categories, defines the mask logic once on that image, and then
+batch-pastes those definitions across the gallery. Lightroom appears to
+recompute the masks per target image using semantic segmentation rather
+than copying static mask pixels. This case study evaluates that
+mechanism qualitatively by examining mask quality, omission behavior,
+and operational usefulness relative to manual masking.
 
-- Problem Statement
-- Constraints and Assumptions
-- System Architecture
-- Batch Rebinding Flow
-- Failure Modes and Recovery Strategy
-- Validation Methodology
-- Results and Tradeoffs
+## Key Constraints
+
+- target images vary in subjects, scene composition, and detectable categories
+- Lightroom's internal masking implementation is not directly observable
+- some propagated masks may be omitted rather than generated on every image
+- automation must remain compatible with later manual review and correction
 
 
 

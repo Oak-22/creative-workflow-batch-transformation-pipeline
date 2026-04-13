@@ -4,25 +4,44 @@ Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project
 
 ## Executive Summary
 
-- **Constraint:** The system/tooling supports only one metadata preset at ingest.
-- **Risk:** Metadata collisions occur when multiple presets write the same fields, risking ownership overwrite.
-- **Architecture:** Split metadata into a protected Identity Layer and a revisable Semantic Layer.
-- **Ingest:** Use a single authoritative preset to establish a stable ownership baseline at ingest.
-- **Enrichment:** Apply domain-specific presets post-ingest that write only classification fields.
-- **Safety:** Field-level write boundaries prevent overwrites by design, not by operator caution.
-- **Validation:** Deterministic IPTC-panel checklist used after ingest and after enrichment.
-- **Querying:** Smart Collections are treated as declarative views (saved predicates), not folders.
-- **Scalability:** Supports multi-domain classification without changing ingest guarantees.
+This stage establishes a safe metadata foundation for downstream image
+workflow operations. Because ingest supports only a single metadata
+preset, the workflow establishes a stable identity baseline first, then
+applies semantic enrichment post-import without overwriting ownership
+fields. The result is a metadata model that is auditable, scalable
+across multiple classification domains, and useful for downstream
+retrieval through ad-hoc filtering and Smart Collections. Operationally,
+this improves internal organization and retrieval while producing structured
+semantic metadata that could later support analytics, search, or machine-learning workflows.
 
-## Problem Statement
+## Problem
 
-Design a deterministic metadata ingestion and enrichment system for image assets operating under a hard tooling constraint: only one preset may be applied at ingest. The system must reliably initialize ownership metadata, prevent field-level collisions, and remain robust as classification requirements span multiple domains.
+Design a deterministic metadata ingestion and enrichment system for
+image assets under a single-preset ingest constraint. The system must
+reliably initialize ownership metadata, prevent field-level collisions,
+and remain robust as classification requirements span multiple domains.
 
-The core challenge is to maintain a stable, authoritative identity state while enabling iterative, revisable semantic enrichment. The solution must be non-destructive, auditable, and simple to validate in batch workflows.
+The core challenge is to maintain a stable, authoritative identity
+state while enabling iterative, revisable semantic enrichment. Poorly
+structured metadata increases rework, weakens retrieval, and reduces
+the downstream usefulness of image records for curation, publishing, and
+discoverability. The solution must therefore be non-destructive,
+auditable, and simple to validate in batch workflows.
 
-## Key Constraints and Observations
+## Solution Overview
 
-- The system/tooling allows only one metadata preset at import, no native preset stacking.
+The workflow separates metadata into a protected identity layer and a
+revisable semantic layer. A single import preset establishes the
+ownership baseline at ingest, while domain-specific semantic presets are
+applied only after import with non-overlapping field writes. Keywords
+are also managed post-ingest so classification remains deliberate and
+incremental. Once enriched, the metadata supports query-driven
+retrieval, including Smart Collections treated as declarative views over
+image records.
+
+## Key Constraints
+
+- Ingest supports only one metadata preset; there is no native preset stacking.
 - Post-import presets are additive when checked fields do not overlap.
 - Conflicts occur only when two presets write to the same checked fields.
 - Export options are reductive (include/exclude), not additive.
@@ -247,8 +266,6 @@ The Library Filter bar performs **temporary metadata queries** against the catal
 
 Conceptually this behaves like a transient query over the metadata index:
 
-[INSERT IMAGE OF GUI]
-
 ```
 SELECT image_id
 FROM images
@@ -258,6 +275,3 @@ AND capture_year = 2023;
 ```
 
 The filter is evaluated immediately and the results are displayed, but the query definition is not saved. Changing the filter simply executes a different query against the catalog.
-
-
-

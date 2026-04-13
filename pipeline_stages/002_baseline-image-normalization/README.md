@@ -1,39 +1,51 @@
-Author: Julian Buccat<br/> 
-Date: 2026-02-26<br/>
-Category: Systems Design Case Study<br/>
-Domain: Image Processing Pipeline
-
 # Case Study: Baseline Image Normalization Pipeline
 
 Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project.
 
-## Original Framing
-
-Designing a baseline image normalization pipeline for heterogeneous input distributions.
-
 ## Executive Summary
 
-High-volume photo datasets captured over long time horizons (several hours) often contain significant lighting variance across [scenes](#scene). Even when the subject matter remains similar, changing sunlight conditions alter how the camera sensor captures both color and brightness information.
+Large photo sets captured across changing lighting conditions often feel
+visually inconsistent even when subject matter remains similar. This
+stage defines a normalization workflow that combines local corrective
+cleanup, dataset-wide luminance normalization, and later color
+calibration support so the final gallery reads as coherent rather than
+ad hoc. The business value is reduced editing time, lower operator
+comparison burden, and more consistent outputs across a heterogeneous
+dataset.
 
-These lighting differences change the [visual tone](#visual-tone) of an image—the overall balance of brightness, contrast, and color that shapes both the technical appearance of the image and the emotional perception of the viewer. For example, a couple photographed in strong midday sunlight may exhibit **warmer color tones and higher contrast** (technical attributes), which viewers often interpret as **vibrant and energetic** (emotional perception). The same couple photographed in shaded late‑afternoon light may exhibit **cooler tones and softer contrast**, which viewers often interpret as **calmer or more subdued** in mood.
+## Problem
 
-Without normalization, these differences cause a [dataset](#dataset) of otherwise related photos to feel visually inconsistent.
+High-volume photo datasets captured over long time horizons often
+contain significant lighting variance across [scenes](#scene). Even
+when the subject matter remains similar, changing sunlight conditions
+alter how the camera sensor captures both color and brightness
+information.
 
+These lighting differences change the [visual tone](#visual-tone) of an
+image, causing otherwise related photos to feel visually inconsistent.
+Without a stable baseline, later adjustments interact differently with
+each image, producing drift across the dataset.
 
+## Solution Overview
+
+This stage treats normalization as a three-part workflow. First,
+localized corrective cleanup removes repeated defects such as dust.
+Second, global luminance normalization reduces inter-image variance and
+establishes a comparable baseline. Third, that normalized baseline makes
+later semantic masking and exemplar-based color calibration more stable
+and consistent across the full gallery.
+
+## Key Constraints
+
+- RAW capture preserves useful signal but increases dataset variance
+- large datasets make continuous cross-image comparison expensive
+- normalization must preserve natural scene variation rather than erase it
+- later transformations perform better when input ranges are comparable
 ---
 🚧 TODO — VISUAL
 Asset: stage1_before_after_dataset
 Purpose: <TO DEFINE>
 ---
-
-This case study describes a three-stage normalization pipeline that combines global luminance normalization, AI-assisted semantic segmentation, and exemplar-based canonical color calibration to establish an automated, consistent visual baseline across the dataset.
-
-- **Goal:** Establish a consistent visual baseline while preserving natural scene variation.
-- **Stage 1:** Global luminance normalization ([automated tonal analysis](#automated-tonal-analysis)) → Normalize input distribution (transforms luminance distribution, variance ↓) (feature scaling / normalization)
-- **Stage 2:** AI-assisted semantic segmentation → Generate indexed features (semantic masks as queryable regions; metadata only, no state mutation) (feature extraction / indexing)
-- **Stage 3:** [Exemplar](#exemplar-image)-based canonical color calibration → Apply deterministic transformations using reference mappings (transforms color distribution, variance ↓) (deterministic transformation)
-
-- **Value:** The pipeline reduces two core pain points: (1) total image editing time and (2) cognitive load, by eliminating the need for continuous cross-image comparison during manual adjustments after baseline normalization.
 
 ## Pipeline Value - In depth
 
@@ -229,7 +241,7 @@ This background context explains why RAW datasets exhibit higher variance and wh
 
 ---
 
-## Problem
+## Detailed Problem Context
 
 Large photo sets captured across multiple lighting environments introduce
 high variance in [visual attributes](#visual-tone). The pipeline must handle diverse
