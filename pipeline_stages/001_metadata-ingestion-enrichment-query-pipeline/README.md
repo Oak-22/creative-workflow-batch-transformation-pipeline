@@ -1,4 +1,4 @@
-# Case Study: Metadata Ingestion and Enrichment Pipeline
+# System Design: Metadata Ingestion and Enrichment Pipeline
 
 Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project.
 
@@ -105,7 +105,11 @@ This ingest preset establishes the authoritative identity state at ingest. By ex
 
 ### 2) Domain-Specific Presets (Post-Import Only)
 
-**Metadata Preset name(s):** `Graduation — CSU Sacramento` | `Wedding`
+**Metadata Preset name(s):**
+
+`Graduation — CSU Sacramento` 
+`Wedding`
+`Marketing`
 
 Domain presets are semantic enrichment presets applied after ingestion.
 
@@ -113,7 +117,7 @@ Domain presets are semantic enrichment presets applied after ingestion.
 - Only semantic fields are checked.
 - Example semantic fields: Caption, Headline, IPTC Category, Accessibility Alt Text, contextual descriptions.
 
-This enables safe batch enrichment while protecting authoritative metadata from accidental overwrite.
+This safely enables further batch enrichment while protecting authoritative metadata from accidental overwrite.
 
 ### 3) Keywords Managed Separately
 
@@ -132,62 +136,45 @@ semantic metadata management.
 
 ## Verification (Critical)
 
-**During import**
-- Apply only `[IMPORT] Global Copyright & Creator` during ingest.
+### During Import
 
-**After import**
-- Review 1-2 sample images from the ingested batch in the Library
-  module.
-- Switch the metadata panel to **IPTC**.
-- Validate identity fields are populated (copyright + creator fields).
-- Validate semantic/classification fields are still empty.
+1. Apply only `[IMPORT] Global Copyright & Creator` during ingest.
 
-**Apply one domain-specific semantic preset to the same sample set post-import**
-- Re-check the metadata panel in **IPTC**.
-- Validate semantic fields are now populated.
-- Validate identity fields *remain unchanged* from ingest baseline.
-- Confirm resulting state is additive and non-destructive.
+### After Import
 
-## Results / Benefits
+1. Review 1-2 sample images from the ingested batch in the Library
+   module.
+2. Switch the metadata panel to **IPTC**.
+3. Validate identity fields are populated (copyright + creator fields).
+4. Validate semantic/classification fields are still empty.
 
-- Single source of truth for identity metadata.
-- Zero overwrite risk for ownership fields when boundaries are respected.
-- Scalable enrichment workflow across multiple classification domains.
-- Explicit, operator-visible classification decisions post-ingest.
-- Reproducible metadata outcomes from deterministic initialization + checklist validation.
+### After Applying One Domain-Specific Semantic Preset
 
-## Engineering Concepts Demonstrated
-
-- Constraint-driven design
-- Separation of concerns
-- Deterministic initialization under tooling limits
-- Protected identity vs revisable semantic metadata
-- Conflict avoidance through non-overlapping field writes
-- Post-ingest enrichment pipeline design
-- Declarative views / logical indexing
-- Non-destructive enrichment when field boundaries are respected
-- Auditability through explicit validation steps
-- Reproducibility via stable ingest baseline
+1. Re-check the metadata panel in **IPTC**.
+2. Validate semantic fields are now populated.
+3. Validate identity fields *remain unchanged* from ingest baseline.
+4. Confirm resulting state is additive and non-destructive.
 
 ## Guiding Principle
 
 > **Authorship metadata should be automatic and irreversible.**
 > **Semantic metadata should be deliberate and revisable.**
 
-## Downstream Querying: Smart Collections as Declarative Views
+
+
+
+## Downstream Querying — Exploratory Queries (Library Filtering) and Declarative Views (Smart Collections)
 
 ### Two Query Modes
 
 After establishing a repeatable metadata schema strategy, the catalog
 supports two distinct query modes:
 
-- **Ad-hoc Library filtering** = temporary, exploratory queries over
-  catalog metadata
-- **Smart Collections** = persistent, reusable saved predicates over
-  the same metadata store
+- **Library Filtering** = exploratory, one-off queries over catalog metadata
+- **Smart Collections** = saved declarative views over the same metadata store
 
 Both depend on the same enriched metadata foundation. The difference is
-whether the query is transient or saved as a reusable view.
+whether the query is transient or saved for repeated reuse.
 
 ### Systems Framing
 
@@ -199,9 +186,50 @@ feature. This makes their behavior more legible in systems terms.
 
 - Photos = source records
 - Metadata fields (ratings, flags, keywords, dates, capture attributes) = structured columns
+- Library filtering = exploratory one-off queries
 - Smart Collections = saved predicates / declarative views
 
-Collections store selection logic, not copies of records. Membership is recomputed as metadata changes.
+Collections store selection logic, not copies of records. Membership is continuously recomputed as metadata changes, making them functionally similar to views in an RDBMS.
+
+## Ad‑hoc Library Filtering
+
+The Library Filter bar performs temporary, exploratory metadata queries
+against the catalog. Users can filter images based on fields such as:
+
+- Rating
+- Flags
+- Capture date
+- Camera model
+- Lens metadata
+
+This mode is useful for one-off investigation and operational review
+when the goal is to inspect the catalog from a temporary analytical
+angle rather than save a reusable retrieval rule.
+
+### Example: Exploratory Gear Review
+
+Conceptual SQL equivalent:
+
+```sql
+SELECT camera_model, lens_model, COUNT(*) AS strong_images
+FROM images
+WHERE rating >= 4
+GROUP BY camera_model, lens_model;
+```
+
+This kind of temporary filtering is useful for exploratory review, such as evaluating which camera body and lens combinations are producing the strongest images.
+
+---
+🚧 TODO — VISUAL
+Asset: ad_hoc_library_filter_example.png
+---
+
+## Smart Collections
+
+Smart Collections store reusable selection logic over the enriched
+metadata layer. Unlike temporary library filters, they preserve the
+query definition itself so the same retrieval rule can be revisited,
+reused, and refined over time.
 
 ### Example: Highlights as Derived Dataset
 
@@ -210,10 +238,9 @@ A “Highlights” view can be defined as:
 - Flag = Pick (retained in the culled working set for downstream editing
   and delivery)
 - Capture date range (e.g., 2024, 2025)
-- Optional keyword/domain filters (e.g., Events > Wedding, Details > Flower)
+- Optional keyword/domain filters (e.g., Events > Wedding > Moments > First kiss)
 
-This produces a highly contextualized derived dataset for downstream
-review.
+This produces a highly contextualized derived dataset for downstream review, curation, and portfolio selection.
 
 Conceptual SQL equivalent:
 
@@ -229,16 +256,24 @@ WHERE rating >= 4
   );
 ```
 
-This is a conceptual analogue, not a literal Lightroom query surface.
-The point is that Smart Collections behave like saved declarative
-predicates over enriched metadata.
+The SQL examples in this section are conceptual analogues, not claims
+about Lightroom’s literal internal query representation. The catalog may
+store rule definitions in SQLite-backed tables, but the system’s
+internal execution model is not directly exposed through the GUI.
+
+The point is that Smart Collections behave like saved declarative views
+over enriched metadata.
+
+---
+🚧 TODO — VISUAL
+Asset: smart_collections_example.png
+---
 
 ### Why This Matters
 
-- Decouples physical storage from access/query patterns.
-- Reduces folder/namespace maintenance overhead.
-- Makes selection logic explicit, inspectable, and repeatable.
-- Enables fast reclassification without moving underlying files.
+- Makes curation logic explicit, inspectable, and reusable.
+- Reduces repeated manual filtering during review and selection.
+- Turns Smart Collections into a more reliable retrieval layer for ongoing workflow decisions by supplying better structured metadata.
 
 ### Limitations
 
@@ -247,31 +282,16 @@ predicates over enriched metadata.
 - No built-in versioning of query definitions
 - No exportable formal schema for rules
 
-### Takeaway
 
-Smart Collections are best treated as a lightweight declarative
-indexing layer over metadata, enabling non-destructive, query-driven
-retrieval of image records.
+## Engineering Concepts Demonstrated Uniquely in Stage 1
 
-
-### Ad‑hoc Library Filtering
-
-The Library Filter bar performs **temporary metadata queries** against the catalog. Users can filter images based on fields such as:
-
-- Rating
-- Flags
-- Capture date
-- Camera model
-- Lens metadata
-
-Conceptually this behaves like a transient query over the metadata index:
-
-```
-SELECT image_id
-FROM images
-WHERE rating >= 4
-AND keyword = 'rings'
-AND capture_year = 2023;
-```
-
-The filter is evaluated immediately and the results are displayed, but the query definition is not saved. Changing the filter simply executes a different query against the catalog.
+- Deterministic metadata initialization under a single-preset ingest
+  constraint
+- Identity vs semantic metadata partitioning
+- Conflict avoidance between identity and semantic enrichment through non-overlapping metadata field assignments
+- Keyword taxonomy management as a separate semantic classification
+  layer
+- IPTC-panel verification as an operator-visible metadata validation
+  checkpoint
+- Smart Collections as saved declarative views 
+- Ad-hoc library filtering as exploratory one-off querying

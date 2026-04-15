@@ -1,4 +1,4 @@
-# Case Study: Bulk AI Masking Batch Rebinding Experiment
+# System Design: Bulk AI Masking Batch Rebinding
 
 Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project.
 

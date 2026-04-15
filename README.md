@@ -86,7 +86,7 @@ Location: `pipeline_stages/002_baseline-image-normalization/` ([README](pipeline
 
 - local corrective cleanup and luminance/color normalization across heterogeneous images with varying capture conditions
 - exemplar-based calibration to propagate consistent transformations across heterogeneous data
-- increased workflow throughput while reducing operator cognitive load
+- virtual copies for rollbackable experimentation while reducing operator cognitive load
 
 ### 3. Bulk AI Mask Definition Propagation 
 Location: `pipeline_stages/003_bulk-ai-mask-definition-propagation/` ([README](pipeline_stages/003_bulk-ai-mask-definition-propagation/README.md))

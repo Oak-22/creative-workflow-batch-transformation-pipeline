@@ -1,4 +1,4 @@
-# Case Study: Baseline Image Normalization Pipeline
+# System Design: Baseline Image Normalization Pipeline
 
 Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project.
 
@@ -9,85 +9,104 @@ visually inconsistent even when subject matter remains similar. This
 stage defines a normalization workflow that combines local corrective
 cleanup, dataset-wide luminance normalization, and later color
 calibration support so the final gallery reads as coherent rather than
-ad hoc. The business value is reduced editing time, lower operator
-comparison burden, and more consistent outputs across a heterogeneous
-dataset.
+ad hoc. Just as importantly, it reduces operator-driven edit drift when
+the editor is repeatedly trying to match a chosen look across many
+similar images. Virtual copies provide independent edit timelines for
+experimentation without sacrificing rollback safety. The business value
+is reduced editing time, lower operator comparison burden, more
+consistent outputs across a heterogeneous dataset, and safer
+exploration of alternate edit directions.
 
 ## Problem
 
 High-volume photo datasets captured over long time horizons often
 contain significant lighting variance across [scenes](#scene). Even
 when the subject matter remains similar, changing sunlight conditions
-alter how the camera sensor captures both color and brightness
+alter how the camera sensor captures both brightness and color
 information.
 
 These lighting differences change the [visual tone](#visual-tone) of an
 image, causing otherwise related photos to feel visually inconsistent.
 Without a stable baseline, later adjustments interact differently with
-each image, producing drift across the dataset.
+each image, leading to visual divergence. In addition, that technical instability
+produces a second-order effect: repeated manual attempts to match a preferred gallery
+look can introduce operator-driven drift across the dataset, especially
+when rollback to an earlier edit state is weak or costly.
 
 ## Solution Overview
 
-This stage treats normalization as a three-part workflow. First,
-localized corrective cleanup removes repeated defects such as dust.
-Second, global luminance normalization reduces inter-image variance and
-establishes a comparable baseline. Third, that normalized baseline makes
-later semantic masking and exemplar-based color calibration more stable
-and consistent across the full gallery.
+Within stage 2, normalization proceeds through three internal
+operations. First, localized corrective cleanup removes repeated
+defects such as dust. Second, global luminance normalization reduces
+inter-image variance and establishes a comparable baseline. Third,
+virtual-copy branching and rollback control protect that baseline while
+still allowing experimentation. Across those operations, the workflow
+reduces both technical variance and the risk of operator-driven drift.
 
 ## Key Constraints
 
-- RAW capture preserves useful signal but increases dataset variance
-- large datasets make continuous cross-image comparison expensive
+- [RAW](#RAW) capture preserves useful signal but increases dataset variance
+- large datasets make continuous cross-image comparison cognitively expensive
 - normalization must preserve natural scene variation rather than erase it
 - later transformations perform better when input ranges are comparable
----
-🚧 TODO — VISUAL
-Asset: stage1_before_after_dataset
-Purpose: <TO DEFINE>
----
 
 ## Pipeline Value - In depth
 
-Stage 1 establishes a consistent luminance baseline across the [dataset](#dataset) through automated global normalization. This aligns exposure and tonal distribution so that each image begins from a comparable brightness and contrast profile before further corrections are applied.
+Operation 1 establishes a consistent luminance baseline across the
+[dataset](#dataset) through automated global normalization. This aligns
+exposure and tonal distribution so that each image begins from a
+comparable brightness and contrast profile before further corrections
+are applied.
 
-Without this baseline, later color corrections interact differently with each image because their underlying luminance distributions vary. The same adjustment can therefore produce inconsistent results across scenes.
+Without this baseline, later color corrections interact differently
+with each image because their underlying luminance distributions vary.
+The same adjustment can therefore produce inconsistent results across
+scenes. Even when a visual domain is already broadly consistent, the
+absence of a stable baseline makes repeated manual look-matching more
+error-prone and increases the chance of operator-induced edit drift.
 
-# Conceptual example (foilage color calibration):
+# Conceptual example (foliage look-matching drift):
 
-Raw foliage pixel values (R,G,B):
+Comparable group portraits can begin with broadly consistent foliage,
+but still drift apart once the operator repeatedly tries to force a
+specific target green palette without a stable baseline or a clean
+rollback path.
 
-Image A — Underexposed foliage(no stage 1):      (3, 2, 8) -->
+Image set A — repeated manual rematching without a stable baseline:
 ---
 🚧 TODO — VISUAL
 Asset: underexposed_foliage_example
-Purpose: <TO DEFINE>
 ---
-Image B — Properly exposed foliage (post-Stage 1):  (98, 68, 80) -->
+Image set B — baseline-normalized starting point before downstream
+calibration:
 ---
 🚧 TODO — VISUAL
 Asset: normalized_foliage_example
-Purpose: <TO DEFINE>
 ---
 
-Desired calibrated foliage tone:
+Observed effect:
 
-If stage 3 calibration is applied directly:
+If downstream look calibration is applied directly:
 
-Image A → large correction required → unstable / inaccurate result
+Image set A → repeated manual compensation → edit-state drift and weak
+reversibility
 ---
 🚧 TODO — VISUAL
-Asset: stage3_without_stage1_set
-Purpose: <TO DEFINE>
+Asset: look_matching_without_baseline
 ---
-Image B → small correction required → stable result
+Image set B → smaller corrective effort → more stable and repeatable
+result
 ---
 🚧 TODO — VISUAL
-Asset: stage3_with_stage1_set
-Purpose: <TO DEFINE>
+Asset: look_matching_with_baseline
 ---
 
-Stage 1 reduces this disparity by normalizing luminance first. Once tonal distributions are aligned, Stage 3 color adjustments operate on comparable input ranges and therefore produce consistent results across the dataset.
+Operation 2 reduces this instability by normalizing luminance first.
+Once tonal distributions are aligned, downstream look adjustments
+operate on comparable input ranges and therefore require less
+compensatory editing. This lowers both technical variance and the
+operator burden of repeatedly re-matching a chosen look across similar
+images.
 
 ---
 
@@ -108,25 +127,61 @@ indiscriminately across the dataset, while images without dust are left
 unaffected. This enables efficient batch cleanup before the later
 normalization and downstream editing passes.
 
+---
+
+## Virtual Copies as Data Lineage and Rollback Control
+
+Virtual Copies provide a lightweight lineage mechanism for alternate
+edit paths. Instead of overwriting a single edit history, the workflow
+can branch an image into parallel adjustment timelines while keeping the
+same underlying source asset.
+
+Operationally, this supports:
+
+- experimentation with alternate normalization or color strategies
+- comparison of competing edit directions without destructive edits
+- rollback to an earlier branch when an experimental path fails
+- preservation of a stable baseline alongside derived variants
+
+In systems terms, Virtual Copies behave like non-destructive derived
+states: multiple transformation histories can reference the same source
+record while preserving separate downstream edit decisions. In this
+workflow, that matters because a bad sequence of global or domain-level
+adjustments can otherwise propagate across many similar images before
+the editor realizes the gallery has drifted away from the intended
+look.
+
 
 ---
 
-Stage 2 precomputes semantic masks to accelerate localized edits. Frequently used masks (such as skin, hair, clothing, and sky/ground) are generated automatically across the dataset. This eliminates the need to manually compute masks per image during editing, reducing repetitive actions and improving editing throughput.
-
----
-
-Stage 3 applies [exemplar](#exemplar-image)-driven batch adjustments (e.g., foliage, clothing, and skin tones) to achieve gallery-wide visual coherence. Key visual domains should remain perceptually consistent across the [dataset](#dataset) even as lighting conditions change throughout the shoot. For example, a subject with tan skin should retain that tone across images rather than appearing significantly lighter or darker due to exposure and color shifts. Exemplar calibration prevents these artifacts by defining a canonical reference for each domain and propagating that correction across the dataset.
+Operation 3 preserves the normalized baseline while allowing alternate
+edit directions to be explored safely. Instead of continuing to stack
+global or domain-level decisions onto a single history, the editor can
+branch from the baseline, compare outcomes, and revert cleanly if a
+chosen direction begins to drift.
 
 ---
 
 ## Pipeline Diagrams
 
-The following simplified diagrams illustrate the three pipeline stages described in this case study. Each stage progressively reduces variance while preserving scene‑level differences.
+The following simplified diagrams illustrate the three internal operations that make up this stage. Each operation progressively reduces variance while preserving scene-level differences.
 
-### Stage 1 — Global Luminance Normalization
+### Operation 1 — Local Corrective Cleanup
 
 ```text
 RAW Images (dataset)
+      ↓
+Fault-Tolerant Local Cleanup
+(dust removal and repeated defect correction)
+      ↓
+Cleaned Baseline Inputs
+```
+---
+
+### Operation 2 — Global Luminance Normalization
+
+```text
+Cleaned Baseline Inputs
       ↓
 Global Luminance Normalization
 (automated tonal analysis)
@@ -136,49 +191,20 @@ Normalized Baseline Images
 ```
 ---
 
-### Stage 2 — AI Semantic Segmentation
+### Operation 3 — Virtual Copies and Rollback Control
 
 ```text
 Normalized Images
       ↓
-AI Segmentation Model
+Virtual Copy Branch Created
       ↓
-Semantic Masks Generated
-
-Example masks:
-
-[ Facial Skin ]
-[ Body Skin   ]
-[ Eye Sclera  ]
-[ Hair        ]
-[ Clothing    ]
+Alternate Edit Direction A / B
+      ↓
+Compare, Keep, or Revert
 ```
 
-These masks act as **precomputed metadata** attached to each image and enable fast, localized transformations during editing.
-
----
-
-### Stage 3 — Exemplar‑Based Canonical Color Calibration
-
-This stage defines canonical color adjustments using a representative image and propagates those adjustments across the dataset.
-
-```text
-Representative Exemplar Image
-        ↓
-Manual Canonical Calibration
-        ↓
-Reference Transform Defined
-        ↓
-Applied via Stage 2 Semantic Masks
-        ↓
-Scene Image A   Scene Image B   Scene Image C
-        ↓            ↓            ↓
-Calibrated Output A  Calibrated Output B  Calibrated Output C
-```
-
-The [exemplar image](#exemplar-image) acts as a **reference transformation**. Adjustments derived from this representative image are batch‑applied using the semantic masks generated in Stage 2.
-
-This approach maintains consistent foliage, clothing, and skin tone rendering across the dataset while preserving natural [scene](#scene) variation.
+These branches preserve the normalized baseline while making alternate
+looks recoverable instead of destructive.
 
 ---
 
@@ -193,6 +219,9 @@ To clarify domain-specific language used throughout this case study, the followi
 
 <a id="scene"></a>
 - **Scene:** A distinct composition within the dataset defined by a particular foreground, subject, and background configuration. A single dataset typically contains multiple scenes.
+
+<a id="RAW"></a>
+- **RAW:** An uncompressed or minimally processed image format that preserves the camera sensor's original luminance and color information for flexible downstream editing. In this workflow, RAW capture retains more recoverable signal than JPEG, but also increases variance that must later be normalized.
 
 ### Perceptual Characteristics
 
@@ -224,8 +253,10 @@ To clarify domain-specific language used throughout this case study, the followi
 <a id="automated-tonal-analysis"></a>
 - **Automated Tonal Analysis:** A global normalization step that analyzes image luminance distribution and applies coordinated adjustments to exposure, highlights/whites, shadows/blacks, and contrast in order to reduce inter-image luminance variance prior to downstream transformations.
 
-<a id="exemplar-image"></a>
-- **Exemplar Image:** A representative high-signal image selected from a scene or domain (e.g., foliage, clothing, or skin tones) used to define canonical adjustments that can be batch-applied across the dataset.
+<a id="virtual-copy"></a>
+- **Virtual Copy:** A non-destructive derived state that preserves an
+  independent edit timeline while continuing to reference the same
+  underlying source image.
 
 ## Domain Background: RAW Capture and Signal Variance
 
@@ -237,6 +268,11 @@ RAW capture therefore increases [dataset](#dataset) variance but enables **contr
 
 Shooting in RAW is a deliberate decision because it preserves recoverable signal that would otherwise be lost in JPEG. RAW files retain significantly more highlight and shadow information from the sensor, allowing the editor to recover details from images that might initially appear unusable. For example, a frame with blown highlights or deep shadows can often be salvaged by recovering clipped highlight detail or lifting shadow information. In contrast, JPEG compression discards much of this recoverable signal and locks the image into a specific tone curve and color profile, making such recovery far more limited.
 
+RAW capture was especially important in low-light venue conditions,
+where heavy tree cover reduced available light and made detail recovery
+more difficult. In that environment, RAW preserved the best chance of
+recovering usable image quality during post-processing.
+
 This background context explains why RAW datasets exhibit higher variance and why a normalization stage becomes necessary before consistent batch edits can be applied.
 
 ---
@@ -245,7 +281,7 @@ This background context explains why RAW datasets exhibit higher variance and wh
 
 Large photo sets captured across multiple lighting environments introduce
 high variance in [visual attributes](#visual-tone). The pipeline must handle diverse
-conditions and scale across datasets without introducing inconsistency.
+conditions and scale across the dataset without introducing inconsistency.
 
 Example capture conditions include:
 
@@ -265,10 +301,21 @@ A naive global editing strategy (e.g., applying identical exposure
 adjustments across all images) yields inconsistent results. The same
 parameter change interacts differently with each scene.
 
-Example: foilage color grading becomes difficult when exposure varies
-across time-of-day conditions. Foliage shot in shaded evening light may
-render a different hue than foliage in strong midday sun. Identical
-adjustments therefore produce divergent effects.
+That technical instability creates a second-order workflow effect: the
+editor must repeatedly rematch a chosen look across related images in
+order to keep the gallery coherent.
+
+This became especially visible in group formals. Although those images
+were already highly similar, repeated manual rematching still
+introduced edit-direction drift once the workflow lacked a stable shared
+baseline.
+
+This was a real workflow failure mode in practice. Rollback was
+technically available, but it was still costly because reverting often
+meant returning to raw source state rather than to a reusable
+intermediate baseline shared across similar group portraits. In other
+words, recovery existed, but the rollback target was too primitive to
+preserve the normalization work that should have remained stable.
 
 The workflow goals are:
 
@@ -277,7 +324,7 @@ The workflow goals are:
 - minimize manual editing effort
 - avoid repeated global transformations across the editing pipeline
 
-Importantly, the pipeline does **not** eliminate all variation between images. Lighting differences across [scenes](#scene) (e.g., midday sun vs shaded evening light) still produce natural mood differences. The normalization stages instead constrain variance to a controlled range, ensuring that images remain visually related while still preserving authentic [scene](#scene) characteristics such as time‑of‑day lighting and environmental context.
+Importantly, the pipeline does **not** eliminate all variation between images. Lighting differences across [scenes](#scene) (e.g., midday sun vs shaded evening light) still produce natural mood differences. The internal operations in this stage instead constrain variance to a controlled range, ensuring that images remain visually related while still preserving authentic [scene](#scene) characteristics such as time-of-day lighting and environmental context.
 ---
 
 ## Initial Approach (Multi-Stage Global Presets)
@@ -312,21 +359,38 @@ deterministic normalization stage followed by localized corrections.
 ```text
 RAW Images (dataset)
       ↓
-Stage 1: Global luminance normalization
+Operation 1: Local corrective cleanup
+(fault-tolerant repeated defect removal)
+      ↓
+Operation 2: Global luminance normalization
 (automated tonal analysis)
       ↓
-Stage 2: Semantic segmentation
-(AI-generated masks as reusable metadata)
-      ↓
-Stage 3: Exemplar-based canonical color calibration
-(region-scoped, reference-based transformations)
+Operation 3: Virtual-copy branching and rollback control
+(preserve baseline while exploring alternate edit directions)
       ↓
 Consistent dataset baseline with preserved scene variation
 ```
 
-### Stage 1: Global Normalization
+### Operation 1: Local Corrective Cleanup
 
-The first stage uses automated tonal analysis to normalize luminance and
+The first operation removes repeated local defects before any
+dataset-wide normalization is applied. In this workflow, the clearest
+example is dust removal: a fault-tolerant cleanup step that improves the
+baseline input without requiring image-by-image branching logic.
+
+Because this kind of correction is local and repeated, it is a good
+candidate for early batch handling. It reduces visible defects up front
+so later baseline normalization is working from cleaner inputs rather
+than repeatedly compensating around the same artifacts.
+
+**Outcome:**
+- cleaner baseline inputs before dataset-wide normalization
+- reduced need to repeatedly correct the same local defect later
+- lower operator burden during downstream review
+
+### Operation 2: Global Normalization
+
+The second operation uses automated tonal analysis to normalize luminance and
 contrast. It reduces dataset variance and establishes a common starting
 state for all images.
 
@@ -343,86 +407,72 @@ image but a reduced variance baseline for downstream processing.
 
 
 
-This stage reduces large luminance variance across the dataset so that downstream corrections behave predictably. Without this normalization step, later adjustments (such as color grading for foliage or human skin tones) interact inconsistently with each image because their underlying exposure and tonal distributions differ. *As a result, identical parameter changes can produce divergent outcomes across scenes.*
+This stage reduces large luminance variance across the dataset so that
+downstream corrections behave predictably. Without this normalization
+step, later adjustments interact inconsistently with each image because
+their underlying exposure and tonal distributions differ. As a result,
+the editor is more likely to compensate manually on a per-image basis,
+which increases the chance of gallery drift when trying to maintain a
+consistent look.
 
-In practice, editors attempting to correct this manually are forced into a continuous cycle of per-image adjustments and cross-image comparison. They must repeatedly zoom into individual images to fine-tune exposure and tonal values, then zoom out to evaluate consistency across the broader dataset. This constant context switching introduces cognitive fatigue and increases the likelihood of drift from both scene-level and gallery-level consistency. 
+In practice, editors attempting to correct this manually are forced into
+a continuous cycle of per-image adjustments and cross-image comparison.
+They must repeatedly zoom into individual images to fine-tune exposure
+and tonal values, then zoom out to evaluate consistency across the
+broader dataset. This constant context switching introduces cognitive
+fatigue and increases the likelihood of drift from both scene-level and
+gallery-level consistency. Once a poor sequence of adjustments has been
+applied across multiple images, weak rollbackability makes recovery even
+harder.
 
-By establishing a consistent luminance baseline upfront, the pipeline removes this instability. Subsequent adjustments operate on comparable tonal distributions, enabling batch edits and exemplar-based corrections to produce stable, repeatable results across the dataset without continuous manual recalibration.
+By establishing a consistent luminance baseline upfront, the pipeline
+removes much of this instability. Subsequent adjustments operate on
+comparable tonal distributions, enabling downstream look corrections to
+produce stable, repeatable results across the dataset without
+continuous manual recalibration.
 
 **Outcome:**
 - reduced luminance variance across the dataset
 - predictable downstream transformations
 - significant reduction in repeated per-image exposure correction (residual adjustments may still be required in edge cases)
 
-### Stage 2: Semantic Segmentation (AI Mask Generation)
+### Operation 3: Virtual Copies and Rollback Control
 
-After normalization, the pipeline generates automated semantic masks. The
-masks identify semantically defined regions within each image for targeted, region-aware corrections.
-
-Detected regions include semantic classes such as:
-
-- facial skin
-- body skin
-- eye sclera
-- hair
-- clothing
-- background
-- ground
-- sky
+After global normalization establishes a stable baseline, the workflow
+must still protect that baseline from operator-induced drift.
+Virtual Copies provide a lightweight branching mechanism for exactly
+that purpose.
 
 **Outcome:**
 
-- **Editing acceleration:** Precomputed masks remove per-image masking
-  work and speed up localized edits.
-- **Region-scoped transformations:** Masks enable targeted corrections without altering unrelated areas.
-
-### Stage 3: Exemplar‑Based Canonical Color Calibration
-
-After global normalization and mask generation, the pipeline introduces a third stage that establishes canonical color references for key visual domains within the dataset.
-
-Rather than manually adjusting each key visual domain per image, the workflow selects **one high‑signal [exemplar image](#exemplar-image) per domain**. An [exemplar image](#exemplar-image) is defined as a single frame with strong lighting information and minimal [clipping](#clipping), providing sufficient tonal signal to define reliable adjustments.
-
-Typical calibration domains include:
-
-- foliage tones
-- clothing tones
-- human skin tones
-
-The editor performs controlled adjustments on the exemplar image to establish the **canonical look** for that domain. These calibrated adjustments are then batch‑applied across the dataset using the masks generated in Stage 2.
-
-This approach creates **region-scoped normalization using globally consistent, exemplar-derived transformations**:
-
-- edits remain globally consistent across the dataset
-- corrections are constrained to semantically relevant regions
-- natural scene variation is preserved
-
-**Outcome:**
-- consistent domain-specific appearance across the dataset (e.g., foliage, skin tones, clothing)
-- deterministic, repeatable transformations derived from exemplar references
-- reduced need for per-image manual color correction
+- **Rollbackable experimentation:** Alternate edit directions can be
+  tested without destroying the normalized baseline.
+- **Baseline preservation:** Once a chosen direction begins to drift,
+  the editor can revert to a known-good state instead of manually
+  untangling accumulated edits.
 
 **Engineering Analogy:**
-This stage functions as a reference-based transformation system. Instead of computing adjustments independently per image, the pipeline derives corrections from representative exemplar frames and applies them deterministically across the dataset. Unlike Stage 1 global normalization, which operates on entire-image luminance distributions, this stage applies uniform transformations within semantically segmented regions only.
+This operation behaves like lightweight branch management over a shared
+source record. Instead of forcing every experiment into one mutable edit
+history, the workflow creates recoverable derived states that can be
+compared, kept, or discarded.
 
 ---
 
 
 ## System Constraints & Scale Considerations
 
-The current implementation is designed as a **local, editor-in-the-loop batch pipeline** operating within Lightroom Desktop / Classic rather than as a cloud-native or distributed image-processing system. RAW files, semantic masks, and downstream edits are managed within a local catalog-centered workflow optimized for a single operator performing interactive review and refinement.
+The current implementation is designed as a **local, editor-in-the-loop batch pipeline** operating within Lightroom Desktop / Classic rather than as a cloud-native or distributed image-processing system. RAW files, virtual copies, and downstream edits are managed within a local catalog-centered workflow optimized for a single operator performing interactive review and refinement.
 
-This design favors **editing throughput, controllability, and local responsiveness** over distributed scalability. Stage 1 and Stage 2 are primarily preprocessing operations that establish a normalized baseline and generate reusable metadata, while Stage 3 remains partially manual because exemplar selection and canonical color decisions still depend on editorial judgment.
+This design favors **editing throughput, controllability, and local responsiveness** over distributed scalability. Operations 1 and 2 are primarily preprocessing operations that establish a normalized baseline, while Operation 3 preserves that baseline during experimentation and revision.
 
 In practical terms, the pipeline is intended to scale across **hundreds of RAW images per dataset**, not to serve as a real-time or horizontally distributed processing system. The relevant engineering question is therefore not formal algorithmic complexity in the abstract, but rather **observed operational latency, throughput, and reduction in manual intervention** as dataset size increases.
 
-Future validation can benchmark representative datasets of different sizes (for example, 25, 100, and 250 RAW images) and record per-stage processing time, downstream manual correction time, and total editing time. This would provide an operational view of scaling behavior without overstating claims about algorithmic complexity inside vendor-controlled black-box tooling.
-
-
----
-🟩 TODO — ANALYSIS
-Asset: benchmark_table_pipeline
-Purpose: <TO DEFINE>
----
+If stronger quantitative support is needed later, future validation can
+benchmark representative datasets of different sizes and record per-stage
+processing time, downstream manual correction time, and total editing
+time. For now, the primary evidence model in this case study is visual
+and workflow-observable rather than heavily instrumented.
 
 
 ---
@@ -435,42 +485,55 @@ Purpose: <TO DEFINE>
 
 Although the pipeline reduces variance and improves editing consistency, each stage still has failure modes that require manual judgment or override.
 
-### Stage 1 Failure Modes
+### Operation 1 Failure Modes
 
-Global luminance normalization can still produce imperfect results when scenes contain **extreme [dynamic range](#dynamic-range)**, strong backlighting, heavy [clipping](#clipping), or intentionally stylized lighting conditions. For example, a deliberately composed **silhouette image**—such as a wedding couple rendered primarily as shadow shapes with little or no recoverable facial or subject detail—may be interpreted by Lightroom’s automated tonal analysis as unintentionally underexposed and therefore brightened, even when the low-key silhouette treatment was the intended creative choice. In these cases, automated tonal analysis may reduce variance without fully establishing a sufficient baseline, and residual per-image exposure correction may still be required.
-
-
----
-🚧 TODO — VISUAL
-Asset: stage1_failure_cases
-Purpose: <TO DEFINE>
----
-
-### Stage 2 Failure Modes
-
-Semantic segmentation depends on model-generated masks and may fail or degrade around **fine boundaries, partial occlusions, transparent materials (e.g., wedding veils), hair edges, or ambiguous foreground/background transitions**. In such cases, masks may spill into unrelated regions or omit portions of the intended subject domain, reducing the reliability of downstream region-scoped corrections.
+Local corrective cleanup can still fail when defects are missed,
+over-corrected, or applied too broadly. Fault-tolerant cleanup is
+helpful for repeated artifacts such as dust, but some defects may still
+require selective operator review.
 
 
 ---
 🟦 TODO — WORKFLOW
-Asset: segmentation_failure_cases
+Asset: cleanup_failure_cases
 Purpose: <TO DEFINE>
 ---
 
-### Stage 3 Failure Modes
+### Operation 2 Failure Modes
 
-Exemplar-based canonical calibration depends heavily on **correct exemplar selection**. If the [exemplar image](#exemplar-image) contains poor lighting information, meaningful [clipping](#clipping), or scene-specific color bias, those incorrect assumptions can propagate across the [dataset](#dataset). Similarly, some domains may vary legitimately across [scenes](#scene), and over-application of canonical adjustments can suppress authentic scene-specific variation.
+Global luminance normalization can still produce imperfect results when scenes contain **extreme [dynamic range](#dynamic-range)**, strong backlighting, heavy [clipping](#clipping), or intentionally stylized lighting conditions. For example, a deliberately composed **silhouette image**—such as a wedding couple rendered primarily as shadow shapes with little or no recoverable facial or subject detail—may be interpreted by Lightroom’s automated tonal analysis as unintentionally underexposed and therefore brightened, even when the low-key silhouette treatment was the **intended creative choice**. In these cases, automated tonal analysis may reduce variance without fully establishing a sufficient baseline, and residual per-image exposure correction may still be required.
 
 
 ---
 🚧 TODO — VISUAL
-Asset: exemplar_failure_cases
+Asset: stage2_failure_cases
+Purpose: <TO DEFINE>
+---
+
+### Operation 3 Failure Modes
+
+Virtual-copy branching can still fail when branch discipline is weak.
+If alternate directions are not clearly named, compared, or pruned, the
+editor can lose track of which branch represents the intended baseline
+versus an experimental detour. In that case, branching reduces recovery
+cost in theory but not in practice.
+
+
+---
+🚧 TODO — VISUAL
+Asset: virtual_copy_failure_cases
 Purpose: <TO DEFINE>
 ---
 
 ### System-Level Failure Modes
 
-At the system level, failure can also occur when too many manual overrides are required. Excessive exception handling reduces the throughput benefit of the pipeline and can reintroduce the same cross-image comparison burden that the workflow is intended to remove. In practice, a weak Stage 1 baseline, unreliable Stage 2 masks, or poor Stage 3 exemplar choice can each increase downstream instability and reduce overall consistency.
+At the system level, failure can also occur when too many manual
+overrides are required. Excessive exception handling reduces the
+throughput benefit of the pipeline and can reintroduce the same
+cross-image comparison burden that the workflow is intended to remove.
+In practice, weak Operation 1 cleanup, a weak Operation 2 baseline, or
+weak Operation 3 rollback discipline can each
+increase downstream instability and reduce overall consistency.
 
 
 ---
@@ -481,53 +544,62 @@ Purpose: <TO DEFINE>
 
 ## Observability & Validation
 
-This case study combines **direct operational measurement**, **editor-observed workflow effects**, and clearly labeled inference. Because parts of the workflow depend on Lightroom’s internal heuristics, validation should focus on observable pipeline behavior rather than on formal claims about algorithmic internals.
+This case study is primarily validated through **embedded visual
+evidence**, **editor-observed workflow effects**, and clearly labeled
+inference. Because parts of the workflow depend on Lightroom’s internal
+heuristics, the most credible proof for this stage is observable
+before/after behavior rather than heavy quantitative instrumentation.
 
-### Operational Metrics
+### Optional Future Metrics
 
-The most practical measurements for this workflow are:
+If stronger quantitative support is needed later, the most practical
+measurements for this workflow would be:
 
 - total editing time per dataset
 - editing time per delivered image
-- number of residual manual exposure corrections after Stage 1
-- number of manual mask corrections after Stage 2
-- number of per-image domain-specific color corrections remaining after Stage 3
+- number of residual local defect corrections after Operation 1
+- number of residual manual exposure corrections after Operation 2
+- number of virtual-copy branches or reversions required after failed
+  edit directions in Operation 3
 
-These metrics capture whether the pipeline actually reduces manual intervention and improves throughput in practice.
+These measurements would help quantify whether the pipeline reduces
+manual intervention and improves throughput in practice, but they are
+not required for the current visuals-first version of the case study.
 
+### Operation 2 Validation
 
----
-🟩 TODO — ANALYSIS
-Asset: operational_metrics_table
-Purpose: <TO DEFINE>
----
-
-### Stage 1 Validation
-
-A lightweight validation approach is to sample a representative subset of images from the same [dataset](#dataset), record pre- and post-Stage 1 values for [exposure](#exposure), [contrast](#contrast), [highlights / whites](#highlights-whites), and [shadows / blacks](#shadows-blacks), and then compare the spread of those values before and after automated tonal analysis. The purpose is not to prove perfect normalization, but to evaluate whether Stage 1 reduces luminance variance sufficiently for more stable downstream transformations.
-
-
----
-🚧 TODO — VISUAL
-Asset: stage1_sample_comparison
-Purpose: <TO DEFINE>
----
----
-🟩 TODO — ANALYSIS
-Asset: stage1_parameter_table
-Purpose: <TO DEFINE>
----
-
-### Stage 3 Validation
-
-Stage 3 can be validated by selecting one visual domain such as foliage or skin tones, applying exemplar-based calibration, and recording how many residual per-image corrections are still required afterward. The central engineering question is whether reference-based propagation reduces repetitive manual correction while preserving legitimate scene-level variation.
-
-Validation here should be both **objective** and **subjective**. Objectively, the workflow should reduce repeated per-image corrections and total edit time. Subjectively, the editor should observe improved cross-image consistency without flattening authentic scene differences in lighting or mood.
+A lightweight validation approach is to show representative before/after
+image subsets from the same [dataset](#dataset) and visually inspect
+whether automated tonal analysis reduces luminance variance enough to
+produce a more stable baseline for later editing. If needed later, that
+visual comparison could be supplemented with recorded pre- and post-
+adjustment values for [exposure](#exposure), [contrast](#contrast),
+[highlights / whites](#highlights-whites), and [shadows / blacks](#shadows-blacks).
 
 
 ---
 🚧 TODO — VISUAL
-Asset: stage3_domain_calibration
+Asset: stage2_sample_comparison
+Purpose: <TO DEFINE>
+---
+
+### Operation 3 Validation
+
+Operation 3 can be validated by testing alternate edit directions on
+Virtual Copies and recording whether the editor can return to a known
+good baseline without manual untangling. The central engineering
+question is whether branching and rollback materially reduce edit-state
+drift during look-matching.
+
+Validation here should be primarily visual and workflow-observable. The
+key question is whether the editor can compare alternate directions,
+revert cleanly, and preserve gallery consistency without losing the
+baseline or manually untangling accumulated edits.
+
+
+---
+🚧 TODO — VISUAL
+Asset: virtual_copy_recovery_comparison
 Purpose: <TO DEFINE>
 ---
 
@@ -535,14 +607,10 @@ Purpose: <TO DEFINE>
 
 A known baseline from the prior workflow is approximately **42 hours of edit time** to complete a 1500-image RAW gallery that was ultimately culled to 375 edited images. That historical workflow included repeated global corrections, inconsistent convergence, and extensive manual adjustment.
 
-Future validation can compare this baseline against either a newly edited gallery or a retrospective subset benchmark using the current pipeline. The goal is not a perfect experimental comparison across all variables, but a practical before/after measure of whether the redesigned workflow reduces editing time and manual correction frequency.
-
-
----
-🟩 TODO — ANALYSIS
-Asset: workflow_comparison_table
-Purpose: <TO DEFINE>
----
+That baseline can remain contextual support without forcing a formal
+before/after table into the document. If stronger quantitative evidence
+is useful later, a retrospective comparison can be added, but the
+current writeup does not depend on it.
 
 ## Design Tradeoffs
 
@@ -550,9 +618,14 @@ The pipeline improves consistency and throughput, but it does so through explici
 
 ### Automation vs Editorial Control
 
-Stage 1 and Stage 2 automate high-frequency repetitive operations, but Stage 3 remains intentionally editor-guided. Full automation of canonical color decisions would increase speed, but it would also reduce control over context-sensitive domains such as skin tones, clothing, and foilage.
+Operations 1 and 2 automate high-frequency repetitive operations, while
+Operation 3 remains intentionally editor-guided because branch
+selection, comparison, and rollback still depend on editorial judgment.
 
-This tradeoff is especially important for culturally or stylistically significant color decisions. For example, in a South Indian wedding ceremony with richly saturated traditional clothing, a fully automated canonical calibration step might converge toward a more muted or “balanced” palette that is technically consistent but misaligned with client preference and event context. In one real workflow, two gallery versions were delivered from the same edit base—one preserving the stronger Sony color rendering and one using a more desaturated look—and the client preferred the more saturated version. This illustrates why Stage 3 remains editor-guided: canonical consistency must still be constrained by situational, cultural, and client-specific judgment.
+This tradeoff is especially important when the editor is comparing
+multiple plausible looks. A purely linear history makes it harder to
+test alternatives safely; a branchable workflow preserves control
+without forcing every experiment to overwrite the baseline.
 
 
 ---
@@ -565,23 +638,34 @@ Purpose: <TO DEFINE>
 
 The system is designed to reduce unwanted variance, not to eliminate all variance. Over-normalization would flatten meaningful differences between [scenes](#scene), especially when time-of-day lighting or environmental color legitimately changes the mood of an image.
 
-### Upfront Preprocessing vs Downstream Speed
+### Upfront Cleanup and Normalization vs Downstream Speed
 
-Stage 2 introduces additional upfront computation by generating masks across the [dataset](#dataset), but that cost is repaid through faster downstream localized editing. This is a deliberate trade of early processing overhead for reduced repeated work later in the pipeline.
+Operations 1 and 2 introduce upfront cleanup and normalization work, but
+that cost is repaid through faster downstream editing. This is a
+deliberate trade of early processing overhead for reduced repeated work
+later in the pipeline.
 
-In real editing workflows, the cost of skipping this preprocessing step is not limited to cumulative time alone. When masks must be created manually on a per-image basis, the editor must repeatedly remember which regions in a given [scene](#scene) require correction and then reapply those decisions across similar frames. As the number of required masks increases, this memory burden increases as well, making it easier to apply a correction inconsistently, place a mask differently across near-identical images, or omit a mask entirely where it should have been applied scene-wide. Precomputed semantic masks therefore improve not only downstream speed, but also workflow consistency by reducing dependence on repeated manual recall and per-image mask recreation, thereby reducing human error.
+In real editing workflows, the cost of skipping this baseline work is
+not limited to cumulative time alone. When global cleanup and
+normalization are not established early, the editor must repeatedly
+re-correct near-identical images and re-compare them against the rest of
+the gallery. That raises both cognitive load and the chance of
+inconsistent edits.
 
 
 ---
 🟦 TODO — WORKFLOW
-Asset: masking_consistency_comparison
+Asset: baseline_consistency_comparison
 Purpose: <TO DEFINE>
 ---
 
 
-### Reference Propagation vs Error Amplification
+### Rollback Safety vs Branch Sprawl
 
-Stage 3 gains efficiency by propagating exemplar-derived transformations across many images, but this also increases the cost of poor reference selection. A weak [exemplar image](#exemplar-image) can amplify error rather than reduce it.
+Operation 3 gains safety by making alternate directions recoverable, but
+that also introduces the need for disciplined branch naming,
+comparison, and pruning. Too many unmanaged branches can create their
+own form of operator confusion.
 
 ### Local Workflow Efficiency vs Cloud-Native Scalability
 
@@ -589,29 +673,30 @@ The current implementation is optimized for a local Lightroom workflow controlle
 
 ### Vendor Heuristics vs Full Transparency
 
-The workflow benefits from Lightroom’s built-in automation, but some stages depend on vendor-controlled black-box heuristics. This improves usability and speed while limiting transparency into the exact internal logic of automated tonal analysis and semantic masking.
+The workflow benefits from Lightroom’s built-in automation, but some stages depend on vendor-controlled black-box heuristics. This improves usability and speed while limiting transparency into the exact internal logic of automated tonal analysis.
 
-## Precomputation Strategy
+## Baseline Preservation Strategy
 
-Segmentation masks are created once across the dataset on import (analogous to dataset ingestion in numerical data pipelines) rather than during editing. This trades upfront processing for much faster downstream edits.
+Virtual Copies preserve a known-good normalized baseline while allowing
+derived edit paths to evolve independently. This trades a small amount
+of branch-management overhead for much safer experimentation later.
 
-This mirrors engineering patterns such as cached derived attributes,
-precomputed embeddings, and secondary indexing. The masks function as
-metadata attached to each image and enable fast transformations later.
+This mirrors engineering patterns such as immutable baselines,
+branchable derived states, and rollbackable experimentation.
 
 ---
 
 ## Controlled Manual Overrides
 
-Manual masking remains available for edge cases but is intentionally
-limited. Excessive masking granularity increases cognitive load and
-reduces editing speed.
+Manual per-image overrides remain available for edge cases but are
+intentionally limited. Excessive local correction increases cognitive
+load and reduces editing speed.
 
 Design rationale:
 
 - overly granular control increases cognitive load
-- editing speed decreases with many masks
-- most images need minimal localized adjustments after baseline
+- editing speed decreases with too many one-off overrides
+- most images need minimal manual intervention after the baseline is established
 
 The workflow prioritizes addressable control rather than complete control.
 
@@ -621,8 +706,8 @@ The workflow prioritizes addressable control rather than complete control.
 
 - consistent visual baseline across heterogeneous input distributions
 - reduced global editing passes
-- faster editing due to segmentation mask precomputation
-- reduced manual masking workload
+- safer experimentation through rollbackable edit branches
+- reduced manual correction churn
 - predictable editing pipeline mechanics
 - preservation of natural scene tone differences
 
@@ -631,11 +716,12 @@ The workflow prioritizes addressable control rather than complete control.
 ## Engineering Concepts Demonstrated
 
 - baseline dataset normalization
-- multi-stage transformation pipelines
-- feature segmentation
-- precomputed feature generation
+- local corrective cleanup before global normalization
+- rollbackable experimentation over shared source assets
 - pipeline stage simplification
 - batch processing optimization
+- virtual copies as lineage-preserving experimental branches
+- rollbackable edit timelines over shared source assets
 - controlled override systems
 - cognitive complexity management
 
