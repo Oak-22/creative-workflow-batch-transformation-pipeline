@@ -1,4 +1,4 @@
-# System Design: Baseline Image Normalization Pipeline
+# System Design: Baseline Conditioning and Rollback Pipeline
 
 Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project.
 
@@ -7,10 +7,9 @@ Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project
 Large photo sets captured across changing lighting conditions often feel
 visually inconsistent even when subject matter remains similar. This
 stage defines a normalization workflow that combines local corrective
-cleanup, dataset-wide luminance normalization, and later color
-calibration support so the final gallery reads as coherent rather than
-ad hoc. Just as importantly, it reduces operator-driven edit drift when
-the editor is repeatedly trying to match a chosen look across many
+cleanup, dataset-wide luminance and color normalization, and rollback-safe
+virtual-copy branching so the final gallery reads as coherent rather than ad hoc. Just as importantly,
+it reduces operator-driven edit drift when the editor is repeatedly trying to match a chosen look across many
 similar images. Virtual copies provide independent edit timelines for
 experimentation without sacrificing rollback safety. The business value
 is reduced editing time, lower operator comparison burden, more
@@ -37,11 +36,12 @@ when rollback to an earlier edit state is weak or costly.
 
 Within stage 2, normalization proceeds through three internal
 operations. First, localized corrective cleanup removes repeated
-defects such as dust. Second, global luminance normalization reduces
-inter-image variance and establishes a comparable baseline. Third,
-virtual-copy branching and rollback control protect that baseline while
-still allowing experimentation. Across those operations, the workflow
-reduces both technical variance and the risk of operator-driven drift.
+defects such as dust. Second, combined luminance and color normalization
+reduces inter-image variance and establishes a comparable visual
+baseline. Third, virtual-copy branching and rollback control protect
+that baseline while still allowing experimentation. Across those
+operations, the workflow reduces both technical variance and the risk
+of operator-driven drift.
 
 ## Key Constraints
 
@@ -52,18 +52,19 @@ reduces both technical variance and the risk of operator-driven drift.
 
 ## Pipeline Value - In depth
 
-Operation 1 establishes a consistent luminance baseline across the
-[dataset](#dataset) through automated global normalization. This aligns
-exposure and tonal distribution so that each image begins from a
-comparable brightness and contrast profile before further corrections
-are applied.
+Operation 2 establishes a consistent luminance and color baseline across
+the [dataset](#dataset) through automated global normalization. This
+aligns exposure, tonal distribution, and broad color balance so that
+each image begins from a comparable brightness, contrast, and color
+profile before further creative edits are applied.
 
-Without this baseline, later color corrections interact differently
-with each image because their underlying luminance distributions vary.
-The same adjustment can therefore produce inconsistent results across
-scenes. Even when a visual domain is already broadly consistent, the
-absence of a stable baseline makes repeated manual look-matching more
-error-prone and increases the chance of operator-induced edit drift.
+Without this baseline, later look adjustments interact differently with
+each image because their underlying luminance and color distributions
+vary. The same adjustment can therefore produce inconsistent results
+across scenes. Even when a visual domain is already broadly consistent,
+the absence of a stable baseline makes repeated manual look-matching
+more error-prone and increases the chance of operator-induced edit
+drift.
 
 # Conceptual example (foliage look-matching drift):
 
@@ -77,8 +78,8 @@ Image set A — repeated manual rematching without a stable baseline:
 🚧 TODO — VISUAL
 Asset: underexposed_foliage_example
 ---
-Image set B — baseline-normalized starting point before downstream
-calibration:
+Image set B — luminance-and-color-normalized starting point before
+downstream creative edits:
 ---
 🚧 TODO — VISUAL
 Asset: normalized_foliage_example
@@ -86,7 +87,7 @@ Asset: normalized_foliage_example
 
 Observed effect:
 
-If downstream look calibration is applied directly:
+If downstream look matching is applied directly:
 
 Image set A → repeated manual compensation → edit-state drift and weak
 reversibility
@@ -101,12 +102,12 @@ result
 Asset: look_matching_with_baseline
 ---
 
-Operation 2 reduces this instability by normalizing luminance first.
-Once tonal distributions are aligned, downstream look adjustments
-operate on comparable input ranges and therefore require less
-compensatory editing. This lowers both technical variance and the
-operator burden of repeatedly re-matching a chosen look across similar
-images.
+Operation 2 reduces this instability by normalizing luminance and color
+together. Once tonal and color distributions are aligned, downstream
+look adjustments operate on comparable input ranges and therefore
+require less compensatory editing. This lowers both technical variance
+and the operator burden of repeatedly re-matching a chosen look across
+similar images.
 
 ---
 
@@ -138,7 +139,7 @@ same underlying source asset.
 
 Operationally, this supports:
 
-- experimentation with alternate normalization or color strategies
+- experimentation with alternate creative directions after normalization
 - comparison of competing edit directions without destructive edits
 - rollback to an earlier branch when an experimental path fails
 - preservation of a stable baseline alongside derived variants
@@ -178,16 +179,18 @@ Cleaned Baseline Inputs
 ```
 ---
 
-### Operation 2 — Global Luminance Normalization
+### Operation 2 — Global Luminance and Color Normalization
 
 ```text
 Cleaned Baseline Inputs
       ↓
-Global Luminance Normalization
-(automated tonal analysis)
+Global Luminance and Color Normalization
+(automated tonal and color analysis)
       ↓
 Normalized Baseline Images
-(reduced luminance variance)
+(reduced luminance and color variance)
+      ↓
+
 ```
 ---
 
@@ -250,8 +253,8 @@ To clarify domain-specific language used throughout this case study, the followi
 
 ### Pipeline Concepts
 
-<a id="automated-tonal-analysis"></a>
-- **Automated Tonal Analysis:** A global normalization step that analyzes image luminance distribution and applies coordinated adjustments to exposure, highlights/whites, shadows/blacks, and contrast in order to reduce inter-image luminance variance prior to downstream transformations.
+<a id="automated-tonal-color-analysis"></a>
+- **Automated Tonal and Color Analysis:** A global normalization step that analyzes image luminance and color distribution, then applies coordinated adjustments to exposure, highlights/whites, shadows/blacks, contrast, color temperature, and tint in order to reduce inter-image visual variance prior to downstream transformations.
 
 <a id="virtual-copy"></a>
 - **Virtual Copy:** A non-destructive derived state that preserves an
@@ -351,8 +354,9 @@ increasing the risk of inconsistent results.
 
 ## Architecture
 
-The pipeline collapses multiple global transformations into a single
-deterministic normalization stage followed by localized corrections.
+The pipeline collapses multiple global transformations into one
+deterministic baseline workflow: local corrective cleanup, combined
+luminance and color normalization, then virtual-copy rollback control.
 
 ### Pipeline Overview
 
@@ -362,8 +366,8 @@ RAW Images (dataset)
 Operation 1: Local corrective cleanup
 (fault-tolerant repeated defect removal)
       ↓
-Operation 2: Global luminance normalization
-(automated tonal analysis)
+Operation 2: Global luminance and color normalization
+(automated tonal and color analysis)
       ↓
 Operation 3: Virtual-copy branching and rollback control
 (preserve baseline while exploring alternate edit directions)
@@ -388,11 +392,11 @@ than repeatedly compensating around the same artifacts.
 - reduced need to repeatedly correct the same local defect later
 - lower operator burden during downstream review
 
-### Operation 2: Global Normalization
+### Operation 2: Global Luminance and Color Normalization
 
-The second operation uses automated tonal analysis to normalize luminance and
-contrast. It reduces dataset variance and establishes a common starting
-state for all images.
+The second operation uses automated tonal and color analysis to
+normalize luminance, contrast, and broad color balance. It reduces
+dataset variance and establishes a common starting state for all images.
 
 This stage adjusts:
 
@@ -400,41 +404,49 @@ This stage adjusts:
 - [contrast](#contrast)
 - [highlights / whites](#highlights-whites)
 - [shadows / blacks](#shadows-blacks)
+- color temperature
+- color tint
 
 This is conceptually similar to feature scaling and histogram
 normalization in data pipelines. The goal is not perfect grading per
 image but a reduced variance baseline for downstream processing.
 
+This is also analogous to tabular-data normalization in that it reduces
+variance before downstream processing. The difference is that the
+normalization target here is perceptual image state rather than numeric
+feature columns.
 
 
-This stage reduces large luminance variance across the dataset so that
-downstream corrections behave predictably. Without this normalization
-step, later adjustments interact inconsistently with each image because
-their underlying exposure and tonal distributions differ. As a result,
-the editor is more likely to compensate manually on a per-image basis,
-which increases the chance of gallery drift when trying to maintain a
-consistent look.
+
+This stage reduces large luminance and color variance across the dataset
+so that downstream corrections behave predictably. Without this
+normalization step, later adjustments interact inconsistently with each
+image because their underlying exposure, tonal, and color distributions
+differ. As a result, the editor is more likely to compensate manually on
+a per-image basis, which increases the chance of gallery drift when
+trying to maintain a consistent look.
 
 In practice, editors attempting to correct this manually are forced into
 a continuous cycle of per-image adjustments and cross-image comparison.
 They must repeatedly zoom into individual images to fine-tune exposure
-and tonal values, then zoom out to evaluate consistency across the
-broader dataset. This constant context switching introduces cognitive
-fatigue and increases the likelihood of drift from both scene-level and
-gallery-level consistency. Once a poor sequence of adjustments has been
-applied across multiple images, weak rollbackability makes recovery even
-harder.
+tonal values, and color balance, then zoom out to evaluate consistency
+across the broader dataset. This constant context switching introduces
+cognitive fatigue and increases the likelihood of drift from both
+scene-level and gallery-level consistency. Once a poor sequence of
+adjustments has been applied across multiple images, weak rollbackability
+makes recovery even harder.
 
-By establishing a consistent luminance baseline upfront, the pipeline
-removes much of this instability. Subsequent adjustments operate on
-comparable tonal distributions, enabling downstream look corrections to
-produce stable, repeatable results across the dataset without
-continuous manual recalibration.
+By establishing a consistent luminance and color baseline upfront, the
+pipeline removes much of this instability. It also reduces repeated
+temperature and tint rematching across similar images. Subsequent
+adjustments operate on comparable visual distributions, enabling
+downstream look corrections to produce stable, repeatable results across
+the dataset without continuous manual recalibration.
 
 **Outcome:**
-- reduced luminance variance across the dataset
+- reduced luminance and color variance across the dataset
 - predictable downstream transformations
-- significant reduction in repeated per-image exposure correction (residual adjustments may still be required in edge cases)
+- significant reduction in repeated per-image exposure and color correction (residual adjustments may still be required in edge cases)
 
 ### Operation 3: Virtual Copies and Rollback Control
 
@@ -501,7 +513,7 @@ Purpose: <TO DEFINE>
 
 ### Operation 2 Failure Modes
 
-Global luminance normalization can still produce imperfect results when scenes contain **extreme [dynamic range](#dynamic-range)**, strong backlighting, heavy [clipping](#clipping), or intentionally stylized lighting conditions. For example, a deliberately composed **silhouette image**—such as a wedding couple rendered primarily as shadow shapes with little or no recoverable facial or subject detail—may be interpreted by Lightroom’s automated tonal analysis as unintentionally underexposed and therefore brightened, even when the low-key silhouette treatment was the **intended creative choice**. In these cases, automated tonal analysis may reduce variance without fully establishing a sufficient baseline, and residual per-image exposure correction may still be required.
+Global luminance and color normalization can still produce imperfect results when scenes contain **extreme [dynamic range](#dynamic-range)**, strong backlighting, heavy [clipping](#clipping), mixed color temperatures, or intentionally stylized lighting conditions. For example, a deliberately composed **silhouette image**—such as a wedding couple rendered primarily as shadow shapes with little or no recoverable facial or subject detail—may be interpreted by Lightroom’s automated tonal and color analysis as unintentionally underexposed and therefore brightened, even when the low-key silhouette treatment was the **intended creative choice**. In these cases, automated analysis may reduce variance without fully establishing a sufficient baseline, and residual per-image exposure or color correction may still be required.
 
 
 ---
@@ -558,7 +570,7 @@ measurements for this workflow would be:
 - total editing time per dataset
 - editing time per delivered image
 - number of residual local defect corrections after Operation 1
-- number of residual manual exposure corrections after Operation 2
+- number of residual manual exposure or color corrections after Operation 2
 - number of virtual-copy branches or reversions required after failed
   edit directions in Operation 3
 
@@ -570,11 +582,12 @@ not required for the current visuals-first version of the case study.
 
 A lightweight validation approach is to show representative before/after
 image subsets from the same [dataset](#dataset) and visually inspect
-whether automated tonal analysis reduces luminance variance enough to
-produce a more stable baseline for later editing. If needed later, that
-visual comparison could be supplemented with recorded pre- and post-
-adjustment values for [exposure](#exposure), [contrast](#contrast),
-[highlights / whites](#highlights-whites), and [shadows / blacks](#shadows-blacks).
+whether automated tonal and color analysis reduces luminance and color
+variance enough to produce a more stable baseline for later editing. If
+needed later, that visual comparison could be supplemented with recorded
+pre- and post-adjustment values for [exposure](#exposure),
+[contrast](#contrast), [highlights / whites](#highlights-whites),
+[shadows / blacks](#shadows-blacks), color temperature, and tint.
 
 
 ---
@@ -673,7 +686,7 @@ The current implementation is optimized for a local Lightroom workflow controlle
 
 ### Vendor Heuristics vs Full Transparency
 
-The workflow benefits from Lightroom’s built-in automation, but some stages depend on vendor-controlled black-box heuristics. This improves usability and speed while limiting transparency into the exact internal logic of automated tonal analysis.
+The workflow benefits from Lightroom’s built-in automation, but some stages depend on vendor-controlled black-box heuristics. This improves usability and speed while limiting transparency into the exact internal logic of automated tonal and color analysis.
 
 ## Baseline Preservation Strategy
 
@@ -717,6 +730,7 @@ The workflow prioritizes addressable control rather than complete control.
 
 - baseline dataset normalization
 - local corrective cleanup before global normalization
+- combined luminance and color normalization
 - rollbackable experimentation over shared source assets
 - pipeline stage simplification
 - batch processing optimization
@@ -729,13 +743,16 @@ The workflow prioritizes addressable control rather than complete control.
 
 ## Key Design Principle
 
-Establish a consistent global baseline first. Apply localized corrections
-only where necessary.
+Clean repeated local defects first, establish a combined luminance and
+color baseline second, then protect that baseline with rollbackable
+Virtual Copy branches.
 
 ---
 
 ## Takeaway
 
 This photography workflow becomes a data transformation pipeline design
-problem. By separating global normalization from localized corrections, the system achieves dataset
-consistency and editing efficiency without sacrificing image fidelity and processing flexibility.
+problem. By separating local cleanup, combined luminance and color
+normalization, and rollbackable experimentation into distinct
+operations, the system achieves dataset consistency and editing
+efficiency without sacrificing image fidelity or processing flexibility.
