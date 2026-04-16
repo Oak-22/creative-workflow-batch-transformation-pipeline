@@ -6,7 +6,7 @@ Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project
 
 Large photo sets captured across changing lighting conditions often feel
 visually inconsistent even when subject matter remains similar. This
-stage defines a normalization workflow that combines local corrective
+stage defines a [normalization](#normalization) workflow that combines local corrective
 cleanup, dataset-wide luminance and color normalization, and rollback-safe
 virtual-copy branching so the final gallery reads as coherent rather than ad hoc. Just as importantly,
 it reduces operator-driven edit drift when the editor is repeatedly trying to match a chosen look across many
@@ -35,13 +35,14 @@ when rollback to an earlier edit state is weak or costly.
 ## Solution Overview
 
 Within stage 2, normalization proceeds through three internal
-operations. First, localized corrective cleanup removes repeated
-defects such as dust. Second, combined luminance and color normalization
-reduces inter-image variance and establishes a comparable visual
-baseline. Third, virtual-copy branching and rollback control protect
-that baseline while still allowing experimentation. Across those
-operations, the workflow reduces both technical variance and the risk
-of operator-driven drift.
+operations. First, batch-safe local corrective cleanup removes validated
+capture artifacts before normalization. In this case study, the tested
+cleanup operation was dust/distraction removal. Second, combined
+luminance and color normalization reduces inter-image variance and
+establishes a comparable visual baseline. Third, virtual-copy branching
+and rollback control protect that baseline while still allowing
+experimentation. Across those operations, the workflow reduces both
+technical variance and the risk of operator-driven drift.
 
 ## Key Constraints
 
@@ -50,7 +51,38 @@ of operator-driven drift.
 - normalization must preserve natural scene variation rather than erase it
 - later transformations perform better when input ranges are comparable
 
-## Pipeline Value - In depth
+## Evidence Framing
+
+This stage includes operational notes from the source photoshoot used to
+develop and validate the workflow. These notes are not presented as
+formal benchmarks; they are lived workflow observations that explain why
+specific design choices exist and where the pipeline reduced real
+editing friction.
+
+Operational notes are labeled consistently so the document distinguishes
+between general system design, domain background, and experience-derived
+design rationale.
+
+## Stage 2 Pipeline Value - In Depth
+
+Stage 2 creates value through three related operations rather than
+through normalization alone. Each operation reduces a different class of
+workflow risk, and the combined effect is larger than the sum of the
+individual batch effects.
+
+### Operation 1 Value: Cleaner Inputs
+
+Operation 1 covers batch-safe local corrective cleanup. In this case
+study, the validated cleanup operation was dust/distraction removal: a
+repeated capture artifact that could be synchronized across the selected
+dataset while leaving unaffected images largely unchanged.
+
+The value is not only cosmetic. Cleaner inputs reduce downstream review
+noise and make later normalization easier to evaluate because the editor
+is comparing global image state (image-to-image coherence) rather than
+repeatedly noticing the same local defect.
+
+### Operation 2 Value: Comparable Visual Baselines
 
 Operation 2 establishes a consistent luminance and color baseline across
 the [dataset](#dataset) through automated global normalization. This
@@ -65,6 +97,29 @@ across scenes. Even when a visual domain is already broadly consistent,
 the absence of a stable baseline makes repeated manual look-matching
 more error-prone and increases the chance of operator-induced edit
 drift.
+
+### Operation 3 Value: Recoverable Edit Branches
+
+Operation 3 protects the normalized baseline by moving experimentation
+into Virtual Copy branches. This changes rollback from a costly return
+to raw source state into a controlled return to a known-good baseline.
+
+That matters because visual drift is often discovered late, after a
+sequence of small adjustments has already spread across similar images.
+Rollbackable branches make it safer to compare alternate creative
+directions without losing the cleanup and normalization work that should
+remain stable.
+
+### Cross-Operation Logic
+
+The operations are ordered linearly, but their impact is not purely
+linear. Weakness in one operation can amplify downstream risk, while a
+strong earlier operation can reduce the complexity of later decisions.
+
+- **Operation 1 → Operation 2:** Cleaner inputs make global luminance and color normalization easier to judge because visible defects are not competing with exposure, tone, or color evaluation.
+- **Operation 2 → Operation 3:** A stronger visual baseline makes Virtual Copy branches more meaningful because each branch starts from a comparable state rather than from unstable per-image variance.
+- **Operation 3 → Operations 1 and 2:** Rollback-safe branching protects the value created by cleanup and normalization, preventing later creative experiments from destroying the stable baseline.
+- **System-level effect:** The pipeline reduces repeated manual comparison loops by separating defect cleanup, visual baseline conditioning, and experimental edit branching into distinct control points.
 
 # Conceptual example (foliage look-matching drift):
 
@@ -113,8 +168,9 @@ similar images.
 
 ## Example: Local Corrective Cleanup Before Dataset-Wide Normalization
 
-The local corrective cleanup portion of this stage includes operations
-such as dust removal before dataset-wide normalization is applied.
+Operation 1 covers batch-safe local corrective cleanup before
+dataset-wide normalization is applied. In this case study, the validated
+cleanup operation was dust/distraction removal.
 
 The images in this example show visible dust that is either on the
 camera body sensor or the camera lens, lowering image quality.
@@ -123,9 +179,9 @@ Here we manually apply the Dust Distraction Removal feature to a single
 image under Lightroom's Develop module.
 
 Synchronize the Dust Removal operation across all selected images.
-Because the operation is fault-tolerant, it can be applied
-indiscriminately across the dataset, while images without dust are left
-unaffected. This enables efficient batch cleanup before the later
+Because the operation is fault-tolerant, it can be applied across the
+selected dataset with review, while images without visible dust are left
+largely unchanged. This enables efficient batch cleanup before the later
 normalization and downstream editing passes.
 
 ---
@@ -173,7 +229,7 @@ The following simplified diagrams illustrate the three internal operations that 
 RAW Images (dataset)
       ↓
 Fault-Tolerant Local Cleanup
-(dust removal and repeated defect correction)
+(validated dust/distraction removal)
       ↓
 Cleaned Baseline Inputs
 ```
@@ -253,8 +309,11 @@ To clarify domain-specific language used throughout this case study, the followi
 
 ### Pipeline Concepts
 
+<a id="normalization"></a>
+- **Normalization:** A batch conditioning operation that reduces unwanted variance across images by bringing luminance and color distributions into a comparable operating range. In this workflow, normalization is adaptive rather than absolute: each image may receive different runtime adjustments based on its own exposure, tonal distribution, and color balance.
+
 <a id="automated-tonal-color-analysis"></a>
-- **Automated Tonal and Color Analysis:** A global normalization step that analyzes image luminance and color distribution, then applies coordinated adjustments to exposure, highlights/whites, shadows/blacks, contrast, color temperature, and tint in order to reduce inter-image visual variance prior to downstream transformations.
+- **Automated Tonal and Color Analysis:** A global normalization operation that analyzes image luminance and color distribution, then applies coordinated adjustments to exposure, highlights/whites, shadows/blacks, contrast, color temperature, and tint in order to reduce inter-image visual variance prior to downstream transformations.
 
 <a id="virtual-copy"></a>
 - **Virtual Copy:** A non-destructive derived state that preserves an
@@ -267,16 +326,35 @@ Digital cameras typically offer two capture formats: **JPEG** and **RAW**. JPEG 
 
 In contrast, **RAW images preserve the camera sensor's unnormalized luminance and color distribution**. This retains the full [dynamic range](#dynamic-range) of the captured signal and defers tonal interpretation to the post‑processing pipeline.
 
-RAW capture therefore increases [dataset](#dataset) variance but enables **controlled, user‑defined normalization during post‑processing**, which motivates the normalization pipeline described in this case study.
+RAW capture therefore increases [dataset](#dataset) variance but enables **controlled, user‑defined normalization during post‑processing**, which motivates the normalization operation described in this case study.
 
 Shooting in RAW is a deliberate decision because it preserves recoverable signal that would otherwise be lost in JPEG. RAW files retain significantly more highlight and shadow information from the sensor, allowing the editor to recover details from images that might initially appear unusable. For example, a frame with blown highlights or deep shadows can often be salvaged by recovering clipped highlight detail or lifting shadow information. In contrast, JPEG compression discards much of this recoverable signal and locks the image into a specific tone curve and color profile, making such recovery far more limited.
 
-RAW capture was especially important in low-light venue conditions,
-where heavy tree cover reduced available light and made detail recovery
-more difficult. In that environment, RAW preserved the best chance of
-recovering usable image quality during post-processing.
+> **Operational note:** In the source photoshoot, RAW capture was
+> especially important in low-light venue conditions where heavy tree
+> cover reduced available light and made detail recovery more difficult.
+> In that environment, RAW preserved the best chance of recovering usable
+> image quality during post-processing.
 
 This background context explains why RAW datasets exhibit higher variance and why a normalization stage becomes necessary before consistent batch edits can be applied.
+
+### What Normalization Means Here
+
+In this pipeline, [normalization](#normalization) means reducing unwanted
+visual variance across a dataset while preserving meaningful scene
+differences. It does not mean forcing every image to the same exposure,
+white balance, or color profile.
+
+Instead, normalization establishes a comparable baseline operating range
+for downstream edits. Each image can receive different runtime
+adjustments because each image starts with different luminance, contrast,
+and color conditions. The batch operation is shared, but the effective
+transformation is image-specific.
+
+This distinction matters because the goal is not visual flattening. The
+goal is to make later edits behave more predictably by reducing
+unwanted input variance before creative decisions, semantic masking, or
+manual refinement are applied.
 
 ---
 
@@ -308,17 +386,17 @@ That technical instability creates a second-order workflow effect: the
 editor must repeatedly rematch a chosen look across related images in
 order to keep the gallery coherent.
 
-This became especially visible in group formals. Although those images
-were already highly similar, repeated manual rematching still
-introduced edit-direction drift once the workflow lacked a stable shared
-baseline.
+> **Operational note:** This became especially visible in group formals.
+> Although those images were already highly similar, repeated manual
+> rematching still introduced edit-direction drift once the workflow
+> lacked a stable shared baseline.
 
-This was a real workflow failure mode in practice. Rollback was
-technically available, but it was still costly because reverting often
-meant returning to raw source state rather than to a reusable
-intermediate baseline shared across similar group portraits. In other
-words, recovery existed, but the rollback target was too primitive to
-preserve the normalization work that should have remained stable.
+> **Operational note:** Rollback was technically available, but it was
+> still costly because reverting often meant returning to raw source
+> state rather than to a reusable intermediate baseline shared across
+> similar group portraits. In other words, recovery existed, but the
+> rollback target was too primitive to preserve the normalization work
+> that should have remained stable.
 
 The workflow goals are:
 
@@ -364,7 +442,7 @@ luminance and color normalization, then virtual-copy rollback control.
 RAW Images (dataset)
       ↓
 Operation 1: Local corrective cleanup
-(fault-tolerant repeated defect removal)
+(validated dust/distraction removal)
       ↓
 Operation 2: Global luminance and color normalization
 (automated tonal and color analysis)
@@ -377,15 +455,16 @@ Consistent dataset baseline with preserved scene variation
 
 ### Operation 1: Local Corrective Cleanup
 
-The first operation removes repeated local defects before any
-dataset-wide normalization is applied. In this workflow, the clearest
-example is dust removal: a fault-tolerant cleanup step that improves the
-baseline input without requiring image-by-image branching logic.
+Operation 1 covers batch-safe local corrective cleanup before any
+dataset-wide normalization is applied. In this workflow, the validated
+cleanup operation was dust/distraction removal: a repeated capture
+artifact that improved the baseline input without requiring
+image-by-image branching logic.
 
 Because this kind of correction is local and repeated, it is a good
-candidate for early batch handling. It reduces visible defects up front
-so later baseline normalization is working from cleaner inputs rather
-than repeatedly compensating around the same artifacts.
+candidate for early batch handling. It reduces visible dust artifacts up
+front so later baseline normalization is working from cleaner inputs
+rather than repeatedly compensating around the same artifacts.
 
 **Outcome:**
 - cleaner baseline inputs before dataset-wide normalization
@@ -420,7 +499,7 @@ feature columns.
 
 This stage reduces large luminance and color variance across the dataset
 so that downstream corrections behave predictably. Without this
-normalization step, later adjustments interact inconsistently with each
+normalization operation, later adjustments interact inconsistently with each
 image because their underlying exposure, tonal, and color distributions
 differ. As a result, the editor is more likely to compensate manually on
 a per-image basis, which increases the chance of gallery drift when
@@ -499,10 +578,10 @@ Although the pipeline reduces variance and improves editing consistency, each st
 
 ### Operation 1 Failure Modes
 
-Local corrective cleanup can still fail when defects are missed,
-over-corrected, or applied too broadly. Fault-tolerant cleanup is
-helpful for repeated artifacts such as dust, but some defects may still
-require selective operator review.
+Local corrective cleanup can still fail when dust artifacts are missed,
+over-corrected, or applied too broadly. Fault-tolerant cleanup is helpful
+for repeated artifacts such as dust, but the result still requires
+selective operator review.
 
 
 ---
@@ -618,7 +697,11 @@ Purpose: <TO DEFINE>
 
 ### Baseline Comparison
 
-A known baseline from the prior workflow is approximately **42 hours of edit time** to complete a 1500-image RAW gallery that was ultimately culled to 375 edited images. That historical workflow included repeated global corrections, inconsistent convergence, and extensive manual adjustment.
+> **Operational note:** A known baseline from the prior workflow is
+> approximately **42 hours of edit time** to complete a 1500-image RAW
+> gallery that was ultimately culled to 375 edited images. That
+> historical workflow included repeated global corrections, inconsistent
+> convergence, and extensive manual adjustment.
 
 That baseline can remain contextual support without forcing a formal
 before/after table into the document. If stronger quantitative evidence
@@ -729,7 +812,7 @@ The workflow prioritizes addressable control rather than complete control.
 ## Engineering Concepts Demonstrated
 
 - baseline dataset normalization
-- local corrective cleanup before global normalization
+- validated dust/distraction cleanup before global normalization
 - combined luminance and color normalization
 - rollbackable experimentation over shared source assets
 - pipeline stage simplification
@@ -743,9 +826,9 @@ The workflow prioritizes addressable control rather than complete control.
 
 ## Key Design Principle
 
-Clean repeated local defects first, establish a combined luminance and
-color baseline second, then protect that baseline with rollbackable
-Virtual Copy branches.
+Clean validated dust/distraction artifacts first, establish a combined
+luminance and color baseline second, then protect that baseline with
+rollbackable Virtual Copy branches.
 
 ---
 
