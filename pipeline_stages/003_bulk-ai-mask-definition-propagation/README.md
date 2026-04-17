@@ -1,4 +1,4 @@
-# System Design: Bulk AI Masking Batch Rebinding
+# Production Workflow System Design & Implementation: Bulk AI Masking Batch Rebinding
 
 Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project.
 

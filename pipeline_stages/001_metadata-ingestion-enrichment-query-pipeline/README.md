@@ -1,4 +1,4 @@
-# System Design: Metadata Ingestion and Enrichment Pipeline
+# Production Workflow System Design & Implementation: Metadata Ingestion and Enrichment Pipeline
 
 Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project.
 
