@@ -220,8 +220,10 @@ GROUP BY camera_model, lens_model;
 This kind of temporary filtering is useful for exploratory review, such as evaluating which camera body and lens combinations are producing the strongest images.
 
 ---
-🚧 TODO — VISUAL
+🚧 TODO — EVIDENCE
+Type: Visual
 Asset: ad_hoc_library_filter_example.png
+Purpose: Show a temporary Lightroom Library Filter query over enriched metadata for exploratory retrieval.
 ---
 
 ## Smart Collections
@@ -265,8 +267,10 @@ The point is that Smart Collections behave like saved declarative views
 over enriched metadata.
 
 ---
-🚧 TODO — VISUAL
+🚧 TODO — EVIDENCE
+Type: Visual
 Asset: smart_collections_example.png
+Purpose: Show a Smart Collection configured as a saved declarative view over enriched metadata.
 ---
 
 ### Why This Matters

@@ -8,8 +8,8 @@ Large photo sets captured across changing lighting conditions often feel
 visually inconsistent even when subject matter remains similar. This
 stage defines a [normalization](#normalization) workflow that combines local corrective
 cleanup, dataset-wide luminance normalization, scene-level color
-normalization, and rollback-safe virtual-copy branching so the final
-gallery reads as coherent rather than ad hoc. Just as importantly,
+normalization, post-cull Virtual Copy lineage, and rollback-safe
+branching so the final gallery reads as coherent rather than ad hoc. Just as importantly,
 it reduces operator-driven edit drift when the editor is repeatedly trying to match a chosen look across many
 similar images. Virtual copies provide independent edit timelines for
 experimentation without sacrificing rollback safety. The business value
@@ -35,16 +35,20 @@ when rollback to an earlier edit state is weak or costly.
 
 ## Solution Overview
 
-Within stage 2, normalization proceeds through three internal
-operations. First, batch-safe local corrective cleanup removes validated
-capture artifacts before normalization. In this case study, the tested
-cleanup operation was dust/distraction removal. Second, dataset-wide
-luminance normalization and scene-level color normalization reduce
-unwanted variance while preserving natural across-scene differences.
-Third, virtual-copy branching and rollback control protect that baseline
-while still allowing experimentation. Across those operations, the
-workflow reduces both technical variance and the risk of operator-driven
-drift.
+Within stage 2, the first Virtual Copy branch is created immediately
+after RAW culling so the workflow has a protected source state before
+cleanup or normalization begins. The three internal operations then
+operate on that lineage-aware working set. First, batch-safe local
+corrective cleanup removes validated capture artifacts before
+normalization. In this case study, dust/distraction removal was the
+safer batch cleanup example, while Auto Transform straightening provided
+a reviewed per-image corrective example with visible pass/fail outcomes.
+Second, dataset-wide luminance normalization and scene-level color
+normalization reduce unwanted variance while preserving natural
+across-scene differences. Third, virtual-copy rollback control protects
+the normalized baseline while still allowing experimentation. Across
+those operations, the workflow reduces both technical variance and the
+risk of operator-driven drift.
 
 ## Key Constraints
 
@@ -65,19 +69,41 @@ Operational notes are labeled consistently so the document distinguishes
 between general system design, domain background, and experience-derived
 design rationale.
 
+Each note follows the same basic structure:
+
+- **Source context:** the relevant condition from the photoshoot or editing session
+- **Observed constraint:** the specific friction, variance, or failure mode encountered
+- **Design implication:** how that observation influenced the pipeline design or operation order
+- **Workflow value:** why the resulting choice improved recovery, consistency, or review efficiency
+
 ## Stage 2 Pipeline Value - In Depth
 
-Stage 2 creates value through three related operations rather than
-through normalization alone. Each operation reduces a different class of
-workflow risk, and the combined effect is larger than the sum of the
-individual batch effects.
+Stage 2 creates value through an initial lineage setup followed by three
+related operations. Each part reduces a different class of workflow risk,
+and the combined effect is larger than the sum of the individual batch
+effects.
+
+### Lineage Setup Value: Protected Working State
+
+The first Virtual Copy branch occurs immediately after RAW culling, before
+Operation 1 or Operation 2. This creates a protected working state for
+the culled image set so cleanup and normalization do not have to operate
+directly on the original RAW selection.
+
+This is not a fourth operation; it is the lineage setup that makes the
+later operations safer. Operations 1 and 2 can transform the working
+branch, while the original culled state remains available as the
+earliest rollback point.
 
 ### Operation 1 Value: Cleaner Inputs
 
 Operation 1 covers batch-safe local corrective cleanup. In this case
-study, the validated cleanup operation was dust/distraction removal: a
-repeated capture artifact that could be synchronized across the selected
-dataset while leaving unaffected images largely unchanged.
+study, the validated cleanup operations were dust/distraction removal
+and Auto Transform straightening. Dust removal is the safer batch
+operation: if no dust is present, little or no change is applied. Auto
+Transform is still useful because it evaluates each image independently,
+but it requires stricter review because failed straightening must be
+corrected later.
 
 The value is not only cosmetic. Cleaner inputs reduce downstream review
 noise and make later normalization easier to evaluate because the editor
@@ -101,9 +127,10 @@ color differences.
 
 ### Operation 3 Value: Recoverable Edit Branches
 
-Operation 3 protects the normalized baseline by moving experimentation
-into Virtual Copy branches. This changes rollback from a costly return
-to raw source state into a controlled return to a known-good baseline.
+Operation 3 protects the normalized baseline by using additional Virtual
+Copy branches for experimentation. This changes rollback from a costly
+return to raw source state into a controlled return to a known-good
+baseline.
 
 That matters because visual drift is often discovered late, after a
 sequence of small adjustments has already spread across similar images.
@@ -118,108 +145,10 @@ linear. Weakness in one operation can amplify downstream risk, while a
 strong earlier operation can reduce the complexity of later decisions.
 
 - **Operation 1 → Operation 2:** Cleaner inputs make luminance and scene-level color normalization easier to judge because visible defects are not competing with exposure, tone, or color evaluation.
-- **Operation 2 → Operation 3:** A stronger visual baseline makes Virtual Copy branches more meaningful because each branch starts from a comparable state rather than from unstable per-image variance.
+- **Lineage setup → Operation 1:** The initial post-cull Virtual Copy branch gives cleanup a protected working state rather than forcing edits directly onto the original RAW selection.
+- **Operation 2 → Operation 3:** A stronger visual baseline makes later Virtual Copy branches more meaningful because each branch starts from a comparable state rather than from unstable per-image variance.
 - **Operation 3 → Operations 1 and 2:** Rollback-safe branching protects the value created by cleanup and normalization, preventing later creative experiments from destroying the stable baseline.
 - **System-level effect:** The pipeline reduces repeated manual comparison loops by separating defect cleanup, visual baseline conditioning, and experimental edit branching into distinct control points.
-
-# Conceptual example (foliage look-matching drift):
-
-Comparable group portraits can begin with broadly consistent foliage,
-but still drift apart once the operator repeatedly tries to force a
-specific target green palette without a stable baseline or a clean
-rollback path.
-
-Image set A — repeated manual rematching without a stable baseline:
----
-🚧 TODO — VISUAL
-Asset: underexposed_foliage_example
----
-Image set B — luminance-normalized and scene-color-normalized starting point before
-downstream creative edits:
----
-🚧 TODO — VISUAL
-Asset: normalized_foliage_example
----
-
-Observed effect:
-
-If downstream look matching is applied directly:
-
-Image set A → repeated manual compensation → edit-state drift and weak
-reversibility
----
-🚧 TODO — VISUAL
-Asset: look_matching_without_baseline
----
-Image set B → smaller corrective effort → more stable and repeatable
-result
----
-🚧 TODO — VISUAL
-Asset: look_matching_with_baseline
----
-
-Operation 2 reduces this instability by normalizing luminance across the
-dataset and normalizing color within scene boundaries. Once tonal
-distributions are aligned and scene-specific color ranges are stabilized,
-downstream look adjustments operate on comparable input ranges without
-forcing every scene into the same foliage hue. This lowers both
-technical variance and the operator burden of repeatedly re-matching a
-chosen look across similar images.
-
----
-
-## Example: Local Corrective Cleanup Before Dataset-Wide Normalization
-
-Operation 1 covers batch-safe local corrective cleanup before
-dataset-wide normalization is applied. In this case study, the validated
-cleanup operation was dust/distraction removal.
-
-The images in this example show visible dust that is either on the
-camera body sensor or the camera lens, lowering image quality.
-
-Here we manually apply the Dust Distraction Removal feature to a single
-image under Lightroom's Develop module.
-
-Synchronize the Dust Removal operation across all selected images.
-Because the operation is fault-tolerant, it can be applied across the
-selected dataset with review, while images without visible dust are left
-largely unchanged. This enables efficient batch cleanup before the later
-normalization and downstream editing passes.
-
----
-
-## Virtual Copies as Data Lineage and Rollback Control
-
-Virtual Copies provide a lightweight lineage mechanism for alternate
-edit paths. Instead of overwriting a single edit history, the workflow
-can branch an image into parallel adjustment timelines while keeping the
-same underlying source asset.
-
-Operationally, this supports:
-
-- experimentation with alternate creative directions after normalization
-- comparison of competing edit directions without destructive edits
-- rollback to an earlier branch when an experimental path fails
-- preservation of a stable baseline alongside derived variants
-
-In systems terms, Virtual Copies behave like non-destructive derived
-states: multiple transformation histories can reference the same source
-record while preserving separate downstream edit decisions. In this
-workflow, that matters because a bad sequence of global or domain-level
-adjustments can otherwise propagate across many similar images before
-the editor realizes the gallery has drifted away from the intended
-look.
-
-
----
-
-Operation 3 preserves the normalized baseline while allowing alternate
-edit directions to be explored safely. Instead of continuing to stack
-global or domain-level decisions onto a single history, the editor can
-branch from the baseline, compare outcomes, and revert cleanly if a
-chosen direction begins to drift.
-
----
 
 ## Pipeline Diagrams
 
@@ -230,8 +159,12 @@ The following simplified diagrams illustrate the three internal operations that 
 ```text
 RAW Images (dataset)
       ↓
+Culled RAW Selection
+      ↓
+Initial Virtual Copy Working Branch
+      ↓
 Fault-Tolerant Local Cleanup
-(validated dust/distraction removal)
+(validated dust/distraction removal + reviewed Auto Transform)
       ↓
 Cleaned Baseline Inputs
 ```
@@ -258,17 +191,19 @@ Normalized Baseline Images
 ### Operation 3 — Virtual Copies and Rollback Control
 
 ```text
-Normalized Images
+Normalized Baseline Images
       ↓
-Virtual Copy Branch Created
+Additional Virtual Copy Branches Created
       ↓
 Alternate Edit Direction A / B
       ↓
 Compare, Keep, or Revert
 ```
 
-These branches preserve the normalized baseline while making alternate
-looks recoverable instead of destructive.
+The initial Virtual Copy branch is created after RAW culling to protect
+the source selection before cleanup and normalization. Operation 3 then
+uses additional branches to preserve the normalized baseline while making
+alternate looks recoverable instead of destructive.
 
 ---
 
@@ -359,13 +294,48 @@ transformation is image-specific.
 Color normalization is also scene-specific. A yellow-green foliage scene
 should not be forced to match a deeper green scene if that hue
 difference reflects real lighting, location, or environmental context.
-In this workflow, luminance can be normalized across the broader dataset,
-but hue and color-balance decisions are evaluated within scene groups.
+The Operation 2 examples later in this document show this distinction
+using foliage and skin tone normalization. In this workflow, luminance
+can be normalized across the broader dataset, but hue and color-balance
+decisions are evaluated within scene groups.
 
 This distinction matters because the goal is not visual flattening. The
 goal is to make later edits behave more predictably by reducing
 unwanted input variance before creative decisions, semantic masking, or
 manual refinement are applied.
+
+### Conceptual RGB Divergence Example
+
+A useful way to explain baseline conditioning is to compare how the same
+manual edit behaves against two different starting states. If one image
+has been baseline conditioned and another has not, the same creative
+adjustment can push their sampled color values farther apart rather than
+closer together.
+
+This can be shown with representative RGB samples, either from a global
+luminance region or from a scene-specific hue region such as foliage or
+skin tone:
+
+```text
+Target look sample:
+  RGB(92, 118, 64)
+
+Image A - not baseline conditioned:
+  before manual edit: RGB(62, 91, 48)
+  after edit:    RGB(83, 132, 58)
+  result: closer in brightness, but hue shifts away from target
+
+Image B - baseline conditioned first:
+  before manual edit: RGB(79, 109, 59)
+  after same edit:    RGB(91, 119, 65)
+  result: converges toward the chosen look with less drift
+```
+
+TO DO: The exact RGB values should be replaced with sampled values from the
+embedded photos when the visual evidence is finalized. The conceptual
+point is that baseline conditioning reduces input variance before the
+manual edit is applied, so the same edit is less likely to amplify
+divergence from the chosen unified look.
 
 ---
 
@@ -386,7 +356,7 @@ These conditions introduce variance in:
 - exposure
 - contrast
 - color temperature
-- foialge and environmental tones
+- foliage and environmental tones
 - skin tone rendering
 
 A naive global editing strategy (e.g., applying identical exposure
@@ -429,15 +399,22 @@ Importantly, the pipeline does **not** eliminate all variation between images. L
 > would erase a natural across-scene difference.
 ---
 
-## Initial Approach (Multi-Stage Global Presets)
+## Initial, Naive Approach (Multi-Stage Global Develop Presets)
 
-The original workflow attempted multiple preset layers across the dataset:
+The original Stage 2 workflow attempted multiple visual Develop preset
+layers across the dataset:
 
 ```text
 Import preset
 → secondary editing preset
 → additional correction preset
 ```
+
+These are image-adjustment presets, not the Stage 1 metadata presets
+used for authorship and semantic enrichment. Stage 1 intentionally uses
+non-overlapping metadata preset layers; the problem here is different:
+multiple broad visual adjustment presets were stacked across the same
+image set without a stable conditioned baseline.
 
 This introduced several issues:
 
@@ -451,25 +428,30 @@ increasing the risk of inconsistent results.
 
 ---
 
-## Architecture
+## Stage 2 Internal Architecture
 
-The pipeline collapses multiple global transformations into one
-deterministic baseline workflow: local corrective cleanup, combined
-luminance and scene-level color normalization, then virtual-copy rollback
-control.
+Within the larger creative workflow pipeline, Stage 2 collapses multiple
+global edit passes into one deterministic baseline-conditioning sequence:
+local corrective cleanup, dataset-wide luminance normalization,
+scene-level color normalization, and Virtual Copy lineage protecting both
+the initial culled selection and later normalized baselines.
 
-### Pipeline Overview
+### Stage 2 Operation Flow
 
 ```text
 RAW Images (dataset)
       ↓
+Culled RAW Selection
+      ↓
+Initial Virtual Copy Working Branch
+      ↓
 Operation 1: Local corrective cleanup
-(validated dust/distraction removal)
+(validated dust/distraction removal + reviewed Auto Transform)
       ↓
 Operation 2: Global luminance and scene-level color normalization
 (dataset-wide tonal analysis + per-scene color adjustment)
       ↓
-Operation 3: Virtual-copy branching and rollback control
+Operation 3: Additional virtual-copy branching and rollback control
 (preserve baseline while exploring alternate edit directions)
       ↓
 Consistent dataset baseline with preserved scene variation
@@ -479,25 +461,59 @@ Consistent dataset baseline with preserved scene variation
 
 Operation 1 covers batch-safe local corrective cleanup before any
 dataset-wide normalization is applied. In this workflow, the validated
-cleanup operation was dust/distraction removal: a repeated capture
-artifact that improved the baseline input without requiring
-image-by-image branching logic.
+cleanup operations were dust/distraction removal and Auto Transform
+straightening.
+
+#### Dust / Distraction Removal
+
+The source images in this example show visible dust from either the
+camera body sensor or lens, lowering image quality. The Dust Distraction
+Removal feature is applied to one representative image in Lightroom's
+Develop module, then synchronized across the selected images.
+
+Because the operation is fault-tolerant, it can be applied across the
+selected dataset with review, while images without visible dust are left
+largely unchanged. This enables efficient batch cleanup before the later
+normalization and downstream editing passes.
 
 Because this kind of correction is local and repeated, it is a good
 candidate for early batch handling. It reduces visible dust artifacts up
 front so later baseline normalization is working from cleaner inputs
 rather than repeatedly compensating around the same artifacts.
 
+#### Auto Transform Straightening
+
+Auto Transform straightening is also useful in Operation 1 because it
+evaluates each image independently rather than applying one fixed
+rotation value across the batch. In the recorded evidence, the automated
+straightening pass worked reliably on four unrelated photos and failed
+on one; the review set marked passes in green and the failure in red.
+
+This makes Auto Transform less batch-safe than dust removal. Dust removal
+is largely no-op when no visible dust is present, while a failed
+straightening result creates work that must be corrected later. For that
+reason, Auto Transform belongs in Operation 1 as a reviewed corrective
+cleanup candidate, not as an indiscriminate batch operation.
+
 **Outcome:**
 - cleaner baseline inputs before dataset-wide normalization
-- reduced need to repeatedly correct the same local defect later
+- reduced need to repeatedly correct the same local defect or alignment issue later
+- explicit review surface for automated straightening failures
 - lower operator burden during downstream review
 
-### Operation 2: Global Luminance and Color Normalization
+---
+🚧 TODO — EVIDENCE
+Type: Workflow
+Asset: operation1_cleanup_examples
+Purpose: Show dust/distraction cleanup and Auto Transform straightening as Operation 1 examples, including the green/red pass-fail review for Auto Transform.
+---
 
-The second operation uses automated tonal and color analysis to
-normalize luminance, contrast, and broad color balance. It reduces
-dataset variance and establishes a common starting state for all images.
+### Operation 2: Global Luminance and Scene-Level Color Normalization
+
+The second operation uses automated tonal analysis to normalize
+luminance across the dataset, then applies color normalization within
+scene boundaries. This reduces unwanted visual variance while preserving
+legitimate environmental hue differences between scenes.
 
 This stage adjusts:
 
@@ -505,8 +521,8 @@ This stage adjusts:
 - [contrast](#contrast)
 - [highlights / whites](#highlights-whites)
 - [shadows / blacks](#shadows-blacks)
-- color temperature
-- color tint
+- scene-level color temperature
+- scene-level color tint and hue balance
 
 This is conceptually similar to feature scaling and histogram
 normalization in data pipelines. The goal is not perfect grading per
@@ -518,18 +534,18 @@ normalization target here is perceptual image state rather than numeric
 feature columns.
 
 
-
-This stage reduces large luminance and color variance across the dataset
-so that downstream corrections behave predictably. Without this
-normalization operation, later adjustments interact inconsistently with each
-image because their underlying exposure, tonal, and color distributions
-differ. As a result, the editor is more likely to compensate manually on
-a per-image basis, which increases the chance of gallery drift when
-trying to maintain a consistent look.
+This stage reduces large luminance variance across the dataset and
+unwanted color variance within scene groups so that downstream
+corrections behave predictably. Without this normalization operation,
+later adjustments interact inconsistently with each image because their
+underlying exposure, tonal, and scene-level color distributions differ.
+As a result, the editor is more likely to compensate manually on a
+per-image basis, which increases the chance of gallery drift when trying
+to maintain a consistent look.
 
 In practice, editors attempting to correct this manually are forced into
 a continuous cycle of per-image adjustments and cross-image comparison.
-They must repeatedly zoom into individual images to fine-tune exposure
+They must repeatedly zoom into individual images to fine-tune exposure,
 tonal values, and color balance, then zoom out to evaluate consistency
 across the broader dataset. This constant context switching introduces
 cognitive fatigue and increases the likelihood of drift from both
@@ -537,38 +553,121 @@ scene-level and gallery-level consistency. Once a poor sequence of
 adjustments has been applied across multiple images, weak rollbackability
 makes recovery even harder.
 
-By establishing a consistent luminance and color baseline upfront, the
-pipeline removes much of this instability. It also reduces repeated
-temperature and tint rematching across similar images. Subsequent
-adjustments operate on comparable visual distributions, enabling
-downstream look corrections to produce stable, repeatable results across
-the dataset without continuous manual recalibration.
+By establishing a consistent dataset-wide luminance baseline upfront, the
+pipeline removes much of this instability. By constraining color
+normalization to scene groups, it also reduces repeated temperature,
+tint, and hue rematching across similar images without flattening
+legitimate across-scene differences. Subsequent adjustments operate on
+comparable visual distributions, enabling downstream look corrections to
+produce stable, repeatable results without continuous manual
+recalibration.
+
+#### Foliage Hue Normalization
+
+Foliage is a useful Operation 2 example because it exposes the
+difference between legitimate scene variance and unwanted within-scene
+drift. A true global hue target would be too aggressive: yellow-green
+foliage in one scene should not be forced to match deeper green foliage
+from a different lighting environment.
+
+The strongest candidate for demonstrating scene-level foliage
+normalization is the wedding-dress foliage scene because the subject and
+environment are similar enough to compare hue drift within the scene.
+The group formal portraits are a stronger candidate for luminance
+normalization because the green hue is relatively stable, while the
+yellow-green foliage scene is the weakest candidate for color
+normalization because its hue difference appears scene-authentic.
+
+```text
+Without scene boundaries:
+  repeated manual compensation
+  → cross-scene hue flattening
+  → edit-state drift and weak reversibility
+
+With scene-level foliage normalization:
+  comparable scene group selected
+  → hue drift reduced within the scene
+  → natural across-scene foliage variance preserved
+```
+
+![Lightroom comparison showing foliage hue differences across scene groups, demonstrating why foliage color should be normalized within comparable scenes rather than globally across the full dataset.](assets/images/intra-scene-hue-normalization-not-global.png)
+
+*Foliage hue normalization should be constrained to comparable scene groups. The yellow-green foliage scene should remain visually distinct rather than being forced to match the deeper green foliage from the other 2 sampled scenes.*
+
+
+#### Skin Tone Normalization
+
+Skin tone is a separate Operation 2 concern because it is evaluated
+against subject consistency rather than environmental consistency. A
+scene can preserve natural foliage or ambient color while still needing
+skin tones to remain believable and consistent across similar portraits.
+
+In practice, skin tone normalization should be evaluated within
+comparable portrait groups after the luminance baseline is established.
+This prevents exposure differences, mixed shade, or local color casts
+from causing manual overcorrection while still avoiding a single global
+skin-tone target across unlike scenes.
+
+```text
+Dataset-wide luminance baseline
+      ↓
+Comparable portrait group selected
+      ↓
+Skin tone checked for believable within-group consistency
+      ↓
+Residual color correction applied only where needed
+```
+
+---
+🚧 TODO — EVIDENCE
+Type: Visual
+Asset: skin_tone_scene_level_normalization
+Purpose: Show skin tone consistency within comparable portrait groups after luminance normalization.
+---
 
 **Outcome:**
-- reduced luminance and color variance across the dataset
+- reduced luminance variance across the dataset
+- reduced hue/color variance within scene groups
 - predictable downstream transformations
-- significant reduction in repeated per-image exposure and color correction (residual adjustments may still be required in edge cases)
+- significant reduction in repeated per-image exposure and scene-level color correction (residual adjustments may still be required in edge cases)
 
 ### Operation 3: Virtual Copies and Rollback Control
 
-After global normalization establishes a stable baseline, the workflow
-must still protect that baseline from operator-induced drift.
-Virtual Copies provide a lightweight branching mechanism for exactly
-that purpose.
+Virtual Copies enter the workflow before Operation 1: after RAW culling,
+the selected images are branched into an initial working state so cleanup
+and normalization do not overwrite the original culled selection. After
+Operation 2 establishes a stable luminance and scene-color baseline,
+Operation 3 uses additional Virtual Copy branches to protect that
+baseline from operator-induced drift.
+
+Virtual Copies provide a lightweight lineage mechanism for alternate edit
+paths: instead of overwriting a single edit history, the workflow can
+branch an image into parallel adjustment timelines while keeping the same
+underlying source asset.
+
+In this workflow, that matters because a bad sequence of global or
+domain-level adjustments can otherwise propagate across many similar
+images before the editor realizes the gallery has drifted away from the
+intended look.
 
 **Outcome:**
 
 - **Rollbackable experimentation:** Alternate edit directions can be
   tested without destroying the normalized baseline.
+- **Comparative review:** Competing edit directions can be compared
+  without forcing every experiment into one mutable history.
+- **Source protection:** The first post-cull Virtual Copy keeps the
+  original culled RAW selection available before cleanup and
+  normalization.
 - **Baseline preservation:** Once a chosen direction begins to drift,
   the editor can revert to a known-good state instead of manually
   untangling accumulated edits.
 
 **Engineering Analogy:**
 This operation behaves like lightweight branch management over a shared
-source record. Instead of forcing every experiment into one mutable edit
-history, the workflow creates recoverable derived states that can be
-compared, kept, or discarded.
+source record. Virtual Copies behave like non-destructive derived states:
+multiple transformation histories can reference the same source record
+while preserving separate downstream edit decisions.
 
 ---
 
@@ -589,9 +688,10 @@ and workflow-observable rather than heavily instrumented.
 
 
 ---
-🟦 TODO — WORKFLOW
+🚧 TODO — EVIDENCE
+Type: Workflow
 Asset: pipeline_stage_views
-Purpose: <TO DEFINE>
+Purpose: Show the Lightroom collection structure for Stage 2, including post-cull Virtual Copy lineage, Operation 1 cleanup, Operation 2 normalization, and Operation 3 rollback branches.
 ---
 
 ## Failure Modes & Edge Cases
@@ -603,39 +703,45 @@ Although the pipeline reduces variance and improves editing consistency, each st
 Local corrective cleanup can still fail when dust artifacts are missed,
 over-corrected, or applied too broadly. Fault-tolerant cleanup is helpful
 for repeated artifacts such as dust, but the result still requires
-selective operator review.
+selective operator review. Auto Transform can also fail when Lightroom's
+geometry inference chooses an incorrect horizon or alignment target; in
+that case, the result must be flagged and corrected manually.
 
 
 ---
-🟦 TODO — WORKFLOW
+🚧 TODO — EVIDENCE
+Type: Workflow
 Asset: cleanup_failure_cases
-Purpose: <TO DEFINE>
+Purpose: Show Operation 1 review cases where dust cleanup or Auto Transform straightening required manual review, including the known Auto Transform failure case.
 ---
 
 ### Operation 2 Failure Modes
 
-Global luminance and color normalization can still produce imperfect results when scenes contain **extreme [dynamic range](#dynamic-range)**, strong backlighting, heavy [clipping](#clipping), mixed color temperatures, or intentionally stylized lighting conditions. For example, a deliberately composed **silhouette image**—such as a wedding couple rendered primarily as shadow shapes with little or no recoverable facial or subject detail—may be interpreted by Lightroom’s automated tonal and color analysis as unintentionally underexposed and therefore brightened, even when the low-key silhouette treatment was the **intended creative choice**. In these cases, automated analysis may reduce variance without fully establishing a sufficient baseline, and residual per-image exposure or color correction may still be required.
+Global luminance normalization and scene-level color normalization can still produce imperfect results when scenes contain **extreme [dynamic range](#dynamic-range)**, strong backlighting, heavy [clipping](#clipping), mixed color temperatures, or intentionally stylized lighting conditions. For example, a deliberately composed **silhouette image**—such as a wedding couple rendered primarily as shadow shapes with little or no recoverable facial or subject detail—may be interpreted by Lightroom’s automated tonal analysis as unintentionally underexposed and therefore brightened, even when the low-key silhouette treatment was the **intended creative choice**. Color normalization can also fail if dissimilar scenes are grouped together and natural foliage hue differences are treated as errors. In these cases, automated analysis may reduce variance without fully establishing a sufficient baseline, and residual per-image exposure or scene-level color correction may still be required.
 
 
 ---
-🚧 TODO — VISUAL
+🚧 TODO — EVIDENCE
+Type: Visual
 Asset: stage2_failure_cases
-Purpose: <TO DEFINE>
+Purpose: Show Operation 2 failure modes such as extreme dynamic range, silhouette images, mixed color temperature, or incorrect scene grouping for color normalization.
 ---
 
 ### Operation 3 Failure Modes
 
-Virtual-copy branching can still fail when branch discipline is weak.
-If alternate directions are not clearly named, compared, or pruned, the
+Virtual-copy branching can still fail when branch discipline is weak. If
+the initial post-cull branch, normalized baseline branch, and later
+experimental branches are not clearly named, compared, or pruned, the
 editor can lose track of which branch represents the intended baseline
 versus an experimental detour. In that case, branching reduces recovery
 cost in theory but not in practice.
 
 
 ---
-🚧 TODO — VISUAL
+🚧 TODO — EVIDENCE
+Type: Workflow
 Asset: virtual_copy_failure_cases
-Purpose: <TO DEFINE>
+Purpose: Show how weak branch naming, comparison, or pruning can make Virtual Copy rollback harder to use in practice.
 ---
 
 ### System-Level Failure Modes
@@ -650,9 +756,10 @@ increase downstream instability and reduce overall consistency.
 
 
 ---
-🚧 TODO — VISUAL
+🚧 TODO — EVIDENCE
+Type: Visual
 Asset: pipeline_instability_example
-Purpose: <TO DEFINE>
+Purpose: Show how weak cleanup, weak normalization, or weak rollback discipline can compound into downstream gallery inconsistency.
 ---
 
 ## Observability & Validation
@@ -670,8 +777,8 @@ measurements for this workflow would be:
 
 - total editing time per dataset
 - editing time per delivered image
-- number of residual local defect corrections after Operation 1
-- number of residual manual exposure or color corrections after Operation 2
+- number of residual local defect or straightening corrections after Operation 1
+- number of residual manual exposure or scene-level color corrections after Operation 2
 - number of virtual-copy branches or reversions required after failed
   edit directions in Operation 3
 
@@ -683,18 +790,19 @@ not required for the current visuals-first version of the case study.
 
 A lightweight validation approach is to show representative before/after
 image subsets from the same [dataset](#dataset) and visually inspect
-whether automated tonal and color analysis reduces luminance and color
-variance enough to produce a more stable baseline for later editing. If
-needed later, that visual comparison could be supplemented with recorded
-pre- and post-adjustment values for [exposure](#exposure),
-[contrast](#contrast), [highlights / whites](#highlights-whites),
-[shadows / blacks](#shadows-blacks), color temperature, and tint.
+whether automated tonal analysis reduces dataset-wide luminance variance
+and whether scene-level color normalization reduces unwanted hue drift
+within comparable scene groups. If needed later, that visual comparison
+could be supplemented with recorded pre- and post-adjustment values for
+[exposure](#exposure), [contrast](#contrast), [highlights / whites](#highlights-whites),
+[shadows / blacks](#shadows-blacks), color temperature, tint, and hue.
 
 
 ---
-🚧 TODO — VISUAL
+🚧 TODO — EVIDENCE
+Type: Visual
 Asset: stage2_sample_comparison
-Purpose: <TO DEFINE>
+Purpose: Show representative before/after subsets for dataset-wide luminance normalization and scene-level color normalization.
 ---
 
 ### Operation 3 Validation
@@ -712,9 +820,10 @@ baseline or manually untangling accumulated edits.
 
 
 ---
-🚧 TODO — VISUAL
+🚧 TODO — EVIDENCE
+Type: Workflow
 Asset: virtual_copy_recovery_comparison
-Purpose: <TO DEFINE>
+Purpose: Show alternate edit branches and demonstrate returning to a known-good normalized baseline without manually untangling edits.
 ---
 
 ### Baseline Comparison
@@ -747,9 +856,10 @@ without forcing every experiment to overwrite the baseline.
 
 
 ---
-🟦 TODO — WORKFLOW
+🚧 TODO — EVIDENCE
+Type: Workflow
 Asset: client_preference_example
-Purpose: <TO DEFINE>
+Purpose: Show how Virtual Copy branches support comparing alternate client-facing looks without overwriting the baseline.
 ---
 
 ### Consistency vs Authentic Scene Variation
@@ -772,9 +882,10 @@ inconsistent edits.
 
 
 ---
-🟦 TODO — WORKFLOW
+🚧 TODO — EVIDENCE
+Type: Visual
 Asset: baseline_consistency_comparison
-Purpose: <TO DEFINE>
+Purpose: Show the downstream consistency difference between images edited after baseline conditioning and images edited without a stable baseline.
 ---
 
 
@@ -791,13 +902,14 @@ The current implementation is optimized for a local Lightroom workflow controlle
 
 ### Vendor Heuristics vs Full Transparency
 
-The workflow benefits from Lightroom’s built-in automation, but some stages depend on vendor-controlled black-box heuristics. This improves usability and speed while limiting transparency into the exact internal logic of automated tonal and color analysis.
+The workflow benefits from Lightroom’s built-in automation, but some stages depend on vendor-controlled black-box heuristics. This improves usability and speed while limiting transparency into the exact internal logic of automated tonal analysis and scene-level color adjustment.
 
 ## Baseline Preservation Strategy
 
-Virtual Copies preserve a known-good normalized baseline while allowing
-derived edit paths to evolve independently. This trades a small amount
-of branch-management overhead for much safer experimentation later.
+Virtual Copies preserve both the initial culled RAW state and later
+known-good normalized baselines while allowing derived edit paths to
+evolve independently. This trades a small amount of branch-management
+overhead for much safer experimentation later.
 
 This mirrors engineering patterns such as immutable baselines,
 branchable derived states, and rollbackable experimentation.
@@ -822,20 +934,23 @@ The workflow prioritizes addressable control rather than complete control.
 
 ## Resulting Benefits
 
-- consistent visual baseline across heterogeneous input distributions
+- consistent luminance baseline across heterogeneous input distributions
+- scene-level color baselines that preserve natural hue differences
 - reduced global editing passes
 - safer experimentation through rollbackable edit branches
 - reduced manual correction churn
 - predictable editing pipeline mechanics
-- preservation of natural scene tone differences
+- preservation of natural scene tone and foliage hue differences
 
 ---
 
 ## Engineering Concepts Demonstrated
 
 - baseline dataset normalization
-- validated dust/distraction cleanup before global normalization
-- combined luminance and color normalization
+- validated dust/distraction cleanup before baseline normalization
+- reviewed Auto Transform straightening before baseline normalization
+- dataset-wide luminance normalization
+- scene-level hue and color normalization
 - rollbackable experimentation over shared source assets
 - pipeline stage simplification
 - batch processing optimization
@@ -848,8 +963,9 @@ The workflow prioritizes addressable control rather than complete control.
 
 ## Key Design Principle
 
-Clean validated dust/distraction artifacts first, establish a combined
-luminance and color baseline second, then protect that baseline with
+Clean validated dust/distraction artifacts and review Auto Transform
+straightening first, establish a dataset-wide luminance baseline and
+scene-level color baselines second, then protect that baseline with
 rollbackable Virtual Copy branches.
 
 ---
@@ -857,7 +973,8 @@ rollbackable Virtual Copy branches.
 ## Takeaway
 
 This photography workflow becomes a data transformation pipeline design
-problem. By separating local cleanup, combined luminance and color
-normalization, and rollbackable experimentation into distinct
-operations, the system achieves dataset consistency and editing
-efficiency without sacrificing image fidelity or processing flexibility.
+problem. By separating local cleanup, dataset-wide luminance
+normalization, scene-level color normalization, and rollbackable
+experimentation into distinct operations, the system achieves dataset
+consistency and editing efficiency without sacrificing image fidelity,
+natural scene variance, or processing flexibility.

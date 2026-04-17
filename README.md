@@ -33,7 +33,7 @@ The repository addresses that problem by breaking the workflow into
 three documented stages:
 
 1. Metadata ingestion, enrichment, and query design
-2. Baseline image normalization
+2. Baseline conditioning and rollback
 3. Bulk AI mask definition propagation
 
 Each stage isolates a specific class of transformations, defines clear
@@ -72,7 +72,7 @@ Stage 1 establishes the metadata and query foundation for the workflow.
 Stages 2 and 3 form the image-processing portion of the pipeline, which currently follows this progression:
 
 - **Preprocessing:** Local corrective cleaning
-- **Normalization:** Dataset-wide luminance and color standardization
+- **Normalization:** Dataset-wide luminance standardization with scene-level color normalization
 - **Semantic operations:** Batch AI masking
 - **Human review:** Manual refinement pass
 
@@ -84,11 +84,11 @@ Focus areas:
 - non-destructive metadata enrichment through non-overlapping field assignments
 - metadata-driven indexing and retrieval patterns enabling both rapid ad-hoc queries and declarative views over image records
 
-### 2. Baseline Image Normalization Pipeline
-Location: [Stage 2](pipeline_stages/002_baseline-image-normalization/README.md)
+### 2. Baseline Conditioning and Rollback Pipeline
+Location: [Stage 2](pipeline_stages/002_baseline-conditioning-and-rollback/README.md)
 
-- local corrective cleanup and luminance/color normalization across heterogeneous images with varying capture conditions
-- batch baseline normalization with image-specific luminance and color adjustments
+- local corrective cleanup and dataset-wide luminance normalization across heterogeneous images
+- scene-level color normalization that preserves natural hue differences across scenes
 - virtual copies for rollbackable experimentation while reducing operator cognitive load
 
 ### 3. Bulk AI Mask Definition Propagation 
@@ -125,7 +125,7 @@ creative-workflow-batch-transformation-pipeline/
 │   │   └── assets/
 │   │       ├── diagrams/
 │   │       └── images/
-│   ├── 002_baseline-image-normalization/
+│   ├── 002_baseline-conditioning-and-rollback/
 │   │   ├── README.md
 │   │   └── assets/
 │   │       ├── diagrams/

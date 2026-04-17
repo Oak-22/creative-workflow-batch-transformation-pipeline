@@ -165,7 +165,7 @@ People Mask Aggregation
 
 ￼
 
-Synchronize the People + Environment operation across all selected images. The operation is fault-tolerant, allowing it to be applied indiscriminately across the dataset—images without dust remain unaffected. Any remaining artifacts are verified and refined later during the manual editing stage that follows baseline luminance/color normalization and batch AI mask segmentation.
+Synchronize the People + Environment operation across all selected images. The operation is fault-tolerant, allowing it to be applied indiscriminately across the dataset—images without dust remain unaffected. Any remaining artifacts are verified and refined later during the manual editing stage that follows dataset-wide luminance normalization, scene-level color normalization, and batch AI mask segmentation.
 
 
 ￼
