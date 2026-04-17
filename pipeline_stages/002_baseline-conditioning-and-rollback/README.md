@@ -7,8 +7,9 @@ Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project
 Large photo sets captured across changing lighting conditions often feel
 visually inconsistent even when subject matter remains similar. This
 stage defines a [normalization](#normalization) workflow that combines local corrective
-cleanup, dataset-wide luminance and color normalization, and rollback-safe
-virtual-copy branching so the final gallery reads as coherent rather than ad hoc. Just as importantly,
+cleanup, dataset-wide luminance normalization, scene-level color
+normalization, and rollback-safe virtual-copy branching so the final
+gallery reads as coherent rather than ad hoc. Just as importantly,
 it reduces operator-driven edit drift when the editor is repeatedly trying to match a chosen look across many
 similar images. Virtual copies provide independent edit timelines for
 experimentation without sacrificing rollback safety. The business value
@@ -37,12 +38,13 @@ when rollback to an earlier edit state is weak or costly.
 Within stage 2, normalization proceeds through three internal
 operations. First, batch-safe local corrective cleanup removes validated
 capture artifacts before normalization. In this case study, the tested
-cleanup operation was dust/distraction removal. Second, combined
-luminance and color normalization reduces inter-image variance and
-establishes a comparable visual baseline. Third, virtual-copy branching
-and rollback control protect that baseline while still allowing
-experimentation. Across those operations, the workflow reduces both
-technical variance and the risk of operator-driven drift.
+cleanup operation was dust/distraction removal. Second, dataset-wide
+luminance normalization and scene-level color normalization reduce
+unwanted variance while preserving natural across-scene differences.
+Third, virtual-copy branching and rollback control protect that baseline
+while still allowing experimentation. Across those operations, the
+workflow reduces both technical variance and the risk of operator-driven
+drift.
 
 ## Key Constraints
 
@@ -84,19 +86,18 @@ repeatedly noticing the same local defect.
 
 ### Operation 2 Value: Comparable Visual Baselines
 
-Operation 2 establishes a consistent luminance and color baseline across
-the [dataset](#dataset) through automated global normalization. This
-aligns exposure, tonal distribution, and broad color balance so that
-each image begins from a comparable brightness, contrast, and color
-profile before further creative edits are applied.
+Operation 2 establishes a dataset-wide luminance baseline and
+scene-level color baselines. Luminance normalization aligns exposure and
+tonal distribution across the full [dataset](#dataset), while color
+normalization operates at the [scene](#scene) level so legitimate
+environmental hue differences are preserved.
 
-Without this baseline, later look adjustments interact differently with
-each image because their underlying luminance and color distributions
-vary. The same adjustment can therefore produce inconsistent results
-across scenes. Even when a visual domain is already broadly consistent,
-the absence of a stable baseline makes repeated manual look-matching
-more error-prone and increases the chance of operator-induced edit
-drift.
+Without this distinction, later look adjustments can either behave
+inconsistently because luminance distributions vary, or overcorrect
+color by forcing naturally different scenes into one shared hue target.
+The goal is therefore not a single global color match, but a stable
+visual baseline that preserves real scene-level foliage and ambient
+color differences.
 
 ### Operation 3 Value: Recoverable Edit Branches
 
@@ -116,7 +117,7 @@ The operations are ordered linearly, but their impact is not purely
 linear. Weakness in one operation can amplify downstream risk, while a
 strong earlier operation can reduce the complexity of later decisions.
 
-- **Operation 1 → Operation 2:** Cleaner inputs make global luminance and color normalization easier to judge because visible defects are not competing with exposure, tone, or color evaluation.
+- **Operation 1 → Operation 2:** Cleaner inputs make luminance and scene-level color normalization easier to judge because visible defects are not competing with exposure, tone, or color evaluation.
 - **Operation 2 → Operation 3:** A stronger visual baseline makes Virtual Copy branches more meaningful because each branch starts from a comparable state rather than from unstable per-image variance.
 - **Operation 3 → Operations 1 and 2:** Rollback-safe branching protects the value created by cleanup and normalization, preventing later creative experiments from destroying the stable baseline.
 - **System-level effect:** The pipeline reduces repeated manual comparison loops by separating defect cleanup, visual baseline conditioning, and experimental edit branching into distinct control points.
@@ -133,7 +134,7 @@ Image set A — repeated manual rematching without a stable baseline:
 🚧 TODO — VISUAL
 Asset: underexposed_foliage_example
 ---
-Image set B — luminance-and-color-normalized starting point before
+Image set B — luminance-normalized and scene-color-normalized starting point before
 downstream creative edits:
 ---
 🚧 TODO — VISUAL
@@ -157,12 +158,13 @@ result
 Asset: look_matching_with_baseline
 ---
 
-Operation 2 reduces this instability by normalizing luminance and color
-together. Once tonal and color distributions are aligned, downstream
-look adjustments operate on comparable input ranges and therefore
-require less compensatory editing. This lowers both technical variance
-and the operator burden of repeatedly re-matching a chosen look across
-similar images.
+Operation 2 reduces this instability by normalizing luminance across the
+dataset and normalizing color within scene boundaries. Once tonal
+distributions are aligned and scene-specific color ranges are stabilized,
+downstream look adjustments operate on comparable input ranges without
+forcing every scene into the same foliage hue. This lowers both
+technical variance and the operator burden of repeatedly re-matching a
+chosen look across similar images.
 
 ---
 
@@ -235,16 +237,19 @@ Cleaned Baseline Inputs
 ```
 ---
 
-### Operation 2 — Global Luminance and Color Normalization
+### Operation 2 — Global Luminance and Scene-Level Color Normalization
 
 ```text
 Cleaned Baseline Inputs
       ↓
-Global Luminance and Color Normalization
-(automated tonal and color analysis)
+Global Luminance Normalization
+(dataset-wide tonal analysis)
+      ↓
+Scene-Level Color Normalization
+(per-scene hue and color-balance adjustment)
       ↓
 Normalized Baseline Images
-(reduced luminance and color variance)
+(reduced luminance variance and stabilized scene-level color)
       ↓
 
 ```
@@ -310,10 +315,10 @@ To clarify domain-specific language used throughout this case study, the followi
 ### Pipeline Concepts
 
 <a id="normalization"></a>
-- **Normalization:** A batch conditioning operation that reduces unwanted variance across images by bringing luminance and color distributions into a comparable operating range. In this workflow, normalization is adaptive rather than absolute: each image may receive different runtime adjustments based on its own exposure, tonal distribution, and color balance.
+- **Normalization:** A batch conditioning operation that reduces unwanted variance across images by bringing luminance and color distributions into a comparable operating range. In this workflow, normalization is adaptive rather than absolute: each image may receive different runtime adjustments based on its own exposure, tonal distribution, and color balance. Luminance normalization can be evaluated dataset-wide, while hue and color normalization must respect scene boundaries.
 
 <a id="automated-tonal-color-analysis"></a>
-- **Automated Tonal and Color Analysis:** A global normalization operation that analyzes image luminance and color distribution, then applies coordinated adjustments to exposure, highlights/whites, shadows/blacks, contrast, color temperature, and tint in order to reduce inter-image visual variance prior to downstream transformations.
+- **Automated Tonal and Color Analysis:** A normalization operation that analyzes image luminance and color distribution, then applies coordinated adjustments to exposure, highlights/whites, shadows/blacks, contrast, color temperature, and tint in order to reduce unwanted visual variance prior to downstream transformations. Tonal analysis is used to establish a dataset-wide luminance baseline; color analysis is constrained to scene-level comparisons so natural environmental hue differences are not flattened.
 
 <a id="virtual-copy"></a>
 - **Virtual Copy:** A non-destructive derived state that preserves an
@@ -350,6 +355,12 @@ for downstream edits. Each image can receive different runtime
 adjustments because each image starts with different luminance, contrast,
 and color conditions. The batch operation is shared, but the effective
 transformation is image-specific.
+
+Color normalization is also scene-specific. A yellow-green foliage scene
+should not be forced to match a deeper green scene if that hue
+difference reflects real lighting, location, or environmental context.
+In this workflow, luminance can be normalized across the broader dataset,
+but hue and color-balance decisions are evaluated within scene groups.
 
 This distinction matters because the goal is not visual flattening. The
 goal is to make later edits behave more predictably by reducing
@@ -400,12 +411,22 @@ order to keep the gallery coherent.
 
 The workflow goals are:
 
-- establish a consistent visual baseline across the dataset
+- establish a consistent luminance baseline across the dataset
+- establish scene-level color baselines without flattening natural hue differences
 - preserve natural [scene](#scene) differences (e.g., time-of-day mood)
 - minimize manual editing effort
 - avoid repeated global transformations across the editing pipeline
 
 Importantly, the pipeline does **not** eliminate all variation between images. Lighting differences across [scenes](#scene) (e.g., midday sun vs shaded evening light) still produce natural mood differences. The internal operations in this stage instead constrain variance to a controlled range, ensuring that images remain visually related while still preserving authentic [scene](#scene) characteristics such as time-of-day lighting and environmental context.
+
+> **Operational note:** The strongest demonstration of scene-level color
+> normalization is the wedding-dress foliage scene, where several frames
+> share a comparable environment but still need per-scene hue alignment.
+> The group formal portraits are a stronger candidate for luminance
+> normalization because the green hue is relatively stable across those
+> frames. The yellow-green foliage scene is the weakest candidate for
+> color normalization because changing its hue to match the other scenes
+> would erase a natural across-scene difference.
 ---
 
 ## Initial Approach (Multi-Stage Global Presets)
@@ -434,7 +455,8 @@ increasing the risk of inconsistent results.
 
 The pipeline collapses multiple global transformations into one
 deterministic baseline workflow: local corrective cleanup, combined
-luminance and color normalization, then virtual-copy rollback control.
+luminance and scene-level color normalization, then virtual-copy rollback
+control.
 
 ### Pipeline Overview
 
@@ -444,8 +466,8 @@ RAW Images (dataset)
 Operation 1: Local corrective cleanup
 (validated dust/distraction removal)
       ↓
-Operation 2: Global luminance and color normalization
-(automated tonal and color analysis)
+Operation 2: Global luminance and scene-level color normalization
+(dataset-wide tonal analysis + per-scene color adjustment)
       ↓
 Operation 3: Virtual-copy branching and rollback control
 (preserve baseline while exploring alternate edit directions)
