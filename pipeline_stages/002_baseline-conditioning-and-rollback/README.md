@@ -410,7 +410,6 @@ Importantly, the pipeline does **not** eliminate all variation between images. L
 > frames. The yellow-green foliage scene is the weakest candidate for
 > color normalization because changing its hue to match the other scenes
 > would erase a natural across-scene difference.
----
 
 ## Initial, Naive Approach (Multi-Stage Global Develop Presets)
 
@@ -606,7 +605,15 @@ With scene-level foliage normalization:
 
 ![Lightroom comparison showing foliage hue differences across scene groups, demonstrating why foliage color should be normalized within comparable scenes rather than globally across the full dataset.](assets/images/intra-scene-hue-normalization-not-global.png)
 
-*Foliage hue normalization should be constrained to comparable scene groups. The yellow-green foliage scene should remain visually distinct rather than being forced to match the deeper green foliage from the other 2 sampled scenes.*
+*This comparison shows why foliage hue normalization must be constrained
+to comparable scene groups. The wedding-dress foliage scene is the
+strongest candidate for demonstrating scene-level hue alignment because
+its frames share a similar subject/environment relationship while still
+showing within-scene foliage drift. The group formal portraits are a
+better luminance-normalization candidate because their green hue is
+already relatively stable. The yellow-green foliage scene should remain
+visually distinct rather than being forced to match the deeper green
+foliage from the other sampled scenes.*
 
 
 #### Skin Tone Normalization
