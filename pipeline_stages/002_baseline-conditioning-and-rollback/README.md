@@ -17,6 +17,12 @@ is reduced editing time, lower operator comparison burden, more
 consistent outputs across a heterogeneous dataset, and safer
 exploration of alternate edit directions.
 
+Within the larger pipeline, Stage 2 wraps deterministic conditioning
+around heterogeneous creative input data. The source images remain
+visually variable because lighting, scene composition, camera position,
+and capture settings change over time; this stage reduces that variance
+without flattening legitimate scene differences.
+
 ## Problem
 
 High-volume photo datasets captured over long time horizons often
@@ -33,6 +39,10 @@ produces a second-order effect: repeated manual attempts to match a preferred ga
 look can introduce operator-driven drift across the dataset, especially
 when rollback to an earlier edit state is weak or costly.
 
+The systems challenge is not to remove all visual difference. It is to
+create a controlled operating range where downstream edits behave more
+predictably while preserving authentic scene-level variation.
+
 ## Solution Overview
 
 Within stage 2, the first Virtual Copy branch is created immediately
@@ -40,7 +50,7 @@ after RAW culling so the workflow has a protected source state before
 cleanup or normalization begins. The three internal operations then
 operate on that lineage-aware working set. First, batch-safe local
 corrective cleanup removes validated capture artifacts before
-normalization. In this case study, dust/distraction removal was the
+normalization. In this implementation, dust/distraction removal was the
 safer batch cleanup example, while Auto Transform straightening provided
 a reviewed per-image corrective example with visible pass/fail outcomes.
 Second, dataset-wide luminance normalization and scene-level color
@@ -209,7 +219,7 @@ alternate looks recoverable instead of destructive.
 
 ## Terminology
 
-To clarify domain-specific language used throughout this case study, the following system concepts are defined:
+To clarify domain-specific language used throughout this document, the following system concepts are defined:
 
 ### Dataset & Structural Concepts
 
@@ -252,6 +262,9 @@ To clarify domain-specific language used throughout this case study, the followi
 <a id="normalization"></a>
 - **Normalization:** A batch conditioning operation that reduces unwanted variance across images by bringing luminance and color distributions into a comparable operating range. In this workflow, normalization is adaptive rather than absolute: each image may receive different runtime adjustments based on its own exposure, tonal distribution, and color balance. Luminance normalization can be evaluated dataset-wide, while hue and color normalization must respect scene boundaries.
 
+<a id="reference-image"></a>
+- **Reference Image:** A representative image selected from a comparable scene group and used as the visual target for normalization decisions. In Operation 2, reference images help evaluate foliage hue, skin tone, or luminance expectations without forcing unrelated scenes into the same target look. A reference image is scoped to the scene or normalization concern it represents; it is not a global target for the entire dataset.
+
 <a id="automated-tonal-color-analysis"></a>
 - **Automated Tonal and Color Analysis:** A normalization operation that analyzes image luminance and color distribution, then applies coordinated adjustments to exposure, highlights/whites, shadows/blacks, contrast, color temperature, and tint in order to reduce unwanted visual variance prior to downstream transformations. Tonal analysis is used to establish a dataset-wide luminance baseline; color analysis is constrained to scene-level comparisons so natural environmental hue differences are not flattened.
 
@@ -266,7 +279,7 @@ Digital cameras typically offer two capture formats: **JPEG** and **RAW**. JPEG 
 
 In contrast, **RAW images preserve the camera sensor's unnormalized luminance and color distribution**. This retains the full [dynamic range](#dynamic-range) of the captured signal and defers tonal interpretation to the post‑processing pipeline.
 
-RAW capture therefore increases [dataset](#dataset) variance but enables **controlled, user‑defined normalization during post‑processing**, which motivates the normalization operation described in this case study.
+RAW capture therefore increases [dataset](#dataset) variance but enables **controlled, user‑defined normalization during post‑processing**, which motivates the normalization operation described in this stage.
 
 Shooting in RAW is a deliberate decision because it preserves recoverable signal that would otherwise be lost in JPEG. RAW files retain significantly more highlight and shadow information from the sensor, allowing the editor to recover details from images that might initially appear unusable. For example, a frame with blown highlights or deep shadows can often be salvaged by recovering clipped highlight detail or lifting shadow information. In contrast, JPEG compression discards much of this recoverable signal and locks the image into a specific tone curve and color profile, making such recovery far more limited.
 
@@ -428,7 +441,7 @@ increasing the risk of inconsistent results.
 
 ---
 
-## Stage 2 Internal Architecture
+## Technical Design & Implementation
 
 Within the larger creative workflow pipeline, Stage 2 collapses multiple
 global edit passes into one deterministic baseline-conditioning sequence:
@@ -570,13 +583,14 @@ drift. A true global hue target would be too aggressive: yellow-green
 foliage in one scene should not be forced to match deeper green foliage
 from a different lighting environment.
 
-The strongest candidate for demonstrating scene-level foliage
-normalization is the wedding-dress foliage scene because the subject and
-environment are similar enough to compare hue drift within the scene.
-The group formal portraits are a stronger candidate for luminance
-normalization because the green hue is relatively stable, while the
-yellow-green foliage scene is the weakest candidate for color
-normalization because its hue difference appears scene-authentic.
+The strongest [reference image](#reference-image) candidate for
+demonstrating scene-level foliage normalization is the wedding-dress
+foliage scene because the subject and environment are similar enough to
+compare hue drift within the scene. The group formal portraits are a
+stronger candidate for luminance normalization because the green hue is
+relatively stable, while the yellow-green foliage scene is the weakest
+candidate for color normalization because its hue difference appears
+scene-authentic.
 
 ```text
 Without scene boundaries:
@@ -602,11 +616,12 @@ against subject consistency rather than environmental consistency. A
 scene can preserve natural foliage or ambient color while still needing
 skin tones to remain believable and consistent across similar portraits.
 
-In practice, skin tone normalization should be evaluated within
-comparable portrait groups after the luminance baseline is established.
-This prevents exposure differences, mixed shade, or local color casts
-from causing manual overcorrection while still avoiding a single global
-skin-tone target across unlike scenes.
+In practice, skin tone normalization should be evaluated against a
+[reference image](#reference-image) within comparable portrait groups
+after the luminance baseline is established. This prevents exposure
+differences, mixed shade, or local color casts from causing manual
+overcorrection while still avoiding a single global skin-tone target
+across unlike scenes.
 
 ```text
 Dataset-wide luminance baseline
@@ -683,7 +698,7 @@ In practical terms, the pipeline is intended to scale across **hundreds of RAW i
 If stronger quantitative support is needed later, future validation can
 benchmark representative datasets of different sizes and record per-stage
 processing time, downstream manual correction time, and total editing
-time. For now, the primary evidence model in this case study is visual
+time. For now, the primary evidence model for this stage is visual
 and workflow-observable rather than heavily instrumented.
 
 
@@ -764,7 +779,7 @@ Purpose: Show how weak cleanup, weak normalization, or weak rollback discipline 
 
 ## Observability & Validation
 
-This case study is primarily validated through **embedded visual
+This implementation is primarily validated through **embedded visual
 evidence**, **editor-observed workflow effects**, and clearly labeled
 inference. Because parts of the workflow depend on Lightroom’s internal
 heuristics, the most credible proof for this stage is observable
@@ -784,7 +799,7 @@ measurements for this workflow would be:
 
 These measurements would help quantify whether the pipeline reduces
 manual intervention and improves throughput in practice, but they are
-not required for the current visuals-first version of the case study.
+not required for the current visuals-first version of this implementation document.
 
 ### Operation 2 Validation
 

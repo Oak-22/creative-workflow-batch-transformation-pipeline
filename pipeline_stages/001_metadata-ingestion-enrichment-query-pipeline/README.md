@@ -14,6 +14,11 @@ retrieval through ad-hoc filtering and Smart Collections. Operationally,
 this improves internal organization and retrieval while producing structured
 semantic metadata that could later support analytics, search, or machine-learning workflows.
 
+Within the larger pipeline, Stage 1 is the deterministic state layer:
+it makes image records identifiable, queryable, and safe to enrich
+before later culling, visual conditioning, or AI-assisted operations
+introduce more subjective and probabilistic decision points.
+
 ## Problem
 
 Design a deterministic metadata ingestion and enrichment system for
@@ -27,6 +32,11 @@ structured metadata increases rework, weakens retrieval, and reduces
 the downstream usefulness of image records for curation, publishing, and
 discoverability. The solution must therefore be non-destructive,
 auditable, and simple to validate in batch workflows.
+
+This stage intentionally resolves the most deterministic part of the
+system first. Later stages operate on visually variable images and
+AI-derived semantic outputs; Stage 1 ensures those later transformations
+remain anchored to stable source records and retrievable metadata.
 
 ## Solution Overview
 
@@ -51,7 +61,7 @@ image records.
 Lightroom provides no field‑level locking and metadata presets can overwrite existing fields if the same fields are checked. Because the system cannot rely on tooling guarantees to protect critical metadata, write isolation is enforced through schema design: each preset writes to a dedicated set of fields, preventing destructive collisions between identity and semantic metadata.
 
 
-## Architecture
+## Technical Design & Implementation
 
 ### Separation of Concerns
 
@@ -77,9 +87,9 @@ Semantic Layer (Mutable)
 Derived Logical Views
 ```
 
-## Implementation Details
+### Implementation Details
 
-### 1) Single Global Import Preset (Authoritative)
+#### 1) Single Global Import Preset (Authoritative)
 
 **Metadata Preset name:** `[IMPORT] Global Copyright & Creator`
 
@@ -103,7 +113,7 @@ Excluded fields:
 
 This ingest preset establishes the authoritative identity state at ingest. By excluding semantic fields, the design minimizes collision surface area and avoids embedding domain assumptions during ingest.
 
-### 2) Domain-Specific Presets (Post-Import Only)
+#### 2) Domain-Specific Presets (Post-Import Only)
 
 **Metadata Preset name(s):**
 
@@ -119,7 +129,7 @@ Domain presets are semantic enrichment presets applied after ingestion.
 
 This safely enables further batch enrichment while protecting authoritative metadata from accidental overwrite.
 
-### 3) Keywords Managed Separately
+#### 3) Keywords Managed Separately
 
 Keywords are intentionally excluded from the global ingest preset.
 - Taxonomy evolves incrementally as the culled image set is reviewed and
@@ -127,7 +137,7 @@ Keywords are intentionally excluded from the global ingest preset.
 - Keyword assignment is explicit and post-ingest (Keyword List/Keyword Sets or semantic presets).
 - This preserves deliberate classification rather than implicit ingest-time tagging.
 
-#### Keyword Tags, Keyword Sets, and Keyword Lists
+##### Keyword Tags, Keyword Sets, and Keyword Lists
 
 Keyword Lists function as hierarchical taxonomies for scalable
 semantic metadata management.
