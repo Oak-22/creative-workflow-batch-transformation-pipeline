@@ -224,54 +224,122 @@ To clarify domain-specific language used throughout this document, the following
 ### Dataset & Structural Concepts
 
 <a id="dataset"></a>
-- **Dataset:** A complete collection of images from a single photoshoot or capture session.
+#### Dataset
+
+A complete collection of images from a single photoshoot or capture session.
 
 <a id="scene"></a>
-- **Scene:** A distinct composition within the dataset defined by a particular foreground, subject, and background configuration. A single dataset typically contains multiple scenes.
+#### Scene
+
+A distinct composition within the dataset defined by a particular
+foreground, subject, and background configuration. A single dataset
+typically contains multiple scenes.
 
 <a id="RAW"></a>
-- **RAW:** An uncompressed or minimally processed image format that preserves the camera sensor's original luminance and color information for flexible downstream editing. In this workflow, RAW capture retains more recoverable signal than JPEG, but also increases variance that must later be normalized.
+#### RAW
+
+An uncompressed or minimally processed image format that preserves the
+camera sensor's original luminance and color information for flexible
+downstream editing. In this workflow, RAW capture retains more
+recoverable signal than JPEG, but also increases variance that must
+later be normalized.
 
 ### Perceptual Characteristics
 
 <a id="visual-tone"></a>
-- **Visual Tone:** The combined luminance, contrast, and color characteristics of an image that determine its perceived brightness, warmth/coolness, and overall visual consistency.
+#### Visual Tone
+
+The combined luminance, contrast, and color characteristics of an image
+that determine its perceived brightness, warmth/coolness, and overall
+visual consistency.
 
 ### Luminance Transformation Primitives
 
 <a id="exposure"></a>
-- **Exposure:** A global adjustment controlling overall image brightness by shifting the luminance distribution uniformly across all pixels.
+#### Exposure
+
+A global adjustment controlling overall image brightness by shifting the
+luminance distribution uniformly across all pixels.
 
 <a id="contrast"></a>
-- **Contrast:** A global adjustment controlling the separation between light and dark regions in an image, increasing or decreasing the intensity difference across the luminance distribution.
+#### Contrast
+
+A global adjustment controlling the separation between light and dark
+regions in an image, increasing or decreasing the intensity difference
+across the luminance distribution.
 
 <a id="highlights-whites"></a>
-- **Highlights / Whites:** Upper-range luminance regions of an image. *Highlights* refer to near-bright regions with recoverable detail, while *whites* represent the brightest values approaching clipping. Adjustments to these regions control brightness and detail retention in the upper portion of the luminance distribution.
+#### Highlights / Whites
+
+Upper-range luminance regions of an image. *Highlights* refer to
+near-bright regions with recoverable detail, while *whites* represent
+the brightest values approaching clipping. Adjustments to these regions
+control brightness and detail retention in the upper portion of the
+luminance distribution.
 
 <a id="shadows-blacks"></a>
-- **Shadows / Blacks:** Lower-range luminance regions of an image. *Shadows* refer to darker regions with recoverable detail, while *blacks* represent the darkest values approaching clipping. Adjustments to these regions control detail visibility and depth in the lower portion of the luminance distribution.
+#### Shadows / Blacks
+
+Lower-range luminance regions of an image. *Shadows* refer to darker
+regions with recoverable detail, while *blacks* represent the darkest
+values approaching clipping. Adjustments to these regions control detail
+visibility and depth in the lower portion of the luminance distribution.
 
 <a id="clipping"></a>
-- **Clipping:** Loss of recoverable image detail in highlights or shadows due to sensor saturation or underexposure, where pixel values are driven to their minimum or maximum limits and no additional tonal information can be retrieved.
+#### Clipping
+
+Loss of recoverable image detail in highlights or shadows due to sensor
+saturation or underexposure, where pixel values are driven to their
+minimum or maximum limits and no additional tonal information can be
+retrieved.
 
 <a id="dynamic-range"></a>
-- **Dynamic Range:** The span between the darkest and brightest image regions that still retain recoverable detail. In practical terms, it describes how much shadow and highlight information can be captured or preserved before those regions collapse into clipped blacks or blown highlights.
+#### Dynamic Range
+
+The span between the darkest and brightest image regions that still
+retain recoverable detail. In practical terms, it describes how much
+shadow and highlight information can be captured or preserved before
+those regions collapse into clipped blacks or blown highlights.
 
 ### Pipeline Concepts
 
 <a id="normalization"></a>
-- **Normalization:** A batch conditioning operation that reduces unwanted variance across images by bringing luminance and color distributions into a comparable operating range. In this workflow, normalization is adaptive rather than absolute: each image may receive different runtime adjustments based on its own exposure, tonal distribution, and color balance. Luminance normalization can be evaluated dataset-wide, while hue and color normalization must respect scene boundaries.
+#### Normalization
+
+A batch conditioning operation that reduces unwanted variance across
+images by bringing luminance and color distributions into a comparable
+operating range. In this workflow, normalization is adaptive rather than
+absolute: each image may receive different runtime adjustments based on
+its own exposure, tonal distribution, and color balance. Luminance
+normalization can be evaluated dataset-wide, while hue and color
+normalization must respect scene boundaries.
 
 <a id="reference-image"></a>
-- **Reference Image:** A representative image selected from a comparable scene group and used as the visual target for normalization decisions. In Operation 2, reference images help evaluate foliage hue, skin tone, or luminance expectations without forcing unrelated scenes into the same target look. A reference image is scoped to the scene or normalization concern it represents; it is not a global target for the entire dataset.
+#### Reference Image
+
+A representative image selected from a comparable scene group and used
+as the visual target for normalization decisions. In Operation 2,
+reference images help evaluate foliage hue, skin tone, or luminance
+expectations without forcing unrelated scenes into the same target look.
+A reference image is scoped to the scene or normalization concern it
+represents; it is not a global target for the entire dataset.
 
 <a id="automated-tonal-color-analysis"></a>
-- **Automated Tonal and Color Analysis:** A normalization operation that analyzes image luminance and color distribution, then applies coordinated adjustments to exposure, highlights/whites, shadows/blacks, contrast, color temperature, and tint in order to reduce unwanted visual variance prior to downstream transformations. Tonal analysis is used to establish a dataset-wide luminance baseline; color analysis is constrained to scene-level comparisons so natural environmental hue differences are not flattened.
+#### Automated Tonal and Color Analysis
+
+A normalization operation that analyzes image luminance and color
+distribution, then applies coordinated adjustments to exposure,
+highlights/whites, shadows/blacks, contrast, color temperature, and tint
+in order to reduce unwanted visual variance prior to downstream
+transformations. Tonal analysis is used to establish a dataset-wide
+luminance baseline; color analysis is constrained to scene-level
+comparisons so natural environmental hue differences are not flattened.
 
 <a id="virtual-copy"></a>
-- **Virtual Copy:** A non-destructive derived state that preserves an
-  independent edit timeline while continuing to reference the same
-  underlying source image.
+#### Virtual Copy
+
+A non-destructive derived state that preserves an independent edit
+timeline while continuing to reference the same underlying source image.
 
 ## Domain Background: RAW Capture and Signal Variance
 
