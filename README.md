@@ -4,8 +4,8 @@ Systems engineering project showing how creative-production workflows can be str
 
 ## Executive Summary
 
-This repository models creative-production work as a reproducible,
-multi-stage pipeline with explicit boundaries, non-destructive state
+Creative-production work is modeled as a reproducible, multi-stage
+pipeline with explicit boundaries, non-destructive state
 transitions, and validation checkpoints. Even when executed inside
 GUI-based tools, the workflow is designed with production system qualities rather
 than an ad hoc editing sequence.
@@ -36,8 +36,7 @@ non-binary failure modes.
 
 ## Solution Overview
 
-The repository addresses that problem by breaking the workflow into
-three documented stages:
+The workflow addresses that problem through three documented stages:
 
 1. Metadata ingestion, enrichment, and query design
 2. Baseline conditioning and rollback
@@ -125,7 +124,7 @@ design themes are:
 
 ## Pipeline Stages
 
-This repository is organized as a single multi-stage pipeline with supporting documentation for each major stage.
+The project is organized as a single multi-stage pipeline with supporting documentation for each major stage.
 
 Stage 1 establishes the metadata and query foundation for the workflow.
 
@@ -171,47 +170,3 @@ Focus areas:
 - dataset-scale application of AI-generated semantic masks to batch edit operations
 - qualitative evaluation of mask quality and workflow reliability against manual editing results
 - deterministic review boundaries around probabilistic AI segmentation behavior
-
-
-## Repository Structure
-
-```text
-creative-workflow-batch-transformation-pipeline/
-├── .github/
-│   └── agent_instructions/
-│       ├── global/
-│       └── repo/
-├── .gitignore
-├── Commit-Message-Pre-Agent-Prompt-Refinement.png
-├── README.md
-├── docs/
-│   ├── README.md
-│   ├── architecure
-│   ├── diagrams
-│   └── stage 2 batch normalization concerns/
-│       ├── Attachments/
-│       └── stage 2 batch normalization.md
-├── engineering_learning_workspace/
-├── pipeline_stages/
-│   ├── 001_metadata-ingestion-enrichment-query-pipeline/
-│   │   ├── README.md
-│   │   └── assets/
-│   │       ├── diagrams/
-│   │       └── images/
-│   ├── 002_baseline-conditioning-and-rollback/
-│   │   ├── README.md
-│   │   └── assets/
-│   │       ├── diagrams/
-│   │       └── images/
-│   └── 003_bulk-ai-mask-definition-propagation/
-│       ├── README.md
-│       └── assets/
-│           ├── diagrams/
-│           └── images/
-├── scripts/
-│   ├── agent_prompt
-│   └── python/
-│       └── README.md
-└── tests/
-    └── README.md
-```
