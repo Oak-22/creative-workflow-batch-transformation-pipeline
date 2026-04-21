@@ -56,12 +56,19 @@ The review step where the full capture set is narrowed to images worth
 carrying forward based on focus, subject relevance, aesthetic value, and
 edit potential.
 
+### Conditioning
+
+A broader preparation step that makes a working set safer and more
+consistent for downstream operations. Conditioning may include cleanup,
+normalization, reviewed corrections, and rollback setup.
+
 ### Normalization
 
-A conditioning operation that reduces unwanted variance across images by
-bringing luminance, tone, or color into a more comparable operating
-range. In this workflow, normalization preserves meaningful scene
-differences rather than forcing all images into one identical look.
+A specific kind of conditioning that reduces unwanted variance across
+images by bringing luminance, tone, or color into a more comparable
+operating range. In this workflow, normalization preserves meaningful
+scene differences rather than forcing all images into one identical
+look.
 
 ### Virtual Copy
 

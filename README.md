@@ -1,6 +1,6 @@
 # Creative Workflow Batch Transformation Pipeline
 
-Systems engineering project showing how creative-production workflows can be structured as deterministic, scalable pipelines rather than ad hoc editing sequences.
+Systems engineering project showing how creative-production workflows can be structured as deterministic,  scalable pipelines rather than ad hoc editing sequences.
 
 For recurring systems and image-workflow language, see the
 [shared terminology](docs/terminology.md).
@@ -25,7 +25,7 @@ repeated manual editing.
 
 ## Problem
 
-Creative-production workflows often accumulate as informal editing
+Creative-production workflows often accumulate as several informal editing
 habits inside GUI tools, making them hard to reproduce, audit, and
 scale across large datasets. Without explicit stage boundaries and
 validation checkpoints, small inconsistencies compound into rework,
@@ -59,9 +59,10 @@ bounded propagation, and human review.
 In Stages 2 and 3, batch execution does not imply a single static
 transformation applied uniformly across every file. Both stages operate
 at dataset scale while still producing image-specific results at
-runtime: normalization responds to the conditions of each image, and AI
-mask propagation generates semantic selections whose effective impact
-varies by image content.
+runtime: baseline conditioning responds to the state of each image,
+while normalization specifically aligns luminance and scene-level color
+where appropriate; AI mask propagation generates semantic selections
+whose effective impact varies by image content.
 
 ## Unit Economics of Batchability
 
