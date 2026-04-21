@@ -2,6 +2,9 @@
 
 Systems engineering project showing how creative-production workflows can be structured as deterministic, scalable pipelines rather than ad hoc editing sequences.
 
+For recurring systems and image-workflow language, see the
+[shared terminology](docs/terminology.md).
+
 ## Executive Summary
 
 Creative-production work is modeled as a reproducible, multi-stage
