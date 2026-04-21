@@ -1,4 +1,4 @@
-# Production Workflow System Design & Implementation: Bulk AI Mask Definition Propagation
+# Production Workflow System Design & Implementation: AI Mask Definition Propagation
 
 Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project.
 
@@ -52,9 +52,9 @@ and operational usefulness relative to the alternative — manual masking.
 <a id="culling"></a>
 ### Culling
 
-Culling is the review step between metadata ingest and image-processing
-operations where the full capture set is narrowed to the photos worth
-carrying forward. In this workflow, images are selected based on usable
+Culling is the review step between ingest-time metadata application and
+image-processing operations where the full capture set is narrowed to
+the photos worth carrying forward. In this workflow, images are selected based on usable
 focus, aesthetic distinctiveness, subject relevance, and downstream edit
 potential.
 

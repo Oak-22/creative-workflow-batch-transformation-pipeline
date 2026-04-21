@@ -1,4 +1,4 @@
-# Production Workflow System Design & Implementation: Metadata Ingestion and Enrichment Pipeline
+# Production Workflow System Design & Implementation: Metadata Application, Enrichment,git  and Query Pipeline
 
 Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project.
 
@@ -21,7 +21,7 @@ introduce more subjective and probabilistic decision points.
 
 ## Problem
 
-Design a deterministic metadata ingestion and enrichment system for
+Design a deterministic metadata application and enrichment system for
 image assets under a single-preset ingest constraint. The system must
 reliably initialize ownership metadata, prevent field-level collisions,
 and remain robust as classification requirements span multiple domains.

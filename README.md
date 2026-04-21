@@ -15,8 +15,8 @@ uncertain inputs: creative image variance from heterogeneous capture
 conditions, and probabilistic semantic segmentation behavior from AI
 masking tools.
 
-Across the documented stages, the project demonstrates how metadata
-ingestion, image normalization, and semantic batch editing can be
+Across the documented stages, the project demonstrates how ingest-time
+metadata application, image normalization, and semantic batch editing can be
 composed into a deterministic workflow that scales more reliably than
 repeated manual editing.
 
@@ -38,9 +38,9 @@ non-binary failure modes.
 
 The workflow addresses that problem through three documented stages:
 
-1. Metadata ingestion, enrichment, and query design
+1. Metadata application, enrichment, and query design
 2. Baseline conditioning and rollback
-3. Bulk AI mask definition propagation
+3. AI mask definition propagation
 
 Each stage isolates a specific class of transformations, defines clear
 inputs and outputs, and introduces validation boundaries before later
@@ -139,14 +139,14 @@ uniqueness, subject relevance, and edit potential.
 
 Stages 2 and 3 then form the image-processing portion of the pipeline, which currently follows this progression:
 
-- **Culling boundary:** Review selects the usable working set after metadata ingest
+- **Culling boundary:** Review selects the usable working set after ingest-time metadata application
 - **Preprocessing:** Local corrective cleaning
 - **Normalization:** Dataset-wide luminance standardization with scene-level color normalization
 - **Semantic operations:** Batch AI masking
 - **Human review:** Manual refinement pass
 
-### 1. Metadata Ingestion, Enrichment, and Query Pipeline
-Location: [Stage 1](pipeline_stages/001_metadata-ingestion-enrichment-query-pipeline/README.md)
+### 1. Metadata Application, Enrichment, and Query Pipeline
+Location: [Stage 1](pipeline_stages/001_metadata-application-enrichment-query-pipeline/README.md)
 
 Focus areas:
 - deterministic ingest behavior under single-preset constraints
@@ -162,8 +162,8 @@ Location: [Stage 2](pipeline_stages/002_baseline-conditioning-and-rollback/READM
 - virtual copies for rollbackable experimentation while reducing operator cognitive load
 - deterministic conditioning around creative/capture variance from changing light, scene, and camera conditions
 
-### 3. Bulk AI Mask Definition Propagation 
-Location: [Stage 3](pipeline_stages/003_bulk-ai-mask-definition-propagation/README.md)
+### 3. AI Mask Definition Propagation
+Location: [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md)
 
 Focus areas:
 - procedural mask definitions propagated across datasets rather than copying pixel regions
