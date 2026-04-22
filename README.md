@@ -67,12 +67,24 @@ whose effective impact varies by image content.
 ## Operational Value
 
 The pipeline is designed around a batchability cost model: identifying
-which mandatory issues can be handled through batch application, which
-must be qualified first, and which should remain manual.
+which mandatory issues can be immediately handled through batch application, which
+must be qualified first before batch, and which should remain manual.
 
 See the [Batchability Cost Model](docs/batchability-cost-model.md)
 for the issue/edit model and back-of-envelope time-savings framework
 across the three stages.
+
+## Evidence Model
+
+The pipeline is documented through a mix of system design rationale,
+workflow-observable behavior, visual evidence, clearly labeled
+operational notes, and stage-specific experiments. These observations
+and experiments are not presented as controlled benchmarks; they are
+workflow evidence used to explain why specific pipeline boundaries,
+validation steps, review points, and overall design patterns exist.
+
+Stage documents define any stage-specific evidence framing near the
+operations where that evidence is used.
 
 ## Key Constraints
 
@@ -97,10 +109,13 @@ Stage 1 establishes the metadata and query foundation for the workflow.
 - **Semantic enrichment:** Post-import presets and keywords add non-overlapping descriptive metadata
 - **Query layer:** Filter-based retrieval and Smart Collections derive reusable views over image records
 
-After Stage 1, the image set is culled before image-processing
-transformations begin. Culling selects the working set that should move
-forward based on review criteria such as usable focus, aesthetic
-uniqueness, subject relevance, and edit potential.
+> **Pipeline boundary:** culling separates metadata preparation from
+> image transformation.
+>
+> After Stage 1, the full image set is narrowed into the working set
+> that moves forward to cleanup, normalization, and AI mask propagation.
+> Selection is based on usable focus, aesthetic uniqueness, subject
+> relevance, and edit potential.
 
 Stages 2 and 3 then form the image-processing portion of the pipeline, which currently follows this progression:
 
