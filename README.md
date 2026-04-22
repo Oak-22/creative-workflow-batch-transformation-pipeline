@@ -64,54 +64,15 @@ while normalization specifically aligns luminance and scene-level color
 where appropriate; AI mask propagation generates semantic selections
 whose effective impact varies by image content.
 
-## Unit Economics of Batchability
+## Operational Value
 
-A single deliverable image can require many mandatory corrections before
-it is ready for final review. Some corrections are mandatory only when a
-specific condition is present, such as dust, tilted framing, weak
-luminance, foliage hue drift, or a semantic region that needs local
-editing. The pipeline value comes from identifying which subset of those
-mandatory corrections can be safely batch-enabled, which require
-qualification first, and which must remain manual.
+The pipeline is designed around the unit economics of batchability:
+identifying which mandatory corrections can be safely batched, which
+must be qualified first, and which should remain manual.
 
-Representative correction categories include:
-
-- **Local defects:** dust/distraction removal
-- **Geometry:** straightening and crop decisions
-- **Recovery:** AI-assisted recovery for borderline focus/noise cases when the image is otherwise worth keeping
-- **Global visual baseline:** luminance and tonal adjustment
-- **Scene-level visual baseline:** hue and color normalization within comparable scenes
-- **Semantic local edits:** people, foliage, sky, background, foreground, or ground masks
-- **Final artistic review:** manual refinement, crop finalization, and subjective delivery choices
-
-The workflow treats each correction as a candidate operation:
-
-```text
-Candidate image
-      ↓
-Cull for focus, relevance, aesthetic uniqueness, and edit potential
-      ↓
-For each mandatory correction:
-      ↓
-Is the correction present?
-      ├── no  → skip
-      └── yes
-           ↓
-      Is it batch-safe?
-      ├── yes → batch operation candidate
-      └── no
-           ↓
-      Can it be qualified on a representative subset?
-      ├── yes → qualify, then promote if reliable
-      └── no  → keep as manual refinement
-```
-
-Stage 2 focuses on corrections that can establish a reliable baseline
-before creative edits: cleanup, luminance normalization, scene-level
-color normalization, and rollback-safe branching. Stage 3 focuses on
-semantic operations whose behavior depends on probabilistic AI
-segmentation and therefore requires qualification, propagation
-boundaries, and human review.
+See [Unit Economics of Batchability](docs/unit-economics-of-batchability.md)
+for the correction model and back-of-envelope time-savings framework
+across the three stages.
 
 ## Key Constraints
 
