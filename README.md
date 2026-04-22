@@ -127,7 +127,7 @@ Eestablishes the metadata and query foundation for the workflow.
 > Selection is based on usable focus, aesthetic uniqueness, subject
 > relevance, and edit potential.
 
-### Stages 2 and 3
+### Stages 2 & 3
 Forms the image-processing portion of the pipeline, which currently follows this progression:
 
 - **Culling boundary:** Review selects the usable working set after ingest-time metadata application
@@ -135,6 +135,9 @@ Forms the image-processing portion of the pipeline, which currently follows this
 - **Normalization:** Dataset-wide luminance standardization with scene-level color normalization
 - **Semantic operations:** Batch AI masking
 - **Human review:** Manual refinement pass
+
+
+
 
 ### 1. Metadata Application, Enrichment, and Query Pipeline
 Location: [Stage 1](pipeline_stages/001_metadata-application-enrichment-query-pipeline/README.md)
