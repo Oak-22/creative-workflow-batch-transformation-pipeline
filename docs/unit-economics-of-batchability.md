@@ -40,6 +40,12 @@ issues recur across a dataset but still require manual image-by-image
 judgment because the target region, edit boundary, source pixels, or
 aesthetic decision changes with each frame.
 
+The practical spectrum is therefore:
+
+```text
+batchable with review -> batchable with higher exception review -> manual
+```
+
 ```text
 All mandatory issue and edit categories
 |
@@ -48,13 +54,14 @@ All mandatory issue and edit categories
 |     |-- ingest-time identity metadata
 |     |-- validated dust/distraction cleanup
 |     |-- dataset-wide luminance normalization
-|     `-- scene-level color normalization
+|     |-- scene-level color normalization
+|     `-- qualified AI mask propagation for common semantic regions
 |
-|-- Qualified before batch propagation
+|-- Batchable with higher exception review
 |     |
-|     |-- AI mask definitions for people, sky, foliage, or background
 |     |-- uncertain semantic regions such as artificial ground
-|     `-- operations promoted only after representative review
+|     |-- semantic-region edits with inconsistent boundaries or binding
+|     `-- operations promoted only after representative qualification
 |
 `-- Manual or primarily manual
       |
@@ -70,9 +77,38 @@ risk. A large blemish on a primary subject, such as a pimple that
 appears across many images, is different. It may be repeated, but the
 face position, expression, lighting, skin texture, and healing source
 change per frame, so the edit must remain manual. In this tested
-workflow, Lightroom did not dynamically remove that recognized entity
+workflow, Lightroom did not dynamically remove that recognized entity (pimple)
 across images with reliable results using either Stage 2 conditioning
 techniques or Stage 3 mask propagation techniques.
+
+Stage 3 should not be treated as only partially batchable. Once a mask
+definition has been qualified, propagation across the gallery is a batch
+operation in the same economic sense as Stage 2 cleanup or
+normalization: the operation is applied at dataset scale, then reviewed.
+The difference is that probabilistic semantic detection can create a
+higher exception-review burden because generated masks may succeed,
+omit unavailable regions, bind to the wrong region, or produce
+boundaries that need manual refinement.
+
+## Batchability Matrix
+
+An alternate way to frame the same model is to separate the issue, the
+pipeline handling strategy, and the expected review burden. This avoids
+forcing every edit need into a single clean boundary when the workflow
+itself has overlapping automation, qualification, and review concerns.
+
+| Issue / edit need | Pipeline handling | Review burden | Example stage |
+|---|---|---|---|
+| Identity metadata | Batch-applied through ingest preset | Low | Stage 1 |
+| Semantic metadata enrichment | Batch-applied through post-import presets | Low to moderate | Stage 1 |
+| Dust/distraction cleanup | Batch-applied after validation | Low to moderate | Stage 2 |
+| Luminance normalization | Batch-applied across dataset | Moderate | Stage 2 |
+| Scene-level color normalization | Batch-applied within comparable scene groups | Moderate | Stage 2 |
+| AI masks for common semantic regions | Qualified, then batch-propagated | Moderate to high | Stage 3 |
+| Uncertain semantic regions | Qualified on representative examples before promotion | High | Stage 3 |
+| Failed straightening, masking, or normalization cases | Exception handling | High | Stage 2 / Stage 3 |
+| Image-specific Spot Removal, blemish, or skin cleanup | Manual per-image edit | High | Manual review |
+| Final crop and artistic emphasis | Manual editorial decision | High | Final review |
 
 ## Stage-Level Value
 
