@@ -97,7 +97,7 @@ The main value is not only faster metadata entry. It is a cleaner state
 layer: images become identifiable, queryable, and easier to segment into
 working sets before visual editing begins.
 
-### Stage 2: Baseline Conditioning and Rollback
+### Stage 2: Baseline Conditioning
 
 Stage 2 focuses on edit operations that establish a reliable visual baseline
 before creative edits: local cleanup, luminance normalization,

@@ -42,7 +42,7 @@ non-binary failure modes.
 The workflow addresses that problem through three documented stages:
 
 1. Metadata application, enrichment, and query design
-2. Baseline conditioning and rollback
+2. Baseline conditioning
 3. AI mask definition propagation
 
 Each stage isolates a specific class of transformations, defines clear
@@ -119,8 +119,8 @@ Focus areas:
 - metadata-driven indexing and retrieval patterns enabling both rapid ad-hoc queries and declarative views over image records
 - stable metadata state before subjective culling or image transformation begins
 
-### 2. Baseline Conditioning and Rollback Pipeline
-Location: [Stage 2](pipeline_stages/002_baseline-conditioning-and-rollback/README.md)
+### 2. Baseline Conditioning Pipeline
+Location: [Stage 2](pipeline_stages/002_baseline-conditioning-pipeline/README.md)
 
 - local corrective cleanup and dataset-wide luminance normalization across heterogeneous images
 - scene-level color normalization that preserves natural hue differences across scenes

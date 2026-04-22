@@ -1,4 +1,4 @@
-# Production Workflow System Design & Implementation: Baseline Conditioning and Rollback Pipeline
+# Production Workflow System Design & Implementation: Baseline Conditioning Pipeline
 
 Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project.
 
@@ -6,16 +6,17 @@ Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project
 
 Large photo sets captured across changing lighting conditions often feel
 visually inconsistent even when subject matter remains similar. This
-stage defines a [normalization](#normalization) workflow that combines local corrective
-cleanup, dataset-wide luminance normalization, scene-level color
-normalization, post-cull Virtual Copy lineage, and rollback-safe
-branching so the final gallery reads as coherent rather than ad hoc. Just as importantly,
-it reduces operator-driven edit drift when the editor is repeatedly trying to match a chosen look across many
-similar images. Virtual copies provide independent edit timelines for
-experimentation without sacrificing rollback safety. The business value
-is reduced editing time, lower operator comparison burden, more
-consistent outputs across a heterogeneous dataset, and safer
-exploration of alternate edit directions.
+stage defines a baseline-conditioning workflow that combines local
+corrective cleanup, dataset-wide luminance normalization, and
+scene-level color normalization so the final gallery reads as coherent
+rather than ad hoc. Post-cull Virtual Copy lineage protects the working
+set before conditioning, and rollbackable output branches preserve the
+normalized baseline for later experimentation. Just as importantly, the
+stage reduces operator-driven edit drift when the editor is repeatedly
+trying to match a chosen look across many similar images. The business
+value is reduced editing time, lower operator comparison burden, more
+consistent outputs across a heterogeneous dataset, and safer exploration
+of alternate edit directions.
 
 Within the larger pipeline, Stage 2 wraps deterministic conditioning
 around heterogeneous creative input data. The source images remain
@@ -45,20 +46,18 @@ predictably while preserving authentic scene-level variation.
 
 ## Solution Overview
 
-Within stage 2, the first Virtual Copy branch is created immediately
-after RAW culling so the workflow has a protected source state before
-cleanup or normalization begins. The three internal operations then
-operate on that lineage-aware working set. First, batch-safe local
-corrective cleanup removes validated capture artifacts before
-normalization. In this implementation, dust/distraction removal was the
-safer batch cleanup example, while Auto Transform straightening provided
-a reviewed per-image corrective example with visible pass/fail outcomes.
-Second, dataset-wide luminance normalization and scene-level color
-normalization reduce unwanted variance while preserving natural
-across-scene differences. Third, virtual-copy rollback control protects
-the normalized baseline while still allowing experimentation. Across
-those operations, the workflow reduces both technical variance and the
-risk of operator-driven drift.
+Stage 2 operates on the protected working set created after RAW culling
+and initial Virtual Copy lineage setup. Its internal conditioning work
+has two main operations. First, batch-safe local corrective cleanup
+removes validated capture artifacts before normalization. In this
+implementation, dust/distraction removal was the safer batch cleanup
+example, while Auto Transform straightening provided a reviewed
+per-image corrective example with visible pass/fail outcomes. Second,
+dataset-wide luminance normalization and scene-level color normalization
+reduce unwanted variance while preserving natural across-scene
+differences. The normalized baseline is then handed off to
+further rollbackable Virtual Copy branches for later experimentation, reducing
+both technical variance and the risk of operator-driven drift.
 
 ## Key Constraints
 
@@ -88,10 +87,10 @@ Each note follows the same basic structure:
 
 ## Stage 2 Pipeline Value - In Depth
 
-Stage 2 creates value through an initial lineage setup followed by three
-related operations. Each part reduces a different class of workflow risk,
-and the combined effect is larger than the sum of the individual batch
-effects.
+Stage 2 creates value through a lineage-protected input boundary followed
+by two conditioning operations and a rollback-safe output boundary. Each
+part reduces a different class of workflow risk, and the combined effect
+is larger than the sum of the individual batch effects.
 
 ### Lineage Setup Value: Protected Working State
 
@@ -100,9 +99,9 @@ Operation 1 or Operation 2. This creates a protected working state for
 the culled image set so cleanup and normalization do not have to operate
 directly on the original RAW selection.
 
-This is not a fourth operation; it is the lineage setup that makes the
-later operations safer. Operations 1 and 2 can transform the working
-branch, while the original culled state remains available as the
+This is not a third conditioning operation; it is the lineage setup that
+makes the later operations safer. Operations 1 and 2 can transform the
+working branch, while the original culled state remains available as the
 earliest rollback point.
 
 ### Operation 1 Value: Cleaner Inputs
@@ -110,7 +109,7 @@ earliest rollback point.
 Operation 1 covers batch-safe local corrective cleanup. In this case
 study, the validated cleanup operations were dust/distraction removal
 and Auto Transform straightening. Dust removal is the safer batch
-operation: if no dust is present, little or no change is applied. Auto
+application: if no dust is present, little or no change is applied. Auto
 Transform is still useful because it evaluates each image independently,
 but it requires stricter review because failed straightening must be
 corrected later.
@@ -135,12 +134,12 @@ The goal is therefore not a single global color match, but a stable
 visual baseline that preserves real scene-level foliage and ambient
 color differences.
 
-### Operation 3 Value: Recoverable Edit Branches
+### Output Boundary Value: Recoverable Edit Branches
 
-Operation 3 protects the normalized baseline by using additional Virtual
-Copy branches for experimentation. This changes rollback from a costly
-return to raw source state into a controlled return to a known-good
-baseline.
+After Operation 2, additional Virtual Copy branches protect the
+normalized baseline during experimentation. This changes rollback from a
+costly return to raw source state into a controlled return to a
+known-good baseline.
 
 That matters because visual drift is often discovered late, after a
 sequence of small adjustments has already spread across similar images.
@@ -148,21 +147,25 @@ Rollbackable branches make it safer to compare alternate creative
 directions without losing the cleanup and normalization work that should
 remain stable.
 
-### Cross-Operation Logic
+### Cross-Boundary Logic
 
-The operations are ordered linearly, but their impact is not purely
-linear. Weakness in one operation can amplify downstream risk, while a
-strong earlier operation can reduce the complexity of later decisions.
+The conditioning operations and lineage boundaries are ordered
+linearly, but their impact is not purely linear. Weakness in one control
+point can amplify downstream risk, while a strong earlier control point
+can reduce the complexity of later decisions.
 
 - **Operation 1 → Operation 2:** Cleaner inputs make luminance and scene-level color normalization easier to judge because visible defects are not competing with exposure, tone, or color evaluation.
 - **Lineage setup → Operation 1:** The initial post-cull Virtual Copy branch gives cleanup a protected working state rather than forcing edits directly onto the original RAW selection.
-- **Operation 2 → Operation 3:** A stronger visual baseline makes later Virtual Copy branches more meaningful because each branch starts from a comparable state rather than from unstable per-image variance.
-- **Operation 3 → Operations 1 and 2:** Rollback-safe branching protects the value created by cleanup and normalization, preventing later creative experiments from destroying the stable baseline.
+- **Operation 2 → Output boundary:** A stronger visual baseline makes later Virtual Copy branches more meaningful because each branch starts from a comparable state rather than from unstable per-image variance.
+- **Output boundary → Operations 1 and 2:** Rollback-safe branching protects the value created by cleanup and normalization, preventing later creative experiments from destroying the stable baseline.
 - **System-level effect:** The pipeline reduces repeated manual comparison loops by separating defect cleanup, visual baseline conditioning, and experimental edit branching into distinct control points.
 
 ## Pipeline Diagrams
 
-The following simplified diagrams illustrate the three internal operations that make up this stage. Each operation progressively reduces variance while preserving scene-level differences.
+The following simplified diagrams illustrate the two internal
+conditioning operations and the surrounding lineage boundaries. The
+conditioning operations progressively reduce variance while preserving
+scene-level differences.
 
 ### Operation 1 — Local Corrective Cleanup
 
@@ -171,7 +174,8 @@ RAW Images (dataset)
       ↓
 Culled RAW Selection
       ↓
-Initial Virtual Copy Working Branch
+Post-Cull Virtual Copy Working Branch
+(lineage boundary before Stage 2 conditioning)
       ↓
 Fault-Tolerant Local Cleanup
 (validated dust/distraction removal + reviewed Auto Transform)
@@ -198,12 +202,13 @@ Normalized Baseline Images
 ```
 ---
 
-### Operation 3 — Virtual Copies and Rollback Control
+### Output Boundary — Baseline Protection and Rollback Control
 
 ```text
 Normalized Baseline Images
       ↓
-Additional Virtual Copy Branches Created
+Rollbackable Virtual Copy Branches Created
+(handoff boundary after Stage 2 conditioning)
       ↓
 Alternate Edit Direction A / B
       ↓
@@ -211,9 +216,9 @@ Compare, Keep, or Revert
 ```
 
 The initial Virtual Copy branch is created after RAW culling to protect
-the source selection before cleanup and normalization. Operation 3 then
-uses additional branches to preserve the normalized baseline while making
-alternate looks recoverable instead of destructive.
+the source selection before cleanup and normalization. After Stage 2
+conditioning, additional branches preserve the normalized baseline while
+making alternate looks recoverable instead of destructive.
 
 ---
 
@@ -512,9 +517,11 @@ increasing the risk of inconsistent results.
 
 Within the larger creative workflow pipeline, Stage 2 collapses multiple
 global edit passes into one deterministic baseline-conditioning sequence:
-local corrective cleanup, dataset-wide luminance normalization,
-scene-level color normalization, and Virtual Copy lineage protecting both
-the initial culled selection and later normalized baselines.
+local corrective cleanup, dataset-wide luminance normalization, and
+scene-level color normalization. Virtual Copy lineage protects the
+working set before conditioning and the normalized baseline after
+conditioning, but it is treated as a boundary mechanism rather than an
+internal conditioning operation.
 
 ### Stage 2 Operation Flow
 
@@ -531,8 +538,8 @@ Operation 1: Local corrective cleanup
 Operation 2: Global luminance and scene-level color normalization
 (dataset-wide tonal analysis + per-scene color adjustment)
       ↓
-Operation 3: Additional virtual-copy branching and rollback control
-(preserve baseline while exploring alternate edit directions)
+Output boundary: rollbackable baseline branches
+(preserve normalized baseline while exploring alternate edit directions)
       ↓
 Consistent dataset baseline with preserved scene variation
 ```
@@ -721,14 +728,14 @@ Purpose: Show skin tone consistency within comparable portrait groups after lumi
 - predictable downstream transformations
 - significant reduction in repeated per-image exposure and scene-level color correction (residual adjustments may still be required in edge cases)
 
-### Operation 3: Virtual Copies and Rollback Control
+### Baseline Handoff: Virtual Copies and Rollback Control
 
 Virtual Copies enter the workflow before Operation 1: after RAW culling,
 the selected images are branched into an initial working state so cleanup
 and normalization do not overwrite the original culled selection. After
 Operation 2 establishes a stable luminance and scene-color baseline,
-Operation 3 uses additional Virtual Copy branches to protect that
-baseline from operator-induced drift.
+additional Virtual Copy branches protect that baseline from
+operator-induced drift.
 
 Virtual Copies provide a lightweight lineage mechanism for alternate edit
 paths: instead of overwriting a single edit history, the workflow can
@@ -766,7 +773,7 @@ while preserving separate downstream edit decisions.
 
 The current implementation is designed as a **local, editor-in-the-loop batch pipeline** operating within Lightroom Desktop / Classic rather than as a cloud-native or distributed image-processing system. RAW files, virtual copies, and downstream edits are managed within a local catalog-centered workflow optimized for a single operator performing interactive review and refinement.
 
-This design favors **editing throughput, controllability, and local responsiveness** over distributed scalability. Operations 1 and 2 are primarily preprocessing operations that establish a normalized baseline, while Operation 3 preserves that baseline during experimentation and revision.
+This design favors **editing throughput, controllability, and local responsiveness** over distributed scalability. Operations 1 and 2 are the conditioning operations that establish a normalized baseline, while the output boundary preserves that baseline during experimentation and revision.
 
 In practical terms, the pipeline is intended to scale across **hundreds of RAW images per dataset**, not to serve as a real-time or horizontally distributed processing system. The relevant engineering question is therefore not formal algorithmic complexity in the abstract, but rather **observed operational latency, throughput, and reduction in manual intervention** as dataset size increases.
 
@@ -781,7 +788,7 @@ and workflow-observable rather than heavily instrumented.
 🚧 TODO — EVIDENCE
 Type: Workflow
 Asset: pipeline_stage_views
-Purpose: Show the Lightroom collection structure for Stage 2, including post-cull Virtual Copy lineage, Operation 1 cleanup, Operation 2 normalization, and Operation 3 rollback branches.
+Purpose: Show the Lightroom collection structure for Stage 2, including post-cull Virtual Copy lineage, Operation 1 cleanup, Operation 2 normalization, and rollbackable output branches.
 ---
 
 ## Failure Modes & Edge Cases
@@ -817,7 +824,7 @@ Asset: stage2_failure_cases
 Purpose: Show Operation 2 failure modes such as extreme dynamic range, silhouette images, mixed color temperature, or incorrect scene grouping for color normalization.
 ---
 
-### Operation 3 Failure Modes
+### Baseline Handoff Failure Modes
 
 Virtual-copy branching can still fail when branch discipline is weak. If
 the initial post-cull branch, normalized baseline branch, and later
@@ -841,7 +848,7 @@ overrides are required. Excessive exception handling reduces the
 throughput benefit of the pipeline and can reintroduce the same
 cross-image comparison burden that the workflow is intended to remove.
 In practice, weak Operation 1 cleanup, a weak Operation 2 baseline, or
-weak Operation 3 rollback discipline can each
+weak rollback discipline at the output boundary can each
 increase downstream instability and reduce overall consistency.
 
 
@@ -869,8 +876,8 @@ measurements for this workflow would be:
 - editing time per delivered image
 - number of residual local defect or straightening corrections after Operation 1
 - number of residual manual exposure or scene-level color corrections after Operation 2
-- number of virtual-copy branches or reversions required after failed
-  edit directions in Operation 3
+- number of virtual-copy branches or reversions required when alternate
+  edit directions fail after the baseline handoff
 
 These measurements would help quantify whether the pipeline reduces
 manual intervention and improves throughput in practice, but they are
@@ -895,9 +902,9 @@ Asset: stage2_sample_comparison
 Purpose: Show representative before/after subsets for dataset-wide luminance normalization and scene-level color normalization.
 ---
 
-### Operation 3 Validation
+### Baseline Handoff Validation
 
-Operation 3 can be validated by testing alternate edit directions on
+The baseline handoff can be validated by testing alternate edit directions on
 Virtual Copies and recording whether the editor can return to a known
 good baseline without manual untangling. The central engineering
 question is whether branching and rollback materially reduce edit-state
@@ -936,7 +943,7 @@ The pipeline improves consistency and throughput, but it does so through explici
 ### Automation vs Editorial Control
 
 Operations 1 and 2 automate high-frequency repetitive operations, while
-Operation 3 remains intentionally editor-guided because branch
+the baseline handoff remains intentionally editor-guided because branch
 selection, comparison, and rollback still depend on editorial judgment.
 
 This tradeoff is especially important when the editor is comparing
@@ -981,10 +988,10 @@ Purpose: Show the downstream consistency difference between images edited after 
 
 ### Rollback Safety vs Branch Sprawl
 
-Operation 3 gains safety by making alternate directions recoverable, but
-that also introduces the need for disciplined branch naming,
-comparison, and pruning. Too many unmanaged branches can create their
-own form of operator confusion.
+The rollback boundary gains safety by making alternate directions
+recoverable, but that also introduces the need for disciplined branch
+naming, comparison, and pruning. Too many unmanaged branches can create
+their own form of operator confusion.
 
 ### Local Workflow Efficiency vs Cloud-Native Scalability
 
@@ -1055,8 +1062,8 @@ The workflow prioritizes addressable control rather than complete control.
 
 Clean validated dust/distraction artifacts and review Auto Transform
 straightening first, establish a dataset-wide luminance baseline and
-scene-level color baselines second, then protect that baseline with
-rollbackable Virtual Copy branches.
+scene-level color baselines second, then hand off the normalized baseline
+to rollbackable Virtual Copy branches.
 
 ---
 
@@ -1065,6 +1072,6 @@ rollbackable Virtual Copy branches.
 This photography workflow becomes a data transformation pipeline design
 problem. By separating local cleanup, dataset-wide luminance
 normalization, scene-level color normalization, and rollbackable
-experimentation into distinct operations, the system achieves dataset
+experimentation boundaries, the system achieves dataset
 consistency and editing efficiency without sacrificing image fidelity,
 natural scene variance, or processing flexibility.
