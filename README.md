@@ -2,6 +2,8 @@
 
 Systems engineering project showing how creative-production workflows can be structured as deterministic, scalable pipelines rather than ad hoc editing sequences.
 
+<br>
+
 ## Project Structure
 
 The project is structured as a workflow system design rather than a
@@ -18,6 +20,8 @@ pipeline boundaries, validation steps, review points, and design
 patterns exist. Stage documents define any stage-specific evidence
 framing near the operations where that evidence is used.
 
+<br>
+
 ## TL;DR
 
 Use these entry points to inspect specific aspects of the project:
@@ -25,6 +29,8 @@ Use these entry points to inspect specific aspects of the project:
 - [Shared terminology](docs/terminology.md) defines recurring systems and image-workflow language.
 - [Batchability Cost Model](docs/batchability-cost-model.md) explains the operational value model.
 - [Pipeline Overview Diagram](docs/pipeline-overview-diagram.png) shows the full pipeline structure.
+
+<br>
 
 ## Executive Summary
 
@@ -44,6 +50,8 @@ metadata application, image normalization, and semantic batch editing can be
 composed into a deterministic workflow that scales more reliably than
 repeated manual editing.
 
+<br>
+
 ## Problem
 
 Creative-production workflows often accumulate as several informal editing
@@ -57,6 +65,8 @@ editing operations, but how to organize them into a stable pipeline
 that remains batch-safe under real tooling limitations, heterogeneous
 creative input data, and AI-assisted operations with partial,
 non-binary failure modes.
+
+<br>
 
 ## Solution Overview
 
@@ -85,6 +95,8 @@ while normalization specifically aligns luminance and scene-level color
 where appropriate; AI mask propagation generates semantic selections
 whose effective impact varies by image content.
 
+<br>
+
 ## Operational Value
 
 The pipeline is designed around a batchability cost model: identifying
@@ -94,6 +106,8 @@ must be qualified first before batch, and which should remain manual.
 See the [Batchability Cost Model](docs/batchability-cost-model.md)
 for the issue/edit model and back-of-envelope time-savings framework
 across the three stages.
+
+<br>
 
 ## Key Constraints
 
@@ -107,13 +121,16 @@ design themes are:
 - reproducibility through clear validation checkpoints
 - structured automation with human review at defined boundaries
 
+<br>
 
 ## Pipeline Stages
 
 The project is organized as a single multi-stage pipeline with supporting documentation for each major stage.
 
+<br>
+
 ### Stage 1
-Eestablishes the metadata and query foundation for the workflow.
+Establishes the metadata and query foundation for the workflow.
 
 - **Identity initialization:** Single-preset ingest establishes the protected authorship baseline
 - **Semantic enrichment:** Post-import presets and keywords add non-overlapping descriptive metadata
@@ -126,6 +143,8 @@ Eestablishes the metadata and query foundation for the workflow.
 > that moves forward to cleanup, normalization, and AI mask propagation.
 > Selection is based on usable focus, aesthetic uniqueness, subject
 > relevance, and edit potential.
+
+<br>
 
 ### Stages 2 & 3
 Forms the image-processing portion of the pipeline, which currently follows this progression:
@@ -140,6 +159,8 @@ Forms the image-processing portion of the pipeline, which currently follows this
 
 ## Stage Details
 
+<br>
+
 ### 1. Metadata Application, Enrichment, and Query Pipeline
 Location: [Stage 1](pipeline_stages/001_metadata-application-enrichment-query-pipeline/README.md)
 
@@ -149,6 +170,8 @@ Focus areas:
 - metadata-driven indexing and retrieval patterns enabling both rapid ad-hoc queries and declarative views over image records
 - stable metadata state before subjective culling or image transformation begins
 
+<br>
+
 ### 2. Baseline Conditioning Pipeline
 Location: [Stage 2](pipeline_stages/002_baseline-conditioning-pipeline/README.md)
 
@@ -156,6 +179,8 @@ Location: [Stage 2](pipeline_stages/002_baseline-conditioning-pipeline/README.md
 - scene-level color normalization that preserves natural hue differences across scenes
 - virtual copies for rollbackable experimentation while reducing operator cognitive load
 - deterministic conditioning around creative/capture variance from changing light, scene, and camera conditions
+
+<br>
 
 ### 3. AI Mask Definition Propagation
 Location: [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md)
