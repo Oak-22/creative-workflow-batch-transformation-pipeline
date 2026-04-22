@@ -1,29 +1,31 @@
 # Unit Economics of Batchability
 
 This document explains the operational value of the pipeline: converting
-repeated per-image corrections into batch-safe operations, qualified
-batch candidates, or intentionally manual review work.
+repeated per-image issues into batch-safe operations, qualified batch
+candidates, or intentionally manual review work.
 
 The estimates here are directional rather than benchmarked. They model
-how the cost shape changes when a correction moves from repeated manual
-execution to setup, propagation, validation, and targeted exception
+how the cost shape changes when an edit operation moves from repeated
+manual execution to setup, propagation, validation, and targeted exception
 handling.
 
 ## Correction Model
 
-A single deliverable image can require many mandatory corrections before
-it is ready for final review. Some corrections are mandatory only when a
-specific condition is present, such as dust, tilted framing, weak
+A single deliverable image can contain many issues or edit requirements
+that must be addressed before final review. Some are mandatory only when
+a specific condition is present, such as dust, tilted framing, weak
 luminance, foliage hue drift, or a semantic region that needs local
 editing.
 
-The pipeline value comes from identifying which subset of those
-mandatory corrections can be safely batch-enabled, which require
-qualification first, and which must remain manual.
+The pipeline value comes from separating issue categories by the
+automation potential of the edit operation used to address them: which
+operations can be safely batch-enabled, which require qualification and
+review, and which must remain manual even when the same issue appears
+many times.
 
-Representative correction categories include:
+Representative issue and edit categories include:
 
-- **Local defects:** dust/distraction removal
+- **Local defects:** dust/distraction removal, with image-specific Spot Removal kept manual when the target changes per frame
 - **Geometry:** straightening and crop decisions
 - **Recovery:** AI-assisted recovery for borderline focus/noise cases when the image is otherwise worth keeping
 - **Global visual baseline:** luminance and tonal adjustment
@@ -31,27 +33,46 @@ Representative correction categories include:
 - **Semantic local edits:** people, foliage, sky, background, foreground, or ground masks
 - **Final artistic review:** manual refinement, crop finalization, and subjective delivery choices
 
-The workflow treats each correction as a candidate operation:
+## Issue Automation Map
+
+Not every repeated issue can be addressed by a batch operation. Some
+issues recur across a dataset but still require manual image-by-image
+judgment because the target region, edit boundary, source pixels, or
+aesthetic decision changes with each frame.
 
 ```text
-Candidate image
+All mandatory issue and edit categories
+|
+|-- Fully batchable with review
+|     |
+|     |-- ingest-time identity metadata
+|     |-- validated dust/distraction cleanup
+|     |-- dataset-wide luminance normalization
+|     `-- scene-level color normalization
+|
+|-- Qualified before batch propagation
+|     |
+|     |-- AI mask definitions for people, sky, foliage, or background
+|     |-- uncertain semantic regions such as artificial ground
+|     `-- operations promoted only after representative review
+|
+`-- Manual or primarily manual
       |
-Cull for focus, relevance, aesthetic uniqueness, and edit potential
-      |
-For each mandatory correction:
-      |
-Is the correction present?
-      |-- no  -> skip
-      `-- yes
-           |
-      Is it batch-safe?
-      |-- yes -> batch operation candidate
-      `-- no
-           |
-      Can it be qualified on a representative subset?
-      |-- yes -> qualify, then promote if reliable
-      `-- no  -> keep as manual refinement
+      |-- final crop and artistic selection
+      |-- subjective local emphasis, such as vignetting or sun radial gradients
+      |-- image-specific Spot Removal, blemish, or skin cleanup
+      `-- failed straightening, masking, or normalization exceptions 
 ```
+
+For example, sensor dust is a strong batch candidate because the defect
+can be small, repeated, and safe to remove or omit with limited visual
+risk. A large blemish on a primary subject, such as a pimple that
+appears across many images, is different. It may be repeated, but the
+face position, expression, lighting, skin texture, and healing source
+change per frame, so the edit must remain manual. In this tested
+workflow, Lightroom did not dynamically remove that recognized entity
+across images with reliable results using either Stage 2 conditioning
+techniques or Stage 3 mask propagation techniques.
 
 ## Stage-Level Value
 
@@ -69,7 +90,7 @@ working sets before visual editing begins.
 
 ### Stage 2: Baseline Conditioning and Rollback
 
-Stage 2 focuses on corrections that establish a reliable visual baseline
+Stage 2 focuses on edit operations that establish a reliable visual baseline
 before creative edits: local cleanup, luminance normalization,
 scene-level color normalization, and rollback-safe branching.
 
@@ -105,10 +126,11 @@ handling.
 
 ## Directional Formula
 
-For each candidate correction, the savings can be approximated as:
+For each recurring issue and proposed edit operation, the savings can be
+approximated as:
 
 ```text
-manual_cost = image_count x correction_frequency x average_manual_time
+manual_cost = image_count x issue_frequency x average_manual_time
 
 pipeline_cost =
   setup_time
@@ -120,16 +142,17 @@ pipeline_cost =
 estimated_savings = manual_cost - pipeline_cost
 ```
 
-The pipeline is most valuable when a correction has high frequency,
+The pipeline is most valuable when an issue has high frequency,
 high manual repetition, and predictable enough behavior to support batch
-execution or qualification. It is less valuable when the correction is
-rare, highly subjective, or cheaper to fix manually than to qualify.
+execution or qualified propagation. It is less valuable when the
+issue is rare, highly subjective, or cheaper to fix manually than
+to qualify.
 
 ## Interpretation
 
 Batchability does not mean removing the editor from the process. It
 means changing where the editor spends attention: less repeated
-mechanical correction, more setup, validation, exception handling, and
+mechanical editing, more setup, validation, exception handling, and
 final creative review.
 
 Across the three stages, the accumulated value comes from stacking these
