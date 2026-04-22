@@ -20,12 +20,20 @@ reviewed by a human operator.
 
 ## Problem
 
-Manual semantic masking is expensive at gallery scale (500+ images for Wedding Photography). When similar adjustments are needed across many photos, manually brushing each semantic region image by image becomes a painful throughput bottleneck. The challenge is to determine whether AI-generated masks can be propagated safely across a heterogeneous dataset without copying brittle pixel selections or introducing silent failures that would require extensive rework.
+Manual semantic masking is expensive at gallery scale. When similar
+adjustments are needed across hundreds of photos, manually brushing each
+semantic region image by image becomes a throughput bottleneck. Without
+a reusable mask-definition workflow, repeated local edits remain tied to
+per-image manual execution.
 
 Unlike Stage 2 normalization, which controls variance in the image data
 itself, Stage 3 controls uncertainty introduced by AI model behavior:
 semantic regions may be detected cleanly, omitted safely, partially
 misbound, or produced with boundaries that require operator judgment.
+The systems challenge is to propagate AI-generated mask definitions
+safely across a heterogeneous dataset without copying brittle pixel
+selections or introducing silent failures that would require extensive
+rework.
 
 ## Solution Overview
 

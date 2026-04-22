@@ -21,17 +21,16 @@ introduce more subjective and probabilistic decision points.
 
 ## Problem
 
-Design a deterministic metadata application and enrichment system for
-image assets under a single-preset ingest constraint. The system must
-reliably initialize ownership metadata, prevent field-level collisions,
-and remain robust as classification requirements span multiple domains.
+Metadata application during ingest is constrained by Lightroom's
+single-preset import model. That makes it easy to initialize ownership
+metadata consistently, but risky to mix protected identity fields with
+later semantic enrichment fields in the same write path.
 
 The core challenge is to maintain a stable, authoritative identity
 state while enabling iterative, revisable semantic enrichment. Poorly
 structured metadata increases rework, weakens retrieval, and reduces
-the downstream usefulness of image records for curation, publishing, and
-discoverability. The solution must therefore be non-destructive,
-auditable, and simple to validate in batch workflows.
+the downstream usefulness of image records for curation, publishing,
+discoverability, and later pipeline stages.
 
 This stage intentionally resolves the most deterministic part of the
 system first. Later stages operate on visually variable images and
