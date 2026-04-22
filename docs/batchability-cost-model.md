@@ -1,12 +1,15 @@
 # Batchability Cost Model
 
-> <<For each repeated issue or edit need, what is the cost of handling
-> it manually per image versus converting part of the work into setup,
-> batch application, qualification, review, and exception handling?>>
+> For each repeated issue, what is the cost of handling it manually per
+> image versus converting part of the work into setup, batch application,
+> qualification, review, and exception handling?
 
 This document poses that question as the cost model for assessing
 pipeline value. The unit economics of batchability come from converting
 repeated per-image issues into batch-safe operations.
+
+Here, **issue** follows the shared terminology definition: a recurring
+workflow need that creates manual effort. See [Issue](terminology.md#issue).
 
 The estimates here are directional rather than benchmarked. They model
 how the cost shape changes when an edit operation moves from repeated

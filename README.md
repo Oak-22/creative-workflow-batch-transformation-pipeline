@@ -1,9 +1,14 @@
 # Creative Workflow Batch Transformation Pipeline
 
-Systems engineering project showing how creative-production workflows can be structured as deterministic,  scalable pipelines rather than ad hoc editing sequences.
+Systems engineering project showing how creative-production workflows can be structured as deterministic, scalable pipelines rather than ad hoc editing sequences.
 
-For recurring systems and image-workflow language, see the
-[shared terminology](docs/terminology.md).
+## TL;DR
+
+Use these entry points to inspect specific aspects of the project:
+
+- [Shared terminology](docs/terminology.md) defines recurring systems and image-workflow language.
+- [Batchability Cost Model](docs/batchability-cost-model.md) explains the operational value model.
+- [Pipeline Overview Diagram](docs/pipeline-overview-diagram.png) shows the full pipeline structure.
 
 ## Executive Summary
 

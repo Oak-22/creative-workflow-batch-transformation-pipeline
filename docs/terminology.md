@@ -5,6 +5,13 @@ operation where they are used.
 
 ## Pipeline Concepts
 
+### Issue
+
+A recurring workflow need that creates manual effort, such as a metadata
+task, visual defect, variance problem, semantic region, exception case,
+or editorial decision that must be handled before the image set can move
+forward.
+
 ### Deterministic Orchestration
 
 A workflow design pattern that makes the order of operations, inputs,
@@ -15,7 +22,7 @@ the underlying data or tool behavior is variable.
 
 Inputs whose exact state or behavior cannot be fully predicted before
 runtime. In this project, the main uncertain inputs are image variance
-from changing capture conditions and AI-generated semantic masks whose
+from changing capture conditions at source and AI-generated semantic masks whose
 quality depends on image content.
 
 ### Stage Boundary

@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net">
   <diagram name="Page-1" id="ZORiqB2L0gApbABSuhiv">
-    <mxGraphModel dx="2054" dy="1121" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="300" pageHeight="2500" math="0" shadow="0">
+    <mxGraphModel dx="2282" dy="1246" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="300" pageHeight="2500" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -28,7 +28,7 @@
         <mxCell id="A9GcHXLtIRmUFDPjzmzb-11" parent="1" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
           <mxGeometry height="8" width="1170" x="350" y="1200" as="geometry" />
         </mxCell>
-        <mxCell id="A9GcHXLtIRmUFDPjzmzb-12" parent="1" style="text;align=center;fontStyle=1;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="&lt;font style=&quot;font-size: 19px;&quot;&gt;Stage 1 – Metadata Application, Enrichment, &amp;amp; Query Pipeline&lt;/font&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="A9GcHXLtIRmUFDPjzmzb-12" parent="1" style="text;align=center;fontStyle=1;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="&lt;font style=&quot;font-size: 19px;&quot;&gt;Stage 1 – Metadata Write, Enrich, &amp;amp; Query Pipeline&lt;/font&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="110" width="480" x="210" y="280" as="geometry" />
         </mxCell>
         <mxCell id="A9GcHXLtIRmUFDPjzmzb-16" parent="1" style="text;align=center;fontStyle=1;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Images&lt;/font&gt;" vertex="1">
@@ -57,7 +57,7 @@
         <mxCell id="4Ns0TeULby68ldCUsVev-12" parent="1" style="html=1;whiteSpace=wrap;" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Ad-hoc lLibrary Filtering (One-off Queries)&lt;/font&gt;" vertex="1">
           <mxGeometry height="80" width="170" x="1140" y="440" as="geometry" />
         </mxCell>
-        <mxCell id="4Ns0TeULby68ldCUsVev-13" parent="1" style="text;align=center;fontStyle=1;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="&lt;font style=&quot;font-size: 19px;&quot;&gt;Stage 2 — Baseline Conditioning Pipeline&lt;/font&gt;" vertex="1">
+        <mxCell id="4Ns0TeULby68ldCUsVev-13" parent="1" style="text;align=center;fontStyle=1;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="&lt;font style=&quot;font-size: 19px;&quot;&gt;Stage 2 — Baseline Conditioning and Rollback&lt;/font&gt;" vertex="1">
           <mxGeometry height="100" width="480" x="210" y="670" as="geometry" />
         </mxCell>
         <mxCell id="4Ns0TeULby68ldCUsVev-14" parent="1" style="text;align=center;fontStyle=1;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="&lt;font style=&quot;font-size: 19px;&quot;&gt;Stage 3 — AI Mask Definition Propagation&lt;/font&gt;" vertex="1">
