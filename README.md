@@ -56,7 +56,7 @@ Stage 2 controls visual variance introduced by capture conditions, and
 Stage 3 constrains probabilistic AI mask outputs through qualification,
 bounded propagation, and human review.
 
-In Stages 2 and 3, batch execution does not imply a single static
+In Stages 2 and 3, batch application does not imply a single static
 transformation applied uniformly across every file. Both stages operate
 at dataset scale while still producing image-specific results at
 runtime: baseline conditioning responds to the state of each image,
@@ -66,12 +66,12 @@ whose effective impact varies by image content.
 
 ## Operational Value
 
-The pipeline is designed around the unit economics of batchability:
-identifying which mandatory corrections can be safely batched, which
+The pipeline is designed around a batchability cost model: identifying
+which mandatory issues can be handled through batch application, which
 must be qualified first, and which should remain manual.
 
-See [Unit Economics of Batchability](docs/unit-economics-of-batchability.md)
-for the correction model and back-of-envelope time-savings framework
+See the [Batchability Cost Model](docs/batchability-cost-model.md)
+for the issue/edit model and back-of-envelope time-savings framework
 across the three stages.
 
 ## Key Constraints

@@ -293,7 +293,7 @@ artificial-ground qualification experiments are rerun.
 ### Observed System Behavior
 During the paste operation, Lightroom displayed the progress indicator: `Updating AI Settings`
 
-This stage represents the batch execution of semantic segmentation models across the selected images.
+This stage represents batch application of semantic segmentation models across the selected images.
 
 Rather than copying mask pixels directly, Lightroom performs the following process for each image:
 mask_definition → semantic segmentation → region binding
@@ -362,7 +362,7 @@ Synchronize the People + Environment operation across all selected images. Image
 
 ￼
 
-The “Updating AI Settings” progress indicator visualizes the batch execution described above: Lightroom reruns AI-driven semantic segmentation on each selected photo rather than reusing static pixel regions.
+The “Updating AI Settings” progress indicator visualizes the batch application described above: Lightroom reruns AI-driven semantic segmentation on each selected photo rather than reusing static pixel regions.
 
 Conceptually, this resembles a machine learning inference pipeline:
 mask := detect_people(image)

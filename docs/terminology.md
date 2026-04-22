@@ -60,7 +60,7 @@ edit potential.
 
 A broader preparation step that makes a working set safer and more
 consistent for downstream operations. Conditioning may include cleanup,
-normalization, reviewed corrections, and rollback setup.
+normalization, reviewed edit operations, and rollback setup.
 
 ### Normalization
 

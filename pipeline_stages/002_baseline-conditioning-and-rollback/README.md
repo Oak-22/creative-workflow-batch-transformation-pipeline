@@ -369,7 +369,7 @@ white balance, or color profile.
 Instead, normalization establishes a comparable baseline operating range
 for downstream edits. Each image can receive different runtime
 adjustments because each image starts with different luminance, contrast,
-and color conditions. The batch operation is shared, but the effective
+and color conditions. The batch application is shared, but the effective
 transformation is image-specific.
 
 Color normalization is also scene-specific. A yellow-green foliage scene
@@ -573,7 +573,7 @@ This makes Auto Transform less batch-safe than dust removal. Dust removal
 is largely no-op when no visible dust is present, while a failed
 straightening result creates work that must be corrected later. For that
 reason, Auto Transform belongs in Operation 1 as a reviewed corrective
-cleanup candidate, not as an indiscriminate batch operation.
+cleanup candidate, not as indiscriminate batch application.
 
 **Outcome:**
 - cleaner baseline inputs before dataset-wide normalization
