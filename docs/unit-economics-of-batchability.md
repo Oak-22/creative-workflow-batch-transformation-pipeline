@@ -33,43 +33,29 @@ Representative issue and edit categories include:
 - **Semantic local edits:** people, foliage, sky, background, foreground, or ground masks
 - **Final artistic review:** manual refinement, crop finalization, and subjective delivery choices
 
-## Issue Automation Map
+## Batchability Matrix
 
 Not every repeated issue can be addressed by a batch operation. Some
 issues recur across a dataset but still require manual image-by-image
 judgment because the target region, edit boundary, source pixels, or
 aesthetic decision changes with each frame.
 
-The practical spectrum is therefore:
+The useful distinction is not whether an edit is automated or manual,
+but how much work can move from per-image execution into setup, batch
+application, qualification, review, and exception handling.
 
-```text
-batchable with review -> batchable with higher exception review -> manual
-```
-
-```text
-All mandatory issue and edit categories
-|
-|-- Fully batchable with review
-|     |
-|     |-- ingest-time identity metadata
-|     |-- validated dust/distraction cleanup
-|     |-- dataset-wide luminance normalization
-|     |-- scene-level color normalization
-|     `-- qualified AI mask propagation for common semantic regions
-|
-|-- Batchable with higher exception review
-|     |
-|     |-- uncertain semantic regions such as artificial ground
-|     |-- semantic-region edits with inconsistent boundaries or binding
-|     `-- operations promoted only after representative qualification
-|
-`-- Manual or primarily manual
-      |
-      |-- final crop and artistic selection
-      |-- subjective local emphasis, such as vignetting or sun radial gradients
-      |-- image-specific Spot Removal, blemish, or skin cleanup
-      `-- failed straightening, masking, or normalization exceptions 
-```
+| Issue / edit need | Pipeline handling | Review burden | Example stage |
+|---|---|---|---|
+| Identity metadata | Batch-applied through ingest preset | Low | Stage 1 |
+| Semantic metadata enrichment | Batch-applied through post-import presets | Low to moderate | Stage 1 |
+| Dust/distraction cleanup | Batch-applied after validation | Low to moderate | Stage 2 |
+| Luminance normalization | Batch-applied across dataset | Moderate | Stage 2 |
+| Scene-level color normalization | Batch-applied within comparable scene groups | Moderate | Stage 2 |
+| AI masks for common semantic regions | Qualified, then batch-propagated | Moderate to high | Stage 3 |
+| Uncertain semantic regions | Qualified on representative examples before promotion | High | Stage 3 |
+| Failed straightening, masking, or normalization cases | Exception handling | High | Stage 2 / Stage 3 |
+| Image-specific Spot Removal, blemish, or skin cleanup | Manual per-image edit | High | Manual review |
+| Final crop and artistic emphasis | Manual editorial decision | High | Final review |
 
 For example, sensor dust is a strong batch candidate because the defect
 can be small, repeated, and safe to remove or omit with limited visual
@@ -89,26 +75,6 @@ The difference is that probabilistic semantic detection can create a
 higher exception-review burden because generated masks may succeed,
 omit unavailable regions, bind to the wrong region, or produce
 boundaries that need manual refinement.
-
-## Batchability Matrix
-
-An alternate way to frame the same model is to separate the issue, the
-pipeline handling strategy, and the expected review burden. This avoids
-forcing every edit need into a single clean boundary when the workflow
-itself has overlapping automation, qualification, and review concerns.
-
-| Issue / edit need | Pipeline handling | Review burden | Example stage |
-|---|---|---|---|
-| Identity metadata | Batch-applied through ingest preset | Low | Stage 1 |
-| Semantic metadata enrichment | Batch-applied through post-import presets | Low to moderate | Stage 1 |
-| Dust/distraction cleanup | Batch-applied after validation | Low to moderate | Stage 2 |
-| Luminance normalization | Batch-applied across dataset | Moderate | Stage 2 |
-| Scene-level color normalization | Batch-applied within comparable scene groups | Moderate | Stage 2 |
-| AI masks for common semantic regions | Qualified, then batch-propagated | Moderate to high | Stage 3 |
-| Uncertain semantic regions | Qualified on representative examples before promotion | High | Stage 3 |
-| Failed straightening, masking, or normalization cases | Exception handling | High | Stage 2 / Stage 3 |
-| Image-specific Spot Removal, blemish, or skin cleanup | Manual per-image edit | High | Manual review |
-| Final crop and artistic emphasis | Manual editorial decision | High | Final review |
 
 ## Stage-Level Value
 
@@ -166,7 +132,7 @@ For each recurring issue and proposed edit operation, the savings can be
 approximated as:
 
 ```text
-manual_cost = image_count x issue_frequency x average_manual_time
+manual_cost = image_count x issue_frequency x average_manual_time_editing
 
 pipeline_cost =
   setup_time
@@ -180,9 +146,8 @@ estimated_savings = manual_cost - pipeline_cost
 
 The pipeline is most valuable when an issue has high frequency,
 high manual repetition, and predictable enough behavior to support batch
-execution or qualified propagation. It is less valuable when the
-issue is rare, highly subjective, or cheaper to fix manually than
-to qualify.
+execution. It is less valuable when the issue is rare, highly subjective,
+or cheaper to fix manually than to qualify.
 
 ## Interpretation
 
