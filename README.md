@@ -4,14 +4,16 @@ Systems engineering project showing how creative-production workflows can be str
 
 ## Project Structure
 
-The project is structured around stage-level prose because the primary
-artifact is a workflow system design, not a standalone software package.
-Each stage document combines system design rationale, workflow-observable
-behavior, visual evidence, clearly labeled operational notes, and
-stage-specific experiments.
+The project is structured as a workflow system design rather than a
+standalone software package.
 
-These observations and experiments are not presented as controlled
-benchmarks; they are workflow evidence used to explain why specific
+- **Stage prose:** primary system-design artifact
+- **Scripts/tests:** supplementary validation and reproducibility support
+- **Visual evidence/experiments:** workflow-observable proof
+- **Not a packaged application:** expectation-setting for how to read the repository
+
+The observations, experiments, scripts, and tests are not presented as
+controlled benchmarks; they are evidence used to explain why specific
 pipeline boundaries, validation steps, review points, and design
 patterns exist. Stage documents define any stage-specific evidence
 framing near the operations where that evidence is used.
@@ -23,8 +25,6 @@ Use these entry points to inspect specific aspects of the project:
 - [Shared terminology](docs/terminology.md) defines recurring systems and image-workflow language.
 - [Batchability Cost Model](docs/batchability-cost-model.md) explains the operational value model.
 - [Pipeline Overview Diagram](docs/pipeline-overview-diagram.png) shows the full pipeline structure.
-
-
 
 ## Executive Summary
 
@@ -112,7 +112,8 @@ design themes are:
 
 The project is organized as a single multi-stage pipeline with supporting documentation for each major stage.
 
-Stage 1 establishes the metadata and query foundation for the workflow.
+### Stage 1
+Eestablishes the metadata and query foundation for the workflow.
 
 - **Identity initialization:** Single-preset ingest establishes the protected authorship baseline
 - **Semantic enrichment:** Post-import presets and keywords add non-overlapping descriptive metadata
@@ -126,7 +127,8 @@ Stage 1 establishes the metadata and query foundation for the workflow.
 > Selection is based on usable focus, aesthetic uniqueness, subject
 > relevance, and edit potential.
 
-Stages 2 and 3 then form the image-processing portion of the pipeline, which currently follows this progression:
+### Stages 2 and 3
+Forms the image-processing portion of the pipeline, which currently follows this progression:
 
 - **Culling boundary:** Review selects the usable working set after ingest-time metadata application
 - **Preprocessing:** Local corrective cleaning
