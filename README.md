@@ -57,8 +57,9 @@ repeated manual editing.
 Creative-production workflows often accumulate as several informal editing
 habits inside GUI tools, making them hard to reproduce, audit, and
 scale across large datasets. Without explicit stage boundaries and
-validation checkpoints, small inconsistencies compound into rework,
-operator drift, and weak rollback safety.
+validation checkpoints, small inconsistencies can compound into rework
+and operator drift. Weak rollback safety then makes those inconsistencies
+more costly to contain once they spread through the working set.
 
 The core systems problem is therefore not only how to optimally perform isolated
 editing operations, but how to organize them into a stable pipeline
