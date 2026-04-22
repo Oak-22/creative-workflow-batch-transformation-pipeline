@@ -2,6 +2,20 @@
 
 Systems engineering project showing how creative-production workflows can be structured as deterministic, scalable pipelines rather than ad hoc editing sequences.
 
+## Project Structure
+
+The project is structured around stage-level prose because the primary
+artifact is a workflow system design, not a standalone software package.
+Each stage document combines system design rationale, workflow-observable
+behavior, visual evidence, clearly labeled operational notes, and
+stage-specific experiments.
+
+These observations and experiments are not presented as controlled
+benchmarks; they are workflow evidence used to explain why specific
+pipeline boundaries, validation steps, review points, and design
+patterns exist. Stage documents define any stage-specific evidence
+framing near the operations where that evidence is used.
+
 ## TL;DR
 
 Use these entry points to inspect specific aspects of the project:
@@ -9,6 +23,8 @@ Use these entry points to inspect specific aspects of the project:
 - [Shared terminology](docs/terminology.md) defines recurring systems and image-workflow language.
 - [Batchability Cost Model](docs/batchability-cost-model.md) explains the operational value model.
 - [Pipeline Overview Diagram](docs/pipeline-overview-diagram.png) shows the full pipeline structure.
+
+
 
 ## Executive Summary
 
@@ -78,18 +94,6 @@ must be qualified first before batch, and which should remain manual.
 See the [Batchability Cost Model](docs/batchability-cost-model.md)
 for the issue/edit model and back-of-envelope time-savings framework
 across the three stages.
-
-## Evidence Model
-
-The pipeline is documented through a mix of system design rationale,
-workflow-observable behavior, visual evidence, clearly labeled
-operational notes, and stage-specific experiments. These observations
-and experiments are not presented as controlled benchmarks; they are
-workflow evidence used to explain why specific pipeline boundaries,
-validation steps, review points, and overall design patterns exist.
-
-Stage documents define any stage-specific evidence framing near the
-operations where that evidence is used.
 
 ## Key Constraints
 
