@@ -136,8 +136,9 @@ Forms the image-processing portion of the pipeline, which currently follows this
 - **Semantic operations:** Batch AI masking
 - **Human review:** Manual refinement pass
 
+<br>
 
-
+## Stage Details
 
 ### 1. Metadata Application, Enrichment, and Query Pipeline
 Location: [Stage 1](pipeline_stages/001_metadata-application-enrichment-query-pipeline/README.md)
