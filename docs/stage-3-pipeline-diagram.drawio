@@ -1,14 +1,14 @@
 <mxfile host="app.diagrams.net">
   <diagram name="Page-1" id="YqjdoMdNvBUqq_bkm9A2">
-    <mxGraphModel dx="1678" dy="1319" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="300" pageHeight="2500" math="0" shadow="0">
+    <mxGraphModel dx="2377" dy="1868" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="300" pageHeight="2500" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="2" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Review / Output" vertex="1">
           <mxGeometry height="754" width="387" x="8" y="1335" as="geometry" />
         </mxCell>
-        <mxCell id="3" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Batch Application" vertex="1">
-          <mxGeometry height="569" width="340" x="415" y="1038" as="geometry" />
+        <mxCell id="3" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);labelBackgroundColor=light-dark(default, #f31212);align=center;verticalAlign=middle;" value="Batch Application" vertex="1">
+          <mxGeometry height="569" width="340" x="420" y="1030" as="geometry" />
         </mxCell>
         <mxCell id="4" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Qualification Boundary" vertex="1">
           <mxGeometry height="161" width="499" x="474" y="803" as="geometry" />
@@ -19,37 +19,37 @@
         <mxCell id="6" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Stage 3 Input" vertex="1">
           <mxGeometry height="449" width="340" x="1352" y="8" as="geometry" />
         </mxCell>
-        <mxCell id="7" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Stage 3 Input:&#xa;    Stage 2 Normalized Baseline / Known-Good Handoff State" vertex="1">
+        <mxCell id="7" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Stage 3 Input:&#xa;&#xa;    Stage 2 Normalized Baseline / Known-Good Handoff State" vertex="1">
           <mxGeometry height="126" width="260" x="1387" y="33" as="geometry" />
         </mxCell>
         <mxCell id="8" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Input is already cleaned, normalized, and lineage-protected." vertex="1">
           <mxGeometry height="102" width="260" x="1397" y="282" as="geometry" />
         </mxCell>
-        <mxCell id="9" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Select Canonical Image&#xa;    - representative normalized image&#xa;    - contains many useful semantic regions&#xa;    - chosen for mask-definition coverage" vertex="1">
+        <mxCell id="9" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Select Canonical Image&#xa;&#xa;    - representative normalized image&#xa;    - contains many useful semantic regions&#xa;    - chosen for mask-definition coverage" vertex="1">
           <mxGeometry height="198" width="260" x="1027" y="234" as="geometry" />
         </mxCell>
-        <mxCell id="10" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Define AI Mask Set on Canonical Image&#xa;    - people masks&#xa;    - sky mask&#xa;    - foliage / vegetation mask&#xa;    - background / foreground / ground masks&#xa;    - aggregate masks where useful" vertex="1">
+        <mxCell id="10" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Define AI Mask Set on Canonical Image&#xa;&#xa;    - people masks&#xa;    - sky mask&#xa;    - foliage / vegetation mask&#xa;    - background / foreground / ground masks&#xa;    - aggregate masks where useful" vertex="1">
           <mxGeometry height="246" width="260" x="1027" y="507" as="geometry" />
         </mxCell>
         <mxCell id="11" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Definitions are procedural instructions, not copied pixel regions." vertex="1">
           <mxGeometry height="102" width="260" x="1037" y="833" as="geometry" />
         </mxCell>
-        <mxCell id="12" parent="1" style="shape=hexagon;perimeter=hexagonPerimeter2;fixedSize=1;strokeWidth=2;whiteSpace=wrap;fillColor=#fff3e0;strokeColor=#f57c00;fontColor=light-dark(#333333,#cccccc);" value="Qualification Boundary:&#xa;    Are uncertain semantic regions reliable enough to propagate?" vertex="1">
+        <mxCell id="12" parent="1" style="shape=hexagon;perimeter=hexagonPerimeter2;fixedSize=1;strokeWidth=2;whiteSpace=wrap;fillColor=#fff3e0;strokeColor=#f57c00;fontColor=light-dark(#333333,#cccccc);" value="Qualification Boundary:&#xa;&#xa;    Are uncertain semantic regions reliable enough to propagate?" vertex="1">
           <mxGeometry height="111" width="277" x="584" y="828" as="geometry" />
         </mxCell>
-        <mxCell id="13" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Batch Apply / Propagate Mask Definitions&#xa;    - paste mask definitions across selected images&#xa;    - Lightroom recomputes semantic regions per image&#xa;    - absent regions may be omitted" vertex="1">
+        <mxCell id="13" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Batch Apply / Propagate Mask Definitions&#xa;&#xa;    - paste mask definitions across selected images&#xa;    - Lightroom recomputes semantic regions per image&#xa;    - absent regions may be omitted" vertex="1">
           <mxGeometry height="222" width="260" x="450" y="1063" as="geometry" />
         </mxCell>
         <mxCell id="14" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="AI segmentation runs per target image." vertex="1">
           <mxGeometry height="78" width="260" x="460" y="1432" as="geometry" />
         </mxCell>
-        <mxCell id="15" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Generated Per-Image Semantic Masks&#xa;    - successful mask binding&#xa;    - safe omission when region is absent&#xa;    - possible misbinding&#xa;    - possible boundary quality issues" vertex="1">
+        <mxCell id="15" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Generated Per-Image Semantic Masks&#xa;&#xa;    - successful mask binding&#xa;    - safe omission when region is absent&#xa;    - possible misbinding&#xa;    - possible boundary quality issues" vertex="1">
           <mxGeometry height="222" width="260" x="91" y="1360" as="geometry" />
         </mxCell>
-        <mxCell id="16" parent="1" style="shape=hexagon;perimeter=hexagonPerimeter2;fixedSize=1;strokeWidth=2;whiteSpace=wrap;fillColor=#fff3e0;strokeColor=#f57c00;fontColor=light-dark(#333333,#cccccc);" value="Human Review / Exception Handling&#xa;    - inspect generated masks&#xa;    - flag misbound regions&#xa;    - refine boundaries&#xa;    - skip unavailable masks" vertex="1">
+        <mxCell id="16" parent="1" style="shape=hexagon;perimeter=hexagonPerimeter2;fixedSize=1;strokeWidth=2;whiteSpace=wrap;fillColor=#fff3e0;strokeColor=#f57c00;fontColor=light-dark(#333333,#cccccc);" value="Human Review / Exception Handling&#xa;&#xa;    - inspect generated masks&#xa;    - flag misbound regions&#xa;    - refine boundaries&#xa;    - skip unavailable masks" vertex="1">
           <mxGeometry height="159" width="277" x="83" y="1657" as="geometry" />
         </mxCell>
-        <mxCell id="17" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Stage 3 Output:&#xa;    Reviewed Semantic Edit State&#xa;    - Ready for final manual refinement / delivery-oriented edits" vertex="1">
+        <mxCell id="17" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Stage 3 Output:&#xa;&#xa;    Reviewed Semantic Edit State&#xa;    - Ready for final manual refinement / delivery-oriented edits" vertex="1">
           <mxGeometry height="174" width="260" x="47" y="1890" as="geometry" />
         </mxCell>
         <mxCell id="18" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);dashed=1;dashPattern=5 5;" value="Keep manual or review-only" vertex="1">
