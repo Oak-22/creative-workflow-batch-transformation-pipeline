@@ -131,7 +131,7 @@ This ingest preset establishes the authoritative identity state at ingest. By ex
 
 <br>
 
-![Written fields](/Users/julianbuccat/Projects/dev/creative_workflow_batch_transformation_pipeline/pipeline_stages/001_metadata-application-enrichment-query-pipeline/assets/images/copyright-field-writes.png)
+![Written fields](assets/images/copyright-field-writes.png)
 
 #### 2) Domain-Specific Presets (Post-Import Only)
 
