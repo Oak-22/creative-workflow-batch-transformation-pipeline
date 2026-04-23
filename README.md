@@ -28,7 +28,7 @@ Use these entry points to inspect specific aspects of the project:
 
 - [Shared terminology](docs/terminology.md) defines recurring systems and image-workflow language.
 - [Batchability Cost Model](docs/batchability-cost-model.md) explains the operational value model.
-- [Pipeline Overview Diagram](docs/pipeline-overview-diagram.png) shows the full pipeline structure.
+- [Pipeline Overview Diagram](docs/creative-workflow-pipeline-overview-diagram.png) shows the full pipeline structure.
 
 <br>
 
