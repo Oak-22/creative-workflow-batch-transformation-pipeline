@@ -34,7 +34,7 @@ The core challenge is to maintain a stable, authoritative identity
 state while enabling iterative, revisable semantic enrichment. Poorly
 structured metadata increases rework, weakens retrieval, and reduces
 the downstream usefulness of image records for curation, publishing,
-discoverability, and later pipeline stages.
+internal discoverability, and later pipeline stages.
 
 This stage intentionally resolves the most deterministic part of the
 system first. Later stages operate on visually variable images and
@@ -150,7 +150,7 @@ above.
 
 ![Import metadata detail view after write](assets/images/003_￼stage1-import-metadata-detail-view-after-write.png)
 
-*Figure: Metadata panel detail after import. This closer view makes the ingest-written identity fields legible without the surrounding Lightroom workspace competing for attention.*
+*Figure: Metadata panel detail after import. This closer view is more legible.*
 
 <br>
 
@@ -164,7 +164,7 @@ Domain presets are semantic enrichment presets applied after ingestion.
 
 - Identity/authorship/copyright fields remain unchecked except for explicitly documented refinement cases.
 - Most checked fields are semantic fields.
-- In this workflow, `Contact > Job Title` is the main intentional overlap: a general ingest value such as `Photographer` may be refined to a domain-specific value such as `Wedding Photographer`, or any other domain-specific variant such as `[DOMAIN] Photographer`. This adds contextual specificity that can marginally improve downstream retrieval and, in some contexts, external discoverability.
+- In this workflow, `Contact > Job Title` is the main intentional overlap: a general ingest value such as `Photographer` may be refined to a domain-specific value such as `Wedding Photographer`, or any other domain-specific variant such as `[DOMAIN] Photographer`. This adds contextual specificity that can marginally improve downstream retrieval, strengthen internal discoverability, and, in some contexts, improve external discoverability.
 - Example semantic fields: Caption, Headline, IPTC Category, Accessibility Alt Text, contextual descriptions.
 
 ##### Preset Panel
@@ -201,13 +201,22 @@ Keywords are intentionally excluded from the global ingest preset.
 Keyword Lists function as hierarchical taxonomies for scalable
 semantic metadata management.
 
+This is more useful than a flat keyword set alone. Flat keywords can
+label isolated concepts, but a keyword taxonomy also preserves
+parent-child structure, making classification easier to extend, browse,
+audit, and reuse across adjacent domains. That added structure improves
+retrieval ergonomics and internal discoverability today, and creates
+cleaner semantic inputs for later analytics, potential machine-learning
+workflows, and any downstream systems that index exported metadata for
+external discoverability.
+
 ![Keyword list full view](assets/images/007_stage1-keyword-list-full-view.png)
 
 *Figure: Full Lightroom view of the Keyword List workspace. This shows where keyword taxonomy is managed as a separate post-ingest classification surface rather than being collapsed into the import preset.*
 
 ![Keyword list detail view](assets/images/008_stage1-keyword-list-detail-view.png)
 
-*Figure: Keyword List panel detail. The hierarchical structure supports deliberate post-ingest classification and produces metadata that is useful for downstream retrieval, discoverability, and potential machine-learning workflows.*
+*Figure: Keyword List panel detail. The hierarchical structure supports deliberate post-ingest classification, improves internal discoverability through more legible retrieval paths, and produces cleaner semantic metadata for downstream analytics and potential machine-learning workflows.*
 
 <br>
 
