@@ -58,16 +58,16 @@ image records.
 
 ## Key Constraints
 
-- Ingest supports only one metadata preset; there is no native preset stacking.
-- Post-import presets are additive when checked fields do not overlap.
-- Conflicts occur only when two presets write to the same checked fields.
-- Export options are reductive (include/exclude), not additive.
+- ingest supports only one metadata preset; there is no native preset stacking
+- Lightroom provides no field-level locking for protected metadata fields
+- post-import presets remain safe only when checked-field writes do not overlap
+- metadata presets can overwrite existing values when the same checked fields are reused
+- export controls are reductive (include/exclude), not additive
 
-<br>
-
-## Tooling Limitations
-
-Lightroom provides no field‑level locking and metadata presets can overwrite existing fields if the same fields are checked. Because the system cannot rely on tooling guarantees to protect critical metadata, write isolation is enforced through schema design: each preset writes to a dedicated set of fields, preventing destructive collisions between identity and semantic metadata.
+Because the tool does not provide native field isolation, the workflow
+enforces write isolation through schema design: the ingest preset owns
+the identity fields, while later semantic presets write only to
+non-overlapping semantic fields.
 
 <br>
 
@@ -131,13 +131,13 @@ This ingest preset establishes the authoritative identity state at ingest. By ex
 
 <br>
 
+![Written fields](/Users/julianbuccat/Projects/dev/creative_workflow_batch_transformation_pipeline/pipeline_stages/001_metadata-application-enrichment-query-pipeline/assets/images/copyright-field-writes.png)
+
 #### 2) Domain-Specific Presets (Post-Import Only)
 
 **Metadata Preset name(s):**
 
-`Graduation — CSU Sacramento` 
-`Wedding`
-`Marketing`
+`Graduation — CSU Sacramento` | `Wedding` | `Marketing`
 
 Domain presets are semantic enrichment presets applied after ingestion.
 
