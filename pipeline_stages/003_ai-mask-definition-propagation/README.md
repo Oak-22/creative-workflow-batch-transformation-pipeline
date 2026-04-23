@@ -335,14 +335,18 @@ technical design section above.
 ### Example 1: Subject Masking
 ￼
 
-![People Mask Aggregation showing the combined semantic scope of generated person masks](assets/images/people-mask-aggregate.png)
+![People mask aggregate](assets/images/people-mask-aggregate.png)
+
+*Figure: The People Mask aggregate groups the generated person masks into a single foreground control surface while preserving the underlying per-person masks.*
 
 The People Mask Aggregation groups the generated person masks into a
 foreground subject aggregate. In the Masks panel, the individual person
 masks appear below the aggregate and cover the same semantic ground at
 per-person granularity.
 
-![Environmental mask aggregate showing combined sky and vegetation mask coverage](assets/images/environmental-masks-aggregate.png)
+![Environmental mask aggregate](assets/images/environmental-masks-aggregate.png)
+
+*Figure: The Environmental Masks aggregate combines detected background regions such as sky and foliage into a broader environmental control surface.*
 
 The Environmental Masks aggregate groups generated environmental masks
 into a broader background-region view. In the Masks panel, the

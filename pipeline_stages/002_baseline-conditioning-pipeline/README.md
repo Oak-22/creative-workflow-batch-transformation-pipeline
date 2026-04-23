@@ -742,17 +742,9 @@ With scene-level foliage normalization:
   → natural across-scene foliage variance preserved
 ```
 
-![Lightroom comparison showing foliage hue differences across scene groups, demonstrating why foliage color should be normalized within comparable scenes rather than globally across the full dataset.](assets/images/intra-scene-hue-normalization-not-global.png)
+![Foliage hue comparison](assets/images/intra-scene-hue-normalization-not-global.png)
 
-*This comparison shows why foliage hue normalization must be constrained
-to comparable scene groups. The wedding-dress foliage scene is the
-strongest candidate for demonstrating scene-level hue alignment because
-its frames share a similar subject/environment relationship while still
-showing within-scene foliage drift. The group formal portraits are a
-better luminance-normalization candidate because their green hue is
-already relatively stable. The yellow-green foliage scene should remain
-visually distinct rather than being forced to match the deeper green
-foliage from the other sampled scenes.*
+*Figure: Foliage hue should be normalized within comparable scene groups, not across the full dataset. The wedding-dress foliage scene is the strongest scene-level color-normalization example, while the yellow-green foliage scene should remain visually distinct rather than being forced toward the deeper green of other scenes.*
 
 <br>
 
