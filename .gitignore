@@ -1,2 +1,7 @@
 engineering_learning_workspace/engineering_learning_notes
 .github
+
+# Generated/local diagram sources and exports.
+docs/*.drawio
+docs/*.png
+!docs/creative-workflow-pipeline-overview-diagram.png
