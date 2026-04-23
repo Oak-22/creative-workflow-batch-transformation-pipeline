@@ -1,6 +1,8 @@
-# Production Workflow System Design & Implementation: Metadata Application, Enrichment,git  and Query Pipeline
+# Production Workflow System Design & Implementation: Metadata Application, Enrichment, and Query Pipeline
 
 Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project.
+
+<br>
 
 ## Executive Summary
 
@@ -18,6 +20,8 @@ Within the larger pipeline, Stage 1 is the deterministic state layer:
 it makes image records identifiable, queryable, and safe to enrich
 before later culling, visual conditioning, or AI-assisted operations
 introduce more subjective and probabilistic decision points.
+
+<br>
 
 ## Problem
 
@@ -37,6 +41,8 @@ system first. Later stages operate on visually variable images and
 AI-derived semantic outputs; Stage 1 ensures those later transformations
 remain anchored to stable source records and retrievable metadata.
 
+<br>
+
 ## Solution Overview
 
 The workflow separates metadata into a protected identity layer and a
@@ -48,6 +54,8 @@ incremental. Once enriched, the metadata supports query-driven
 retrieval, including Smart Collections treated as declarative views over
 image records.
 
+<br>
+
 ## Key Constraints
 
 - Ingest supports only one metadata preset; there is no native preset stacking.
@@ -55,12 +63,17 @@ image records.
 - Conflicts occur only when two presets write to the same checked fields.
 - Export options are reductive (include/exclude), not additive.
 
+<br>
+
 ## Tooling Limitations
 
 Lightroom provides no field‑level locking and metadata presets can overwrite existing fields if the same fields are checked. Because the system cannot rely on tooling guarantees to protect critical metadata, write isolation is enforced through schema design: each preset writes to a dedicated set of fields, preventing destructive collisions between identity and semantic metadata.
 
+<br>
 
 ## Technical Design & Implementation
+
+<br>
 
 ### Separation of Concerns
 
@@ -86,7 +99,11 @@ Semantic Layer (Mutable)
 Derived Logical Views
 ```
 
+<br>
+
 ### Implementation Details
+
+<br>
 
 #### 1) Single Global Import Preset (Authoritative)
 
@@ -112,6 +129,8 @@ Excluded fields:
 
 This ingest preset establishes the authoritative identity state at ingest. By excluding semantic fields, the design minimizes collision surface area and avoids embedding domain assumptions during ingest.
 
+<br>
+
 #### 2) Domain-Specific Presets (Post-Import Only)
 
 **Metadata Preset name(s):**
@@ -128,6 +147,8 @@ Domain presets are semantic enrichment presets applied after ingestion.
 
 This safely enables further batch enrichment while protecting authoritative metadata from accidental overwrite.
 
+<br>
+
 #### 3) Keywords Managed Separately
 
 Keywords are intentionally excluded from the global ingest preset.
@@ -143,11 +164,17 @@ semantic metadata management.
 
 ![Screenshot of Lightroom Classic keyword panel interface showing keyword hierarchies and management tools organized in a tree structure with parent and child keyword entries](assets/images/lightroom-keyword-panel.png)
 
+<br>
+
 ## Verification (Critical)
+
+<br>
 
 ### During Import
 
 1. Apply only `[IMPORT] Global Copyright & Creator` during ingest.
+
+<br>
 
 ### After Import
 
@@ -157,6 +184,8 @@ semantic metadata management.
 3. Validate identity fields are populated (copyright + creator fields).
 4. Validate semantic/classification fields are still empty.
 
+<br>
+
 ### After Applying One Domain-Specific Semantic Preset
 
 1. Re-check the metadata panel in **IPTC**.
@@ -164,15 +193,18 @@ semantic metadata management.
 3. Validate identity fields *remain unchanged* from ingest baseline.
 4. Confirm resulting state is additive and non-destructive.
 
+<br>
+
 ## Guiding Principle
 
 > **Authorship metadata should be automatic and irreversible.**
 > **Semantic metadata should be deliberate and revisable.**
 
-
-
+<br>
 
 ## Downstream Querying — Exploratory Queries (Library Filtering) and Declarative Views (Smart Collections)
+
+<br>
 
 ### Two Query Modes
 
@@ -185,11 +217,15 @@ supports two distinct query modes:
 Both depend on the same enriched metadata foundation. The difference is
 whether the query is transient or saved for repeated reuse.
 
+<br>
+
 ### Systems Framing
 
 Smart Collections can be understood as a query and indexing layer over
 stable metadata-backed source records, not just as an organizational UI
 feature. This makes their behavior more legible in systems terms.
+
+<br>
 
 ### Conceptual Model
 
@@ -199,6 +235,8 @@ feature. This makes their behavior more legible in systems terms.
 - Smart Collections = saved predicates / declarative views
 
 Collections store selection logic, not copies of records. Membership is continuously recomputed as metadata changes, making them functionally similar to views in an RDBMS.
+
+<br>
 
 ## Ad‑hoc Library Filtering
 
@@ -214,6 +252,8 @@ against the catalog. Users can filter images based on fields such as:
 This mode is useful for one-off investigation and operational review
 when the goal is to inspect the catalog from a temporary analytical
 angle rather than save a reusable retrieval rule.
+
+<br>
 
 ### Example: Exploratory Gear Review
 
@@ -235,12 +275,16 @@ Asset: ad_hoc_library_filter_example.png
 Purpose: Show a temporary Lightroom Library Filter query over enriched metadata for exploratory retrieval.
 ---
 
+<br>
+
 ## Smart Collections
 
 Smart Collections store reusable selection logic over the enriched
 metadata layer. Unlike temporary library filters, they preserve the
 query definition itself so the same retrieval rule can be revisited,
 reused, and refined over time.
+
+<br>
 
 ### Example: Highlights as Derived Dataset
 
@@ -282,11 +326,15 @@ Asset: smart_collections_example.png
 Purpose: Show a Smart Collection configured as a saved declarative view over enriched metadata.
 ---
 
+<br>
+
 ### Why This Matters
 
 - Makes curation logic explicit, inspectable, and reusable.
 - Reduces repeated manual filtering during review and selection.
 - Turns Smart Collections into a more reliable retrieval layer for ongoing workflow decisions by supplying better structured metadata.
+
+<br>
 
 ### Limitations
 
@@ -295,6 +343,7 @@ Purpose: Show a Smart Collection configured as a saved declarative view over enr
 - No built-in versioning of query definitions
 - No exportable formal schema for rules
 
+<br>
 
 ## Engineering Concepts Demonstrated Uniquely in Stage 1
 
