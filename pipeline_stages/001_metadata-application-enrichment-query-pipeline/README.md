@@ -127,11 +127,9 @@ Excluded fields:
 - Accessibility Alt Text
 - Domain-specific descriptions
 
-This ingest preset establishes the authoritative identity state at ingest. By excluding semantic fields, the design minimizes collision surface area and avoids embedding domain assumptions during ingest.
+![This ingest preset establishes the authoritative identity state at ingest. By excluding semantic fields, the design minimizes collision surface area and avoids embedding domain assumptions during ingest.](assets/images/copyright-field-writes.png)
 
 <br>
-
-![Written fields](assets/images/copyright-field-writes.png)
 
 #### 2) Domain-Specific Presets (Post-Import Only)
 
@@ -145,7 +143,7 @@ Domain presets are semantic enrichment presets applied after ingestion.
 - Only semantic fields are checked.
 - Example semantic fields: Caption, Headline, IPTC Category, Accessibility Alt Text, contextual descriptions.
 
-This safely enables further batch enrichment while protecting authoritative metadata from accidental overwrite.
+![Authoritative metadata protected with additional domain-relevant metadata written from preset 'Wedding' without losing metadata written from previous preset `[IMPORT] Global Copyright & Creator` with additional fields added such as x, y, and z](assets/images/copright-domain-layered-writes.png)
 
 <br>
 
@@ -162,7 +160,7 @@ Keywords are intentionally excluded from the global ingest preset.
 Keyword Lists function as hierarchical taxonomies for scalable
 semantic metadata management.
 
-![Screenshot of Lightroom Classic keyword panel interface showing keyword hierarchies and management tools organized in a tree structure with parent and child keyword entries](assets/images/lightroom-keyword-panel.png)
+![Keyword panel interface showing keyword hierarchy with parent and child keyword entries with relevant keywords selected as indicated by the [insert ASCII white checkmark symbol]](assets/images/keyword-list.png)
 
 <br>
 
