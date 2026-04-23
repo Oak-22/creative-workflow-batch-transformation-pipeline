@@ -9,8 +9,8 @@ Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project
 This stage establishes a safe metadata foundation for downstream image
 workflow operations. Because ingest supports only a single metadata
 preset, the workflow establishes a stable identity baseline first, then
-applies semantic enrichment post-import without overwriting ownership
-fields. The result is a metadata model that is auditable, scalable
+applies semantic enrichment post-import with tightly controlled overlap.
+The result is a metadata model that is auditable, scalable
 across multiple classification domains, and useful for downstream
 retrieval through ad-hoc filtering and Smart Collections. Operationally,
 this improves internal organization and retrieval while producing structured
@@ -48,11 +48,14 @@ remain anchored to stable source records and retrievable metadata.
 The workflow separates metadata into a protected identity layer and a
 revisable semantic layer. A single import preset establishes the
 ownership baseline at ingest, while domain-specific semantic presets are
-applied only after import with non-overlapping field writes. Keywords
-are also managed post-ingest so classification remains deliberate and
-incremental. Once enriched, the metadata supports query-driven
-retrieval, including Smart Collections treated as declarative views over
-image records.
+applied only after import with mostly non-overlapping field writes.
+Keywords are also managed post-ingest so classification remains
+deliberate and incremental. In this implementation, the main documented
+exception is `Contact > Job Title`, where the domain preset can refine a
+generic ingest value such as `Photographer` into a domain-specific value
+such as `Wedding Photographer`. Once enriched, the metadata supports
+query-driven retrieval, including Smart Collections treated as
+declarative views over image records.
 
 <br>
 
@@ -66,8 +69,10 @@ image records.
 
 Because the tool does not provide native field isolation, the workflow
 enforces write isolation through schema design: the ingest preset owns
-the identity fields, while later semantic presets write only to
-non-overlapping semantic fields.
+the stable identity baseline, while later semantic presets write
+primarily to non-overlapping semantic fields. Where a later preset
+intentionally refines an existing value, that overlap must be explicit,
+documented, and reviewable.
 
 <br>
 
@@ -79,6 +84,7 @@ non-overlapping semantic fields.
 
 - **Identity Layer**: protected, authoritative ownership/authorship state initialized at ingest.
 - **Semantic Layer**: mutable, revisable classification/context state enriched post-ingest.
+- **Refinement Exception Layer**: narrowly scoped, intentional post-ingest updates to baseline metadata where domain context adds specificity.
 - **Query Layer**: declarative logical views derived from metadata predicates (Smart Collections).
 
 ```text
@@ -127,9 +133,24 @@ Excluded fields:
 - Accessibility Alt Text
 - Domain-specific descriptions
 
-![Import preset field writes](assets/images/copyright-field-writes.png)
+##### Preset Panel
 
-*Figure: The ingest preset writes only authoritative identity fields, establishing a stable metadata baseline while leaving semantic fields untouched.*
+The preset panel itself is part of the evidence here because it shows
+the write scope before import. In this stage, the import preset is
+configured to initialize only the authority-bound identity fields listed
+above.
+
+![Import preset panel before write](assets/images/001_stage1-import-preset-panel-before-write.png)
+
+*Figure: Import preset configuration before write. The checked fields define the ingest-time identity baseline that will be applied uniformly at import.*
+
+![Import metadata full view after write](assets/images/002_stage1-import-metadata-full-view-after-write.png)
+
+*Figure: Full Lightroom view after the import preset has been applied. The image provides workflow context while showing the authoritative metadata baseline now present on the asset.*
+
+![Import metadata detail view after write](assets/images/003_￼stage1-import-metadata-detail-view-after-write.png)
+
+*Figure: Metadata panel detail after import. This closer view makes the ingest-written identity fields legible without the surrounding Lightroom workspace competing for attention.*
 
 <br>
 
@@ -141,13 +162,29 @@ Excluded fields:
 
 Domain presets are semantic enrichment presets applied after ingestion.
 
-- All identity/authorship/copyright fields are unchecked.
-- Only semantic fields are checked.
+- Identity/authorship/copyright fields remain unchecked except for explicitly documented refinement cases.
+- Most checked fields are semantic fields.
+- In this workflow, `Contact > Job Title` is the main intentional overlap: a general ingest value such as `Photographer` may be refined to a domain-specific value such as `Wedding Photographer`, or any other domain-specific variant such as `[DOMAIN] Photographer`. This adds contextual specificity that can marginally improve downstream retrieval and, in some contexts, external discoverability.
 - Example semantic fields: Caption, Headline, IPTC Category, Accessibility Alt Text, contextual descriptions.
 
-![Layered semantic preset writes](assets/images/copright-domain-layered-writes.png)
+##### Preset Panel
 
-*Figure: A domain-specific semantic preset (Wedding) adds contextual metadata after ingest without overwriting the identity fields established by the import preset.*
+The domain preset panel shows the second write path before application.
+This is where the workflow deliberately constrains semantic enrichment to
+its intended fields and, where needed, documents any narrow refinement
+overlap with the ingest baseline.
+
+![Domain preset panel before write](assets/images/004_stage1-domain-preset-panel-before-write.png)
+
+*Figure: Domain preset configuration before write. The checked fields define the semantic enrichment scope that will be layered onto the ingest-established metadata baseline.*
+
+![Layered metadata full view after write](assets/images/005_stage1-layered-metadata-full-view-after-write.png)
+
+*Figure: Full Lightroom view after the domain preset has been applied on top of the import baseline. The combined state now includes both preserved identity metadata and domain-specific enrichment.*
+
+![Layered metadata detail view after write](assets/images/006_stage1-domain-layered-metadata-detail-view-after-write.png)
+
+*Figure: Metadata write behavior after applying a domain-specific preset. Green marks preserved authority-bound fields, amber marks intentional refinement of selective fields such as `Contact > Job Title`, and blue marks domain-specific fields added post-ingest.*
 
 <br>
 
@@ -164,9 +201,13 @@ Keywords are intentionally excluded from the global ingest preset.
 Keyword Lists function as hierarchical taxonomies for scalable
 semantic metadata management.
 
-![Lightroom keyword list](assets/images/keyword-list.png)
+![Keyword list full view](assets/images/007_stage1-keyword-list-full-view.png)
 
-*Figure: Lightroom's Keyword List panel shows the hierarchical taxonomy used for deliberate post-ingest classification. This structured metadata is useful for downstream retrieval, discoverability, and potential machine-learning workflows. *
+*Figure: Full Lightroom view of the Keyword List workspace. This shows where keyword taxonomy is managed as a separate post-ingest classification surface rather than being collapsed into the import preset.*
+
+![Keyword list detail view](assets/images/008_stage1-keyword-list-detail-view.png)
+
+*Figure: Keyword List panel detail. The hierarchical structure supports deliberate post-ingest classification and produces metadata that is useful for downstream retrieval, discoverability, and potential machine-learning workflows.*
 
 <br>
 
@@ -194,7 +235,7 @@ semantic metadata management.
 
 1. Re-check the metadata panel in **IPTC**.
 2. Validate semantic fields are now populated.
-3. Validate identity fields *remain unchanged* from ingest baseline.
+3. Validate identity fields remain unchanged from ingest baseline except for any explicitly intended refinement fields such as `Contact > Job Title`.
 4. Confirm resulting state is additive and non-destructive.
 
 <br>
@@ -354,7 +395,7 @@ Purpose: Show a Smart Collection configured as a saved declarative view over enr
 - Deterministic metadata initialization under a single-preset ingest
   constraint
 - Identity vs semantic metadata partitioning
-- Conflict avoidance between identity and semantic enrichment through non-overlapping metadata field assignments
+- Controlled metadata refinement through primarily non-overlapping field assignments with explicit exceptions
 - Keyword taxonomy management as a separate semantic classification
   layer
 - IPTC-panel verification as an operator-visible metadata validation
