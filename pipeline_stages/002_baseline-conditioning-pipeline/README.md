@@ -118,6 +118,14 @@ makes the later operations safer. Operations 1 and 2 can transform the
 working branch, while the original culled state remains available as the
 earliest rollback point.
 
+Although Virtual Copy branching recurs at multiple control points in
+Stage 2, this view captures the underlying lineage pattern they all
+rely on: preserved source state plus isolated downstream experiments.
+
+![Stage 2 lineage setup value evidence](assets/images/stage2-lineage-setup-value-evidence.png)
+
+*Figure: This view shows how Virtual Copy lineage preserves the unedited RAW state while allowing parallel experiment branches to diverge safely. Each copy represents an isolated test path rather than a destructive overwrite of the baseline. Here, divergence occurs from a post-tonal state because these branches were later used for an exploratory external blur-recovery test, which was ultimately discarded from the formal workflow.*
+
 <br>
 
 ### Operation 1 Value: Cleaner Inputs

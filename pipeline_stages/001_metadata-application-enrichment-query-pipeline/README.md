@@ -284,9 +284,14 @@ feature. This makes their behavior more legible in systems terms.
 ### Conceptual Model
 
 - Photos = source records
-- Metadata fields (ratings, flags, keywords, dates, capture attributes) = structured columns
+- Metadata-backed attributes (ratings, flags, keywords, dates, capture attributes) = structured columns
 - Library filtering = exploratory one-off queries
 - Smart Collections = saved predicates / declarative views
+
+Stage 1 does not create every queryable field in the catalog; it
+standardizes and enriches the subset of metadata this workflow
+explicitly controls, increasing overall metadata diversity. Other queryable attributes may be camera-generated or added later in the workflow. For example, ratings and flags may be
+assigned during culling after Stage 1 and before Stage 2.
 
 Collections store selection logic, not copies of records. Membership is continuously recomputed as metadata changes, making them functionally similar to views in an RDBMS.
 
@@ -322,12 +327,9 @@ GROUP BY camera_model, lens_model;
 
 This kind of temporary filtering is useful for exploratory review, such as evaluating which camera body and lens combinations are producing the strongest images.
 
----
-🚧 TODO — EVIDENCE
-Type: Visual
-Asset: ad_hoc_library_filter_example.png
-Purpose: Show a temporary Lightroom Library Filter query over enriched metadata for exploratory retrieval.
----
+![Ad-hoc library filter example](assets/images/009_ad_hoc_library_filter_example.png)
+
+*Figure: Temporary Library Filter query over catalog metadata for exploratory retrieval. This mode supports quick operational inspection without creating a saved declarative view.*
 
 <br>
 
