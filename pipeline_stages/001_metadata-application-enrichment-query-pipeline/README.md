@@ -146,8 +146,9 @@ above.
 
 ![Import preset panel before write](assets/images/001_stage1-import-preset-panel-before-write.png)
 
-*Figure: Import preset configuration before write. The checked fields define the ingest-time identity baseline that will be applied uniformly at import.*
+*Figure: Import preset configuration before write. The checked fields define the ingest-time identity baseline that will be applied uniformly to the entire batch of images at import.*
 
+<br>
 <br>
 
 ![Import metadata full view after write](assets/images/002_stage1-import-metadata-full-view-after-write.png)
@@ -155,11 +156,13 @@ above.
 *Figure: Full Lightroom view after the import preset has been applied. The image provides workflow context while showing the authoritative metadata baseline now present on the asset.*
 
 <br>
+<br>
 
 ![Import metadata detail view after write](assets/images/003_stage1-import-metadata-detail-view-after-write.png)
 
 *Figure: Metadata panel detail after import. This closer view is more legible.*
 
+<br>
 <br>
 
 #### 2) Domain-Specific Presets (Post-Import Only)
@@ -172,8 +175,17 @@ Domain presets are semantic enrichment presets applied after ingestion.
 
 - Identity/authorship/copyright fields remain unchecked except for explicitly documented refinement cases.
 - Most checked fields are semantic fields.
-- In this workflow, `Contact > Job Title` is the main intentional overlap: a general ingest value such as `Photographer` may be refined to a domain-specific value such as `Wedding Photographer`, or any other domain-specific variant such as `[DOMAIN] Photographer`. This adds contextual specificity that can marginally improve downstream retrieval, strengthen internal discoverability, and, in some contexts, improve external discoverability.
+- In this workflow, `Contact > Job Title` is the main intentional overlap: a general ingest value such as `Photographer` may be refined to a domain-specific value such as `Wedding Photographer`, or any other domain-specific variant (`[INSERT DOMAIN] Photographer`). These selective metadata overwrites are intended primarily to increase external discoverability by adding domain-specific professional context, while also marginally improving downstream retrieval and internal discoverability.
 - Example semantic fields: Caption, Headline, IPTC Category, Accessibility Alt Text, contextual descriptions.
+
+Location metadata is a separate classification dimension from domain.
+Because a domain such as `Wedding` or `Marketing` can occur across many
+regions, IPTC Image location fields are too context-sensitive to be
+safely embedded in a broad domain preset by default. In practice,
+selective keyword-based location tagging is often the safer batch
+mechanism.
+
+<br>
 
 **Preset Panel**
 
@@ -182,18 +194,27 @@ This is where the workflow deliberately constrains semantic enrichment to
 its intended fields and, where needed, documents any narrow refinement
 overlap with the ingest baseline.
 
+<br>
+
 ![Domain preset panel before write](assets/images/004_stage1-domain-preset-panel-before-write.png)
 
 *Figure: Domain preset configuration before write. The checked fields define the semantic enrichment scope that will be layered onto the ingest-established metadata baseline.*
+
+<br>
+<br>
 
 ![Layered metadata full view after write](assets/images/005_stage1-layered-metadata-full-view-after-write.png)
 
 *Figure: Full Lightroom view after the domain preset has been applied on top of the import baseline. The combined state now includes both preserved identity metadata and domain-specific enrichment.*
 
+<br>
+<br>
+
 ![Layered metadata detail view after write](assets/images/006_stage1-domain-layered-metadata-detail-view-after-write.png)
 
 *Figure: Metadata write behavior after applying a domain-specific preset. Green marks preserved authority-bound fields, amber marks intentional refinement of selective fields such as `Contact > Job Title`, and blue marks domain-specific fields added post-ingest.*
 
+<br>
 <br>
 
 #### 3) Keywords Managed Separately
@@ -220,26 +241,38 @@ cleaner semantic inputs for later analytics, potential machine-learning
 workflows, and any downstream systems that index exported metadata for
 external discoverability.
 
+<br>
+
 ![Keyword list full view](assets/images/007_stage1-keyword-list-full-view.png)
 
 *Figure: Full Lightroom view of the Keyword List workspace. This shows where keyword taxonomy is managed as a separate post-ingest classification surface rather than being collapsed into the import preset.*
 
+<br>
+<br>
+
 ![Keyword list detail view](assets/images/008_stage1-keyword-list-detail-view.png)
 
 *Figure: Keyword List panel detail. The hierarchical structure supports deliberate post-ingest classification, improves internal discoverability through more legible retrieval paths, and produces cleaner semantic metadata for downstream analytics and potential machine-learning workflows.*
+
+<br>
 
 **Keyword Taxonomy Design: When Hierarchy Helps vs Hurts**
 
 Hierarchy is only useful when the child term truly depends on the
 parent term for meaning. When independent dimensions are overnested
 under a parent such as `Wedding`, the taxonomy becomes less reusable and
-harder to query cleanly across adjacent domains.
+harder to query cleanly across adjacent domains. The following figures will show progressively stronger keyword taxonomy hierarchy.
+
+<br>
 
 ![Overnested keyword taxonomy example](assets/images/009_stage1-keyword-taxonomy-overnested.png)
 
 *Figure: Overnested taxonomy design. Here, several independent dimensions are incorrectly bound under `Wedding`, even though they also apply to engagement sessions, branding work, graduation sessions, corporate events, or venue classification more broadly.*
 
-In the first version, terms such as `First Look`, `Outdoor`, `Church`,
+<br>
+<br>
+
+In the first version above, terms such as `First Look`, `Outdoor`, `Church`,
 and even `Cocktail Hour` are too tightly coupled to `Wedding`.
 Operationally, that hurts reuse because those concepts can also describe
 other session types, locations, or event structures. If a reader or
@@ -259,7 +292,7 @@ forcing cross-domain reuse through one event-specific parent.
 
 ![Further rationalized keyword taxonomy example](assets/images/011_stage1-keyword-taxonomy-rationalized.png)
 
-*Figure: Further taxonomy rationalization. Additional review revealed that some seemingly wedding-specific moments were still cross-event concepts, so they were promoted out of the wedding-only subtree while finer-grained nested structure was retained only where it represented true specialization.*
+*Figure: Final taxonomy structure. Additional review revealed that some seemingly wedding-exclusive moments were still cross-event concepts, so they were promoted out of the wedding-only subtree while finer-grained nested structure was retained only where it represented true specialization. As a result, `Wedding` now functions as a single top-level event identity rather than as a parent container for unrelated dimensions.*
 
 This final revision sharpens the design rule: nesting is still useful,
 but only when it expresses genuine specialization rather than
