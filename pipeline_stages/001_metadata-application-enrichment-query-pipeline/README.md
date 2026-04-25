@@ -148,7 +148,7 @@ above.
 
 *Figure: Full Lightroom view after the import preset has been applied. The image provides workflow context while showing the authoritative metadata baseline now present on the asset.*
 
-![Import metadata detail view after write](assets/images/003_￼stage1-import-metadata-detail-view-after-write.png)
+![Import metadata detail view after write](assets/images/003_stage1-import-metadata-detail-view-after-write.png)
 
 *Figure: Metadata panel detail after import. This closer view is more legible.*
 
@@ -217,6 +217,47 @@ external discoverability.
 ![Keyword list detail view](assets/images/008_stage1-keyword-list-detail-view.png)
 
 *Figure: Keyword List panel detail. The hierarchical structure supports deliberate post-ingest classification, improves internal discoverability through more legible retrieval paths, and produces cleaner semantic metadata for downstream analytics and potential machine-learning workflows.*
+
+##### Keyword Taxonomy Design: When Hierarchy Helps vs Hurts
+
+Hierarchy is only useful when the child term truly depends on the
+parent term for meaning. When independent dimensions are overnested
+under a parent such as `Wedding`, the taxonomy becomes less reusable and
+harder to query cleanly across adjacent domains.
+
+![Overnested keyword taxonomy example](assets/images/009_stage1-keyword-taxonomy-overnested.png)
+
+*Figure: Overnested taxonomy design. Here, several independent dimensions are incorrectly bound under `Wedding`, even though they also apply to engagement sessions, branding work, graduation sessions, corporate events, or venue classification more broadly.*
+
+In the first version, terms such as `First Look`, `Outdoor`, `Church`,
+and even `Cocktail Hour` are too tightly coupled to `Wedding`.
+Operationally, that hurts reuse because those concepts can also describe
+other session types, locations, or event structures. If a reader or
+operator needs `Cocktail Hour` and `Wedding`, those dimensions should be
+combined at query time rather than fused permanently into one subtree.
+
+![Improved keyword taxonomy example](assets/images/010_stage1-keyword-taxonomy-improved.png)
+
+*Figure: Improved taxonomy design. The hierarchy is reduced so only clearly dependent structures remain nested, while reusable concepts are promoted to their own top-level classification dimensions.*
+
+The improved version separates event identity from other dimensions.
+`Location (Type)` becomes its own classification surface rather than a
+subtree of `Wedding`, and general moments remain distinct from
+wedding-specific moments. This is the point where hierarchy starts to
+help rather than hurt: the structure becomes easier to extend without
+forcing cross-domain reuse through one event-specific parent.
+
+![Further rationalized keyword taxonomy example](assets/images/011_stage1-keyword-taxonomy-rationalized.png)
+
+*Figure: Further taxonomy rationalization. Additional review revealed that some seemingly wedding-specific moments were still cross-event concepts, so they were promoted out of the wedding-only subtree while finer-grained nested structure was retained only where it represented true specialization.*
+
+This final revision sharpens the design rule: nesting is still useful,
+but only when it expresses genuine specialization rather than
+convenience. `Celebration` can retain nested subterms because those
+children are finer-grained variants of the same parent concept. By
+contrast, terms such as `father daughter dance` or `first dance` become
+less useful when treated as inherently wedding-exclusive if they can
+also function as cross-event moments in the broader taxonomy.
 
 <br>
 
@@ -327,7 +368,7 @@ GROUP BY camera_model, lens_model;
 
 This kind of temporary filtering is useful for exploratory review, such as evaluating which camera body and lens combinations are producing the strongest images.
 
-![Ad-hoc library filter example](assets/images/009_ad_hoc_library_filter_example.png)
+![Ad-hoc library filter example](assets/images/012_stage1-ad-hoc-library-filter-example.png)
 
 *Figure: Temporary Library Filter query over catalog metadata for exploratory retrieval. This mode supports quick operational inspection without creating a saved declarative view.*
 
