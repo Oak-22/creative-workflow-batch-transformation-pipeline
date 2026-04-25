@@ -133,7 +133,7 @@ Excluded fields:
 - Accessibility Alt Text
 - Domain-specific descriptions
 
-##### Preset Panel
+**Preset Panel**
 
 The preset panel itself is part of the evidence here because it shows
 the write scope before import. In this stage, the import preset is
@@ -167,7 +167,7 @@ Domain presets are semantic enrichment presets applied after ingestion.
 - In this workflow, `Contact > Job Title` is the main intentional overlap: a general ingest value such as `Photographer` may be refined to a domain-specific value such as `Wedding Photographer`, or any other domain-specific variant such as `[DOMAIN] Photographer`. This adds contextual specificity that can marginally improve downstream retrieval, strengthen internal discoverability, and, in some contexts, improve external discoverability.
 - Example semantic fields: Caption, Headline, IPTC Category, Accessibility Alt Text, contextual descriptions.
 
-##### Preset Panel
+**Preset Panel**
 
 The domain preset panel shows the second write path before application.
 This is where the workflow deliberately constrains semantic enrichment to
@@ -196,7 +196,7 @@ Keywords are intentionally excluded from the global ingest preset.
 - Keyword assignment is explicit and post-ingest (Keyword List/Keyword Sets or semantic presets).
 - This preserves deliberate classification rather than implicit ingest-time tagging.
 
-##### Keyword Lists
+**Keyword Lists**
 
 Keyword Lists function as hierarchical taxonomies for scalable
 semantic metadata management.
@@ -218,7 +218,7 @@ external discoverability.
 
 *Figure: Keyword List panel detail. The hierarchical structure supports deliberate post-ingest classification, improves internal discoverability through more legible retrieval paths, and produces cleaner semantic metadata for downstream analytics and potential machine-learning workflows.*
 
-##### Keyword Taxonomy Design: When Hierarchy Helps vs Hurts
+**Keyword Taxonomy Design: When Hierarchy Helps vs Hurts**
 
 Hierarchy is only useful when the child term truly depends on the
 parent term for meaning. When independent dimensions are overnested
