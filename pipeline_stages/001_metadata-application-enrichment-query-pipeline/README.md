@@ -133,6 +133,8 @@ Excluded fields:
 - Accessibility Alt Text
 - Domain-specific descriptions
 
+<br>
+
 **Preset Panel**
 
 The preset panel itself is part of the evidence here because it shows
@@ -140,13 +142,19 @@ the write scope before import. In this stage, the import preset is
 configured to initialize only the authority-bound identity fields listed
 above.
 
+<br>
+
 ![Import preset panel before write](assets/images/001_stage1-import-preset-panel-before-write.png)
 
 *Figure: Import preset configuration before write. The checked fields define the ingest-time identity baseline that will be applied uniformly at import.*
 
+<br>
+
 ![Import metadata full view after write](assets/images/002_stage1-import-metadata-full-view-after-write.png)
 
 *Figure: Full Lightroom view after the import preset has been applied. The image provides workflow context while showing the authoritative metadata baseline now present on the asset.*
+
+<br>
 
 ![Import metadata detail view after write](assets/images/003_stage1-import-metadata-detail-view-after-write.png)
 
@@ -195,6 +203,8 @@ Keywords are intentionally excluded from the global ingest preset.
   the keyword hierarchy is refined over time.
 - Keyword assignment is explicit and post-ingest (Keyword List/Keyword Sets or semantic presets).
 - This preserves deliberate classification rather than implicit ingest-time tagging.
+
+<br>
 
 **Keyword Lists**
 
