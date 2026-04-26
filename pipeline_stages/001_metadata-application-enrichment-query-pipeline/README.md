@@ -177,13 +177,14 @@ Domain presets are semantic enrichment presets applied after ingestion.
 - Most checked fields are semantic fields.
 - In this workflow, `Contact > Job Title` is the main intentional overlap: a general ingest value such as `Photographer` may be refined to a domain-specific value such as `Wedding Photographer`, or any other domain-specific variant (`[INSERT DOMAIN] Photographer`). These selective metadata overwrites are intended primarily to increase external discoverability by adding domain-specific professional context, while also marginally improving downstream retrieval and internal discoverability.
 - Example semantic fields: Caption, Headline, IPTC Category, Accessibility Alt Text, contextual descriptions.
+- In this workflow, `Content > Description` is the clearest domain-specific metadata consequence of the post-import preset. A field such as `Wedding Photography by Julian Buccat – professional wedding photographer based in California, specializing in timeless, candid, and editorial-style wedding photos.` is intended primarily for external discoverability, while still supplying richer contextual metadata for downstream retrieval and catalog interpretation.
 
 Location metadata is a separate classification dimension from domain.
 Because a domain such as `Wedding` or `Marketing` can occur across many
-regions, IPTC Image location fields are too context-sensitive to be
+regions, IPTC Image location fields in the metadata presets are too context-sensitive to be
 safely embedded in a broad domain preset by default. In practice,
 selective keyword-based location tagging is often the safer batch
-mechanism.
+mechanism, post-presets. 
 
 <br>
 
