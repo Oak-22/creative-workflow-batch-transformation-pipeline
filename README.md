@@ -1,59 +1,12 @@
 # Creative Workflow Batch Transformation Pipeline
 
-Systems engineering project showing how creative-production workflows can be structured as deterministic, scalable pipelines rather than ad hoc editing sequences.
-
-<br>
-
-## Project Structure
-
-The project is structured as a workflow system design rather than a
-standalone software package.
-
-- **Stage prose:** primary system-design artifact
-- **Scripts/tests:** supplementary validation and reproducibility support
-- **Workflow evidence:** visual and operational proof carried by the documented stages
-- **Not a packaged application:** expectation-setting for how to read the repository
-
-<br>
-
-## Evidence Model
-
-The repository uses multiple evidence modes to explain the workflow.
-These materials are not presented as controlled benchmarks; they are
-used to explain why specific pipeline boundaries, validation steps,
-review points, and design patterns exist.
-
-- **Workflow Image Evidence:** visual evidence drawn from the workflow
-  itself, such as Lightroom panels, before/after comparisons, lineage
-  views, masks, taxonomy screenshots, and other observable system
-  states.
-- **Workflow Operational Evidence:** experience-derived notes from
-  actually running the workflow in practice. These observations capture
-  friction, exceptions, decision boundaries, tool behavior, and other
-  operational nuances that are not always visible from images alone.
-- **Stage-specific experiments:** narrower exploratory tests used when a
-  stage benefits from a focused comparison or qualification exercise.
-- **Scripts/tests:** supplementary validation and reproducibility
-  support.
-
-Stage documents define any stage-specific evidence framing near the
-operations where that evidence is used.
-
-<br>
-
-## TL;DR
-
-Use these entry points to inspect specific aspects of the project:
-
-- [Shared terminology](docs/terminology.md) defines recurring systems and image-workflow language.
-- [Batchability Cost Model](docs/batchability-cost-model.md) explains the operational value model.
-- [Pipeline Overview Diagram](docs/creative-workflow-pipeline-overview-diagram.png) shows the full pipeline structure.
+Systems engineering project showing how ambiguous, ad hoc creative production workflows can be structured as deterministic, scalable pipelines.  
 
 <br>
 
 ## Executive Summary
 
-Creative-production work is modeled as a reproducible, multi-stage
+Creative production work is modeled as a reproducible, multi-stage
 pipeline with explicit boundaries, non-destructive state
 transitions, and validation checkpoints. Even when executed inside
 GUI-based tools, the workflow is designed with production system qualities rather
@@ -65,19 +18,62 @@ conditions, and probabilistic semantic segmentation behavior from AI
 masking tools.
 
 Across the documented stages, the project demonstrates how ingest-time
-metadata application, image normalization, and semantic batch editing can be
+metadata application, image normalization, and semantic masking can be
 composed into a deterministic workflow that scales more reliably than
 repeated manual editing.
 
 <br>
 
+## TL;DR
+
+Use these entry points to inspect specific aspects of the project:
+
+- [Pipeline Overview Diagram](docs/creative-workflow-pipeline-overview-diagram.png) shows the full pipeline structure.
+- [Shared terminology](docs/terminology.md) defines recurring systems and image-workflow language.
+- [Batchability Cost Model](docs/batchability-cost-model.md) explains the operational value model.
+
+<br>
+
+## Project Structure
+
+The project is structured as two parts:
+
+a) Worfklow System Design 
+      - **Stage prose:** primary system-design artifact
+      - **Workflow evidence:** visual and operational proof carried by the documented stages
+b) Scripting to validate Design in Operation
+      - **Scripts/tests:** validation and reproducibility support
+
+- This pipeline is **Not a packaged application:**. It augments an existing application (Adobe Lightroom)
+
+<br>
+
+## Evidence Model
+
+The repository uses two equally important evidence modes that align with
+the project structure above. Together they explain both the system
+design and its runnable operation.
+
+- **A) Workflow System Design Evidence:** the stage prose, workflow
+  image evidence, workflow operational evidence, and any stage-specific
+  experiments are used to explain why specific pipeline boundaries,
+  validation steps, review points, and design patterns exist. In the
+  stage documents, this evidence typically appears as explicit
+  `Operational note:` callouts or as `Figure` sections with embedded
+  images.
+- **B) Runnable Script/Test Evidence:** scripts, tests, and sample-data
+  execution support that make the pipeline operable, inspectable, and
+  reproducible in practice rather than only described in prose.
+
+
+<br>
+
 ## Problem
 
-Creative-production workflows often accumulate as several informal editing
+Creative production workflows often accumulate as several informal editing
 habits inside GUI tools, making them hard to reproduce, audit, and
 scale across large datasets. Without explicit stage boundaries and
-validation checkpoints, small inconsistencies can compound into rework
-and operator drift. Weak rollback safety then makes those inconsistencies
+validation checkpoints, small inconsistencies can compound into operator drift causing laborous rework. Weak rollback safety then makes those inconsistencies
 more costly to contain once they spread through the working set.
 
 The core systems problem is therefore not only how to optimally perform isolated
@@ -110,10 +106,7 @@ bounded propagation, and human review.
 In Stages 2 and 3, batch application does not imply a single static
 transformation applied uniformly across every file. Both stages operate
 at dataset scale while still producing image-specific results at
-runtime: baseline conditioning responds to the state of each image,
-while normalization specifically aligns luminance and scene-level color
-where appropriate; AI mask propagation generates semantic selections
-whose effective impact varies by image content.
+runtime: baseline conditioning responds to the state of each image; AI mask propagation generates semantic selections whose effective impact varies by image content.
 
 <br>
 
@@ -124,8 +117,8 @@ which mandatory issues can be immediately handled through batch application, whi
 must be qualified first before batch, and which should remain manual.
 
 See the [Batchability Cost Model](docs/batchability-cost-model.md)
-for the issue/edit model and back-of-envelope time-savings framework
-across the three stages.
+for the issue/edit model and resulting back-of-envelope time-savings framework as 
+the defining business benefit to the pipeline.
 
 <br>
 
@@ -134,16 +127,16 @@ across the three stages.
 Across the documented stages, the shared engineering constraints and
 design themes are:
 
-- deterministic, stage-bounded workflow design
-- batch-safe operations under tooling constraints
+- stage-bounded workflow design
 - deterministic orchestration around heterogeneous creative inputs
-- bounded handling of probabilistic AI outputs
+- batch-safe operations under tooling constraints
+- bounded handling of probabilistic outputs
 - reproducibility through clear validation checkpoints
-- structured automation with human review at defined boundaries
+- human review at defined boundaries
 
 <br>
 
-## Pipeline Stages
+## Pipeline Stages and Explicit Boundaries 
 
 The project is organized as a single multi-stage pipeline with supporting documentation for each major stage.
 
@@ -166,12 +159,42 @@ Establishes the metadata and query foundation for the workflow.
 
 <br>
 
-### Stages 2 & 3
-Forms the image-processing portion of the pipeline, which currently follows this progression:
+### Stage 2
+Establishes the conditioned image baseline for downstream semantic
+operations.
 
-- **Culling boundary:** Review selects the usable working set after ingest-time metadata application
-- **Preprocessing:** Local corrective cleaning
-- **Normalization:** Dataset-wide luminance standardization with scene-level color normalization
+- **Input lineage boundary:** Initial virtual-copy branching protects
+  the culled working set from the original RAW selection
+- **Operation 1:** Local corrective cleanup
+> **Pipeline boundary:** Operator review separates local corrective
+> cleanup from cleaned baseline inputs.
+
+> After Operation 1, the working set should be free of validated local
+> defects and obvious geometric issues before broader luminance and
+> scene-level color normalization is applied.
+- **Operation 2:** Dataset-wide luminance normalization with scene-level color normalization
+- **Output lineage boundary:** Post-conditioning virtual-copy branching
+  preserves the normalized baseline as a known-good handoff state
+
+> **Pipeline boundary:** Review checkpoint separates normalization from
+> normalized baseline images.
+>
+> After Operation 2, the working set should carry a stable luminance
+> and scene-level color baseline before later semantic operations
+> depend on it.
+>
+> **Pipeline boundary:** Stage 2 output handoff separates baseline
+> conditioning from Stage 3 semantic masking.
+>
+> Stage 3 receives a cleaned, normalized, and lineage-protected working
+> state rather than unresolved luminance and color variance.
+
+<br>
+
+### Stage 3
+Applies semantic mask definitions across the conditioned working set and
+introduces bounded review around probabilistic AI output.
+
 - **Semantic operations:** Batch AI masking
 - **Human review:** Manual refinement pass
 

@@ -163,21 +163,6 @@ color differences.
 
 <br>
 
-### Output Boundary Value: Recoverable Edit Branches
-
-After Operation 2, additional Virtual Copy branches protect the
-normalized baseline during experimentation. This changes rollback from a
-costly return to raw source state into a controlled return to a
-known-good baseline.
-
-That matters because visual drift is often discovered late, after a
-sequence of small adjustments has already spread across similar images.
-Rollbackable branches make it safer to compare alternate creative
-directions without losing the cleanup and normalization work that should
-remain stable.
-
-<br>
-
 ### Cross-Boundary Logic
 
 The conditioning operations and lineage boundaries are ordered
@@ -185,8 +170,8 @@ linearly, but their impact is not purely linear. Weakness in one control
 point can amplify downstream risk, while a strong earlier control point
 can reduce the complexity of later decisions.
 
-- **Operation 1 → Operation 2:** Cleaner inputs make luminance and scene-level color normalization easier to judge because visible defects are not competing with exposure, tone, or color evaluation.
 - **Lineage setup → Operation 1:** The initial post-cull Virtual Copy branch gives cleanup a protected working state rather than forcing edits directly onto the original RAW selection.
+- **Operation 1 → Operation 2:** Cleaner inputs make luminance and scene-level color normalization easier to judge because visible defects are not competing with exposure, tone, or color evaluation.
 - **Operation 2 → Output boundary:** A stronger visual baseline makes later Virtual Copy branches more meaningful because each branch starts from a comparable state rather than from unstable per-image variance.
 - **Output boundary → Operations 1 and 2:** Rollback-safe branching protects the value created by cleanup and normalization, preventing later creative experiments from destroying the stable baseline.
 - **System-level effect:** The pipeline reduces repeated manual comparison loops by separating defect cleanup, visual baseline conditioning, and experimental edit branching into distinct control points.
@@ -271,7 +256,11 @@ In contrast, **RAW images preserve the camera sensor's unnormalized luminance an
 
 RAW capture therefore increases [dataset](../../docs/terminology.md#dataset) variance but enables **controlled, user‑defined normalization during post‑processing**, which motivates the normalization operation described in this stage.
 
-Shooting in RAW is a deliberate decision because it preserves recoverable signal that would otherwise be lost in JPEG. RAW files retain significantly more highlight and shadow information from the sensor, allowing the editor to recover details from images that might initially appear unusable. For example, a frame with blown highlights or deep shadows can often be salvaged by recovering clipped highlight detail or lifting shadow information. In contrast, JPEG compression discards much of this recoverable signal and locks the image into a specific tone curve and color profile, making such recovery far more limited.
+Shooting in RAW is a deliberate decision because it preserves recoverable signal that would otherwise be lost in JPEG. RAW files retain significantly more highlight and shadow information from the sensor, allowing the editor to recover details from images that might initially appear unusable (see [clipping](#clipping)). For example, a frame with blown highlights or deep shadows can often be salvaged by recovering clipped highlight detail or lifting shadow information. In contrast, JPEG compression discards much of this recoverable signal and locks the image into a specific tone curve and color profile, making such recovery far more limited. 
+
+#### Governing principle
+
+**Don't throw away potentially usable signal prematurely**
 
 > **Operational note:** In the source photoshoot, RAW capture was
 > especially important in low-light venue conditions where heavy tree
@@ -298,7 +287,7 @@ transformation is image-specific.
 
 Color normalization is also scene-specific. A yellow-green foliage scene
 should not be forced to match a deeper green scene if that hue
-difference reflects real lighting, location, or environmental context.
+difference reflects real location, or environmental context.
 The Operation 2 examples later in this document show this distinction
 using foliage and skin tone normalization. In this workflow, luminance
 can be normalized across the broader dataset, but hue and color-balance
@@ -306,8 +295,12 @@ decisions are evaluated within scene groups.
 
 This distinction matters because the goal is not visual flattening. The
 goal is to make later edits behave more predictably by reducing
-unwanted input variance before creative decisions, semantic masking, or
+unwanted input variance before downstream creative decisions, semantic masking, or
 manual refinement are applied.
+
+#### Governing Principle
+
+**Converge first, diverge later intentionally in a controlled manner**
 
 <br>
 
@@ -369,8 +362,32 @@ These conditions introduce variance in:
 - skin tone rendering
 
 A naive global editing strategy (e.g., applying identical exposure
-adjustments across all images) yields inconsistent results. The same
-parameter change interacts differently with each scene.
+adjustments across all images) yields inconsistent results. In the
+original Stage 2 workflow, this showed up as multiple broad visual
+Develop preset layers applied across the dataset:
+
+```text
+Import preset
+→ secondary editing preset
+→ additional correction preset
+```
+
+These are image-adjustment presets, not the Stage 1 metadata presets
+used for authorship and semantic enrichment. Stage 1 intentionally uses
+non-overlapping metadata preset layers; the problem here was different:
+multiple broad visual adjustment presets were stacked across the same
+image set without a stable conditioned baseline.
+
+That approach introduced several issues:
+
+- repeated global edits across the dataset
+- increased pipeline complexity
+- difficulty maintaining a consistent baseline
+- additional manual intervention per image
+
+The same parameter change interacts differently with each scene, so the
+pipeline effectively introduced multiple global transformation stages
+while increasing the risk of inconsistent results.
 
 That technical instability creates a second-order workflow effect: the
 editor must repeatedly rematch a chosen look across related images in
@@ -396,7 +413,8 @@ The workflow goals are:
 - minimize manual editing effort
 - avoid repeated global transformations across the editing pipeline
 
-Importantly, the pipeline does **not** eliminate all variation between images. Lighting differences across [scenes](../../docs/terminology.md#scene) (e.g., midday sun vs shaded evening light) still produce natural mood differences. The internal operations in this stage instead constrain variance to a controlled range, ensuring that images remain visually related while still preserving authentic [scene](../../docs/terminology.md#scene) characteristics such as time-of-day lighting and environmental context.
+Importantly, the pipeline constrains variance rather than erasing it.
+The in-depth normalization logic appears later in Operation 2.
 
 > **Operational note:** The strongest demonstration of scene-level color
 > normalization is the wedding-dress foliage scene, where several frames
@@ -406,37 +424,6 @@ Importantly, the pipeline does **not** eliminate all variation between images. L
 > frames. The yellow-green foliage scene is the weakest candidate for
 > color normalization because changing its hue to match the other scenes
 > would erase a natural across-scene difference.
-
-<br>
-
-## Initial, Naive Approach (Multi-Stage Global Develop Presets)
-
-The original Stage 2 workflow attempted multiple visual Develop preset
-layers across the dataset:
-
-```text
-Import preset
-→ secondary editing preset
-→ additional correction preset
-```
-
-These are image-adjustment presets, not the Stage 1 metadata presets
-used for authorship and semantic enrichment. Stage 1 intentionally uses
-non-overlapping metadata preset layers; the problem here is different:
-multiple broad visual adjustment presets were stacked across the same
-image set without a stable conditioned baseline.
-
-This introduced several issues:
-
-- repeated global edits across the dataset
-- increased pipeline complexity
-- difficulty maintaining a consistent baseline
-- additional manual intervention per image
-
-The pipeline effectively introduced multiple global transformation stages,
-increasing the risk of inconsistent results.
-
----
 
 <br>
 
