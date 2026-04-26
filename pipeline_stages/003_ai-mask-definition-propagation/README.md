@@ -6,7 +6,7 @@ Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project
 
 This stage evaluates whether AI-generated semantic masks can be treated
 as reusable batch artifacts rather than one-off, image-specific edits, similarly to Stage 2.
-The workflow defines mask logic once on a [canonical image](#canonical-image),
+The workflow defines mask logic once on a [canonical image](../../docs/terminology.md#canonical-image),
 then applies that logic across a full gallery to test whether Lightroom
 recomputes the masks per image reliably enough for production-scale use.
 The value is reduced repetitive masking effort while preserving a clear
@@ -54,65 +54,6 @@ and operational usefulness relative to the alternative — manual masking.
 - AI segmentation quality can degrade or improve in non-obvious,
   image-specific ways
 - automation must remain compatible with later manual review and correction
-
-## Terminology
-
-<a id="culling"></a>
-### Culling
-
-Culling is the review step between ingest-time metadata application and
-image-processing operations where the full capture set is narrowed to
-the photos worth carrying forward. In this workflow, images are selected based on usable
-focus, aesthetic distinctiveness, subject relevance, and downstream edit
-potential.
-
-<a id="semantic-region"></a>
-### Semantic Region
-
-A semantic region is an image area identified by meaning rather than by
-manual pixel coordinates, such as a person, sky, foliage, background,
-or artificial ground.
-
-<a id="canonical-image"></a>
-### Canonical Image
-
-A canonical image is the mask-definition source image used to define the
-widest useful set of AI mask definitions before those definitions are
-propagated across the broader gallery. It is not necessarily the best
-image artistically; it is the image with the highest utility for
-exercising Lightroom's semantic mask detection paths.
-
-<a id="mask-definition"></a>
-### Mask Definition
-
-A mask definition is the procedural instruction Lightroom uses to detect
-and adjust a semantic region, such as a person, sky, foliage, or
-background. In this workflow, the definition is what gets copied across
-images; the pixel region itself is recomputed on each target image.
-
-<a id="aggregate-mask"></a>
-### Aggregate Mask
-
-An aggregate mask combines multiple related generated masks into a
-larger review or control surface, such as all detected people, a
-foreground subject group, or multiple environmental regions.
-
-<a id="propagation"></a>
-### Propagation
-
-Propagation is the batch distribution of a procedural mask definition
-from a source image to target images, where each target image recomputes
-the semantic region locally rather than receiving copied mask pixels.
-
-<a id="semantic-binding"></a>
-### Semantic Binding
-
-Semantic binding is the process by which Lightroom associates a copied
-mask definition with a detected region in a target image. A binding is
-correct when the generated mask attaches to the intended semantic class
-or subject.
-
-
 
 ## Technical Design & Implementation
 
@@ -211,7 +152,7 @@ definitions available for downstream corrections across the dataset.
 
 
 ### Canonical Image Selection
-From a [culled gallery](#culling), a single [canonical image](#canonical-image) was
+From a [culled gallery](../../docs/terminology.md#culling), a single [canonical image](../../docs/terminology.md#canonical-image) was
 selected using the criteria defined above. Because Stage 3 operates
 after the post-ingest culling boundary, the candidate image set has
 already been narrowed to photos with sufficient focus, aesthetic

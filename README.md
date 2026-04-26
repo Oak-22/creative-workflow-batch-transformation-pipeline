@@ -11,14 +11,33 @@ standalone software package.
 
 - **Stage prose:** primary system-design artifact
 - **Scripts/tests:** supplementary validation and reproducibility support
-- **Visual evidence/experiments:** workflow-observable proof
+- **Workflow evidence:** visual and operational proof carried by the documented stages
 - **Not a packaged application:** expectation-setting for how to read the repository
 
-The observations, experiments, scripts, and tests are not presented as
-controlled benchmarks; they are evidence used to explain why specific
-pipeline boundaries, validation steps, review points, and design
-patterns exist. Stage documents define any stage-specific evidence
-framing near the operations where that evidence is used.
+<br>
+
+## Evidence Model
+
+The repository uses multiple evidence modes to explain the workflow.
+These materials are not presented as controlled benchmarks; they are
+used to explain why specific pipeline boundaries, validation steps,
+review points, and design patterns exist.
+
+- **Workflow Image Evidence:** visual evidence drawn from the workflow
+  itself, such as Lightroom panels, before/after comparisons, lineage
+  views, masks, taxonomy screenshots, and other observable system
+  states.
+- **Workflow Operational Evidence:** experience-derived notes from
+  actually running the workflow in practice. These observations capture
+  friction, exceptions, decision boundaries, tool behavior, and other
+  operational nuances that are not always visible from images alone.
+- **Stage-specific experiments:** narrower exploratory tests used when a
+  stage benefits from a focused comparison or qualification exercise.
+- **Scripts/tests:** supplementary validation and reproducibility
+  support.
+
+Stage documents define any stage-specific evidence framing near the
+operations where that evidence is used.
 
 <br>
 

@@ -31,12 +31,12 @@ without flattening legitimate scene differences.
 ## Problem
 
 High-volume photo datasets captured over long time horizons often
-contain significant lighting variance across [scenes](#scene). Even
+contain significant lighting variance across [scenes](../../docs/terminology.md#scene). Even
 when the subject matter remains similar, changing sunlight conditions
 alter how the camera sensor captures both brightness and color
 information.
 
-These lighting differences change the [visual tone](#visual-tone) of an
+These lighting differences change the [visual tone](../../docs/terminology.md#visual-tone) of an
 image, causing otherwise related photos to feel visually inconsistent.
 Without a stable baseline, later adjustments interact differently with
 each image, leading to visual divergence. In addition, that technical instability
@@ -69,7 +69,7 @@ both technical variance and the risk of operator-driven drift.
 
 ## Key Constraints
 
-- [RAW](#RAW) capture preserves useful signal but increases dataset variance
+- [RAW](../../docs/terminology.md#RAW) capture preserves useful signal but increases dataset variance
 - large datasets make continuous cross-image comparison cognitively expensive
 - normalization must preserve natural scene variation rather than erase it
 - later transformations perform better when input ranges are comparable
@@ -78,11 +78,12 @@ both technical variance and the risk of operator-driven drift.
 
 ## Evidence Framing
 
-This stage includes operational notes from the source photoshoot used to
-develop and validate the workflow. These notes are not presented as
-formal benchmarks; they are lived workflow observations that explain why
-specific design choices exist and where the pipeline reduced real
-editing friction.
+This stage uses both Workflow Image Evidence and Workflow Operational
+Evidence. The workflow images show observable system state, while the
+operational notes capture lived production nuances from the source
+photoshoot used to develop and validate the workflow. These notes are
+not presented as formal benchmarks; they explain why specific design
+choices exist and where the pipeline reduced real editing friction.
 
 Operational notes are labeled consistently so the document distinguishes
 between general system design, domain background, and experience-derived
@@ -149,8 +150,8 @@ repeatedly noticing the same local defect.
 
 Operation 2 establishes a dataset-wide luminance baseline and
 scene-level color baselines. Luminance normalization aligns exposure and
-tonal distribution across the full [dataset](#dataset), while color
-normalization operates at the [scene](#scene) level so legitimate
+tonal distribution across the full [dataset](../../docs/terminology.md#dataset), while color
+normalization operates at the [scene](../../docs/terminology.md#scene) level so legitimate
 environmental hue differences are preserved.
 
 Without this distinction, later look adjustments can either behave
@@ -262,147 +263,13 @@ making alternate looks recoverable instead of destructive.
 
 <br>
 
-## Terminology
-
-To clarify domain-specific language used throughout this document, the following system concepts are defined:
-
-<br>
-
-### Dataset & Structural Concepts
-
-<a id="dataset"></a>
-#### Dataset
-
-A complete collection of images from a single photoshoot or capture session.
-
-<a id="scene"></a>
-#### Scene
-
-A distinct composition within the dataset defined by a particular
-foreground, subject, and background configuration. A single dataset
-typically contains multiple scenes.
-
-<a id="RAW"></a>
-#### RAW
-
-An uncompressed or minimally processed image format that preserves the
-camera sensor's original luminance and color information for flexible
-downstream editing. In this workflow, RAW capture retains more
-recoverable signal than JPEG, but also increases variance that must
-later be normalized.
-
-<br>
-
-### Perceptual Characteristics
-
-<a id="visual-tone"></a>
-#### Visual Tone
-
-The combined luminance, contrast, and color characteristics of an image
-that determine its perceived brightness, warmth/coolness, and overall
-visual consistency.
-
-<br>
-
-### Luminance Transformation Primitives
-
-<a id="exposure"></a>
-#### Exposure
-
-A global adjustment controlling overall image brightness by shifting the
-luminance distribution uniformly across all pixels.
-
-<a id="contrast"></a>
-#### Contrast
-
-A global adjustment controlling the separation between light and dark
-regions in an image, increasing or decreasing the intensity difference
-across the luminance distribution.
-
-<a id="highlights-whites"></a>
-#### Highlights / Whites
-
-Upper-range luminance regions of an image. *Highlights* refer to
-near-bright regions with recoverable detail, while *whites* represent
-the brightest values approaching clipping. Adjustments to these regions
-control brightness and detail retention in the upper portion of the
-luminance distribution.
-
-<a id="shadows-blacks"></a>
-#### Shadows / Blacks
-
-Lower-range luminance regions of an image. *Shadows* refer to darker
-regions with recoverable detail, while *blacks* represent the darkest
-values approaching clipping. Adjustments to these regions control detail
-visibility and depth in the lower portion of the luminance distribution.
-
-<a id="clipping"></a>
-#### Clipping
-
-Loss of recoverable image detail in highlights or shadows due to sensor
-saturation or underexposure, where pixel values are driven to their
-minimum or maximum limits and no additional tonal information can be
-retrieved.
-
-<a id="dynamic-range"></a>
-#### Dynamic Range
-
-The span between the darkest and brightest image regions that still
-retain recoverable detail. In practical terms, it describes how much
-shadow and highlight information can be captured or preserved before
-those regions collapse into clipped blacks or blown highlights.
-
-<br>
-
-### Pipeline Concepts
-
-<a id="normalization"></a>
-#### Normalization
-
-A batch conditioning operation that reduces unwanted variance across
-images by bringing luminance and color distributions into a comparable
-operating range. In this workflow, normalization is adaptive rather than
-absolute: each image may receive different runtime adjustments based on
-its own exposure, tonal distribution, and color balance. Luminance
-normalization can be evaluated dataset-wide, while hue and color
-normalization must respect scene boundaries.
-
-<a id="reference-image"></a>
-#### Reference Image
-
-A representative image selected from a comparable scene group and used
-as the visual target for normalization decisions. In Operation 2,
-reference images help evaluate foliage hue, skin tone, or luminance
-expectations without forcing unrelated scenes into the same target look.
-A reference image is scoped to the scene or normalization concern it
-represents; it is not a global target for the entire dataset.
-
-<a id="automated-tonal-color-analysis"></a>
-#### Automated Tonal and Color Analysis
-
-A normalization operation that analyzes image luminance and color
-distribution, then applies coordinated adjustments to exposure,
-highlights/whites, shadows/blacks, contrast, color temperature, and tint
-in order to reduce unwanted visual variance prior to downstream
-transformations. Tonal analysis is used to establish a dataset-wide
-luminance baseline; color analysis is constrained to scene-level
-comparisons so natural environmental hue differences are not flattened.
-
-<a id="virtual-copy"></a>
-#### Virtual Copy
-
-A non-destructive derived state that preserves an independent edit
-timeline while continuing to reference the same underlying source image.
-
-<br>
-
 ## Domain Background: RAW Capture and Signal Variance
 
 Digital cameras typically offer two capture formats: **JPEG** and **RAW**. JPEG images are processed in‑camera using built‑in normalization, color profiles, and compression. While this produces visually pleasing images immediately, it also locks in tonal decisions made by the camera firmware and reduces the flexibility of downstream editing.
 
-In contrast, **RAW images preserve the camera sensor's unnormalized luminance and color distribution**. This retains the full [dynamic range](#dynamic-range) of the captured signal and defers tonal interpretation to the post‑processing pipeline.
+In contrast, **RAW images preserve the camera sensor's unnormalized luminance and color distribution**. This retains the full [dynamic range](../../docs/terminology.md#dynamic-range) of the captured signal and defers tonal interpretation to the post‑processing pipeline.
 
-RAW capture therefore increases [dataset](#dataset) variance but enables **controlled, user‑defined normalization during post‑processing**, which motivates the normalization operation described in this stage.
+RAW capture therefore increases [dataset](../../docs/terminology.md#dataset) variance but enables **controlled, user‑defined normalization during post‑processing**, which motivates the normalization operation described in this stage.
 
 Shooting in RAW is a deliberate decision because it preserves recoverable signal that would otherwise be lost in JPEG. RAW files retain significantly more highlight and shadow information from the sensor, allowing the editor to recover details from images that might initially appear unusable. For example, a frame with blown highlights or deep shadows can often be salvaged by recovering clipped highlight detail or lifting shadow information. In contrast, JPEG compression discards much of this recoverable signal and locks the image into a specific tone curve and color profile, making such recovery far more limited.
 
@@ -418,7 +285,7 @@ This background context explains why RAW datasets exhibit higher variance and wh
 
 ### What Normalization Means Here
 
-In this pipeline, [normalization](#normalization) means reducing unwanted
+In this pipeline, [normalization](../../docs/terminology.md#normalization) means reducing unwanted
 visual variance across a dataset while preserving meaningful scene
 differences. It does not mean forcing every image to the same exposure,
 white balance, or color profile.
@@ -484,7 +351,7 @@ divergence from the chosen unified look.
 ## Detailed Problem Context
 
 Large photo sets captured across multiple lighting environments introduce
-high variance in [visual attributes](#visual-tone). The pipeline must handle diverse
+high variance in [visual attributes](../../docs/terminology.md#visual-tone). The pipeline must handle diverse
 conditions and scale across the dataset without introducing inconsistency.
 
 Example capture conditions include:
@@ -525,11 +392,11 @@ The workflow goals are:
 
 - establish a consistent luminance baseline across the dataset
 - establish scene-level color baselines without flattening natural hue differences
-- preserve natural [scene](#scene) differences (e.g., time-of-day mood)
+- preserve natural [scene](../../docs/terminology.md#scene) differences (e.g., time-of-day mood)
 - minimize manual editing effort
 - avoid repeated global transformations across the editing pipeline
 
-Importantly, the pipeline does **not** eliminate all variation between images. Lighting differences across [scenes](#scene) (e.g., midday sun vs shaded evening light) still produce natural mood differences. The internal operations in this stage instead constrain variance to a controlled range, ensuring that images remain visually related while still preserving authentic [scene](#scene) characteristics such as time-of-day lighting and environmental context.
+Importantly, the pipeline does **not** eliminate all variation between images. Lighting differences across [scenes](../../docs/terminology.md#scene) (e.g., midday sun vs shaded evening light) still produce natural mood differences. The internal operations in this stage instead constrain variance to a controlled range, ensuring that images remain visually related while still preserving authentic [scene](../../docs/terminology.md#scene) characteristics such as time-of-day lighting and environmental context.
 
 > **Operational note:** The strongest demonstration of scene-level color
 > normalization is the wedding-dress foliage scene, where several frames
@@ -674,10 +541,10 @@ legitimate environmental hue differences between scenes.
 
 This stage adjusts:
 
-- [exposure](#exposure)
-- [contrast](#contrast)
-- [highlights / whites](#highlights-whites)
-- [shadows / blacks](#shadows-blacks)
+- [exposure](../../docs/terminology.md#exposure)
+- [contrast](../../docs/terminology.md#contrast)
+- [highlights / whites](../../docs/terminology.md#highlights-whites)
+- [shadows / blacks](../../docs/terminology.md#shadows-blacks)
 - scene-level color temperature
 - scene-level color tint and hue balance
 
@@ -729,7 +596,7 @@ drift. A true global hue target would be too aggressive: yellow-green
 foliage in one scene should not be forced to match deeper green foliage
 from a different lighting environment.
 
-The strongest [reference image](#reference-image) candidate for
+The strongest [reference image](../../docs/terminology.md#reference-image) candidate for
 demonstrating scene-level foliage normalization is the wedding-dress
 foliage scene because the subject and environment are similar enough to
 compare hue drift within the scene. The group formal portraits are a
@@ -764,7 +631,7 @@ scene can preserve natural foliage or ambient color while still needing
 skin tones to remain believable and consistent across similar portraits.
 
 In practice, skin tone normalization should be evaluated against a
-[reference image](#reference-image) within comparable portrait groups
+[reference image](../../docs/terminology.md#reference-image) within comparable portrait groups
 after the luminance baseline is established. This prevents exposure
 differences, mixed shade, or local color casts from causing manual
 overcorrection while still avoiding a single global skin-tone target
@@ -888,7 +755,7 @@ Purpose: Show Operation 1 review cases where dust cleanup or Auto Transform stra
 
 ### Operation 2 Failure Modes
 
-Global luminance normalization and scene-level color normalization can still produce imperfect results when scenes contain **extreme [dynamic range](#dynamic-range)**, strong backlighting, heavy [clipping](#clipping), mixed color temperatures, or intentionally stylized lighting conditions. For example, a deliberately composed **silhouette image**—such as a wedding couple rendered primarily as shadow shapes with little or no recoverable facial or subject detail—may be interpreted by Lightroom’s automated tonal analysis as unintentionally underexposed and therefore brightened, even when the low-key silhouette treatment was the **intended creative choice**. Color normalization can also fail if dissimilar scenes are grouped together and natural foliage hue differences are treated as errors. In these cases, automated analysis may reduce variance without fully establishing a sufficient baseline, and residual per-image exposure or scene-level color correction may still be required.
+Global luminance normalization and scene-level color normalization can still produce imperfect results when scenes contain **extreme [dynamic range](../../docs/terminology.md#dynamic-range)**, strong backlighting, heavy [clipping](../../docs/terminology.md#clipping), mixed color temperatures, or intentionally stylized lighting conditions. For example, a deliberately composed **silhouette image**—such as a wedding couple rendered primarily as shadow shapes with little or no recoverable facial or subject detail—may be interpreted by Lightroom’s automated tonal analysis as unintentionally underexposed and therefore brightened, even when the low-key silhouette treatment was the **intended creative choice**. Color normalization can also fail if dissimilar scenes are grouped together and natural foliage hue differences are treated as errors. In these cases, automated analysis may reduce variance without fully establishing a sufficient baseline, and residual per-image exposure or scene-level color correction may still be required.
 
 
 ---
@@ -970,13 +837,13 @@ not required for the current visuals-first version of this implementation docume
 ### Operation 2 Validation
 
 A lightweight validation approach is to show representative before/after
-image subsets from the same [dataset](#dataset) and visually inspect
+image subsets from the same [dataset](../../docs/terminology.md#dataset) and visually inspect
 whether automated tonal analysis reduces dataset-wide luminance variance
 and whether scene-level color normalization reduces unwanted hue drift
 within comparable scene groups. If needed later, that visual comparison
 could be supplemented with recorded pre- and post-adjustment values for
-[exposure](#exposure), [contrast](#contrast), [highlights / whites](#highlights-whites),
-[shadows / blacks](#shadows-blacks), color temperature, tint, and hue.
+[exposure](../../docs/terminology.md#exposure), [contrast](../../docs/terminology.md#contrast), [highlights / whites](../../docs/terminology.md#highlights-whites),
+[shadows / blacks](../../docs/terminology.md#shadows-blacks), color temperature, tint, and hue.
 
 
 ---
@@ -1055,7 +922,7 @@ Purpose: Show how Virtual Copy branches support comparing alternate client-facin
 
 ### Consistency vs Authentic Scene Variation
 
-The system is designed to reduce unwanted variance, not to eliminate all variance. Over-normalization would flatten meaningful differences between [scenes](#scene), especially when time-of-day lighting or environmental color legitimately changes the mood of an image.
+The system is designed to reduce unwanted variance, not to eliminate all variance. Over-normalization would flatten meaningful differences between [scenes](../../docs/terminology.md#scene), especially when time-of-day lighting or environmental color legitimately changes the mood of an image.
 
 <br>
 
