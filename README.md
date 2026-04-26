@@ -38,11 +38,12 @@ Use these entry points to inspect specific aspects of the project:
 
 The project is structured as two parts:
 
-a) Worfklow System Design 
-      - **Stage prose:** primary system-design artifact
-      - **Workflow evidence:** visual and operational proof carried by the documented stages
-b) Scripting to validate Design in Operation
-      - **Scripts/tests:** validation and reproducibility support
+- `a) Workflow System Design`
+- **Stage prose:** primary system-design artifact
+- **Workflow evidence:** visual and operational proof carried by the documented stages
+
+- `b) Scripting to validate Design in Operation`
+- **Scripts/tests:** validation and reproducibility support
 
 - This pipeline is **Not a packaged application:**. It augments an existing application (Adobe Lightroom)
 
@@ -136,7 +137,7 @@ design themes are:
 
 <br>
 
-## Pipeline Stages and Explicit Boundaries 
+## Pipeline Stages and Explicit Boundaries
 
 The project is organized as a single multi-stage pipeline with supporting documentation for each major stage.
 
@@ -149,13 +150,13 @@ Establishes the metadata and query foundation for the workflow.
 - **Semantic enrichment:** Post-import presets and keywords add non-overlapping descriptive metadata
 - **Query layer:** Filter-based retrieval and Smart Collections derive reusable views over image records
 
-> **Pipeline boundary:** culling separates metadata preparation from
-> image transformation.
+> **Boundary:** culling separates metadata preparation from image
+> transformation.
 >
-> After Stage 1, the full image set is narrowed into the working set
-> that moves forward to cleanup, normalization, and AI mask propagation.
-> Selection is based on usable focus, aesthetic uniqueness, subject
-> relevance, and edit potential.
+> **Handoff state:** the full image set is narrowed into the working
+> set that moves forward to cleanup, normalization, and AI mask
+> propagation. Selection is based on usable focus, aesthetic
+> uniqueness, subject relevance, and edit potential.
 
 <br>
 
@@ -163,31 +164,24 @@ Establishes the metadata and query foundation for the workflow.
 Establishes the conditioned image baseline for downstream semantic
 operations.
 
-- **Input lineage boundary:** Initial virtual-copy branching protects
-  the culled working set from the original RAW selection
-- **Operation 1:** Local corrective cleanup
-> **Pipeline boundary:** Operator review separates local corrective
-> cleanup from cleaned baseline inputs.
+The Stage 2 flow is:
 
-> After Operation 1, the working set should be free of validated local
-> defects and obvious geometric issues before broader luminance and
-> scene-level color normalization is applied.
-- **Operation 2:** Dataset-wide luminance normalization with scene-level color normalization
-- **Output lineage boundary:** Post-conditioning virtual-copy branching
-  preserves the normalized baseline as a known-good handoff state
+1. **Input lineage boundary:** Initial virtual-copy branching protects
+   the culled working set from the original RAW selection.
+2. **Operation 1:** Local corrective cleanup.
+3. **Boundary:** operator review separates cleanup from cleaned
+   baseline inputs.
+4. **Operation 2:** Dataset-wide luminance normalization with
+   scene-level color normalization.
+5. **Boundary:** review checkpoint separates normalization from
+   normalized baseline images.
+6. **Output lineage boundary:** Post-conditioning virtual-copy
+   branching preserves the normalized baseline as a known-good handoff
+   state.
 
-> **Pipeline boundary:** Review checkpoint separates normalization from
-> normalized baseline images.
->
-> After Operation 2, the working set should carry a stable luminance
-> and scene-level color baseline before later semantic operations
-> depend on it.
->
-> **Pipeline boundary:** Stage 2 output handoff separates baseline
-> conditioning from Stage 3 semantic masking.
->
-> Stage 3 receives a cleaned, normalized, and lineage-protected working
-> state rather than unresolved luminance and color variance.
+> **Handoff state:** Stage 3 receives a cleaned, normalized, and
+> lineage-protected working state rather than unresolved luminance and
+> color variance.
 
 <br>
 
@@ -196,6 +190,7 @@ Applies semantic mask definitions across the conditioned working set and
 introduces bounded review around probabilistic AI output.
 
 - **Semantic operations:** Batch AI masking
+- **Qualification boundary:** Semantic definitions are qualified before broad propagation
 - **Human review:** Manual refinement pass
 
 <br>
