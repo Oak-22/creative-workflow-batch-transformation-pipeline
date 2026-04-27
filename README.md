@@ -38,14 +38,14 @@ Use these entry points to inspect specific aspects of the project:
 
 The project is structured as two parts:
 
-- `a) Workflow System Design`
+`a) Workflow System Design`
 - **Stage prose:** primary system-design artifact
 - **Workflow evidence:** visual and operational proof carried by the documented stages
 
-- `b) Scripting to validate Design in Operation`
+`b) Scripting to validate Design in Operation`
 - **Scripts/tests:** validation and reproducibility support
 
-- This pipeline is **Not a packaged application:**. It augments an existing application (Adobe Lightroom)
+This pipeline is **Not a packaged application:**. It augments an existing application (Adobe Lightroom)
 
 <br>
 
@@ -137,18 +137,26 @@ design themes are:
 
 <br>
 
-## Pipeline Stages and Explicit Boundaries
+## Pipeline Stages
 
 The project is organized as a single multi-stage pipeline with supporting documentation for each major stage.
 
 <br>
 
-### Stage 1
+### Stage 1 – Metadata Application, Enrichment, and Query Pipeline
+Location: [Stage 1](pipeline_stages/001_metadata-application-enrichment-query-pipeline/README.md)
+
 Establishes the metadata and query foundation for the workflow.
 
 - **Identity initialization:** Single-preset ingest establishes the protected authorship baseline
 - **Semantic enrichment:** Post-import presets and keywords add non-overlapping descriptive metadata
 - **Query layer:** Filter-based retrieval and Smart Collections derive reusable views over image records
+
+Focus areas:
+- deterministic ingest behavior under single-preset constraints
+- non-destructive metadata enrichment through non-overlapping field assignments
+- metadata-driven indexing and retrieval patterns enabling both rapid ad-hoc queries and declarative views over image records
+- stable metadata state before subjective culling or image transformation begins
 
 > **Boundary:** culling separates metadata preparation from image
 > transformation.
@@ -160,7 +168,9 @@ Establishes the metadata and query foundation for the workflow.
 
 <br>
 
-### Stage 2
+### Stage 2 – Baseline Conditioning Pipeline
+Location: [Stage 2](pipeline_stages/002_baseline-conditioning-pipeline/README.md)
+
 Establishes the conditioned image baseline for downstream semantic
 operations.
 
@@ -179,13 +189,21 @@ The Stage 2 flow is:
    branching preserves the normalized baseline as a known-good handoff
    state.
 
+Focus areas:
+- local corrective cleanup and dataset-wide luminance normalization across heterogeneous images
+- scene-level color normalization that preserves natural hue differences across scenes
+- virtual copies for rollbackable experimentation while reducing operator cognitive load
+- deterministic conditioning around creative/capture variance from changing light, scene, and camera conditions
+
 > **Handoff state:** Stage 3 receives a cleaned, normalized, and
 > lineage-protected working state rather than unresolved luminance and
 > color variance.
 
 <br>
 
-### Stage 3
+### Stage 3 – AI Mask Definition Propagation
+Location: [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md)
+
 Applies semantic mask definitions across the conditioned working set and
 introduces bounded review around probabilistic AI output.
 
@@ -193,38 +211,10 @@ introduces bounded review around probabilistic AI output.
 - **Qualification boundary:** Semantic definitions are qualified before broad propagation
 - **Human review:** Manual refinement pass
 
-<br>
-
-## Stage Details
-
-<br>
-
-### 1. Metadata Application, Enrichment, and Query Pipeline
-Location: [Stage 1](pipeline_stages/001_metadata-application-enrichment-query-pipeline/README.md)
-
-Focus areas:
-- deterministic ingest behavior under single-preset constraints
-- non-destructive metadata enrichment through non-overlapping field assignments
-- metadata-driven indexing and retrieval patterns enabling both rapid ad-hoc queries and declarative views over image records
-- stable metadata state before subjective culling or image transformation begins
-
-<br>
-
-### 2. Baseline Conditioning Pipeline
-Location: [Stage 2](pipeline_stages/002_baseline-conditioning-pipeline/README.md)
-
-- local corrective cleanup and dataset-wide luminance normalization across heterogeneous images
-- scene-level color normalization that preserves natural hue differences across scenes
-- virtual copies for rollbackable experimentation while reducing operator cognitive load
-- deterministic conditioning around creative/capture variance from changing light, scene, and camera conditions
-
-<br>
-
-### 3. AI Mask Definition Propagation
-Location: [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md)
-
 Focus areas:
 - procedural mask definitions propagated across datasets rather than copying pixel regions
 - dataset-scale application of AI-generated semantic masks to batch edit operations
 - qualitative evaluation of mask quality and workflow reliability against manual editing results
 - deterministic review boundaries around probabilistic AI segmentation behavior
+
+<br>
