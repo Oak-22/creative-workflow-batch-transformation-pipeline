@@ -427,14 +427,12 @@ reused, and refined over time.
 
 <br>
 
-### Example: Highlights as Derived Dataset
+### Example: Best of Graduation 2025 as Derived Dataset
 
-A “Highlights” view can be defined as:
-- Rating ≥ 4
-- Flag = Pick (retained in the culled working set for downstream editing
-  and delivery)
-- Capture date range (e.g., 2024, 2025)
-- Optional keyword/domain filters (e.g., Events > Wedding > Moments > First kiss)
+A “Best of Graduation 2025” view can be defined as:
+- Capture Date is in the range `2025-01-01` to `2025-12-31`
+- Rating ≥ 5
+- Keywords contains all `graduation`
 
 This produces a highly contextualized derived dataset for downstream review, curation, and portfolio selection.
 
@@ -443,13 +441,9 @@ Conceptual SQL equivalent:
 ```sql
 SELECT *
 FROM photo_catalog
-WHERE rating >= 4
-  AND rejected = false
-  AND capture_year IN (2024, 2025)
-  AND (
-    keyword_path LIKE 'Events > Wedding%'
-    OR keyword_path LIKE 'Details > Flower%'
-  );
+WHERE capture_date BETWEEN '2025-01-01' AND '2025-12-31'
+  AND rating >= 4
+  AND keyword_terms LIKE '%graduation%';
 ```
 
 The SQL examples in this section are conceptual analogues, not claims
@@ -461,10 +455,7 @@ The point is that Smart Collections behave like saved declarative views
 over enriched metadata.
 
 ---
-🚧 TODO — EVIDENCE
-Type: Visual
-Asset: smart_collections_example.png
-Purpose: Show a Smart Collection configured as a saved declarative view over enriched metadata.
+![Smart Collection Example] (assets/images/013_stage1-smart-collection-example.png)
 ---
 
 <br>
@@ -486,7 +477,7 @@ Purpose: Show a Smart Collection configured as a saved declarative view over enr
 
 <br>
 
-## Engineering Concepts Demonstrated Uniquely in Stage 1
+## Engineering Concepts (Stage 1)
 
 - Deterministic metadata initialization under a single-preset ingest
   constraint
