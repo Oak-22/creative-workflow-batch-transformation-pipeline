@@ -178,7 +178,7 @@ can reduce the complexity of later decisions.
 
 <br>
 
-## Pipeline Diagrams
+## Pipeline Data Flow
 
 The following simplified diagrams illustrate the two internal
 conditioning operations and the surrounding lineage boundaries. The
@@ -187,15 +187,30 @@ scene-level differences.
 
 <br>
 
-### Operation 1 — Local Corrective Cleanup
+### Input Boundary — Baseline Protection and Rollback Control
 
 ```text
 RAW Images (dataset)
       ↓
-Culled RAW Selection
+Culled RAW Selection (earliest rollback point)
       ↓
 Post-Cull Virtual Copy Working Branch
 (lineage boundary before Stage 2 conditioning)
+```
+
+The initial Virtual Copy branch is created after RAW culling to protect
+the source selection before cleanup and normalization. This creates a
+safe working branch for Stage 2 while preserving the original culled RAW
+selection as the earliest rollback point.
+
+---
+
+<br>
+
+### Operation 1 — Local Corrective Cleanup
+
+```text
+Post-Cull Virtual Copy Working Branch
       ↓
 Fault-Tolerant Local Cleanup
 (validated dust/distraction removal + reviewed Auto Transform)
@@ -239,10 +254,8 @@ Alternate Edit Direction A / B
 Compare, Keep, or Revert
 ```
 
-The initial Virtual Copy branch is created after RAW culling to protect
-the source selection before cleanup and normalization. After Stage 2
-conditioning, additional branches preserve the normalized baseline while
-making alternate looks recoverable instead of destructive.
+After Stage 2 conditioning, additional Virtual Copy branches preserve
+the normalized baseline while allowing additional, alternate editing paths.
 
 ---
 
@@ -300,7 +313,7 @@ manual refinement are applied.
 
 #### Governing Principle
 
-**Converge first, diverge later intentionally in a controlled manner**
+**Converge first, diverge later intentionally**
 
 <br>
 
@@ -336,6 +349,10 @@ embedded photos when the visual evidence is finalized. The conceptual
 point is that baseline conditioning reduces input variance before the
 manual edit is applied, so the same edit is less likely to amplify
 divergence from the chosen unified look.
+
+#### Governing Principle 
+
+**Reduce downstream drift by reducing input variance.**
 
 ---
 
@@ -437,28 +454,6 @@ working set before conditioning and the normalized baseline after
 conditioning, but it is treated as a boundary mechanism rather than an
 internal conditioning operation.
 
-<br>
-
-### Stage 2 Operation Flow
-
-```text
-RAW Images (dataset)
-      ↓
-Culled RAW Selection
-      ↓
-Initial Virtual Copy Working Branch
-      ↓
-Operation 1: Local corrective cleanup
-(validated dust/distraction removal + reviewed Auto Transform)
-      ↓
-Operation 2: Global luminance and scene-level color normalization
-(dataset-wide tonal analysis + per-scene color adjustment)
-      ↓
-Output boundary: rollbackable baseline branches
-(preserve normalized baseline while exploring alternate edit directions)
-      ↓
-Consistent dataset baseline with preserved scene variation
-```
 
 <br>
 
@@ -591,6 +586,10 @@ stronger candidate for luminance normalization because the green hue is
 relatively stable, while the yellow-green foliage scene is the weakest
 candidate for color normalization because its hue difference appears
 scene-authentic.
+
+![Scene-scoped cross-image color normalization](assets/diagrams/scene-scoped-cross-image-color-normalization.jpg)
+
+*Figure: Scene-scoped cross-image color normalization proceeds in two steps. First, automated luminance normalization reduces frame-level exposure variance across comparable images. Second, canonical scene-level color calibration aligns within-scene hue drift, such as inconsistent green cast, without forcing unrelated scenes toward one global color target.*
 
 ```text
 Without scene boundaries:

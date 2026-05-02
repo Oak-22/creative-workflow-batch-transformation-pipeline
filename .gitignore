@@ -1,7 +1,10 @@
 engineering_learning_workspace/engineering_learning_notes
 .github
+.DS_Store
 
 # Generated/local diagram sources and exports.
 docs/*.drawio
 docs/*.png
 !docs/creative-workflow-pipeline-overview-diagram.png
+pipeline_stages/002_baseline-conditioning-pipeline/assets/diagrams/source/*
+!pipeline_stages/002_baseline-conditioning-pipeline/assets/diagrams/source/.gitkeep
