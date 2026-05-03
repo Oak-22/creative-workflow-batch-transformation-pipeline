@@ -9,7 +9,7 @@ Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project
 Large photo sets captured across changing lighting conditions often feel
 visually inconsistent even when subject matter remains similar. This
 stage defines a baseline-conditioning workflow that combines local
-corrective cleanup, dataset-wide luminance normalization, and
+corrective cleanup applied per frame across the working set, dataset-wide luminance normalization, and
 scene-level color normalization so the final gallery reads as coherent
 rather than ad hoc. Post-cull Virtual Copy lineage protects the working
 set before conditioning, and rollbackable output branches preserve the
@@ -55,7 +55,7 @@ predictably while preserving authentic scene-level variation.
 Stage 2 operates on the protected working set created after RAW culling
 and initial Virtual Copy lineage setup. Its internal conditioning work
 has two main operations. First, batch-safe local corrective cleanup
-removes validated capture artifacts before normalization. In this
+applied per frame across the working set removes validated capture artifacts before normalization. In this
 implementation, dust/distraction removal was the safer batch cleanup
 example, while Auto Transform straightening provided a reviewed
 per-image corrective example with visible pass/fail outcomes. Second,
@@ -131,7 +131,8 @@ rely on: preserved source state plus isolated downstream experiments.
 
 ### Operation 1 Value: Cleaner Inputs
 
-Operation 1 covers batch-safe local corrective cleanup. In this case
+Operation 1 covers batch-safe, dataset-scale local corrective cleanup
+applied per frame. In this case
 study, the validated cleanup operations were dust/distraction removal
 and Auto Transform straightening. Dust removal is the safer batch
 application: if no dust is present, little or no change is applied. Auto
@@ -207,12 +208,12 @@ selection as the earliest rollback point.
 
 <br>
 
-### Operation 1 — Local Corrective Cleanup
+### Operation 1 — Dataset-Scale Local Corrective Cleanup
 
 ```text
 Post-Cull Virtual Copy Working Branch
       ↓
-Fault-Tolerant Local Cleanup
+Dataset-Scale Local Cleanup Applied Per Frame
 (validated dust/distraction removal + reviewed Auto Transform)
       ↓
 Cleaned Baseline Inputs
@@ -301,10 +302,10 @@ transformation is image-specific.
 Color normalization is also scene-specific. A yellow-green foliage scene
 should not be forced to match a deeper green scene if that hue
 difference reflects real location, or environmental context.
-The Operation 2 examples later in this document show this distinction
-using foliage and skin tone normalization. In this workflow, luminance
-can be normalized across the broader dataset, but hue and color-balance
-decisions are evaluated within scene groups.
+The Operation 2 foliage examples later in this document show this
+distinction. In this workflow, luminance can be normalized across the
+broader dataset, but hue and color-balance decisions are evaluated
+within scene groups.
 
 This distinction matters because the goal is not visual flattening. The
 goal is to make later edits behave more predictably by reducing
@@ -369,6 +370,7 @@ Example capture conditions include:
 - midday direct sunlight
 - shaded environments
 - late-afternoon or evening lighting
+- high variation in light direction and angle of incidence (backlit, front-lit, side-lit, etc.)
 
 These conditions introduce variance in:
 
@@ -376,7 +378,6 @@ These conditions introduce variance in:
 - contrast
 - color temperature
 - foliage and environmental tones
-- skin tone rendering
 
 A naive global editing strategy (e.g., applying identical exposure
 adjustments across all images) yields inconsistent results. In the
@@ -406,21 +407,21 @@ The same parameter change interacts differently with each scene, so the
 pipeline effectively introduced multiple global transformation stages
 while increasing the risk of inconsistent results.
 
+This parallels software systems where broad mutation of shared state is
+treated as the exception rather than the rule. Repeated global changes
+to a shared baseline create hidden coupling, make downstream behavior
+harder to reason about, and increase the chance of silent drift across
+the working set.
+
 That technical instability creates a second-order workflow effect: the
 editor must repeatedly rematch a chosen look across related images in
 order to keep the gallery coherent.
 
-> **Operational note:** This became especially visible in group formals.
-> Although those images were already highly similar, repeated manual
-> rematching still introduced edit-direction drift once the workflow
-> lacked a stable shared baseline.
+#### Governing principle
+**Treat broad shared-state mutation as the exception; prefer bounded transformations over a stable baseline.**
 
-> **Operational note:** Rollback was technically available, but it was
-> still costly because reverting often meant returning to raw source
-> state rather than to a reusable intermediate baseline shared across
-> similar group portraits. In other words, recovery existed, but the
-> rollback target was too primitive to preserve the normalization work
-> that should have remained stable.
+#### Governing principle
+**Effective rollback depends on returning to a known-good intermediate state, not merely to raw source state.**
 
 The workflow goals are:
 
@@ -433,34 +434,22 @@ The workflow goals are:
 Importantly, the pipeline constrains variance rather than erasing it.
 The in-depth normalization logic appears later in Operation 2.
 
-> **Operational note:** The strongest demonstration of scene-level color
-> normalization is the wedding-dress foliage scene, where several frames
-> share a comparable environment but still need per-scene hue alignment.
-> The group formal portraits are a stronger candidate for luminance
-> normalization because the green hue is relatively stable across those
-> frames. The yellow-green foliage scene is the weakest candidate for
-> color normalization because changing its hue to match the other scenes
-> would erase a natural across-scene difference.
-
 <br>
 
 ## Technical Design & Implementation
 
-Within the larger creative workflow pipeline, Stage 2 collapses multiple
-global edit passes into one deterministic baseline-conditioning sequence:
-local corrective cleanup, dataset-wide luminance normalization, and
-scene-level color normalization. Virtual Copy lineage protects the
-working set before conditioning and the normalized baseline after
-conditioning, but it is treated as a boundary mechanism rather than an
+Within the larger creative workflow pipeline, Stage 2 collapses multiple global edit passes into one deterministic baseline-conditioning sequence: dataset-scale local corrective cleanup applied per frame, followed by dataset-wide luminance normalization then scene-level color normalization. Virtual Copy lineage protects the working set before conditioning (pre-stage 2) and the normalized baseline after conditioning (post-stage 2) but it is treated as a boundary mechanism rather than an
 internal conditioning operation.
 
 
 <br>
 
-### Operation 1: Local Corrective Cleanup
+### Operation 1: Dataset-Scale Local Corrective Cleanup
 
-Operation 1 covers batch-safe local corrective cleanup before any
-dataset-wide normalization is applied. In this workflow, the validated
+Operation 1 covers batch-safe, dataset-scale local corrective cleanup
+applied per frame before any dataset-wide normalization is applied.
+Here, `local` refers to the scope of the correction within each image,
+not to a narrow subset of the dataset. In this workflow, the validated
 cleanup operations were dust/distraction removal and Auto Transform
 straightening.
 
@@ -475,13 +464,20 @@ Develop module, then synchronized across the selected images.
 
 Because the operation is fault-tolerant, it can be applied across the
 selected dataset with review, while images without visible dust are left
-largely unchanged. This enables efficient batch cleanup before the later
+largely unchanged. This makes it a dataset-scale cleanup step even
+though the correction itself is local to small image regions. It
+therefore enables efficient batch cleanup before the later
 normalization and downstream editing passes.
 
-Because this kind of correction is local and repeated, it is a good
-candidate for early batch handling. It reduces visible dust artifacts up
-front so later baseline normalization is working from cleaner inputs
-rather than repeatedly compensating around the same artifacts.
+Because this kind of correction is local within each image and repeated
+across many images, it is a good candidate for early batch handling. It
+reduces visible dust artifacts up front so later baseline normalization
+is working from cleaner inputs rather than repeatedly compensating
+around the same artifacts. This ordering is deliberate: if dust cleanup
+is deferred until after normalization, the workflow risks introducing
+new visible repair artifacts into an already-conditioned image, which
+can reduce perceived image quality and undermine the stability that
+normalization was meant to establish.
 
 <br>
 
@@ -489,9 +485,11 @@ rather than repeatedly compensating around the same artifacts.
 
 Auto Transform straightening is also useful in Operation 1 because it
 evaluates each image independently rather than applying one fixed
-rotation value across the batch. In the recorded evidence, the automated
-straightening pass worked reliably on four unrelated photos and failed
-on one; the review set marked passes in green and the failure in red.
+rotation value across the batch. This makes it another dataset-scale,
+per-frame cleanup operation rather than a single global transform. In
+the recorded evidence, the automated straightening pass worked reliably
+on four unrelated photos and failed on one; the review set marked
+passes in green and the failure in red.
 
 This makes Auto Transform less batch-safe than dust removal. Dust removal
 is largely no-op when no visible dust is present, while a failed
@@ -499,18 +497,19 @@ straightening result creates work that must be corrected later. For that
 reason, Auto Transform belongs in Operation 1 as a reviewed corrective
 cleanup candidate, not as indiscriminate batch application.
 
+![Auto Transform before review](assets/images/operation-1-dataset-wide-cleanup-images/009_stage2-local-corrective-cleanup-auto-transform-before-review.png)
+
+*Figure: Auto Transform before review. This view shows the pre-operation comparison set selected for batch straightening prior to manual verification.*
+
+![Auto Transform after review pass/fail](assets/images/operation-1-dataset-wide-cleanup-images/010_stage2-local-corrective-cleanup-auto-transform-after-review-pass-fail.png)
+
+*Figure: Auto Transform after review. The manually verified result set shows successful straightening outcomes in green and the known failure case in red, making the review boundary explicit rather than implicit.*
+
 **Outcome:**
 - cleaner baseline inputs before dataset-wide normalization
 - reduced need to repeatedly correct the same local defect or alignment issue later
 - explicit review surface for automated straightening failures
 - lower operator burden during downstream review
-
----
-🚧 TODO — EVIDENCE
-Type: Workflow
-Asset: operation1_cleanup_examples
-Purpose: Show dust/distraction cleanup and Auto Transform straightening as Operation 1 examples, including the green/red pass-fail review for Auto Transform.
----
 
 <br>
 
@@ -555,9 +554,13 @@ They must repeatedly zoom into individual images to fine-tune exposure,
 tonal values, and color balance, then zoom out to evaluate consistency
 across the broader dataset. This constant context switching introduces
 cognitive fatigue and increases the likelihood of drift from both
-scene-level and gallery-level consistency. Once a poor sequence of
-adjustments has been applied across multiple images, weak rollbackability
-makes recovery even harder.
+scene-level and gallery-level consistency. **Once a poor sequence of
+adjustments has been applied across multiple images, weak rollbackability makes recovery even harder.**
+
+> **Operational note:** This became especially visible in group formals.
+> Although those images were already highly similar, repeated manual
+> rematching still introduced edit-direction drift once the workflow
+> lacked a stable shared baseline.
 
 By establishing a consistent dataset-wide luminance baseline upfront, the
 pipeline removes much of this instability. By constraining color
@@ -576,16 +579,28 @@ Foliage is a useful Operation 2 example because it exposes the
 difference between legitimate scene variance and unwanted within-scene
 drift. A true global hue target would be too aggressive: yellow-green
 foliage in one scene should not be forced to match deeper green foliage
-from a different lighting environment.
+from a different lighting environment, as explained below.
 
-The strongest [reference image](../../docs/terminology.md#reference-image) candidate for
-demonstrating scene-level foliage normalization is the wedding-dress
-foliage scene because the subject and environment are similar enough to
-compare hue drift within the scene. The group formal portraits are a
-stronger candidate for luminance normalization because the green hue is
-relatively stable, while the yellow-green foliage scene is the weakest
-candidate for color normalization because its hue difference appears
-scene-authentic.
+![Foliage hue comparison](assets/images/002_stage2-intra-scene-hue-normalization-not-global.png)
+
+*Figure: Foliage hue should be normalized within comparable scene groups, not across the full dataset. Across the three example scenes, the wedding-dress foliage scene is the strongest candidate for scene-level color calibration, the group formal portraits are a weaker but still plausible candidate, and the yellow-hue foliage scene is the weakest candidate because its color is already internally consistent and appears scene-authentic rather than erroneous.*
+
+The wedding-dress foliage scene (left-most) is the strongest scene for
+demonstrating color calibration because within-scene foliage hue
+variance is highest there. The group formal portraits are the second
+best scene of the three because their green hue is comparatively more
+stable, leaving less color drift to correct. By contrast, the
+yellow-hue foliage scene is the weakest candidate for color calibration:
+its yellow cast is already consistent within the scene, so there is
+little evidence of within-scene hue error to normalize.
+
+> **Operational note:** The wedding-dress foliage scene is therefore the
+> strongest demonstration of scene-level color normalization. The group
+> formal portraits are a stronger candidate for luminance normalization
+> than for hue correction because their green cast is relatively stable.
+> The yellow-hue foliage scene is the weakest candidate for color
+> normalization because changing its hue to match the other scenes would
+> erase a natural across-scene difference rather than correct an error.
 
 ![Scene-scoped cross-image color normalization](assets/diagrams/scene-scoped-cross-image-color-normalization.jpg)
 
@@ -603,42 +618,7 @@ With scene-level foliage normalization:
   → natural across-scene foliage variance preserved
 ```
 
-![Foliage hue comparison](assets/images/intra-scene-hue-normalization-not-global.png)
-
-*Figure: Foliage hue should be normalized within comparable scene groups, not across the full dataset. The wedding-dress foliage scene is the strongest scene-level color-normalization example, while the yellow-green foliage scene should remain visually distinct rather than being forced toward the deeper green of other scenes.*
-
 <br>
-
-#### Skin Tone Normalization
-
-Skin tone is a separate Operation 2 concern because it is evaluated
-against subject consistency rather than environmental consistency. A
-scene can preserve natural foliage or ambient color while still needing
-skin tones to remain believable and consistent across similar portraits.
-
-In practice, skin tone normalization should be evaluated against a
-[reference image](../../docs/terminology.md#reference-image) within comparable portrait groups
-after the luminance baseline is established. This prevents exposure
-differences, mixed shade, or local color casts from causing manual
-overcorrection while still avoiding a single global skin-tone target
-across unlike scenes.
-
-```text
-Dataset-wide luminance baseline
-      ↓
-Comparable portrait group selected
-      ↓
-Skin tone checked for believable within-group consistency
-      ↓
-Residual color correction applied only where needed
-```
-
----
-🚧 TODO — EVIDENCE
-Type: Visual
-Asset: skin_tone_scene_level_normalization
-Purpose: Show skin tone consistency within comparable portrait groups after luminance normalization.
----
 
 **Outcome:**
 - reduced luminance variance across the dataset
@@ -666,6 +646,13 @@ In this workflow, that matters because a bad sequence of global or
 domain-level adjustments can otherwise propagate across many similar
 images before the editor realizes the gallery has drifted away from the
 intended look.
+
+> **Operational note:** Rollback was technically available in the prior
+> workflow, but it was still costly because reverting often meant
+> returning to raw source state rather than to a reusable intermediate
+> baseline shared across similar group portraits. In other words,
+> recovery existed, but the rollback target was too primitive to
+> preserve the normalization work that should have remained stable.
 
 **Outcome:**
 
@@ -722,7 +709,8 @@ Although the pipeline reduces variance and improves editing consistency, each st
 
 ### Operation 1 Failure Modes
 
-Local corrective cleanup can still fail when dust artifacts are missed,
+Dataset-scale local corrective cleanup can still fail when dust
+artifacts are missed,
 over-corrected, or applied too broadly. Fault-tolerant cleanup is helpful
 for repeated artifacts such as dust, but the result still requires
 selective operator review. Auto Transform can also fail when Lightroom's
