@@ -51,9 +51,9 @@ This pipeline is **Not a packaged application:**. It augments an existing applic
 
 ## Evidence Model
 
-The repository uses two equally important evidence modes that align with
-the project structure above. Together they explain both the system
-design and its runnable operation.
+This repository is documented as an applied systems-design case study.
+Its claims are supported through two complementary evidence modes: one
+for explaining the design and one for showing runnable operation.
 
 - **A) Workflow System Design Evidence:** the stage prose, workflow
   image evidence, workflow operational evidence, and any stage-specific
@@ -65,6 +65,10 @@ design and its runnable operation.
 - **B) Runnable Script/Test Evidence:** scripts, tests, and sample-data
   execution support that make the pipeline operable, inspectable, and
   reproducible in practice rather than only described in prose.
+
+These materials are used to justify workflow behavior and design
+choices. They are not presented as controlled benchmarks or as claims of
+universal performance beyond the documented workflow context.
 
 
 <br>

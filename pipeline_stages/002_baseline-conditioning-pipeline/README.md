@@ -462,6 +462,24 @@ camera body sensor or lens, lowering image quality. The Dust Distraction
 Removal feature is applied to one representative image in Lightroom's
 Develop module, then synchronized across the selected images.
 
+![Dust example 1](assets/images/operation-1-dataset-wide-cleanup-images/003_stage2-local-corrective-cleanup-dust-image1.png)
+
+![Dust example 2](assets/images/operation-1-dataset-wide-cleanup-images/004_stage2-local-corrective-cleanup-dust-image2.png)
+
+![Dust removal panel](assets/images/operation-1-dataset-wide-cleanup-images/005_stage2-local-corrective-cleanup-dust-panel.png)
+
+*Figure: Representative dust/distraction cleanup setup on a source image. The local correction is defined once on a visibly affected image before being synchronized across the selected working set.*
+
+![Dust sync settings](assets/images/operation-1-dataset-wide-cleanup-images/006_stage2-local-corrective-cleanup-dust-sync-settings.png)
+
+*Figure: Sync settings for dust/distraction cleanup. This shows the batch handoff point where the reviewed local correction is propagated across the selected images.*
+
+![Dust sync time](assets/images/operation-1-dataset-wide-cleanup-images/007_stage2-local-corrective-cleanup-dust-sync-time.png)
+
+![Dust cleanup final result](assets/images/operation-1-dataset-wide-cleanup-images/008_stage2-local-corrective-cleanup-dust-final-result-example.png)
+
+*Figure: Final result after synchronized dust/distraction cleanup. The evidence is most valuable here not as a dramatic stylistic change, but as proof that repeated local defects can be removed early so later normalization operates on cleaner inputs.*
+
 Because the operation is fault-tolerant, it can be applied across the
 selected dataset with review, while images without visible dust are left
 largely unchanged. This makes it a dataset-scale cleanup step even
@@ -583,24 +601,16 @@ from a different lighting environment, as explained below.
 
 ![Foliage hue comparison](assets/images/002_stage2-intra-scene-hue-normalization-not-global.png)
 
-*Figure: Foliage hue should be normalized within comparable scene groups, not across the full dataset. Across the three example scenes, the wedding-dress foliage scene is the strongest candidate for scene-level color calibration, the group formal portraits are a weaker but still plausible candidate, and the yellow-hue foliage scene is the weakest candidate because its color is already internally consistent and appears scene-authentic rather than erroneous.*
+*Figure: Foliage hue should be normalized within comparable scene groups, not across the full dataset. Across the three example scenes, the wedding-dress foliage scene is the strongest candidate for scene-level color calibration (Images 1-4), the group formal portraits are a weaker but still plausible candidate (Images 8-9), and the yellow-hue foliage scene (Images 5-7) is the weakest candidate because its color is already internally consistent and appears scene-authentic rather than erroneous.*
 
-The wedding-dress foliage scene (left-most) is the strongest scene for
+The wedding-dress foliage scene is the strongest scene for
 demonstrating color calibration because within-scene foliage hue
 variance is highest there. The group formal portraits are the second
-best scene of the three because their green hue is comparatively more
-stable, leaving less color drift to correct. By contrast, the
+best scene of the three because their green hue — although varying — is comparatively more
+stable to the wedding-dress foilage scene, leaving less color drift to correct. By contrast, the
 yellow-hue foliage scene is the weakest candidate for color calibration:
 its yellow cast is already consistent within the scene, so there is
 little evidence of within-scene hue error to normalize.
-
-> **Operational note:** The wedding-dress foliage scene is therefore the
-> strongest demonstration of scene-level color normalization. The group
-> formal portraits are a stronger candidate for luminance normalization
-> than for hue correction because their green cast is relatively stable.
-> The yellow-hue foliage scene is the weakest candidate for color
-> normalization because changing its hue to match the other scenes would
-> erase a natural across-scene difference rather than correct an error.
 
 ![Scene-scoped cross-image color normalization](assets/diagrams/scene-scoped-cross-image-color-normalization.jpg)
 
@@ -635,7 +645,7 @@ the selected images are branched into an initial working state so cleanup
 and normalization do not overwrite the original culled selection. After
 Operation 2 establishes a stable luminance and scene-color baseline,
 additional Virtual Copy branches protect that baseline from
-operator-induced drift.
+operator-induced drift as the dataset progresses to the next stage (Stage 3: AI Mask Definition Propagation) and beyond.
 
 Virtual Copies provide a lightweight lineage mechanism for alternate edit
 paths: instead of overwriting a single edit history, the workflow can
@@ -691,14 +701,6 @@ processing time, downstream manual correction time, and total editing
 time. For now, the primary evidence model for this stage is visual
 and workflow-observable rather than heavily instrumented.
 
-
----
-🚧 TODO — EVIDENCE
-Type: Workflow
-Asset: pipeline_stage_views
-Purpose: Show the Lightroom collection structure for Stage 2, including post-cull Virtual Copy lineage, Operation 1 cleanup, Operation 2 normalization, and rollbackable output branches.
----
-
 <br>
 
 ## Failure Modes & Edge Cases
@@ -709,13 +711,18 @@ Although the pipeline reduces variance and improves editing consistency, each st
 
 ### Operation 1 Failure Modes
 
-Dataset-scale local corrective cleanup can still fail when dust
-artifacts are missed,
-over-corrected, or applied too broadly. Fault-tolerant cleanup is helpful
-for repeated artifacts such as dust, but the result still requires
-selective operator review. Auto Transform can also fail when Lightroom's
-geometry inference chooses an incorrect horizon or alignment target; in
-that case, the result must be flagged and corrected manually.
+The primary Operation 1 failure surface is Auto Transform rather than
+dust cleanup. In this workflow, dust/distraction removal is effectively
+fault-tolerant: when no relevant dust artifact is present, the synced
+correction usually leaves the image materially unchanged.
+
+Auto Transform straightening is highly effective, but it can still fail
+when Lightroom's geometry inference chooses the wrong horizon or
+alignment target. In the recorded review set, the automated
+straightening pass succeeded on 4 of 5 sample images and failed on 1,
+which was sufficient to justify keeping manual review as an explicit
+boundary. When that happens, the result must be flagged and corrected
+manually rather than accepted as a fully reliable batch-safe outcome.
 
 
 ---

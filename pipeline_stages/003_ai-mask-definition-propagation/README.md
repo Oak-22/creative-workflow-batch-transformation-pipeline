@@ -57,24 +57,16 @@ and operational usefulness relative to the alternative — manual masking.
 
 ## Technical Design & Implementation
 
-### Core Concepts
-
-- define mask logic once, then apply it across an entire dataset
-- use AI segmentation to dynamically recompute masks per image for people, sky, vegetation, and other semantic regions
-- keep mask operations fault-tolerant when target objects are missing
-- qualify uncertain semantic regions before promoting them to full-batch
-  propagation
-
-> **Note:** Unlike a traditional software operation that often has a
-> clear binary outcome, semantic mask propagation can partially succeed.
-> A mask may bind to the correct region but with weak boundaries, omit a
-> category that is not detectable, or produce a plausible result that
-> still requires editorial judgment. Because the behavior depends on AI
-> segmentation rather than fully observable deterministic rules, this
-> stage treats human operator review and interpretability as a required
-> part of the validation design, not an optional cleanup step. This is
-> why the implementation below is structured as a qualification and
-> review workflow rather than a one-time batch command.
+This stage defines mask logic once, then applies it across the dataset
+as a batch workflow. Lightroom recomputes semantic masks per image for
+people, sky, vegetation, and other detectable regions rather than
+copying static pixels. That makes propagation scalable, but it also
+means outcomes are only partially deterministic: a mask may bind
+correctly, bind weakly, omit a missing region safely, or produce a
+plausible result that still requires editorial judgment. For that
+reason, this implementation treats qualification, fault-tolerant
+omission behavior, and human review as required parts of the design
+rather than as optional cleanup after a one-time batch command.
 
 
 ### Experiment Objectives
