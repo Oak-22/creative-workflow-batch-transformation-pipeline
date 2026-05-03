@@ -342,3 +342,34 @@ practice, despite Lightroom estimating a longer duration.
 
 Per image (~10 seconds) x 500 images = 83.33 minutes at near
 full-automation, compared to 375 minutes for fully manual correction.
+
+<br>
+
+## Engineering Concepts Demonstrated
+
+- procedural definition reuse rather than static result copying
+- dataset-scale propagation of AI-generated semantic operations
+- qualification boundaries for uncertain semantic regions
+- fault-tolerant omission when expected regions are absent
+- semantic binding as a distinct correctness concern from boundary quality
+- human review as an explicit control surface around probabilistic automation
+- canonical source selection for maximizing reusable downstream operations
+- bounded batch automation under black-box vendor heuristics
+
+<br>
+
+## Key Design Principle
+
+Propagate procedural semantic definitions only after qualification, and
+treat human review as a required boundary around probabilistic AI
+outputs rather than as optional cleanup.
+
+<br>
+
+## Takeaway
+
+Stage 3 converts AI masking from one-off image editing into a controlled
+batch workflow. By defining masks once on a canonical image, qualifying
+uncertain regions before full propagation, and reviewing generated masks
+after batch application, the stage gains semantic editing throughput
+without treating AI outputs as silently trustworthy.

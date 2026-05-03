@@ -703,97 +703,17 @@ and workflow-observable rather than heavily instrumented.
 
 <br>
 
-## Failure Modes & Edge Cases
-
-Although the pipeline reduces variance and improves editing consistency, each stage still has failure modes that require manual judgment or override.
-
-<br>
-
-### Operation 1 Failure Modes
-
-The primary Operation 1 failure surface is Auto Transform rather than
-dust cleanup. In this workflow, dust/distraction removal is effectively
-fault-tolerant: when no relevant dust artifact is present, the synced
-correction usually leaves the image materially unchanged.
-
-Auto Transform straightening is highly effective, but it can still fail
-when Lightroom's geometry inference chooses the wrong horizon or
-alignment target. In the recorded review set, the automated
-straightening pass succeeded on 4 of 5 sample images and failed on 1,
-which was sufficient to justify keeping manual review as an explicit
-boundary. When that happens, the result must be flagged and corrected
-manually rather than accepted as a fully reliable batch-safe outcome.
-
-
----
-🚧 TODO — EVIDENCE
-Type: Workflow
-Asset: cleanup_failure_cases
-Purpose: Show Operation 1 review cases where dust cleanup or Auto Transform straightening required manual review, including the known Auto Transform failure case.
----
-
-<br>
-
-### Operation 2 Failure Modes
-
-Global luminance normalization and scene-level color normalization can still produce imperfect results when scenes contain **extreme [dynamic range](../../docs/terminology.md#dynamic-range)**, strong backlighting, heavy [clipping](../../docs/terminology.md#clipping), mixed color temperatures, or intentionally stylized lighting conditions. For example, a deliberately composed **silhouette image**—such as a wedding couple rendered primarily as shadow shapes with little or no recoverable facial or subject detail—may be interpreted by Lightroom’s automated tonal analysis as unintentionally underexposed and therefore brightened, even when the low-key silhouette treatment was the **intended creative choice**. Color normalization can also fail if dissimilar scenes are grouped together and natural foliage hue differences are treated as errors. In these cases, automated analysis may reduce variance without fully establishing a sufficient baseline, and residual per-image exposure or scene-level color correction may still be required.
-
-
----
-🚧 TODO — EVIDENCE
-Type: Visual
-Asset: stage2_failure_cases
-Purpose: Show Operation 2 failure modes such as extreme dynamic range, silhouette images, mixed color temperature, or incorrect scene grouping for color normalization.
----
-
-<br>
-
-### Baseline Handoff Failure Modes
-
-Virtual-copy branching can still fail when branch discipline is weak. If
-the initial post-cull branch, normalized baseline branch, and later
-experimental branches are not clearly named, compared, or pruned, the
-editor can lose track of which branch represents the intended baseline
-versus an experimental detour. In that case, branching reduces recovery
-cost in theory but not in practice.
-
-
----
-🚧 TODO — EVIDENCE
-Type: Workflow
-Asset: virtual_copy_failure_cases
-Purpose: Show how weak branch naming, comparison, or pruning can make Virtual Copy rollback harder to use in practice.
----
-
-<br>
-
-### System-Level Failure Modes
-
-At the system level, failure can also occur when too many manual
-overrides are required. Excessive exception handling reduces the
-throughput benefit of the pipeline and can reintroduce the same
-cross-image comparison burden that the workflow is intended to remove.
-In practice, weak Operation 1 cleanup, a weak Operation 2 baseline, or
-weak rollback discipline at the output boundary can each
-increase downstream instability and reduce overall consistency.
-
-
----
-🚧 TODO — EVIDENCE
-Type: Visual
-Asset: pipeline_instability_example
-Purpose: Show how weak cleanup, weak normalization, or weak rollback discipline can compound into downstream gallery inconsistency.
----
-
-<br>
-
 ## Observability & Validation
 
-This implementation is primarily validated through **embedded visual
-evidence**, **editor-observed workflow effects**, and clearly labeled
-inference. Because parts of the workflow depend on Lightroom’s internal
-heuristics, the most credible proof for this stage is observable
-before/after behavior rather than heavy quantitative instrumentation.
+This implementation is validated through a layered evidence model:
+**embedded visual evidence**, **editor-observed workflow effects (Operational Notes)**, and
+**runnable script/test support** where structured checks can be
+operationalized. Because parts of the workflow depend on Lightroom’s
+internal heuristics and perceptual image outcomes, the most credible
+proof for this stage still includes observable before/after behavior.
+Scripts and tests strengthen reproducibility and structured validation,
+but they do not fully replace visual review for perceptual coherence,
+hue alignment, or cleanup-artifact detection.
 
 <br>
 
@@ -811,7 +731,26 @@ measurements for this workflow would be:
 
 These measurements would help quantify whether the pipeline reduces
 manual intervention and improves throughput in practice, but they are
-not required for the current visuals-first version of this implementation document.
+not required for the current layered validation model used in this
+implementation document.
+
+<br>
+
+### Operation 1 Validation
+
+Operation 1 can be validated through the dust/distraction cleanup and
+Auto Transform review evidence already embedded in the section above.
+For dust cleanup, the relevant question is whether repeated local
+defects are removed without introducing visible repair artifacts or
+unnecessary changes to unaffected images. For Auto Transform, the
+relevant question is whether the automated straightening pass is useful
+enough at dataset scale to justify batch application under explicit
+manual review rather than as a fully trusted automatic transform.
+
+The Auto Transform before/after review set provides the clearest
+validation surface here: successful outcomes are visually confirmed, the
+known failure case is explicitly marked, and the manual review boundary
+is made observable rather than assumed.
 
 <br>
 
@@ -874,6 +813,64 @@ current writeup does not depend on it.
 
 <br>
 
+## Failure Modes & Edge Cases
+
+Although the pipeline reduces variance and improves editing consistency, each stage still has failure modes that require manual judgment or override.
+
+<br>
+
+### Operation 1 Failure Modes
+
+The primary Operation 1 failure surface is Auto Transform rather than
+dust cleanup. In this workflow, dust/distraction removal is effectively
+fault-tolerant: when no relevant dust artifact is present, the synced
+correction usually leaves the image materially unchanged.
+
+Auto Transform straightening is highly effective, but it can still fail
+when Lightroom's geometry inference chooses the wrong horizon or
+alignment target. In the recorded review set, the automated
+straightening pass succeeded on 4 of 5 sample images and failed on 1,
+which was sufficient to justify keeping manual review as an explicit
+boundary. When that happens, the result must be flagged and corrected
+manually rather than accepted as a fully reliable batch-safe outcome.
+
+See the Auto Transform review evidence in the Operation 1 section
+above, especially the post-review pass/fail figure showing the known
+failure case in red and successful outcomes in green.
+
+<br>
+
+### Operation 2 Failure Modes
+
+Global luminance normalization and scene-level color normalization can still produce imperfect results when scenes contain **extreme [dynamic range](../../docs/terminology.md#dynamic-range)**, strong backlighting, heavy [clipping](../../docs/terminology.md#clipping), mixed color temperatures, or intentionally stylized lighting conditions. For example, a deliberately composed **silhouette image**—such as a wedding couple rendered primarily as shadow shapes with little or no recoverable facial or subject detail—may be interpreted by Lightroom’s automated tonal analysis as unintentionally underexposed and therefore brightened, even when the low-key silhouette treatment was the **intended creative choice**. Color normalization can also fail if dissimilar scenes are grouped together and natural foliage hue differences are treated as errors. In these cases, automated analysis may reduce variance without fully establishing a sufficient baseline. In addition, residual, manual per-image exposure or scene-level color correction may still be required.
+
+
+<br>
+
+### Baseline Handoff Failure Modes
+
+Virtual-copy branching can still fail when branch discipline is weak. If
+the initial post-cull branch, normalized baseline branch, and later
+experimental branches are not clearly named, compared, or pruned, the
+editor can lose track of which branch represents the intended baseline
+versus an experimental detour. In that case, branching reduces recovery
+cost in theory but not in practice.
+
+
+<br>
+
+### System-Level Failure Modes
+
+At the system level, failure can also occur when too many manual
+overrides are required. Excessive exception handling reduces the
+throughput benefit of the pipeline and can reintroduce the same
+cross-image comparison burden that the workflow is intended to remove.
+In practice, weak Operation 1 cleanup, a weak Operation 2 baseline, or
+weak rollback discipline at the output boundary can each
+increase downstream instability and reduce overall consistency.
+
+<br>
+
 ## Design Tradeoffs
 
 The pipeline improves consistency and throughput, but it does so through explicit tradeoffs rather than through full automation.
@@ -891,13 +888,7 @@ multiple plausible looks. A purely linear history makes it harder to
 test alternatives safely; a branchable workflow preserves control
 without forcing every experiment to overwrite the baseline.
 
-
----
-🚧 TODO — EVIDENCE
-Type: Workflow
-Asset: client_preference_example
-Purpose: Show how Virtual Copy branches support comparing alternate client-facing looks without overwriting the baseline.
----
+See the `Lineage Setup Value: Protected Working State` section above for the visual example of this branching pattern.
 
 <br>
 
@@ -922,13 +913,6 @@ the gallery. That raises both cognitive load and the chance of
 inconsistent edits.
 
 
----
-🚧 TODO — EVIDENCE
-Type: Visual
-Asset: baseline_consistency_comparison
-Purpose: Show the downstream consistency difference between images edited after baseline conditioning and images edited without a stable baseline.
----
-
 <br>
 
 ### Rollback Safety vs Branch Sprawl
@@ -942,13 +926,13 @@ their own form of operator confusion.
 
 ### Local Workflow Efficiency vs Cloud-Native Scalability
 
-The current implementation is optimized for a local Lightroom workflow controlled by a single editor. This makes it practical and immediately useful, but it also means the system is not designed for distributed execution, real-time serving, or cloud-native orchestration.
+The current implementation is optimized for a local Lightroom workflow controlled by a single editor. This makes it practical and immediately useful, but it also means the system is not designed for distributed execution, real-time serving, or cloud-native orchestration. However, the principles and pipeline design demonstrated here can be adopted and tuned for similarly purposed workflows.
 
 <br>
 
 ### Vendor Heuristics vs Full Transparency
 
-The workflow benefits from Lightroom’s built-in automation, but some stages depend on vendor-controlled black-box heuristics. This improves usability and speed while limiting transparency into the exact internal logic of automated tonal analysis and scene-level color adjustment.
+The workflow benefits from Lightroom’s built-in automation, but some stages depend on vendor-controlled black-box heuristics. This improves usability and speed while limiting transparency into the exact internal logic of automated tonal analysis.
 
 <br>
 
@@ -984,15 +968,14 @@ The workflow prioritizes addressable control rather than complete control.
 
 <br>
 
-## Resulting Benefits
+## Resulting Benefits of Stage 2
 
 - consistent luminance baseline across heterogeneous input distributions
 - scene-level color baselines that preserve natural hue differences
 - reduced global editing passes
 - safer experimentation through rollbackable edit branches
-- reduced manual correction churn
+- reduced manual correction
 - predictable editing pipeline mechanics
-- preservation of natural scene tone and foliage hue differences
 
 ---
 
@@ -1000,18 +983,16 @@ The workflow prioritizes addressable control rather than complete control.
 
 ## Engineering Concepts Demonstrated
 
-- baseline dataset normalization
-- validated dust/distraction cleanup before baseline normalization
-- reviewed Auto Transform straightening before baseline normalization
-- dataset-wide luminance normalization
-- scene-level hue and color normalization
-- rollbackable experimentation over shared source assets
-- pipeline stage simplification
-- batch processing optimization
-- virtual copies as lineage-preserving experimental branches
-- rollbackable edit timelines over shared source assets
-- controlled override systems
-- cognitive complexity management
+- deterministic sequencing of heterogeneous transformations
+- dataset-scale conditioning with per-frame execution
+- separation of local corrective cleanup from global baseline normalization
+- scene-scoped normalization rather than indiscriminate global color matching
+- lineage-preserving non-destructive branching
+- rollback to known-good intermediate state rather than raw-source reset
+- bounded automation with explicit human review checkpoints
+- batch throughput optimization under tooling constraints
+- controlled manual overrides for edge cases
+- cognitive-load reduction through staged workflow design
 
 ---
 

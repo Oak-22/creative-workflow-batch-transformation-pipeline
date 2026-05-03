@@ -477,7 +477,7 @@ over enriched metadata.
 
 <br>
 
-## Engineering Concepts (Stage 1)
+## Engineering Concepts Demonstrated
 
 - Deterministic metadata initialization under a single-preset ingest
   constraint
@@ -489,3 +489,21 @@ over enriched metadata.
   checkpoint
 - Smart Collections as saved declarative views 
 - Ad-hoc library filtering as exploratory one-off querying
+
+<br>
+
+## Key Design Principle
+
+Establish protected metadata state first, then layer revisable semantic
+enrichment and query logic on top of it through explicitly bounded write
+paths.
+
+<br>
+
+## Takeaway
+
+Stage 1 turns metadata application from an ad hoc cataloging habit into
+a deterministic state-initialization and retrieval system. By
+separating protected identity metadata from later semantic enrichment
+and query logic, it creates the stable, searchable foundation that the
+later visual-conditioning and AI-assisted stages depend on.
