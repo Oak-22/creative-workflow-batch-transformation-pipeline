@@ -460,7 +460,7 @@ over enriched metadata.
 
 <br>
 
-### Why This Matters
+### Smart Collection Value
 
 - Makes curation logic explicit, inspectable, and reusable.
 - Reduces repeated manual filtering during review and selection.
@@ -468,12 +468,23 @@ over enriched metadata.
 
 <br>
 
-### Limitations
+### Smart Collection Limitations
 
 - No joins across entities
 - Limited computed-field expressiveness
 - No built-in versioning of query definitions
 - No exportable formal schema for rules
+
+<br>
+
+## Resulting Benefits of Stage 1
+
+- protected identity metadata established at ingest
+- revisable semantic enrichment layered without destructive field overlap
+- clearer separation between authority-bound metadata and descriptive metadata
+- more reusable classification through post-ingest keyword taxonomy management
+- faster and more reliable retrieval through ad-hoc filtering and Smart Collections
+- stable metadata state before subjective culling and downstream image transformation
 
 <br>
 
