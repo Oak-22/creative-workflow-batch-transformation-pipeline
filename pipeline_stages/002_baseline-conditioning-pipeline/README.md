@@ -79,7 +79,7 @@ both technical variance and the risk of operator-driven drift.
 ## Evidence Framing
 
 This stage uses both Workflow Image Evidence and Workflow Operational
-Evidence. The workflow images show observable system state, while the
+Evidence (as hinted in the root README.md under `Evidence Model`). The workflow images show observable system state, while the
 operational notes capture lived production nuances from the source
 photoshoot used to develop and validate the workflow. These notes are
 not presented as formal benchmarks; they explain why specific design
@@ -345,11 +345,13 @@ Image B - baseline conditioned first:
   result: converges toward the chosen look with less drift
 ```
 
-TO DO: The exact RGB values should be replaced with sampled values from the
-embedded photos when the visual evidence is finalized. The conceptual
-point is that baseline conditioning reduces input variance before the
-manual edit is applied, so the same edit is less likely to amplify
-divergence from the chosen unified look.
+The exact RGB values here are illustrative rather than empirically
+sampled from the embedded photos. The conceptual point is that larger
+per-pixel differences from the target state create larger perceptual
+differences at the image level. Baseline conditioning reduces those
+starting differences before the manual edit is applied, so the same edit
+is less likely to amplify visible divergence from the chosen unified
+look.
 
 #### Governing Principle 
 
@@ -419,9 +421,6 @@ order to keep the gallery coherent.
 
 #### Governing principle
 **Treat broad shared-state mutation as the exception; prefer bounded transformations over a stable baseline.**
-
-#### Governing principle
-**Effective rollback depends on returning to a known-good intermediate state, not merely to raw source state.**
 
 The workflow goals are:
 
@@ -542,8 +541,8 @@ This stage adjusts:
 
 - [exposure](../../docs/terminology.md#exposure)
 - [contrast](../../docs/terminology.md#contrast)
-- [highlights / whites](../../docs/terminology.md#highlights-whites)
-- [shadows / blacks](../../docs/terminology.md#shadows-blacks)
+- highlights / whites (see [clipping](../../docs/terminology.md#clipping))
+- shadows / blacks (see [clipping](../../docs/terminology.md#clipping))
 - scene-level color temperature
 - scene-level color tint and hue balance
 
@@ -556,6 +555,9 @@ variance before downstream processing. The difference is that the
 normalization target here is perceptual image state rather than numeric
 feature columns.
 
+<br>
+
+#### Global Luminance Normalization
 
 This stage reduces large luminance variance across the dataset and
 unwanted color variance within scene groups so that downstream
@@ -606,8 +608,9 @@ from a different lighting environment, as explained below.
 The wedding-dress foliage scene is the strongest scene for
 demonstrating color calibration because within-scene foliage hue
 variance is highest there. The group formal portraits are the second
-best scene of the three because their green hue — although varying — is comparatively more
-stable to the wedding-dress foilage scene, leaving less color drift to correct. By contrast, the
+best scene of the three because their green hue — although varying — is
+comparatively more stable than in the wedding-dress foliage scene,
+leaving less color drift to correct. By contrast, the
 yellow-hue foliage scene is the weakest candidate for color calibration:
 its yellow cast is already consistent within the scene, so there is
 little evidence of within-scene hue error to normalize.
@@ -760,18 +763,14 @@ A lightweight validation approach is to show representative before/after
 image subsets from the same [dataset](../../docs/terminology.md#dataset) and visually inspect
 whether automated tonal analysis reduces dataset-wide luminance variance
 and whether scene-level color normalization reduces unwanted hue drift
-within comparable scene groups. If needed later, that visual comparison
-could be supplemented with recorded pre- and post-adjustment values for
-[exposure](../../docs/terminology.md#exposure), [contrast](../../docs/terminology.md#contrast), [highlights / whites](../../docs/terminology.md#highlights-whites),
-[shadows / blacks](../../docs/terminology.md#shadows-blacks), color temperature, tint, and hue.
-
-
----
-🚧 TODO — EVIDENCE
-Type: Visual
-Asset: stage2_sample_comparison
-Purpose: Show representative before/after subsets for dataset-wide luminance normalization and scene-level color normalization.
----
+within comparable scene groups. Visual comparison remains the primary
+perceptual validation method for this stage. In addition, the Stage 2
+scripting layer is intended to record relevant pre- and
+post-normalization adjustment values — such as
+[exposure](../../docs/terminology.md#exposure), [contrast](../../docs/terminology.md#contrast), highlights / whites, shadows / blacks, color
+temperature, tint, and hue-related changes — so observable image
+results can be paired with structured validation and reproducibility
+data.
 
 <br>
 
@@ -783,33 +782,27 @@ good baseline without manual untangling. The central engineering
 question is whether branching and rollback materially reduce edit-state
 drift during look-matching.
 
-Validation here should be primarily visual and workflow-observable. The
-key question is whether the editor can compare alternate directions,
-revert cleanly, and preserve gallery consistency without losing the
-baseline or manually untangling accumulated edits.
+Validation here is primarily visual and workflow-observable: can the
+editor compare alternate directions, revert to the known-good baseline,
+and preserve gallery consistency without manually untangling
+accumulated edits?
 
-
----
-🚧 TODO — EVIDENCE
-Type: Workflow
-Asset: virtual_copy_recovery_comparison
-Purpose: Show alternate edit branches and demonstrate returning to a known-good normalized baseline without manually untangling edits.
----
 
 <br>
 
-### Baseline Comparison
+### Historical Workflow Reference Point
 
 > **Operational note:** A known baseline from the prior workflow is
 > approximately **42 hours of edit time** to complete a 1500-image RAW
 > gallery that was ultimately culled to 375 edited images. That
-> historical workflow included repeated global corrections, inconsistent
-> convergence, and extensive manual adjustment.
+> historical workflow included repeated global corrections, constant untraceable
+> divergence, and extensive manual adjustment.
 
-That baseline can remain contextual support without forcing a formal
-before/after table into the document. If stronger quantitative evidence
-is useful later, a retrospective comparison can be added, but the
-current writeup does not depend on it.
+This historical reference point can remain contextual support without
+forcing a formal before/after table into the document. If stronger
+quantitative evidence is useful later, a retrospective comparison
+between workflows can be added, but the current writeup does not depend
+on it.
 
 <br>
 
@@ -829,7 +822,7 @@ correction usually leaves the image materially unchanged.
 Auto Transform straightening is highly effective, but it can still fail
 when Lightroom's geometry inference chooses the wrong horizon or
 alignment target. In the recorded review set, the automated
-straightening pass succeeded on 4 of 5 sample images and failed on 1,
+straightening pass succeeded on 4 of 5 sample images and failed on 1 (highlighted red),
 which was sufficient to justify keeping manual review as an explicit
 boundary. When that happens, the result must be flagged and corrected
 manually rather than accepted as a fully reliable batch-safe outcome.
@@ -840,9 +833,25 @@ failure case in red and successful outcomes in green.
 
 <br>
 
-### Operation 2 Failure Modes
+### Operation 2 Failure Modes and Edge Cases
 
-Global luminance normalization and scene-level color normalization can still produce imperfect results when scenes contain **extreme [dynamic range](../../docs/terminology.md#dynamic-range)**, strong backlighting, heavy [clipping](../../docs/terminology.md#clipping), mixed color temperatures, or intentionally stylized lighting conditions. For example, a deliberately composed **silhouette image**—such as a wedding couple rendered primarily as shadow shapes with little or no recoverable facial or subject detail—may be interpreted by Lightroom’s automated tonal analysis as unintentionally underexposed and therefore brightened, even when the low-key silhouette treatment was the **intended creative choice**. Color normalization can also fail if dissimilar scenes are grouped together and natural foliage hue differences are treated as errors. In these cases, automated analysis may reduce variance without fully establishing a sufficient baseline. In addition, residual, manual per-image exposure or scene-level color correction may still be required.
+Global luminance normalization and scene-level color normalization can
+still produce imperfect results when scenes contain **extreme [dynamic
+range](../../docs/terminology.md#dynamic-range)**, strong backlighting,
+heavy [clipping](../../docs/terminology.md#clipping), mixed color
+temperatures, or incorrectly grouped scene comparisons. In these cases,
+automated analysis may reduce variance without fully establishing a
+sufficient baseline, and residual manual per-image exposure or
+scene-level color correction may still be required.
+
+An important edge case is the deliberately stylized image whose low-key
+or high-contrast treatment is intentional rather than erroneous. For
+example, a deliberately composed **silhouette image** — such as a
+wedding couple rendered primarily as shadow shapes with little or no
+recoverable facial or subject detail — may be interpreted by
+Lightroom’s automated tonal analysis as unintentionally underexposed and
+therefore brightened, even when the silhouette treatment was the
+intended creative choice.
 
 
 <br>
