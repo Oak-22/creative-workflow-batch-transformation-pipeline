@@ -93,13 +93,22 @@ Generated mask            → contained boundary?
 Together, these criteria determine whether the propagated masks are
 usable for downstream edits with bounded human review.
 
-> **In-depth note:** Omission is not always negative. If a target image
-> lacks the category, omission is the desired fault-tolerant behavior; it
-> only becomes a failure when a needed region exists but is not detected.
-> Misclassification is a separate failure mode from boundary bleed: the
-> mask may have clean boundaries but still bind to the wrong semantic
-> region, such as treating part of a person as pavement or another
-> background surface.
+> **In-depth note:** Omission is usually the correct outcome, not a
+> negative one. When a target image lacks the semantic category,
+> Lightroom may still show a mask thumbnail from the propagated
+> definition while leaving the mask itself undrawn, which creates no
+> meaningful downside in practice and preserves fault tolerance. Omission
+> only becomes a failure in the rarer case where the semantic class is
+> genuinely present in the target image but is not detected after
+> propagation. Misclassification is a separate failure mode from
+> boundary bleed: the mask may have clean boundaries but still bind to
+> the wrong semantic region, such as treating part of a person as
+> pavement or another background surface.
+
+
+### Canonical Image Selection
+From a [culled gallery](../../docs/terminology.md#culling), a single [canonical image](../../docs/terminology.md#canonical-image) was
+selected using the criteria defined below
 
 ### Canonical Image Selection Criteria
 
@@ -116,19 +125,19 @@ baseline image level; Stage 3 provides a more granular local-control
 layer for the same multi-variable variation by targeting semantic
 regions independently. A strong canonical image should therefore contain
 multiple regions that may need independent correction after mask
-propagation.
+propagation completes.
 
 - **Maximum number of in-focus subjects:** More detectable people create more reusable person-mask definitions for downstream edits. Overshooting people masks has little observable downside because Lightroom can omit unavailable masks on images where fewer subjects exist.
 - **Clearly separated primary subjects:** Subjects should be visually distinct enough for Lightroom to bind masks to people rather than background regions or overlapping bodies.
-- **Vegetation or foliage:** Stage 2 already establishes scene-level foliage hue normalization. In Stage 3, vegetation masks provide optional semantic-region control for further batch adjustment or manual single-image refinement when the Stage 2 baseline is insufficient.
+- **Foilage:** Stage 2 already establishes scene-level foliage hue normalization. In Stage 3, vegetation masks provide optional semantic-region control for further batch adjustment or manual single-image refinement when the Stage 2 baseline is insufficient.
 - **Sky:** Sky is a high-value semantic edit target because brightness and tonal changes are often visually obvious in sky regions and thus require editing.
-- **Background aggregate:** A background mask supports aggregate region control when the entire backline needs exposure or tonal adjustment, even if constituent regions such as sky, foliage, and artificial ground are also masked independently. This matters when background areas are underexposed while near-lens subjects are overexposed.
+- **Background aggregate:** A background mask supports aggregate region control when the entire backline needs exposure or tonal adjustment, even if constituent regions such as sky, foliage, and artificial ground are also masked independently. This matters when background areas are underexposed while near-lens subjects are overexposed, or vice versa.
 - **Foreground subject aggregate:** Group-level people masks provide a matching control layer for the frontline: adjusting all human subjects together instead of correcting each person one at a time.
 - **Representative scene complexity:** The image should contain enough people and environment variety to generate useful masks, but not be so cluttered that mask boundaries are unusually ambiguous.
 - **Usable focus and exposure:** The semantic regions should be sharp and readable enough that mask quality failures are likely to reflect propagation behavior rather than poor source-image quality.
 
-> **Selection note:** The goal is not simply to choose a visually strong
-> photo; it is to choose a source image that can be sliced into as many
+> **Selection note:** The goal is not simply to choose a "beautiful"
+> photo in the subjective sense; it is to choose a source image that can be sliced into as many
 > useful, sufficiently accurate mask definitions as possible. Strong
 > candidates support both semantic-region control, such as people, sky,
 > foliage, and ground, and plane-wise control, such as foreground subject
@@ -136,19 +145,7 @@ propagation.
 > when their detection quality is high enough to remain editable after
 > propagation.
 
-The selection strategy intentionally favors a rich source image. If a
-mask category is absent from a target image, Lightroom can omit that mask
-rather than applying an incorrect static region. This makes a mask-rich
-canonical image useful for maximizing the set of reusable mask
-definitions available for downstream corrections across the dataset.
-
-
-### Canonical Image Selection
-From a [culled gallery](../../docs/terminology.md#culling), a single [canonical image](../../docs/terminology.md#canonical-image) was
-selected using the criteria defined above. Because Stage 3 operates
-after the post-ingest culling boundary, the candidate image set has
-already been narrowed to photos with sufficient focus, aesthetic
-distinctiveness, subject relevance, and downstream edit potential.
+<br>
 
 ### Semantic Region Qualification Experiment
 
@@ -266,69 +263,117 @@ The following examples document the observed behavior described in the
 technical design section above.
 
 ### Example 1: Subject Masking
-￼
 
-![People mask aggregate](assets/images/people-mask-aggregate.png)
+![People mask aggregate](assets/images/001_people-mask-aggregation-overview.png)
 
-*Figure: The People Mask aggregate groups the generated person masks into a single foreground control surface while preserving the underlying per-person masks.*
+*Figure: The People Mask aggregate groups the generated person masks into a single foreground control surface separate from the underlying per-person masks.*
 
-The People Mask Aggregation groups the generated person masks into a
-foreground subject aggregate. In the Masks panel, the individual person
-masks appear below the aggregate and cover the same semantic ground at
-per-person granularity.
+The People Mask aggregate is most useful as an operator decision layer.
+The first question is whether the needed adjustment applies to all or
+most detected people. If the answer is yes, the edit should usually be
+made at the aggregate-mask level so the foreground subject group can be
+corrected in less total operation count. If the adjustment is only needed for a
+specific person, or if one subject requires refinement after the group
+edit, the operator can then move down to the underlying per-person
+masks.
 
-![Environmental mask aggregate](assets/images/environmental-masks-aggregate.png)
+```text
+People masks generated
+      ↓
+Does the needed edit apply to all or most people?
+      ↓
+Yes → adjust the People Mask aggregate
+No  → adjust only the needed per-person mask(s)
+      ↓
+Optionally refine individual people after the aggregate edit
+```
+
+![Environmental mask aggregate](assets/images/002_environmental-masks-aggregate.png)
 
 *Figure: The Environmental Masks aggregate combines detected background regions such as sky and foliage into a broader environmental control surface.*
 
-The Environmental Masks aggregate groups generated environmental masks
-into a broader background-region view. In the Masks panel, the
-individual environmental masks appear below the aggregate and cover the
-same semantic ground at region-specific granularity, including Sky and
-Foliage.
+The Environmental Masks aggregate follows the same operator logic as the
+People Mask aggregate. The first question is whether the needed
+adjustment applies to most or all environmental regions together. If
+the answer is yes, the edit should usually be made at the aggregate-mask
+level so the broader background control surface can be adjusted in one
+operation. If the change is only needed for a specific region, such as
+Sky or Foliage, the operator can then move down to the underlying
+region-specific masks.
+
+```text
+Environmental masks generated
+      ↓
+Does the needed edit apply to most or all environmental regions?
+      ↓
+Yes → adjust the Environmental Mask aggregate
+No  → adjust only the needed region-specific mask(s)
+      ↓
+Optionally refine individual regions after the aggregate edit
+```
 
 
 
-￼
+![Synchronize all masks settings](assets/images/003_synchronize-mask-definitions-settings.png)
 
+*Figure: The Synchronize Settings dialog applies the propagated
+mask-definition set across the selected working set in one batch
+operation.*
 
+The Synchronize All Masks operation can be applied across all selected
+images, such as the full culled gallery. Like the Stage 2 dust-removal
+sync, this batch operation is fault-tolerant enough to apply broadly,
+with any remaining artifacts reviewed and refined later during the
+manual editing stage that follows the pipeline.
 
+![Updating AI settings progress](assets/images/004_ai-mask-definitions-propagation-progress.png)
 
-￼
+*Figure: Lightroom then runs the propagated AI mask definitions across
+the selected images as a batch recomputation step.*
 
+The “Updating AI Settings” progress indicator represents the batch
+execution of these models across the selected photos.
 
-
-
-
-￼
-
-Synchronize the People + Environment operation across all selected images. Images with matching semantic regions receive masks, while unmatched definitions remain unavailable for that image. Any remaining artifacts are verified and refined later during the manual editing stage that follows dataset-wide luminance normalization, scene-level color normalization, and batch AI mask segmentation.
-
-
-￼
-
-The “Updating AI Settings” progress indicator visualizes the batch application described above: Lightroom reruns AI-driven semantic segmentation on each selected photo rather than reusing static pixel regions.
+Lightroom copies mask definitions, not pixel masks. When pasted across
+multiple images, Lightroom runs AI-driven semantic segmentation on each
+image to recompute masks such as people, sky, and vegetation. This is
+necessary because the semantic regions are almost never identical
+between images, even when the compositions are very similar.
 
 Conceptually, this resembles a machine learning inference pipeline:
 mask := detect_people(image)
 apply_adjustment(mask)
 
-Instead of copying results, the system copies the procedure and executes it across a dataset.
-
-If a mask does not apply to a given image (e.g., fewer detected people), Lightroom leaves that unavailable mask out of the generated mask set.
-
-
-￼
-
-For example above, we see that Foliage, Sky, and Background were successfully generated and applied to one of the batched photos below, while Mask 1 - 3 are not accessible. Since Lightroom's AI Masking Tool internals are not directly observable, we cannot say with certainty whether computation occurred for Mask 1 - 3 partially, not at all, or entirely, but we can infer it was one of the first two possibilities.
+Instead of copying results, the system copies the procedure and executes
+it across a dataset.
 
 
 
-￼
-￼
-￼
+![Fault-tolerant omission example](assets/images/005_fault-tolerant-subject-mask-omission.png)
 
-In the 3 images above we see that the batch mask propagation correctly identified the 3 most important person subjects as desired. 
+*Figure: Omission is usually the correct outcome when the propagated
+semantic class is absent. Lightroom may still retain mask thumbnails
+even when no corresponding mask is meaningfully drawn in the image.*
+
+In another image from the same dataset, Foliage, Sky, and Background
+were generated successfully after mask-definition propagation, while
+Mask 1-3 are not meaningfully present as editable subject regions. That
+end state is expected and should be treated as success, not failure,
+because the target image does not contain the same subject structure
+seen in the source image. As an end user, I cannot verify Lightroom's
+internal execution path, but the visible result shows that omission here
+is fault-tolerant and carries no practical drawback.
+
+![Person subject mask propagation success example 1](assets/images/006_person-subject-mask-success-example-1.png)
+![Person subject mask propagation success example 2](assets/images/007_person-subject-mask-success-example-2.png)
+![Person subject mask propagation success example 3](assets/images/008_person-subject-mask-success-example-3.png)
+
+*Figure: Across these three target images, propagated person-mask
+definitions successfully bind to the main subjects even though each
+image requires its own recomputed semantic segmentation result.*
+
+In the three images above, batch mask propagation correctly identifies
+the most important person subjects as desired.
 
 
 ## Back-of-the-Envelope Time Savings
