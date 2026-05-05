@@ -52,7 +52,7 @@ but how much work can move from per-image execution into setup,
 qualification where needed, batch application, review, and exception
 handling.
 
-| Issue / edit need | Pipeline handling | Review burden | Example stage |
+| Issue / edit need | Pipeline handling | Review burden | Pipeline stage |
 |---|---|---|---|
 | Identity metadata | Batch-applied through ingest preset | Low | Stage 1 |
 | Semantic metadata enrichment | Batch-applied through post-import presets | Low to moderate | Stage 1 |
@@ -124,6 +124,71 @@ depends on qualification and review. The pipeline does not remove human
 judgment; it reduces the amount of repetitive manual masking that must
 happen before judgment can be applied.
 
+## How To Demonstrate Savings Clearly
+
+The clearest way to show pipeline value is to separate three different
+claims that are easy to blur together if they share one table:
+
+1. **Stage-local savings:** what one stage saves on its own for a
+   specific repeated workflow problem.
+2. **Observed example run:** what was actually measured in a concrete
+   test, with explicit image counts, mask counts, or runtime.
+3. **Stacked pipeline effect:** how Stage 1, Stage 2, and Stage 3
+   compound by removing different kinds of repeated work across the full
+   workflow.
+
+That means this document should treat Stage 3's measured mask
+propagation example as a stage-specific proof point, not as a combined
+summary for all three stages.
+
+## Stage-Level Evidence Pattern
+
+When savings are presented, each stage should ideally be described using
+the same structure:
+
+| Stage | Repeated manual work being reduced | Batch/pipeline substitute | Evidence type |
+|---|---|---|---|
+| Stage 1 | Manual metadata entry, re-entry, and retrieval friction | Presets, enrichment, Smart Collection queries | Qualitative workflow reduction |
+| Stage 2 | Repeated cleanup, brightness matching, color matching, and rollback recovery | Batch conditioning plus protected branches | Qualitative workflow reduction with operational examples |
+| Stage 3 | Manual semantic mask application per region per image | Qualified mask definition propagation plus review | Quantified example run |
+
+This keeps the argument honest: Stage 3 currently has the clearest
+back-of-envelope time example, while Stage 1 and Stage 2 are better
+described today as cost-shape reductions unless they are later
+benchmarked directly.
+
+## Stage 3 Observed Example
+
+The current Stage 3 example is the strongest quantified proof point in
+the project so far because it compares a bounded manual workload against
+an observed batch runtime on the same gallery slice.
+
+```text
+gallery size: 64 images
+qualified masks propagated per image: 9
+theoretical maximum mask applications: 64 x 9 = 576
+
+manual model:
+576 mask applications x ~10 seconds each = 5,760 seconds
+= 96 minutes
+= 1 hour 36 minutes
+
+observed batch runtime:
+~7 minutes total
+= 420 seconds
+
+directional savings:
+5,760 - 420 = 5,340 seconds saved
+= 89 minutes saved
+= 1 hour 29 minutes saved
+= ~93% less operator time
+```
+
+This is the right level to quantify because the units match:
+manual per-mask application effort is compared against the observed
+runtime for propagating those same candidate mask operations across the
+same 64-image set.
+
 ## Back-of-Envelope Savings Model
 
 The pipeline changes the cost model from repeated per-image execution to
@@ -168,6 +233,8 @@ mechanical editing, more setup, qualification, validation, exception
 handling, and final creative review.
 
 Across the three stages, the accumulated value comes from stacking these
-small cost-shape changes. Metadata becomes easier to retrieve, baseline
-conditioning reduces visual comparison work, and semantic mask
-propagation reduces repeated local editing effort.
+stage-local cost-shape changes. Metadata becomes easier to retrieve,
+baseline conditioning reduces visual comparison work, and semantic mask
+propagation reduces repeated local editing effort. The safest way to
+present that cumulative value is to first show each stage's savings on
+its own terms, then describe the combined workflow effect second.

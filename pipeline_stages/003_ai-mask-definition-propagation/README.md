@@ -376,17 +376,36 @@ In the three images above, batch mask propagation correctly identifies
 the most important person subjects as desired.
 
 
-## Back-of-the-Envelope Time Savings
+## Back-of-the-Envelope Time Savings 
 
-**Manual correction:**
-Per image (~45 seconds) x 500 images = 375 mins
+**Manual Masking:**
+9 masks x 64 images = 576 potential mask operations
+
+576 mask operations x ~10 seconds per mask = 5,760 seconds
+
+= 96 minutes
+
+= 1 hour 36 minutes of manual masking work
 
 **Batch correction:**
-Tested across 3 photos. Batch application took roughly 20 seconds in
-practice, despite Lightroom estimating a longer duration.
+Observed batch propagation time in Lightroom: ~7 minutes across 64 images
 
-Per image (~10 seconds) x 500 images = 83.33 minutes at near
-full-automation, compared to 375 minutes for fully manual correction.
+= 420 seconds total
+
+That works out to:
+
+- ~6.6 seconds per image
+- ~0.73 seconds per potential mask operation, if the 7-minute observed runtime is distributed across the 576 theoretical operations (420 / 576)
+
+**Estimated savings for this 64-image run:**
+
+5,760 seconds manual - 420 seconds batched = 5,340 seconds saved
+
+= 89 minutes saved
+
+= 1 hour 29 minutes saved
+
+> **Headline result: ~93% less operator time than manual per-mask execution**
 
 <br>
 
