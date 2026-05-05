@@ -307,6 +307,13 @@ distinction. In this workflow, luminance can be normalized across the
 broader dataset, but hue and color-balance decisions are evaluated
 within scene groups.
 
+Unlike Stage 3, where a canonical image serves as the source of
+procedural definitions that Lightroom recomputes image by image, Stage 2
+uses a scene-specific reference image as a visual target for calibration
+judgment. The copied adjustments are therefore mostly static edit
+parameters, even when the visual judgment that selected them is
+scene-specific.
+
 This distinction matters because the goal is not visual flattening. The
 goal is to make later edits behave more predictably by reducing
 unwanted input variance before downstream creative decisions, semantic masking, or
