@@ -24,13 +24,35 @@ repeated manual editing.
 
 <br>
 
-## TL;DR
+## Reading Paths
 
-Use these entry points to inspect specific aspects of the project:
+Readers will usually benefit from taking one of two paths through the
+repository depending on how much context they want up front.
 
-- [Pipeline Overview Diagram](docs/creative-workflow-pipeline-overview-diagram.png) shows the full pipeline structure.
-- [Shared terminology](docs/terminology.md) defines recurring systems and image-workflow language.
-- [Batchability Cost Model](docs/batchability-cost-model.md) explains the operational value model.
+### Quick Path
+
+Use this path if you want a condensed, high-level view of the project
+without reading every stage writeup in full:
+
+1. [Shared terminology](docs/terminology.md)
+2. [Pipeline Overview Diagram](docs/creative-workflow-pipeline-overview-diagram.png)
+3. [Project Abstract](docs/abstract.md)
+4. [Batchability Cost Model](docs/batchability-cost-model.md)
+5. [Scripts](scripts) and [Tests](tests) for runnable validation support
+
+### Extensive Path
+
+Use this path if you want the full systems-design argument, stage
+evidence, and implementation rationale:
+
+1. [Shared terminology](docs/terminology.md)
+2. [Pipeline Overview Diagram](docs/creative-workflow-pipeline-overview-diagram.png)
+3. [Project Abstract](docs/abstract.md)
+4. [Stage 1](pipeline_stages/001_metadata-application-enrichment-query-pipeline/README.md)
+5. [Stage 2](pipeline_stages/002_baseline-conditioning-pipeline/README.md)
+6. [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md)
+7. [Batchability Cost Model](docs/batchability-cost-model.md)
+8. [Scripts](scripts) and [Tests](tests)
 
 <br>
 
