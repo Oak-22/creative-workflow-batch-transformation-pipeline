@@ -195,12 +195,43 @@ For artificial ground, the source-definition comparison used:
 - artificial ground generated from the current canonical image
 - artificial ground generated from an alternate image with stronger ground signal
 
+The qualification test was organized into canonical-source,
+alternate-source, compare, and manual-source collection branches so the
+candidate definitions could be reviewed side by side rather than
+inferred from memory.
+
+The canonical-source branch propagated an artificial-ground definition
+created from the Stage 3 canonical image across the target set.
+
+![Canonical-source artificial-ground target example](assets/images/009_artificial-ground-canonical-source-target-mask-example.png)
+
+*Figure: Canonical-source propagation generated an artificial-ground mask on a target image with the expected broad surface binding, but without evidence of unusually improved boundary precision.*
+
+![Canonical-source artificial-ground batch progress](assets/images/010_artificial-ground-canonical-source-batch-progress.png)
+
+*Figure: Lightroom batch-applied the canonical-source artificial-ground definition across the selected target images as another `Updating AI Settings` run, confirming that this comparison used the same propagation mechanism as the rest of Stage 3.*
+
+The alternate-source branch repeated that same procedure using a source
+image chosen specifically for stronger artificial-ground signal.
+
+![Alternate-source artificial-ground target example](assets/images/011_artificial-ground-alternate-source-target-mask-example.png)
+
+*Figure: Alternate-source propagation produced an artificial-ground mask on a target image, but the visible boundary quality was not observably stronger than the canonical-source result.*
+
+![Alternate-source artificial-ground batch run overview](assets/images/012_artificial-ground-alternate-source-batch-run-overview.png)
+
+*Figure: The alternate-source branch was run as its own collection-level propagation test so its generated masks could be compared directly against the canonical-source branch on the same target set.*
+
 In a side-by-side comparison across the target dataset of 64 images,
 artificial-ground propagation from the canonical source and from the
 alternate source produced no observable difference in mask quality. In
 addition, neither approach produced meaningfully better target-image
 boundaries than running Lightroom's AI masking directly on the target
 image itself.
+
+![Artificial-ground compare view](assets/images/013_artificial-ground-compare-collection-overview.png)
+
+*Figure: The compare collection paired canonical-source and alternate-source outputs for the same targets, supporting the observed result that no visible mask-quality difference emerged from the stronger alternate source.*
 
 This suggests that, for this semantic category, target-image signal
 rather than source-definition origin is the dominant constraint. In
