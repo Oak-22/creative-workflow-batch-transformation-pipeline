@@ -113,6 +113,11 @@ transformation applied uniformly across every file. Both stages operate
 at dataset scale while still producing image-specific results at
 runtime: baseline conditioning responds to the state of each image; AI mask propagation generates semantic selections whose effective impact varies by image content.
 
+The pipeline does not replace the final manual editing pass. It prepares
+a cleaner, normalized, review-bounded working set so obligatory manual
+refinement and final artistic touches happen later with less repeated
+effort.
+
 <br>
 
 ## Operational Value
@@ -185,21 +190,14 @@ Focus areas:
 - virtual copies for rollbackable experimentation while reducing operator cognitive load
 - deterministic conditioning around creative/capture variance from changing light, scene, and camera conditions
 
-The Stage 2 flow is:
-
-1. **Input lineage boundary:** Initial virtual-copy branching protects
-   the culled working set from the original RAW selection.
-2. **Operation 1:** Local corrective cleanup.
-3. **Boundary:** operator review separates cleanup from cleaned
-   baseline inputs.
-4. **Operation 2:** Dataset-wide luminance normalization with
-   scene-level color normalization.
-5. **Boundary:** review checkpoint separates normalization from
-   normalized baseline images.
-6. **Output lineage boundary:** Post-conditioning virtual-copy
-   branching preserves the normalized baseline as a known-good handoff
-   state.
-
+- **Input lineage protection:** Initial virtual-copy branching protects
+  the culled working set from the original RAW selection
+- **Operation 1:** Local corrective cleanup
+- **Operation 2:** Dataset-wide luminance normalization with
+  scene-level color normalization
+- **Output lineage protection:** Post-conditioning virtual-copy
+  branching preserves the normalized baseline as a known-good handoff
+  state
 
 > **Handoff state:** Stage 3 receives a cleaned, normalized, and
 > lineage-protected working state rather than unresolved luminance and
@@ -221,7 +219,14 @@ Applies semantic mask definitions across the conditioned working set and
 introduces bounded review around probabilistic AI output.
 
 - **Semantic operations:** Batch AI masking
-- **Qualification boundary:** Semantic definitions are qualified before broad propagation
+- **Qualification:** Semantic definitions are qualified before broad propagation
 - **Human review:** Manual refinement pass
+
+> **Boundary:** qualification and review separate propagated semantic
+> candidates from accepted downstream corrections.
+>
+> **Handoff state:** the working set carries propagated, review-bounded
+> semantic masks forward into final manual refinement rather than
+> requiring full local masking from scratch.
 
 <br>
