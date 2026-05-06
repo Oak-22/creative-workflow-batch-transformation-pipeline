@@ -2,6 +2,8 @@
 
 Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project.
 
+<br>
+
 ## Executive Summary
 
 This stage evaluates whether AI-generated semantic masks can be treated
@@ -17,6 +19,8 @@ pattern to probabilistic AI outputs. AI masks are not treated as
 automatically correct; they are treated as candidate semantic operations
 that must be qualified, propagated within defined boundaries, and
 reviewed by a human operator.
+
+<br>
 
 ## Problem
 
@@ -35,6 +39,8 @@ safely across a heterogeneous dataset without copying brittle pixel
 selections or introducing silent failures that would require extensive
 rework.
 
+<br>
+
 ## Solution Overview
 
 The workflow selects a canonical image containing many relevant
@@ -46,6 +52,8 @@ from single-image editing into a batch workflow, then evaluates the
 mechanism qualitatively by examining mask quality, omission behavior,
 and operational usefulness relative to the alternative — manual masking.
 
+<br>
+
 ## Key Constraints
 
 - target images vary in subjects, scene composition, and detectable categories
@@ -54,6 +62,8 @@ and operational usefulness relative to the alternative — manual masking.
 - AI segmentation quality can degrade or improve in non-obvious,
   image-specific ways
 - automation must remain compatible with later manual review and correction
+
+<br>
 
 ## Technical Design & Implementation
 
@@ -207,9 +217,15 @@ created from the Stage 3 canonical image across the target set.
 
 *Figure: Canonical-source propagation generated an artificial-ground mask on a target image with the expected broad surface binding, but without evidence of unusually improved boundary precision.*
 
+<br>
+<br>
+
 ![Canonical-source artificial-ground batch progress](assets/images/010_artificial-ground-canonical-source-batch-progress.png)
 
 *Figure: Lightroom batch-applied the canonical-source artificial-ground definition across the selected target images as another `Updating AI Settings` run, confirming that this comparison used the same propagation mechanism as the rest of Stage 3.*
+
+<br>
+<br>
 
 The alternate-source branch repeated that same procedure using a source
 image chosen specifically for stronger artificial-ground signal.
@@ -218,9 +234,15 @@ image chosen specifically for stronger artificial-ground signal.
 
 *Figure: Alternate-source propagation produced an artificial-ground mask on a target image, but the visible boundary quality was not observably stronger than the canonical-source result.*
 
+<br>
+<br>
+
 ![Alternate-source artificial-ground batch run overview](assets/images/012_artificial-ground-alternate-source-batch-run-overview.png)
 
 *Figure: The alternate-source branch was run as its own collection-level propagation test so its generated masks could be compared directly against the canonical-source branch on the same target set.*
+
+<br>
+<br>
 
 In a side-by-side comparison across the target dataset of 64 images,
 artificial-ground propagation from the canonical source and from the
@@ -232,6 +254,9 @@ image itself.
 ![Artificial-ground compare view](assets/images/013_artificial-ground-compare-collection-overview.png)
 
 *Figure: The compare collection paired canonical-source and alternate-source outputs for the same targets, supporting the observed result that no visible mask-quality difference emerged from the stronger alternate source.*
+
+<br>
+<br>
 
 This suggests that, for this semantic category, target-image signal
 rather than source-definition origin is the dominant constraint. In
@@ -253,6 +278,8 @@ Asset: artificial_ground_semantic_region_qualification
 Purpose: Document the artificial-ground source-definition comparison and its conclusion that stronger source signal did not improve target-image mask quality under the tested conditions.
 ---
 
+
+<br>
 
 ## Evidence/Example Application of Mask Propagation (w/ Images)
 
@@ -323,6 +350,8 @@ Only a subset of the theoretical 448 mask operations were generated.
 The final mask set applied to each image depended entirely on the semantic content of that image, confirming that Lightroom’s masking pipeline copies procedural mask definitions and recomputes them per image using AI-driven segmentation.
 
 
+<br>
+
 ## Example Walkthroughs
 
 The following examples document the observed behavior described in the
@@ -333,6 +362,9 @@ technical design section above.
 ![People mask aggregate](assets/images/001_people-mask-aggregation-overview.png)
 
 *Figure: The People Mask aggregate groups the generated person masks into a single foreground control surface separate from the underlying per-person masks.*
+
+<br>
+<br>
 
 The People Mask aggregate is most useful as an operator decision layer.
 The first question is whether the needed adjustment applies to all or
@@ -357,6 +389,9 @@ Optionally refine individual people after the aggregate edit
 ![Environmental mask aggregate](assets/images/002_environmental-masks-aggregate.png)
 
 *Figure: The Environmental Masks aggregate combines detected background regions such as sky and foliage into a broader environmental control surface.*
+
+<br>
+<br>
 
 The Environmental Masks aggregate follows the same operator logic as the
 People Mask aggregate. The first question is whether the needed
@@ -386,6 +421,9 @@ Optionally refine individual regions after the aggregate edit
 mask-definition set across the selected working set in one batch
 operation.*
 
+<br>
+<br>
+
 The Synchronize All Masks operation can be applied across all selected
 images, such as the full culled gallery. Like the Stage 2 dust-removal
 sync, this batch operation is fault-tolerant enough to apply broadly,
@@ -396,6 +434,9 @@ manual editing stage that follows the pipeline.
 
 *Figure: Lightroom then runs the propagated AI mask definitions across
 the selected images as a batch recomputation step.*
+
+<br>
+<br>
 
 The “Updating AI Settings” progress indicator represents the batch
 execution of these models across the selected photos.
@@ -421,6 +462,9 @@ it across a dataset.
 semantic class is absent. Lightroom may still retain mask thumbnails
 even when no corresponding mask is meaningfully drawn in the image.*
 
+<br>
+<br>
+
 In another image from the same dataset, Foliage, Sky, and Background
 were generated successfully after mask-definition propagation, while
 Mask 1-3 are not meaningfully present as editable subject regions. That
@@ -438,9 +482,14 @@ is fault-tolerant and carries no practical drawback.
 definitions successfully bind to the main subjects even though each
 image requires its own recomputed semantic segmentation result.*
 
+<br>
+<br>
+
 In the three images above, batch mask propagation correctly identifies
 the most important person subjects as desired.
 
+
+<br>
 
 ## Back-of-the-Envelope Time Savings 
 

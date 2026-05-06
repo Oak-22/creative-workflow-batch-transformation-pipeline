@@ -128,6 +128,7 @@ rely on: preserved source state plus isolated downstream experiments.
 *Figure: This view shows how Virtual Copy lineage preserves the unedited RAW state while allowing parallel experiment branches to diverge safely. Each copy represents an isolated test path rather than a destructive overwrite of the baseline. Here, divergence occurs from a post-tonal state because these branches were later used for an exploratory external blur-recovery test, which was ultimately discarded from the formal workflow.*
 
 <br>
+<br>
 
 ### Operation 1 Value: Cleaner Inputs
 
@@ -476,15 +477,24 @@ Develop module, then synchronized across the selected images.
 
 *Figure: Representative dust/distraction cleanup setup on a source image. The local correction is defined once on a visibly affected image before being synchronized across the selected working set.*
 
+<br>
+<br>
+
 ![Dust sync settings](assets/images/operation-1-dataset-wide-cleanup-images/006_stage2-local-corrective-cleanup-dust-sync-settings.png)
 
 *Figure: Sync settings for dust/distraction cleanup. This shows the batch handoff point where the reviewed local correction is propagated across the selected images.*
+
+<br>
+<br>
 
 ![Dust sync time](assets/images/operation-1-dataset-wide-cleanup-images/007_stage2-local-corrective-cleanup-dust-sync-time.png)
 
 ![Dust cleanup final result](assets/images/operation-1-dataset-wide-cleanup-images/008_stage2-local-corrective-cleanup-dust-final-result-example.png)
 
 *Figure: Final result after synchronized dust/distraction cleanup. The evidence is most valuable here not as a dramatic stylistic change, but as proof that repeated local defects can be removed early so later normalization operates on cleaner inputs.*
+
+<br>
+<br>
 
 Because the operation is fault-tolerant, it can be applied across the
 selected dataset with review, while images without visible dust are left
@@ -525,9 +535,15 @@ cleanup candidate, not as indiscriminate batch application.
 
 *Figure: Auto Transform before review. This view shows the pre-operation comparison set selected for batch straightening prior to manual verification.*
 
+<br>
+<br>
+
 ![Auto Transform after review pass/fail](assets/images/operation-1-dataset-wide-cleanup-images/010_stage2-local-corrective-cleanup-auto-transform-after-review-pass-fail.png)
 
 *Figure: Auto Transform after review. The manually verified result set shows successful straightening outcomes in green and the known failure case in red, making the review boundary explicit rather than implicit.*
+
+<br>
+<br>
 
 **Outcome:**
 - cleaner baseline inputs before dataset-wide normalization
@@ -612,6 +628,9 @@ from a different lighting environment, as explained below.
 
 *Figure: Foliage hue should be normalized within comparable scene groups, not across the full dataset. Across the three example scenes, the wedding-dress foliage scene is the strongest candidate for scene-level color calibration (Images 1-4), the group formal portraits are a weaker but still plausible candidate (Images 8-9), and the yellow-hue foliage scene (Images 5-7) is the weakest candidate because its color is already internally consistent and appears scene-authentic rather than erroneous.*
 
+<br>
+<br>
+
 The wedding-dress foliage scene is the strongest scene for
 demonstrating color calibration because within-scene foliage hue
 variance is highest there. The group formal portraits are the second
@@ -625,6 +644,9 @@ little evidence of within-scene hue error to normalize.
 ![Scene-scoped cross-image color normalization](assets/diagrams/scene-scoped-cross-image-color-normalization.jpg)
 
 *Figure: Scene-scoped cross-image color normalization proceeds in two steps. First, automated luminance normalization reduces frame-level exposure variance across comparable images. Second, canonical scene-level color calibration aligns within-scene hue drift, such as inconsistent green cast, without forcing unrelated scenes toward one global color target.*
+
+<br>
+<br>
 
 ```text
 Without scene boundaries:

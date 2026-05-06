@@ -1,8 +1,12 @@
 # Batchability Cost Model
 
-> For each repeated issue, what is the cost of handling it manually per
-> image versus converting part of the work into setup, batch application,
-> qualification, review, and exception handling?
+<br>
+
+## Core Question
+
+For each repeated issue, what is the cost of handling it manually per
+image versus converting part of the work into setup, batch application,
+qualification, review, and exception handling?
 
 This document poses that question as the cost model for assessing
 pipeline value. The unit economics of batchability come from converting
@@ -15,6 +19,8 @@ The estimates here are directional rather than benchmarked. They model
 how the cost shape changes when a correction operation moves from repeated
 manual execution to setup, qualification where needed, batch
 application, validation, and targeted exception handling.
+
+<br>
 
 ## Issue/Correction Model
 
@@ -39,6 +45,8 @@ Representative issue and correction categories include:
 - **Scene-level visual baseline:** hue and color normalization within comparable scenes
 - **Semantic local edits:** people, foliage, sky, background, foreground, or ground masks
 - **Final artistic review:** manual refinement, crop finalization, and subjective delivery choices
+
+<br>
 
 ## Batchability Matrix
 
@@ -86,6 +94,8 @@ can still fail, but its main uncertainty is image-level luminance or
 color interpretation; Stage 3 adds semantic-region detection, class
 binding, and mask-boundary quality as additional review surfaces.
 
+<br>
+
 ## Stage-Level Value
 
 ### Stage 1: Metadata Application, Enrichment, and Query
@@ -124,6 +134,8 @@ depends on qualification and review. The pipeline does not remove human
 judgment; it reduces the amount of repetitive manual masking that must
 happen before judgment can be applied.
 
+<br>
+
 ## How To Demonstrate Savings Clearly
 
 The clearest way to show pipeline value is to separate three different
@@ -141,6 +153,8 @@ That means this document should treat Stage 3's measured mask
 propagation example as a stage-specific proof point, not as a combined
 summary for all three stages.
 
+<br>
+
 ## Stage-Level Evidence Pattern
 
 When savings are presented, each stage should ideally be described using
@@ -156,6 +170,8 @@ This keeps the argument honest: Stage 3 currently has the clearest
 back-of-envelope time example, while Stage 1 and Stage 2 are better
 described today as cost-shape reductions unless they are later
 benchmarked directly.
+
+<br>
 
 ## Stage 3 Observed Example
 
@@ -189,6 +205,8 @@ manual per-mask application effort is compared against the observed
 runtime for propagating those same candidate mask operations across the
 same 64-image set.
 
+<br>
+
 ## Back-of-Envelope Savings Model
 
 The pipeline changes the cost model from repeated per-image execution to
@@ -200,6 +218,8 @@ and targeted exception handling.
 | Metadata application | Repeated field entry, ad-hoc classification, manual searching | Ingest-time identity preset, post-import semantic enrichment, reusable queries | Fewer field collisions and faster retrieval |
 | Baseline conditioning | Repeated cleanup, matching, comparison, and rollback recovery per image | Batch-safe cleanup, dataset/scene-level normalization, protected correction branches | Less comparison burden and safer experimentation |
 | AI mask propagation | Manual semantic masking per region per image | Canonical mask definition, batch propagation, human review | Less repetitive masking before review |
+
+<br>
 
 ## Directional Formula
 
@@ -224,6 +244,8 @@ high manual repetition, and predictable enough behavior to support batch
 application after any required qualification. It is less valuable when
 the issue is rare, highly subjective, or cheaper to fix manually than to
 qualify.
+
+<br>
 
 ## Summary
 
