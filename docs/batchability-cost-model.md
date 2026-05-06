@@ -227,8 +227,7 @@ qualify.
 
 ## Interpretation
 
-Batchability does not mean removing the editor from the process. It
-means changing where the editor spends attention: less repeated
+Batchability changes where the editor spends attention: less repeated
 mechanical editing, more setup, qualification, validation, exception
 handling, and final creative review.
 

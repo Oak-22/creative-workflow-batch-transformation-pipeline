@@ -155,23 +155,31 @@ sky, and foliage while still being a weak source for a specific region
 such as artificial ground if that region has limited visible signal or
 ambiguous boundaries.
 
-This experiment will compare multiple source-definition strategies for
-artificial ground before applying any candidate definition across the
-full dataset:
+This qualification step is only intended for uncertain semantic regions
+whose batch value appears plausible but is not yet proven. It is not a
+required experiment for every semantic category. Strong, high-value
+regions with clearly acceptable behavior can be promoted directly,
+whereas weak or ambiguous regions should first be subset-tested before
+they are allowed into full-batch propagation.
 
-- artificial ground generated from the current canonical image
-- artificial ground generated from an alternate image with stronger ground signal
-- artificial ground created or refined manually, if manual definition produces a cleaner reusable boundary
+#### Qualification Logic
 
-Each candidate definition should first be applied to a representative
-subset of target images, then evaluated for detection and omission
-behavior, semantic binding correctness, and boundary containment. Only
-qualified definitions should be promoted to full-batch propagation.
+The general qualification question is not whether propagation
+outperforms native per-image AI segmentation. The question is whether a
+given semantic category is reliable enough to justify batch promotion at
+all.
+
+For uncertain categories, the workflow is:
+
+- compare candidate source-definition strategies
+- apply them to representative target images
+- review detection, omission, semantic binding, and boundary containment
+- promote only the definitions that are operationally worth batching
 
 ```text
 Define uncertain semantic region
       ↓
-Apply to representative subset
+Apply candidate definitions to representative targets
       ↓
 Review detection, binding, and boundary containment
       ↓
@@ -180,11 +188,38 @@ Promote, revise, or reject definition
 Full-batch propagation only if qualified
 ```
 
+#### Artificial-Ground Comparison
+
+For artificial ground, the source-definition comparison used:
+
+- artificial ground generated from the current canonical image
+- artificial ground generated from an alternate image with stronger ground signal
+
+In a side-by-side comparison across the target dataset of 64 images,
+artificial-ground propagation from the canonical source and from the
+alternate source produced no observable difference in mask quality. In
+addition, neither approach produced meaningfully better target-image
+boundaries than running Lightroom's AI masking directly on the target
+image itself.
+
+This suggests that, for this semantic category, target-image signal
+rather than source-definition origin is the dominant constraint. In
+practical terms, once the source image contains enough signal to define
+the semantic class at all, increasing source-signal strength did not
+improve the target-image result under the tested conditions.
+
+This result does not change the canonical-image selection logic. The
+canonical image is still chosen to maximize how many useful semantic
+signals can be defined from one source image. The narrower conclusion is
+that, for this category, stronger source signal did not improve
+target-image segmentation quality once a usable source definition
+already existed.
+
 ---
 🚧 TODO — EVIDENCE
 Type: Workflow
 Asset: artificial_ground_semantic_region_qualification
-Purpose: Compare artificial-ground mask definitions from multiple source images and/or manual refinement before promoting a qualified definition to full-batch propagation.
+Purpose: Document the artificial-ground source-definition comparison and its conclusion that stronger source signal did not improve target-image mask quality under the tested conditions.
 ---
 
 
