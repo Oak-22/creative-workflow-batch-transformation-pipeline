@@ -122,7 +122,7 @@ which mandatory issues can be immediately handled through batch application, whi
 must be qualified first before batch, and which should remain manual.
 
 See the [Batchability Cost Model](docs/batchability-cost-model.md)
-for the issue/edit model and resulting back-of-envelope time-savings framework as 
+for the issue/correction model and resulting back-of-envelope time-savings framework as 
 the defining business benefit to the pipeline.
 
 <br>
