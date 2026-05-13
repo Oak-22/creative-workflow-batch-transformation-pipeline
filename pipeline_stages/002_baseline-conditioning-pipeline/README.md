@@ -123,7 +123,7 @@ Although Virtual Copy branching recurs at multiple control points in
 Stage 2, this view captures the underlying lineage pattern they all
 rely on: preserved source state plus isolated downstream experiments.
 
-![Stage 2 lineage setup value evidence](assets/images/stage2-lineage-setup-value-evidence.png)
+![Stage 2 lineage setup value evidence](assets/images/001_pre-operations/001_stage2-lineage-setup-value-evidence.png)
 
 *Figure: This view shows how Virtual Copy lineage preserves the unedited RAW state while allowing parallel experiment branches to diverge safely. Each copy represents an isolated test path rather than a destructive overwrite of the baseline. Here, divergence occurs from a post-tonal state because these branches were later used for an exploratory external blur-recovery test, which was ultimately discarded from the formal workflow.*
 
@@ -469,27 +469,27 @@ camera body sensor or lens, lowering image quality. The Dust Distraction
 Removal feature is applied to one representative image in Lightroom's
 Develop module, then synchronized across the selected images.
 
-![Dust example 1](assets/images/operation-1-dataset-wide-cleanup-images/003_stage2-local-corrective-cleanup-dust-image1.png)
+![Dust example 1](assets/images/002_operation-1-dataset-wide-cleanup/003_stage2-local-corrective-cleanup-dust-image1.png)
 
-![Dust example 2](assets/images/operation-1-dataset-wide-cleanup-images/004_stage2-local-corrective-cleanup-dust-image2.png)
+![Dust example 2](assets/images/002_operation-1-dataset-wide-cleanup/004_stage2-local-corrective-cleanup-dust-image2.png)
 
-![Dust removal panel](assets/images/operation-1-dataset-wide-cleanup-images/005_stage2-local-corrective-cleanup-dust-panel.png)
+![Dust removal panel](assets/images/002_operation-1-dataset-wide-cleanup/005_stage2-local-corrective-cleanup-dust-panel.png)
 
 *Figure: Representative dust/distraction cleanup setup on a source image. The local correction is defined once on a visibly affected image before being synchronized across the selected working set.*
 
 <br>
 <br>
 
-![Dust sync settings](assets/images/operation-1-dataset-wide-cleanup-images/006_stage2-local-corrective-cleanup-dust-sync-settings.png)
+![Dust sync settings](assets/images/002_operation-1-dataset-wide-cleanup/006_stage2-local-corrective-cleanup-dust-sync-settings.png)
 
 *Figure: Sync settings for dust/distraction cleanup. This shows the batch handoff point where the reviewed local correction is propagated across the selected images.*
 
 <br>
 <br>
 
-![Dust sync time](assets/images/operation-1-dataset-wide-cleanup-images/007_stage2-local-corrective-cleanup-dust-sync-time.png)
+![Dust sync time](assets/images/002_operation-1-dataset-wide-cleanup/007_stage2-local-corrective-cleanup-dust-sync-time.png)
 
-![Dust cleanup final result](assets/images/operation-1-dataset-wide-cleanup-images/008_stage2-local-corrective-cleanup-dust-final-result-example.png)
+![Dust cleanup final result](assets/images/002_operation-1-dataset-wide-cleanup/008_stage2-local-corrective-cleanup-dust-final-result-example.png)
 
 *Figure: Final result after synchronized dust/distraction cleanup. The evidence is most valuable here not as a dramatic stylistic change, but as proof that repeated local defects can be removed early so later normalization operates on cleaner inputs.*
 
@@ -531,14 +531,14 @@ straightening result creates work that must be corrected later. For that
 reason, Auto Transform belongs in Operation 1 as a reviewed corrective
 cleanup candidate, not as indiscriminate batch application.
 
-![Auto Transform before review](assets/images/operation-1-dataset-wide-cleanup-images/009_stage2-local-corrective-cleanup-auto-transform-before-review.png)
+![Auto Transform before review](assets/images/002_operation-1-dataset-wide-cleanup/009_stage2-local-corrective-cleanup-auto-transform-before-review.png)
 
 *Figure: Auto Transform before review. This view shows the pre-operation comparison set selected for batch straightening prior to manual verification.*
 
 <br>
 <br>
 
-![Auto Transform after review pass/fail](assets/images/operation-1-dataset-wide-cleanup-images/010_stage2-local-corrective-cleanup-auto-transform-after-review-pass-fail.png)
+![Auto Transform after review pass/fail](assets/images/002_operation-1-dataset-wide-cleanup/010_stage2-local-corrective-cleanup-auto-transform-after-review-pass-fail.png)
 
 *Figure: Auto Transform after review. The manually verified result set shows successful straightening outcomes in green and the known failure case in red, making the review boundary explicit rather than implicit.*
 
@@ -624,7 +624,7 @@ drift. A true global hue target would be too aggressive: yellow-green
 foliage in one scene should not be forced to match deeper green foliage
 from a different lighting environment, as explained below.
 
-![Foliage hue comparison](assets/images/002_stage2-intra-scene-hue-normalization-not-global.png)
+![Foliage hue comparison](assets/images/001_pre-operations/002_stage2-intra-scene-hue-normalization-not-global.png)
 
 *Figure: Foliage hue should be normalized within comparable scene groups, not across the full dataset. Across the three example scenes, the wedding-dress foliage scene is the strongest candidate for scene-level color calibration (Images 1-4), the group formal portraits are a weaker but still plausible candidate (Images 8-9), and the yellow-hue foliage scene (Images 5-7) is the weakest candidate because its color is already internally consistent and appears scene-authentic rather than erroneous.*
 
