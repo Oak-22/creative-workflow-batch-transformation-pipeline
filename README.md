@@ -71,30 +71,6 @@ This pipeline is **Not a packaged application:**. It augments an existing applic
 
 <br>
 
-## Evidence Model
-
-This repository is documented as an applied systems-design case study.
-Its claims are supported through two complementary evidence modes: one
-for explaining the design and one for showing runnable operation.
-
-- **A) Workflow System Design Evidence:** the stage prose, workflow
-  image evidence, workflow operational evidence, and any stage-specific
-  experiments are used to explain why specific pipeline boundaries,
-  validation steps, review points, and design patterns exist. In the
-  stage documents, this evidence typically appears as explicit
-  `Operational note:` callouts or as `Figure` sections with embedded
-  images.
-- **B) Runnable Script/Test Evidence:** scripts, tests, and sample-data
-  execution support that make the pipeline operable, inspectable, and
-  reproducible in practice rather than only described in prose.
-
-These materials are used to justify workflow behavior and design
-choices. They are not presented as controlled benchmarks or as claims of
-universal performance beyond the documented workflow context.
-
-
-<br>
-
 ## Problem
 
 Creative production workflows often accumulate as several informal editing
@@ -142,15 +118,28 @@ effort.
 
 <br>
 
-## Operational Value
 
-The pipeline is designed around a batchability cost model: identifying
-which mandatory issues can be immediately handled through batch application, which
-must be qualified first before batch, and which should remain manual.
+## Evidence Model
 
-See the [Batchability Cost Model](docs/batchability-cost-model.md)
-for the issue/correction model and resulting back-of-envelope time-savings framework as 
-the defining business benefit to the pipeline.
+This repository is documented as an applied systems-design case study.
+Its claims are supported through two complementary evidence modes: one
+for explaining the design and one for showing runnable operation.
+
+- **A) Workflow System Design Evidence:** the stage prose, workflow
+  image evidence, workflow operational evidence, and any stage-specific
+  experiments are used to explain why specific pipeline boundaries,
+  validation steps, review points, and design patterns exist. In the
+  stage documents, this evidence typically appears as explicit
+  `Operational note:` callouts or as `Figure` sections with embedded
+  images.
+  
+- **B) Runnable Script/Test Evidence:** scripts, tests, and sample-data
+  execution support that make the pipeline operable, inspectable, and
+  reproducible in practice rather than only described in prose.
+
+These materials are used to justify workflow behavior and design
+choices. They are not presented as controlled benchmarks or as claims of
+universal performance beyond the documented workflow context.
 
 <br>
 
@@ -170,7 +159,7 @@ design themes are:
 
 ## Pipeline Stages
 
-The project is organized as a single multi-stage pipeline with supporting documentation for each major stage.
+The project is organized as a single multi-stage pipeline with supporting documentation (engineering rationale) for each major stage.
 
 <br>
 
