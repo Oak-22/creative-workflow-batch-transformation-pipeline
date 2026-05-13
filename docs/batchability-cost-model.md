@@ -5,8 +5,7 @@
 ## Core Question
 
 For each repeated issue, what is the cost of handling it manually per
-image versus converting part of the work into setup, batch application,
-qualification, review, and exception handling?
+image versus converting it to a batchable process?
 
 This document poses that question as the cost model for assessing
 pipeline value. The unit economics of batchability come from converting
@@ -27,13 +26,13 @@ application, validation, and targeted exception handling.
 A single deliverable image can contain many issues or correction requirements
 that must be addressed before final review. Some are mandatory only when
 a specific condition is present, such as dust, tilted framing, weak
-luminance, foliage hue drift, or a semantic region that needs local
+luminance, foliage hue drift, or a semantic region (i.e., sky) that needs local
 correction.
 
 The pipeline value comes from separating issue categories by the
 automation potential of the correction operation used to address them: which
-operations can be handled through batch application, which require
-qualification and review, and which must remain manual even when the
+operations can be immediately through batch application, which require
+qualification and review before batching, and which must remain manual even when the
 same issue appears many times.
 
 Representative issue and correction categories include:
@@ -55,10 +54,7 @@ issues recur across a dataset but still require manual image-by-image
 judgment because the target region, edit boundary, source pixels, or
 aesthetic decision changes with each frame.
 
-The useful distinction is not whether a correction is automated or manual,
-but how much work can move from per-image execution into setup,
-qualification where needed, batch application, review, and exception
-handling.
+The useful distinction is not whether a correction is simply automated or manual, but where it falls on a continuous batchability spectrum.
 
 | Issue / correction need | Pipeline handling | Review burden | Pipeline stage |
 |---|---|---|---|
@@ -79,7 +75,7 @@ risk. A large blemish on a primary subject, such as a pimple that
 appears across many images, is different. It may be repeated, but the
 face position, expression, lighting, skin texture, and healing source
 change per frame, so the correction must remain manual. In this tested
-workflow, Lightroom did not dynamically remove that recognized entity (pimple)
+workflow, Lightroom did not dynamically remove that recognized entity (skin pimple)
 across images with reliable results using either Stage 2 conditioning
 techniques or Stage 3 mask propagation techniques.
 
@@ -185,25 +181,15 @@ qualified masks propagated per image: 9
 theoretical maximum mask applications: 64 x 9 = 576
 
 manual model:
-576 mask applications x ~10 seconds each = 5,760 seconds
-= 96 minutes
-= 1 hour 36 minutes
+576 mask applications x ~10 seconds each = 5,760 seconds = 96 minutes
 
 observed batch runtime:
-~7 minutes total
-= 420 seconds
+7 minutes 
 
 directional savings:
-5,760 - 420 = 5,340 seconds saved
-= 89 minutes saved
-= 1 hour 29 minutes saved
+96 - 7 = 89 minutes saved
 = ~93% less operator time
 ```
-
-This is the right level to quantify because the units match:
-manual per-mask application effort is compared against the observed
-runtime for propagating those same candidate mask operations across the
-same 64-image set.
 
 <br>
 
