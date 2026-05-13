@@ -252,7 +252,32 @@ external discoverability.
 Hierarchy is only useful when the child term truly depends on the
 parent term for meaning. When independent dimensions are overnested
 under a parent such as `Wedding`, the taxonomy becomes less reusable and
-harder to query cleanly across adjacent domains. The following figures will show progressively stronger keyword taxonomy hierarchy.
+harder to query cleanly across adjacent domains. The taxonomy evolution
+is easier to understand when viewed side by side before the individual
+intermediate states are examined in detail.
+
+![Keyword taxonomy semantic normalization overview](assets/diagrams/stage1-keyword-taxonomy-semantic-normalization.jpg)
+
+*Figure: Side-by-side taxonomy evolution from overnested event-centric hierarchy to a more composable semantic classification structure. The comparison makes the semantic separation and retained specialization boundaries easier to see than the vertically stacked screenshots alone.*
+
+<br>
+<br>
+
+This evolution also mirrors classical schema normalization in database
+design. Early keyword hierarchies often behave like denormalized
+structures where multiple independent semantic dimensions are tightly
+coupled beneath a single parent category. As the taxonomy matures,
+reusable concepts are decomposed into more independent classification
+dimensions, reducing semantic coupling and improving query
+composability, reuse, and extensibility across domains. In this sense,
+the workflow performs a form of semantic schema normalization over the
+catalog metadata layer.
+
+<br>
+<br>
+
+The following detailed figures show the intermediate states that led to
+that final structure.
 
 <br>
 
