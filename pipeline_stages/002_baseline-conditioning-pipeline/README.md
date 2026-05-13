@@ -273,7 +273,7 @@ RAW capture therefore increases [dataset](../../docs/terminology.md#dataset) var
 
 Shooting in RAW is a deliberate decision because it preserves recoverable signal that would otherwise be lost in JPEG. RAW files retain significantly more highlight and shadow information from the sensor, allowing the editor to recover details from images that might initially appear unusable (see [clipping](#clipping)). For example, a frame with blown highlights or deep shadows can often be salvaged by recovering clipped highlight detail or lifting shadow information. In contrast, JPEG compression discards much of this recoverable signal and locks the image into a specific tone curve and color profile, making such recovery far more limited. 
 
-#### Governing principle
+### Governing principle
 
 **Don't throw away potentially usable signal prematurely**
 
@@ -320,7 +320,7 @@ goal is to make later edits behave more predictably by reducing
 unwanted input variance before downstream creative decisions, semantic masking, or
 manual refinement are applied.
 
-#### Governing Principle
+### Governing Principle
 
 **Converge first, diverge later intentionally**
 
@@ -361,7 +361,7 @@ starting differences before the manual edit is applied, so the same edit
 is less likely to amplify visible divergence from the chosen unified
 look.
 
-#### Governing Principle 
+### Governing Principle 
 
 **Reduce downstream drift by reducing input variance.**
 
@@ -427,7 +427,7 @@ That technical instability creates a second-order workflow effect: the
 editor must repeatedly rematch a chosen look across related images in
 order to keep the gallery coherent.
 
-#### Governing principle
+### Governing principle
 **Treat broad shared-state mutation as the exception; prefer bounded transformations over a stable baseline.**
 
 The workflow goals are:
@@ -462,7 +462,7 @@ straightening.
 
 <br>
 
-#### Dust / Distraction Removal
+### Dust / Distraction Removal
 
 The source images in this example show visible dust from either the
 camera body sensor or lens, lowering image quality. The Dust Distraction
@@ -515,7 +515,7 @@ normalization was meant to establish.
 
 <br>
 
-#### Auto Transform Straightening
+### Auto Transform Straightening
 
 Auto Transform straightening is also useful in Operation 1 because it
 evaluates each image independently rather than applying one fixed
@@ -580,7 +580,7 @@ feature columns.
 
 <br>
 
-#### Global Luminance Normalization
+### Global Luminance Normalization
 
 This stage reduces large luminance variance across the dataset and
 unwanted color variance within scene groups so that downstream
@@ -616,7 +616,7 @@ recalibration.
 
 <br>
 
-#### Foliage Hue Normalization
+### Foliage Hue Normalization
 
 Foliage is a useful Operation 2 example because it exposes the
 difference between legitimate scene variance and unwanted within-scene

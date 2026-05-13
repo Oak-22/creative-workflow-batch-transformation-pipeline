@@ -172,7 +172,7 @@ regions with clearly acceptable behavior can be promoted directly,
 whereas weak or ambiguous regions should first be subset-tested before
 they are allowed into full-batch propagation.
 
-#### Qualification Logic
+### Qualification Logic
 
 The general qualification question is not whether propagation
 outperforms native per-image AI segmentation. The question is whether a
@@ -198,7 +198,7 @@ Promote, revise, or reject definition
 Full-batch propagation only if qualified
 ```
 
-#### Artificial-Ground Comparison
+### Artificial-Ground Comparison
 
 For artificial ground, the source-definition comparison used:
 
