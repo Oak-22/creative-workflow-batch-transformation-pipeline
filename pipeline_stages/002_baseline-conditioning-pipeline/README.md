@@ -147,6 +147,7 @@ is comparing global image state (image-to-image coherence) rather than
 repeatedly noticing the same local defect.
 
 <br>
+<br>
 
 ### Operation 2 Value: Comparable Visual Baselines
 
@@ -162,21 +163,6 @@ color by forcing naturally different scenes into one shared hue target.
 The goal is therefore not a single global color match, but a stable
 visual baseline that preserves real scene-level foliage and ambient
 color differences.
-
-<br>
-
-### Cross-Boundary Logic
-
-The conditioning operations and lineage boundaries are ordered
-linearly, but their impact is not purely linear. Weakness in one control
-point can amplify downstream risk, while a strong earlier control point
-can reduce the complexity of later decisions.
-
-- **Lineage setup → Operation 1:** The initial post-cull Virtual Copy branch gives cleanup a protected working state rather than forcing edits directly onto the original RAW selection.
-- **Operation 1 → Operation 2:** Cleaner inputs make luminance and scene-level color normalization easier to judge because visible defects are not competing with exposure, tone, or color evaluation.
-- **Operation 2 → Output boundary:** A stronger visual baseline makes later Virtual Copy branches more meaningful because each branch starts from a comparable state rather than from unstable per-image variance.
-- **Output boundary → Operations 1 and 2:** Rollback-safe branching protects the value created by cleanup and normalization, preventing later creative experiments from destroying the stable baseline.
-- **System-level effect:** The pipeline reduces repeated manual comparison loops by separating defect cleanup, visual baseline conditioning, and experimental edit branching into distinct control points.
 
 <br>
 
@@ -277,11 +263,15 @@ Shooting in RAW is a deliberate decision because it preserves recoverable signal
 
 **Don't throw away potentially usable signal prematurely**
 
+<br>
+
 > **Operational note:** In the source photoshoot, RAW capture was
 > especially important in low-light venue conditions where heavy tree
 > cover reduced available light and made detail recovery more difficult.
 > In that environment, RAW preserved the best chance of recovering usable
 > image quality during post-processing.
+
+<br>
 
 This background context explains why RAW datasets exhibit higher variance and why a normalization stage becomes necessary before consistent batch edits can be applied.
 
@@ -320,9 +310,10 @@ goal is to make later edits behave more predictably by reducing
 unwanted input variance before downstream creative decisions, semantic masking, or
 manual refinement are applied.
 
-### Governing Principle
+<br>
 
-**Converge first, diverge later intentionally**
+> [!IMPORTANT]
+> **Governing Principle:** Converge first, diverge later intentionally.
 
 <br>
 
@@ -361,9 +352,8 @@ starting differences before the manual edit is applied, so the same edit
 is less likely to amplify visible divergence from the chosen unified
 look.
 
-### Governing Principle 
-
-**Reduce downstream drift by reducing input variance.**
+> [!IMPORTANT]
+> **Governing Principle:** Reduce downstream drift by reducing input variance.
 
 ---
 
