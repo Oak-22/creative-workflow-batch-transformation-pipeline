@@ -247,12 +247,6 @@ external discoverability.
 <br>
 <br>
 
-![Keyword list detail view](assets/images/008_stage1-keyword-list-detail-view.png)
-
-*Figure: Keyword List panel detail. The hierarchical structure supports deliberate post-ingest classification, improves internal discoverability through more legible retrieval paths, and produces cleaner semantic metadata for downstream analytics and potential machine-learning workflows.*
-
-<br>
-
 **Keyword Taxonomy Design: When Hierarchy Helps vs Hurts**
 
 Hierarchy is only useful when the child term truly depends on the
@@ -287,7 +281,7 @@ wedding-specific moments. This is the point where hierarchy starts to
 help rather than hurt: the structure becomes easier to extend without
 forcing cross-domain reuse through one event-specific parent.
 
-![Further rationalized keyword taxonomy example](assets/images/011_stage1-keyword-taxonomy-rationalized.png)
+![Further rationalized keyword taxonomy example](assets/images/011_stage1-keyword-taxonomy-superior.png)
 
 *Figure: Final taxonomy structure. Additional review revealed that some seemingly wedding-exclusive moments were still cross-event concepts, so they were promoted out of the wedding-only subtree while finer-grained nested structure was retained only where it represented true specialization. As a result, `Wedding` now functions as a single top-level event identity rather than as a parent container for unrelated dimensions.*
 
@@ -427,7 +421,7 @@ reused, and refined over time.
 
 A “Best of Graduation 2025” view can be defined as:
 - Capture Date is in the range `2025-01-01` to `2025-12-31`
-- Rating ≥ 5
+- Rating = 5
 - Keywords contains all `graduation`
 
 This produces a highly contextualized derived dataset for downstream review, curation, and portfolio selection.
@@ -438,7 +432,7 @@ Conceptual SQL equivalent:
 SELECT *
 FROM photo_catalog
 WHERE capture_date BETWEEN '2025-01-01' AND '2025-12-31'
-  AND rating >= 4
+  AND rating = 5
   AND keyword_terms LIKE '%graduation%';
 ```
 
@@ -502,8 +496,7 @@ over enriched metadata.
 ## Key Design Principle
 
 Establish protected metadata state first, then layer revisable semantic
-enrichment and query logic on top of it through explicitly bounded write
-paths.
+enrichment and query logic on top of it.
 
 <br>
 
