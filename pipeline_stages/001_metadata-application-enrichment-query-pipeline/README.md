@@ -90,14 +90,10 @@ documented, and reviewable.
 ```text
 RAW Image
    ↓
-[Copyright & Creator Import Preset]
-   ↓
-Identity Layer (Protected)
-
+[Copyright & Creator Import Preset] -> Identity Layer (Protected)
+   
    ↓ (post-import)
-[Domain Presets]
-   ↓
-Semantic Layer (Mutable)
+[Domain Presets] -> Semantic Layer (Mutable)
 
    ↓
 [Smart Collections]
@@ -111,7 +107,7 @@ Derived Logical Views
 
 <br>
 
-#### 1) Single Global Import Preset (Authoritative)
+### 1) Single Global Import Preset (Authoritative)
 
 **Metadata Preset name:** `[IMPORT] Global Copyright & Creator`
 
@@ -165,7 +161,7 @@ above.
 <br>
 <br>
 
-#### 2) Domain-Specific Presets (Post-Import Only)
+### 2) Domain-Specific Presets (Post-Import Only)
 
 **Metadata Preset name(s):**
 
@@ -184,7 +180,7 @@ Because a domain such as `Wedding` or `Marketing` can occur across many
 regions, IPTC Image location fields in the metadata presets are too context-sensitive to be
 safely embedded in a broad domain preset by default. In practice,
 selective keyword-based location tagging is often the safer batch
-mechanism, post-presets. 
+mechanism, post-presets.
 
 <br>
 
@@ -213,12 +209,12 @@ overlap with the ingest baseline.
 
 ![Layered metadata detail view after write](assets/images/006_stage1-domain-layered-metadata-detail-view-after-write.png)
 
-*Figure: Metadata write behavior after applying a domain-specific preset. Green marks preserved authority-bound fields, amber marks intentional refinement of selective fields such as `Contact > Job Title`, and blue marks domain-specific fields added post-ingest.*
+*Figure: Combined identity and domain metadata view*
 
 <br>
 <br>
 
-#### 3) Keywords Managed Separately
+### 3) Keywords Managed Separately
 
 Keywords are intentionally excluded from the global ingest preset.
 - Taxonomy evolves incrementally as the culled image set is reviewed and
