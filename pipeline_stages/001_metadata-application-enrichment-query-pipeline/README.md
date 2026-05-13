@@ -229,14 +229,21 @@ Keywords are intentionally excluded from the global ingest preset.
 Keyword Lists function as hierarchical taxonomies for scalable
 semantic metadata management.
 
-This is more useful than a flat keyword set alone. Flat keywords can
-label isolated concepts, but a keyword taxonomy also preserves
-parent-child structure, making classification easier to extend, browse,
-audit, and reuse across adjacent domains. That added structure improves
-retrieval ergonomics and internal discoverability today, and creates
-cleaner semantic inputs for later analytics, potential machine-learning
-workflows, and any downstream systems that index exported metadata for
-external discoverability.
+This is more useful than a flat keyword set alone when the hierarchy
+captures real semantic dependency rather than convenience. Flat
+keywords can label isolated concepts, but a keyword taxonomy can also
+preserve parent-child structure where that structure is meaningful,
+making classification easier to extend, browse, audit, and reuse across
+adjacent domains. That added structure improves retrieval ergonomics
+and internal discoverability today, and creates cleaner semantic inputs
+for later analytics, potential machine-learning workflows, and any
+downstream systems that index exported metadata for external
+discoverability.
+
+The important boundary condition is that not every concept benefits from
+being nested. Once a hierarchy starts binding together independent
+dimensions that should remain composable at query time, the better
+design moves back toward a flatter taxonomy in those areas.
 
 <br>
 
@@ -250,15 +257,17 @@ external discoverability.
 **Keyword Taxonomy Design: When Hierarchy Helps vs Hurts**
 
 Hierarchy is only useful when the child term truly depends on the
-parent term for meaning. When independent dimensions are overnested
-under a parent such as `Wedding`, the taxonomy becomes less reusable and
-harder to query cleanly across adjacent domains. The taxonomy evolution
-is easier to understand when viewed side by side before the individual
-intermediate states are examined in detail.
+parent term for meaning. The diagram below makes the threshold explicit:
+once independent dimensions are overnested under a parent such as
+`Wedding`, the taxonomy becomes less reusable and harder to query
+cleanly across adjacent domains, so the design should be normalized back
+toward a flatter, more composable structure in those areas. The
+taxonomy evolution is easier to understand when viewed side by side
+before the individual intermediate states are examined in detail.
 
 ![Keyword taxonomy semantic normalization overview](assets/diagrams/stage1-keyword-taxonomy-semantic-normalization.jpg)
 
-*Figure: Side-by-side taxonomy evolution from overnested event-centric hierarchy to a more composable semantic classification structure. The comparison makes the semantic separation and retained specialization boundaries easier to see than the vertically stacked screenshots alone.*
+*Figure: Side-by-side taxonomy evolution from overnested event-centric hierarchy to a more composable semantic classification structure. The sequence shows where hierarchy adds value, where it crosses the threshold into semantic coupling, and why parts of the taxonomy are intentionally flattened back out while true specialization boundaries are retained.*
 
 <br>
 <br>
