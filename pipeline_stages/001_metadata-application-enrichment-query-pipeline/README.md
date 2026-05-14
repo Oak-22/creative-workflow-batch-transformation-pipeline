@@ -23,6 +23,10 @@ introduce more subjective and probabilistic decision points.
 
 <br>
 
+---
+
+<br>
+
 ## Problem
 
 Metadata application during ingest is constrained by Lightroom's
@@ -43,6 +47,10 @@ remain anchored to stable source records and retrievable metadata.
 
 <br>
 
+---
+
+<br>
+
 ## Solution Overview
 
 The workflow separates metadata into a protected identity layer and a
@@ -56,6 +64,10 @@ generic ingest value such as `Photographer` into a domain-specific value
 such as `Wedding Photographer`. Once enriched, the metadata supports
 query-driven retrieval, including Smart Collections treated as
 declarative views over image records.
+
+<br>
+
+---
 
 <br>
 
@@ -73,6 +85,10 @@ the stable identity baseline, while later semantic presets write
 primarily to non-overlapping semantic fields. Where a later preset
 intentionally refines an existing value, that overlap must be explicit,
 documented, and reviewable.
+
+<br>
+
+---
 
 <br>
 
@@ -329,6 +345,10 @@ also function as cross-event moments in the broader taxonomy.
 
 <br>
 
+---
+
+<br>
+
 ## Verification (Critical)
 
 <br>
@@ -361,6 +381,10 @@ also function as cross-event moments in the broader taxonomy.
 > [!IMPORTANT]
 > **Governing Principle:** Authorship metadata should be automatic and irreversible.
 > Semantic metadata should be deliberate and revisable.
+
+<br>
+
+---
 
 <br>
 
@@ -405,6 +429,10 @@ Collections store selection logic, not copies of records. Membership is continuo
 
 <br>
 
+---
+
+<br>
+
 ## Ad‑hoc Library Filtering
 
 The Library Filter bar performs temporary, exploratory metadata queries
@@ -438,6 +466,10 @@ This kind of temporary filtering is useful for exploratory review, such as evalu
 ![Ad-hoc library filter example](assets/images/012_stage1-ad-hoc-library-filter-example.png)
 
 *Figure: Temporary Library Filter query over catalog metadata for exploratory retrieval. This mode supports quick operational inspection without creating a saved declarative view.*
+
+<br>
+
+---
 
 <br>
 
@@ -500,6 +532,10 @@ over enriched metadata.
 
 <br>
 
+---
+
+<br>
+
 ## Resulting Benefits of Stage 1
 
 - protected identity metadata established at ingest
@@ -508,6 +544,10 @@ over enriched metadata.
 - more reusable classification through post-ingest keyword taxonomy management
 - faster and more reliable retrieval through ad-hoc filtering and Smart Collections
 - stable metadata state before subjective culling and downstream image transformation
+
+<br>
+
+---
 
 <br>
 
@@ -529,6 +569,10 @@ over enriched metadata.
 > [!IMPORTANT]
 > **Governing Principle:** Establish protected metadata state first, then
 > layer revisable semantic enrichment and query logic on top of it.
+
+<br>
+
+---
 
 <br>
 

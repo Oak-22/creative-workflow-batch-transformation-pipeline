@@ -22,6 +22,10 @@ reviewed by a human operator.
 
 <br>
 
+---
+
+<br>
+
 ## Problem
 
 Manual semantic masking is expensive at gallery scale. When similar
@@ -41,6 +45,10 @@ rework.
 
 <br>
 
+---
+
+<br>
+
 ## Solution Overview
 
 The workflow selects a canonical image containing many relevant
@@ -54,6 +62,10 @@ and operational usefulness relative to the alternative — manual masking.
 
 <br>
 
+---
+
+<br>
+
 ## Key Constraints
 
 - target images vary in subjects, scene composition, and detectable categories
@@ -62,6 +74,10 @@ and operational usefulness relative to the alternative — manual masking.
 - AI segmentation quality can degrade or improve in non-obvious,
   image-specific ways
 - automation must remain compatible with later manual review and correction
+
+<br>
+
+---
 
 <br>
 
@@ -281,6 +297,10 @@ Purpose: Document the artificial-ground source-definition comparison and its con
 
 <br>
 
+---
+
+<br>
+
 ## Evidence/Example Application of Mask Propagation (w/ Images)
 
 ### Mask Definition Phase
@@ -349,6 +369,10 @@ Only a subset of the theoretical 448 mask operations were generated.
 
 The final mask set applied to each image depended entirely on the semantic content of that image, confirming that Lightroom’s masking pipeline copies procedural mask definitions and recomputes them per image using AI-driven segmentation.
 
+
+<br>
+
+---
 
 <br>
 
@@ -491,6 +515,10 @@ the most important person subjects as desired.
 
 <br>
 
+---
+
+<br>
+
 ## Back-of-the-Envelope Time Savings 
 
 **Manual Masking:**
@@ -524,6 +552,10 @@ That works out to:
 
 <br>
 
+---
+
+<br>
+
 ## Engineering Concepts Demonstrated
 
 - procedural definition reuse rather than static result copying
@@ -541,6 +573,10 @@ That works out to:
 > **Governing Principle:** Propagate procedural semantic definitions only
 > after qualification, and treat human review as a required boundary
 > around probabilistic AI outputs rather than as optional cleanup.
+
+<br>
+
+---
 
 <br>
 

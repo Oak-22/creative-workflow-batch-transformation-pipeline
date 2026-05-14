@@ -28,6 +28,10 @@ without flattening legitimate scene differences.
 
 <br>
 
+---
+
+<br>
+
 ## Problem
 
 High-volume photo datasets captured over long time horizons often
@@ -50,6 +54,10 @@ predictably while preserving authentic scene-level variation.
 
 <br>
 
+---
+
+<br>
+
 ## Solution Overview
 
 Stage 2 operates on the protected working set created after RAW culling
@@ -67,12 +75,20 @@ both technical variance and the risk of operator-driven drift.
 
 <br>
 
+---
+
+<br>
+
 ## Key Constraints
 
 - [RAW](../../docs/terminology.md#RAW) capture preserves useful signal but increases dataset variance
 - large datasets make continuous cross-image comparison cognitively expensive
 - normalization must preserve natural scene variation rather than erase it
 - later transformations perform better when input ranges are comparable
+
+<br>
+
+---
 
 <br>
 
@@ -95,6 +111,10 @@ Each note follows the same basic structure:
 - **Observed constraint:** the specific friction, variance, or failure mode encountered
 - **Design implication:** how that observation influenced the pipeline design or operation order
 - **Workflow value:** why the resulting choice improved recovery, consistency, or review efficiency
+
+<br>
+
+---
 
 <br>
 
@@ -163,6 +183,10 @@ color by forcing naturally different scenes into one shared hue target.
 The goal is therefore not a single global color match, but a stable
 visual baseline that preserves real scene-level foliage and ambient
 color differences.
+
+<br>
+
+---
 
 <br>
 
@@ -244,6 +268,10 @@ Compare, Keep, or Revert
 
 After Stage 2 conditioning, additional Virtual Copy branches preserve
 the normalized baseline while allowing additional, alternate editing paths.
+
+---
+
+<br>
 
 ---
 
@@ -359,6 +387,10 @@ look.
 
 <br>
 
+---
+
+<br>
+
 ## Detailed Problem Context
 
 Large photo sets captured across multiple lighting environments introduce
@@ -430,6 +462,10 @@ The workflow goals are:
 
 Importantly, the pipeline constrains variance rather than erasing it.
 The in-depth normalization logic appears later in Operation 2.
+
+<br>
+
+---
 
 <br>
 
@@ -709,6 +745,10 @@ while preserving separate downstream edit decisions.
 
 <br>
 
+---
+
+<br>
+
 ## System Constraints & Scale Considerations
 
 The current implementation is designed as a **local, editor-in-the-loop batch pipeline** operating within Lightroom Desktop / Classic rather than as a cloud-native or distributed image-processing system. RAW files, virtual copies, and downstream edits are managed within a local catalog-centered workflow optimized for a single operator performing interactive review and refinement.
@@ -722,6 +762,10 @@ benchmark representative datasets of different sizes and record per-stage
 processing time, downstream manual correction time, and total editing
 time. For now, the primary evidence model for this stage is visual
 and workflow-observable rather than heavily instrumented.
+
+<br>
+
+---
 
 <br>
 
@@ -825,6 +869,10 @@ on it.
 
 <br>
 
+---
+
+<br>
+
 ## Failure Modes & Edge Cases
 
 Although the pipeline reduces variance and improves editing consistency, each stage still has failure modes that require manual judgment or override.
@@ -899,6 +947,10 @@ increase downstream instability and reduce overall consistency.
 
 <br>
 
+---
+
+<br>
+
 ## Design Tradeoffs
 
 The pipeline improves consistency and throughput, but it does so through explicit tradeoffs rather than through full automation.
@@ -964,6 +1016,10 @@ The workflow benefits from Lightroom’s built-in automation, but some stages de
 
 <br>
 
+---
+
+<br>
+
 ## Baseline Preservation Strategy
 
 Virtual Copies preserve both the initial culled RAW state and later
@@ -973,6 +1029,10 @@ overhead for much safer experimentation later.
 
 This mirrors engineering patterns such as immutable baselines,
 branchable derived states, and rollbackable experimentation.
+
+---
+
+<br>
 
 ---
 
@@ -996,6 +1056,10 @@ The workflow prioritizes addressable control rather than complete control.
 
 <br>
 
+---
+
+<br>
+
 ## Resulting Benefits of Stage 2
 
 - consistent luminance baseline across heterogeneous input distributions
@@ -1004,6 +1068,10 @@ The workflow prioritizes addressable control rather than complete control.
 - safer experimentation through rollbackable edit branches
 - reduced manual correction
 - predictable editing pipeline mechanics
+
+---
+
+<br>
 
 ---
 
@@ -1031,6 +1099,10 @@ The workflow prioritizes addressable control rather than complete control.
 > review Auto Transform straightening first, establish a dataset-wide
 > luminance baseline and scene-level color baselines second, then hand
 > off the normalized baseline to rollbackable Virtual Copy branches.
+
+---
+
+<br>
 
 ---
 
