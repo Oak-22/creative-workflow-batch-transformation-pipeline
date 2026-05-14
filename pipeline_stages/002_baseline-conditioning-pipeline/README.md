@@ -670,19 +670,10 @@ from a different lighting environment, as explained below.
 <br>
 <br>
 
-The wedding-dress foliage scene is the strongest scene for
-demonstrating color calibration because within-scene foliage hue
-variance is highest there. The group formal portraits are the second
-best scene of the three because their green hue — although varying — is
-comparatively more stable than in the wedding-dress foliage scene,
-leaving less color drift to correct. By contrast, the
-yellow-hue foliage scene is the weakest candidate for color calibration:
-its yellow cast is already consistent within the scene, so there is
-little evidence of within-scene hue error to normalize.
 
-![Scene-scoped cross-image color normalization](assets/diagrams/scene-scoped-cross-image-color-normalization.jpg)
+![Scene-scoped cross-image color normalization](assets/diagrams/scene-scoped-cross-image-color-normalization-v2.jpg)
 
-*Figure: Scene-scoped cross-image color normalization proceeds in two steps. First, automated tonal normalization reduces frame-level exposure variance across comparable images, while also allowing secondary chromatic shifts. Second, canonical scene-level color calibration aligns within-scene hue drift, such as inconsistent green cast, without forcing unrelated scenes toward one global color target.*
+*Figure: Scene-scoped cross-image color normalization proceeds in two steps. First, automated tonal normalization reduces frame-level exposure variance across comparable images, while also allowing subtle, secondary chromatic shifts. Second, scene-level reference-image color calibration aligns within-scene hue drift, such as inconsistent green cast, without forcing unrelated scenes toward one global color target.*
 
 <br>
 <br>
