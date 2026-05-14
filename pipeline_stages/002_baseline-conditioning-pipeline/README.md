@@ -354,22 +354,23 @@ adjustment can push their sampled color values farther apart rather than
 closer together.
 
 This can be shown with representative RGB samples, either from a global
-luminance region or from a scene-specific hue region such as foliage or
-skin tone:
+luminance region or from a scene-specific hue region such as foliage.
+Here, "starting sample" means the pixel state immediately before a later
+shared creative edit is applied:
 
 ```text
 Target look sample:
   RGB(92, 118, 64)
 
 Image A - not baseline conditioned:
-  before manual edit: RGB(62, 91, 48)
-  after edit:    RGB(83, 132, 58)
-  result: closer in brightness, but hue shifts away from target
+  starting sample:          RGB(68, 96, 50)
+  after creative edit: RGB(84, 130, 56)
+  result: brightness moves closer, but the sample still drifts away from the target balance
 
 Image B - baseline conditioned first:
-  before manual edit: RGB(79, 109, 59)
-  after same edit:    RGB(91, 119, 65)
-  result: converges toward the chosen look with less drift
+  starting sample:          RGB(84, 113, 61)
+  after same creative edit: RGB(92, 118, 64)
+  result: the same edit lands on or near the intended look with less drift
 ```
 
 The exact RGB values here are illustrative rather than empirically
@@ -383,8 +384,6 @@ look.
 > [!IMPORTANT]
 > **Governing Principle:** Reduce downstream drift by reducing input variance.
 
----
-
 <br>
 
 ---
@@ -394,7 +393,7 @@ look.
 ## Detailed Problem Context
 
 Large photo sets captured across multiple lighting environments introduce
-high variance in [visual attributes](../../docs/terminology.md#visual-tone). The pipeline must handle diverse
+high variance in [visual tone](../../docs/terminology.md#visual-tone). The pipeline must handle diverse
 conditions and scale across the dataset without introducing inconsistency.
 
 Example capture conditions include:
@@ -408,13 +407,16 @@ These conditions introduce variance in:
 
 - exposure
 - contrast
-- color temperature
-- foliage and environmental tones
+- color temperature (e.g., cool, warm)
+- foliage and environmental tone (e.g., light, medium, dark)
+
+### Naive Approach: Multiple Global Editing Passes
 
 A naive global editing strategy (e.g., applying identical exposure
-adjustments across all images) yields inconsistent results. In the
-original Stage 2 workflow, this showed up as multiple broad visual
-Develop preset layers applied across the dataset:
+adjustments across all images) yields inconsistent results. In this
+workflow context, that showed up as multiple broad visual Develop preset
+layers applied across the dataset:
+
 
 ```text
 Import preset
