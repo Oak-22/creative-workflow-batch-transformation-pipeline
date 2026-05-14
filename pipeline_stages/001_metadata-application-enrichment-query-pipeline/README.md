@@ -358,10 +358,9 @@ also function as cross-event moments in the broader taxonomy.
 
 <br>
 
-## Guiding Principle
-
-> **Authorship metadata should be automatic and irreversible.**
-> **Semantic metadata should be deliberate and revisable.**
+> [!IMPORTANT]
+> **Governing Principle:** Authorship metadata should be automatic and irreversible.
+> Semantic metadata should be deliberate and revisable.
 
 <br>
 
@@ -527,10 +526,9 @@ over enriched metadata.
 
 <br>
 
-## Key Design Principle
-
-Establish protected metadata state first, then layer revisable semantic
-enrichment and query logic on top of it.
+> [!IMPORTANT]
+> **Governing Principle:** Establish protected metadata state first, then
+> layer revisable semantic enrichment and query logic on top of it.
 
 <br>
 

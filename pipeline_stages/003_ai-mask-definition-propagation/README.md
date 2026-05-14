@@ -537,11 +537,10 @@ That works out to:
 
 <br>
 
-## Key Design Principle
-
-Propagate procedural semantic definitions only after qualification, and
-treat human review as a required boundary around probabilistic AI
-outputs rather than as optional cleanup.
+> [!IMPORTANT]
+> **Governing Principle:** Propagate procedural semantic definitions only
+> after qualification, and treat human review as a required boundary
+> around probabilistic AI outputs rather than as optional cleanup.
 
 <br>
 

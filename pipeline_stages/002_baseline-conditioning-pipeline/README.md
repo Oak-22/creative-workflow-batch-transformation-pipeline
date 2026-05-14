@@ -1026,12 +1026,11 @@ The workflow prioritizes addressable control rather than complete control.
 
 <br>
 
-## Key Design Principle
-
-Clean validated dust/distraction artifacts and review Auto Transform
-straightening first, establish a dataset-wide luminance baseline and
-scene-level color baselines second, then hand off the normalized baseline
-to rollbackable Virtual Copy branches.
+> [!IMPORTANT]
+> **Governing Principle:** Clean validated dust/distraction artifacts and
+> review Auto Transform straightening first, establish a dataset-wide
+> luminance baseline and scene-level color baselines second, then hand
+> off the normalized baseline to rollbackable Virtual Copy branches.
 
 ---
 
