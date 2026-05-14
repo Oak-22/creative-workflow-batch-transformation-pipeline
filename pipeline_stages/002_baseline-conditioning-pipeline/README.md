@@ -9,7 +9,7 @@ Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project
 Large photo sets captured across changing lighting conditions often feel
 visually inconsistent even when subject matter remains similar. This
 stage defines a baseline-conditioning workflow that combines local
-corrective cleanup applied per frame across the working set, dataset-wide luminance normalization, and
+corrective cleanup applied per frame across the working set, dataset-wide tonal normalization, and
 scene-level color normalization so the final gallery reads as coherent
 rather than ad hoc. Post-cull Virtual Copy lineage protects the working
 set before conditioning, and rollbackable output branches preserve the
@@ -67,7 +67,7 @@ applied per frame across the working set removes validated capture artifacts bef
 implementation, dust/distraction removal was the safer batch cleanup
 example, while Auto Transform straightening provided a reviewed
 per-image corrective example with visible pass/fail outcomes. Second,
-dataset-wide luminance normalization and scene-level color normalization
+dataset-wide tonal normalization and scene-level color normalization
 reduce unwanted variance while preserving natural across-scene
 differences. The normalized baseline is then handed off to
 further rollbackable Virtual Copy branches for later experimentation, reducing
@@ -171,8 +171,8 @@ repeatedly noticing the same local defect.
 
 ### Operation 2 Value: Comparable Visual Baselines
 
-Operation 2 establishes a dataset-wide luminance baseline and
-scene-level color baselines. Luminance normalization aligns exposure and
+Operation 2 establishes a dataset-wide tonal baseline and
+scene-level color baselines. Tonal normalization aligns exposure and
 tonal distribution across the full [dataset](../../docs/terminology.md#dataset), while color
 normalization operates at the [scene](../../docs/terminology.md#scene) level so legitimate
 environmental hue differences are preserved.
@@ -233,12 +233,12 @@ Cleaned Baseline Inputs
 
 <br>
 
-### Operation 2 — Global Luminance and Scene-Level Color Normalization
+### Operation 2 — Global Tonal and Scene-Level Color Normalization
 
 ```text
 Cleaned Baseline Inputs
       ↓
-Global Luminance Normalization
+Global Tonal Normalization
 (dataset-wide tonal analysis)
       ↓
 Scene-Level Color Normalization
@@ -287,9 +287,8 @@ RAW capture therefore increases [dataset](../../docs/terminology.md#dataset) var
 
 Shooting in RAW is a deliberate decision because it preserves recoverable signal that would otherwise be lost in JPEG. RAW files retain significantly more highlight and shadow information from the sensor, allowing the editor to recover details from images that might initially appear unusable (see [clipping](#clipping)). For example, a frame with blown highlights or deep shadows can often be salvaged by recovering clipped highlight detail or lifting shadow information. In contrast, JPEG compression discards much of this recoverable signal and locks the image into a specific tone curve and color profile, making such recovery far more limited. 
 
-### Governing principle
-
-**Don't throw away potentially usable signal prematurely**
+> [!IMPORTANT]
+> **Governing Principle:** Don't throw away potentially usable signal prematurely.
 
 <br>
 
@@ -322,7 +321,7 @@ Color normalization is also scene-specific. A yellow-green foliage scene
 should not be forced to match a deeper green scene if that hue
 difference reflects real location, or environmental context.
 The Operation 2 foliage examples later in this document show this
-distinction. In this workflow, luminance can be normalized across the
+distinction. In this workflow, tonal state can be normalized across the
 broader dataset, but hue and color-balance decisions are evaluated
 within scene groups.
 
@@ -451,12 +450,13 @@ That technical instability creates a second-order workflow effect: the
 editor must repeatedly rematch a chosen look across related images in
 order to keep the gallery coherent.
 
-### Governing principle
-**Treat broad shared-state mutation as the exception; prefer bounded transformations over a stable baseline.**
+> [!IMPORTANT]
+> **Governing Principle:** Treat broad shared-state mutation as the
+> exception; prefer bounded transformations over a stable baseline.
 
 The workflow goals are:
 
-- establish a consistent luminance baseline across the dataset
+- establish a consistent tonal baseline across the dataset
 - establish scene-level color baselines without flattening natural hue differences
 - preserve natural [scene](../../docs/terminology.md#scene) differences (e.g., time-of-day mood)
 - minimize manual editing effort
@@ -473,9 +473,8 @@ The in-depth normalization logic appears later in Operation 2.
 
 ## Technical Design & Implementation
 
-Within the larger creative workflow pipeline, Stage 2 collapses multiple global edit passes into one deterministic baseline-conditioning sequence: dataset-scale local corrective cleanup applied per frame, followed by dataset-wide luminance normalization then scene-level color normalization. Virtual Copy lineage protects the working set before conditioning (pre-stage 2) and the normalized baseline after conditioning (post-stage 2) but it is treated as a boundary mechanism rather than an
+Within the larger creative workflow pipeline, Stage 2 collapses multiple global edit passes into one deterministic baseline-conditioning sequence: dataset-scale local corrective cleanup applied per frame, followed by dataset-wide tonal normalization then scene-level color normalization. Virtual Copy lineage protects the working set before conditioning (pre-stage 2) and the normalized baseline after conditioning (post-stage 2) but it is treated as a boundary mechanism rather than an
 internal conditioning operation.
-
 
 <br>
 
@@ -499,7 +498,11 @@ Develop module, then synchronized across the selected images.
 
 ![Dust example 1](assets/images/002_operation-1-dataset-wide-cleanup/003_stage2-local-corrective-cleanup-dust-image1.png)
 
+<br>
+
 ![Dust example 2](assets/images/002_operation-1-dataset-wide-cleanup/004_stage2-local-corrective-cleanup-dust-image2.png)
+
+<br>
 
 ![Dust removal panel](assets/images/002_operation-1-dataset-wide-cleanup/005_stage2-local-corrective-cleanup-dust-panel.png)
 
@@ -517,6 +520,8 @@ Develop module, then synchronized across the selected images.
 
 ![Dust sync time](assets/images/002_operation-1-dataset-wide-cleanup/007_stage2-local-corrective-cleanup-dust-sync-time.png)
 
+*Figure: Batch synchronization time for validated dust/distraction removal across the selected working set, showing the operational cost of dataset-scale local corrective cleanup in Stage 2.*
+
 ![Dust cleanup final result](assets/images/002_operation-1-dataset-wide-cleanup/008_stage2-local-corrective-cleanup-dust-final-result-example.png)
 
 *Figure: Final result after synchronized dust/distraction cleanup. The evidence is most valuable here not as a dramatic stylistic change, but as proof that repeated local defects can be removed early so later normalization operates on cleaner inputs.*
@@ -525,7 +530,7 @@ Develop module, then synchronized across the selected images.
 <br>
 
 Because the operation is fault-tolerant, it can be applied across the
-selected dataset with review, while images without visible dust are left
+selected dataset without review since images without visible dust are left
 largely unchanged. This makes it a dataset-scale cleanup step even
 though the correction itself is local to small image regions. It
 therefore enables efficient batch cleanup before the later
@@ -539,7 +544,11 @@ around the same artifacts. This ordering is deliberate: if dust cleanup
 is deferred until after normalization, the workflow risks introducing
 new visible repair artifacts into an already-conditioned image, which
 can reduce perceived image quality and undermine the stability that
-normalization was meant to establish.
+normalization was meant to establish, thus, sequence order matters.
+
+> [!IMPORTANT]
+> **Governing Principle:** Remove validated local defects before global normalization so downstream edits operate on cleaner, more stable inputs.
+
 
 <br>
 
@@ -549,13 +558,13 @@ Auto Transform straightening is also useful in Operation 1 because it
 evaluates each image independently rather than applying one fixed
 rotation value across the batch. This makes it another dataset-scale,
 per-frame cleanup operation rather than a single global transform. In
-the recorded evidence, the automated straightening pass worked reliably
-on four unrelated photos and failed on one; the review set marked
-passes in green and the failure in red.
+the recorded evidence, we tested the automated straightening pass across 5 unrelated photos. 
+Results show that the function worked reliably on four and failed on one (4/5 pass); the review set marked
+initial photos all as red, with 4 of 5 changing to green (successfully straightend). 
 
 This makes Auto Transform less batch-safe than dust removal. Dust removal
 is largely no-op when no visible dust is present, while a failed
-straightening result creates work that must be corrected later. For that
+straightening result leaves an issue to be corrected later manually (post-pipeline). For that
 reason, Auto Transform belongs in Operation 1 as a reviewed corrective
 cleanup candidate, not as indiscriminate batch application.
 
@@ -581,10 +590,10 @@ cleanup candidate, not as indiscriminate batch application.
 
 <br>
 
-### Operation 2: Global Luminance and Scene-Level Color Normalization
+### Operation 2: Global Tonal and Scene-Level Color Normalization
 
-The second operation uses automated tonal analysis to normalize
-luminance across the dataset, then applies color normalization within
+The second operation uses automated tonal analysis to establish a
+comparable tonal baseline across the dataset, then applies color normalization within
 scene boundaries. This reduces unwanted visual variance while preserving
 legitimate environmental hue differences between scenes.
 
@@ -608,13 +617,15 @@ feature columns.
 
 <br>
 
-### Global Luminance Normalization
+### Global Tonal Normalization
 
-This stage reduces large luminance variance across the dataset and
-unwanted color variance within scene groups so that downstream
-corrections behave predictably. Without this normalization operation,
-later adjustments interact inconsistently with each image because their
-underlying exposure, tonal, and scene-level color distributions differ.
+This stage primarily reduces large tonal variance across the dataset so
+that downstream corrections behave predictably. Although the automated
+tonal adjustments applied here can also produce secondary color shifts,
+intentional color alignment is not governed at this step. Without this
+normalization operation, later adjustments interact inconsistently with
+each image because their underlying exposure, tonal, and scene-level
+color distributions differ.
 As a result, the editor is more likely to compensate manually on a
 per-image basis, which increases the chance of gallery drift when trying
 to maintain a consistent look.
@@ -633,7 +644,7 @@ adjustments has been applied across multiple images, weak rollbackability makes 
 > rematching still introduced edit-direction drift once the workflow
 > lacked a stable shared baseline.
 
-By establishing a consistent dataset-wide luminance baseline upfront, the
+By establishing a consistent dataset-wide tonal baseline upfront, the
 pipeline removes much of this instability. By constraining color
 normalization to scene groups, it also reduces repeated temperature,
 tint, and hue rematching across similar images without flattening
@@ -671,7 +682,7 @@ little evidence of within-scene hue error to normalize.
 
 ![Scene-scoped cross-image color normalization](assets/diagrams/scene-scoped-cross-image-color-normalization.jpg)
 
-*Figure: Scene-scoped cross-image color normalization proceeds in two steps. First, automated luminance normalization reduces frame-level exposure variance across comparable images. Second, canonical scene-level color calibration aligns within-scene hue drift, such as inconsistent green cast, without forcing unrelated scenes toward one global color target.*
+*Figure: Scene-scoped cross-image color normalization proceeds in two steps. First, automated tonal normalization reduces frame-level exposure variance across comparable images, while also allowing secondary chromatic shifts. Second, canonical scene-level color calibration aligns within-scene hue drift, such as inconsistent green cast, without forcing unrelated scenes toward one global color target.*
 
 <br>
 <br>
@@ -904,7 +915,7 @@ failure case in red and successful outcomes in green.
 
 ### Operation 2 Failure Modes and Edge Cases
 
-Global luminance normalization and scene-level color normalization can
+Global tonal normalization and scene-level color normalization can
 still produce imperfect results when scenes contain **extreme [dynamic
 range](../../docs/terminology.md#dynamic-range)**, strong backlighting,
 heavy [clipping](../../docs/terminology.md#clipping), mixed color
@@ -1064,7 +1075,7 @@ The workflow prioritizes addressable control rather than complete control.
 
 ## Resulting Benefits of Stage 2
 
-- consistent luminance baseline across heterogeneous input distributions
+- consistent tonal baseline across heterogeneous input distributions
 - scene-level color baselines that preserve natural hue differences
 - reduced global editing passes
 - safer experimentation through rollbackable edit branches
@@ -1099,7 +1110,7 @@ The workflow prioritizes addressable control rather than complete control.
 > [!IMPORTANT]
 > **Governing Principle:** Clean validated dust/distraction artifacts and
 > review Auto Transform straightening first, establish a dataset-wide
-> luminance baseline and scene-level color baselines second, then hand
+> tonal baseline and scene-level color baselines second, then hand
 > off the normalized baseline to rollbackable Virtual Copy branches.
 
 ---
@@ -1113,7 +1124,7 @@ The workflow prioritizes addressable control rather than complete control.
 ## Takeaway
 
 This photography workflow becomes a data transformation pipeline design
-problem. By separating local cleanup, dataset-wide luminance
+problem. By separating local cleanup, dataset-wide tonal
 normalization, scene-level color normalization, and rollbackable
 experimentation boundaries, the system achieves dataset
 consistency and editing efficiency without sacrificing image fidelity,

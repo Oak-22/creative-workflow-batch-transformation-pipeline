@@ -160,7 +160,7 @@ distribution, then applies coordinated adjustments to exposure,
 highlights/whites, shadows/blacks, contrast, color temperature, and tint
 in order to reduce unwanted visual variance prior to downstream
 transformations. Tonal analysis is used to establish a dataset-wide
-luminance baseline; color analysis is constrained to scene-level
+tonal baseline; color analysis is constrained to scene-level
 comparisons so natural environmental hue differences are not flattened.
 
 ## Stage 1 Terms

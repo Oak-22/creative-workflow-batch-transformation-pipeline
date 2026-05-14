@@ -61,7 +61,7 @@ The useful distinction is not whether a correction is simply automated or manual
 | Identity metadata | Batch-applied through ingest preset | Low | Stage 1 |
 | Semantic metadata enrichment | Batch-applied through post-import presets | Low to moderate | Stage 1 |
 | Dust/distraction cleanup | Batch-applied after validation | Low to moderate | Stage 2 |
-| Luminance normalization | Batch-applied across dataset | Moderate | Stage 2 |
+| Tonal normalization | Batch-applied across dataset | Moderate | Stage 2 |
 | Scene-level color normalization | Batch-applied within comparable scene groups | Moderate | Stage 2 |
 | AI masks for common semantic regions | Qualified, then batch-propagated | Moderate to high | Stage 3 |
 | Uncertain semantic regions | Qualified on representative examples before promotion | High | Stage 3 |
@@ -109,7 +109,7 @@ working sets before visual editing begins.
 ### Stage 2: Baseline Conditioning
 
 Stage 2 focuses on correction operations that establish a reliable visual baseline
-before creative edits: local cleanup, luminance normalization,
+before creative edits: local cleanup, tonal normalization,
 scene-level color normalization, and rollback-safe branching.
 
 The savings come from reducing repeated comparison loops. Instead of

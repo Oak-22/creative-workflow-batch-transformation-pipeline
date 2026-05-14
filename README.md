@@ -196,7 +196,7 @@ Establishes the conditioned image baseline for downstream semantic
 operations.
 
 Focus areas:
-- local corrective cleanup and dataset-wide luminance normalization across heterogeneous images
+- local corrective cleanup and dataset-wide tonal normalization across heterogeneous images
 - scene-level color normalization that preserves natural hue differences across scenes
 - virtual copies for rollbackable experimentation while reducing operator cognitive load
 - deterministic conditioning around creative/capture variance from changing light, scene, and camera conditions
@@ -204,7 +204,7 @@ Focus areas:
 - **Input lineage protection:** Initial virtual-copy branching protects
   the culled working set from the original RAW selection
 - **Operation 1:** Local corrective cleanup
-- **Operation 2:** Dataset-wide luminance normalization with
+- **Operation 2:** Dataset-wide tonal normalization with
   scene-level color normalization
 - **Output lineage protection:** Post-conditioning virtual-copy
   branching preserves the normalized baseline as a known-good handoff
