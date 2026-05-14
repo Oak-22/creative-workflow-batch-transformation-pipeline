@@ -810,6 +810,10 @@ Lightroom’s automated tonal analysis as unintentionally underexposed and
 therefore excessively brightened — degrading image quality — even when the silhouette treatment was the
 intended creative choice.
 
+![Auto tonal analysis failure for intentional creative treatment](assets/images/004_failure-modes/001_stage2-auto-tonal-analysis-creative-intent-failure.png)
+
+*Figure: Failure mode for automated tonal analysis under intentional creative treatment. The left image preserves the intended low-key result, while the right image shows quality degradation after the automation interprets the scene as unintentionally underexposed and brightens it too aggressively.*
+
 
 <br>
 
@@ -966,6 +970,9 @@ editor compare alternate directions, revert to the known-good baseline,
 and preserve gallery consistency without manually untangling
 accumulated edits?
 
+<br>
+
+---
 
 <br>
 
