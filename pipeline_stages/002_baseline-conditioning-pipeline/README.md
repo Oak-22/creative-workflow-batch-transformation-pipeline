@@ -739,13 +739,9 @@ intended look.
   the editor can revert to a known-good state instead of manually
   untangling accumulated edits.
 
-**Engineering Analogy:**
-This operation behaves like lightweight branch management over a shared
-source record. Virtual Copies behave like non-destructive derived states:
-multiple transformation histories can reference the same source record
-while preserving separate downstream edit decisions.
-
----
+> [!IMPORTANT]
+> **Governing Principle:** Preserve the normalized baseline through
+> lightweight branch management over a shared source record.
 
 <br>
 
@@ -757,119 +753,9 @@ while preserving separate downstream edit decisions.
 
 The current implementation is designed as a **local, editor-in-the-loop batch pipeline** operating within Lightroom Desktop / Classic rather than as a cloud-native or distributed image-processing system. RAW files, virtual copies, and downstream edits are managed within a local catalog-centered workflow optimized for a single operator performing interactive review and refinement.
 
-This design favors **editing throughput, controllability, and local responsiveness** over distributed scalability. Operations 1 and 2 are the conditioning operations that establish a normalized baseline, while the output boundary preserves that baseline during experimentation and revision.
+This design favors **editing throughput, controllability, and local responsiveness**. Operations 1 and 2 are the conditioning operations that establish a normalized baseline, while the output boundary preserves that baseline during experimentation and revision.
 
-In practical terms, the pipeline is intended to scale across **hundreds of RAW images per dataset**, not to serve as a real-time or horizontally distributed processing system. The relevant engineering question is therefore not formal algorithmic complexity in the abstract, but rather **observed operational latency, throughput, and reduction in manual intervention** as dataset size increases.
-
-If stronger quantitative support is needed later, future validation can
-benchmark representative datasets of different sizes and record per-stage
-processing time, downstream manual correction time, and total editing
-time. For now, the primary evidence model for this stage is visual
-and workflow-observable rather than heavily instrumented.
-
-<br>
-
----
-
-<br>
-
-## Observability & Validation
-
-This implementation is validated through a layered evidence model:
-**embedded visual evidence**, **editor-observed workflow effects (Operational Notes)**, and
-**runnable script/test support** where structured checks can be
-operationalized. Because parts of the workflow depend on Lightroom’s
-internal heuristics and perceptual image outcomes, the most credible
-proof for this stage still includes observable before/after behavior.
-Scripts and tests strengthen reproducibility and structured validation,
-but they do not fully replace visual review for perceptual coherence,
-hue alignment, or cleanup-artifact detection.
-
-<br>
-
-### Optional Future Metrics
-
-If stronger quantitative support is needed later, the most practical
-measurements for this workflow would be:
-
-- total editing time per dataset
-- editing time per delivered image
-- number of residual local defect or straightening corrections after Operation 1
-- number of residual manual exposure or scene-level color corrections after Operation 2
-- number of virtual-copy branches or reversions required when alternate
-  edit directions fail after the baseline handoff
-
-These measurements would help quantify whether the pipeline reduces
-manual intervention and improves throughput in practice, but they are
-not required for the current layered validation model used in this
-implementation document.
-
-<br>
-
-### Operation 1 Validation
-
-Operation 1 can be validated through the dust/distraction cleanup and
-Auto Transform review evidence already embedded in the section above.
-For dust cleanup, the relevant question is whether repeated local
-defects are removed without introducing visible repair artifacts or
-unnecessary changes to unaffected images. For Auto Transform, the
-relevant question is whether the automated straightening pass is useful
-enough at dataset scale to justify batch application under explicit
-manual review rather than as a fully trusted automatic transform.
-
-The Auto Transform before/after review set provides the clearest
-validation surface here: successful outcomes are visually confirmed, the
-known failure case is explicitly marked, and the manual review boundary
-is made observable rather than assumed.
-
-<br>
-
-### Operation 2 Validation
-
-A lightweight validation approach is to show representative before/after
-image subsets from the same [dataset](../../docs/terminology.md#dataset) and visually inspect
-whether automated tonal analysis reduces dataset-wide luminance variance
-and whether scene-level color normalization reduces unwanted hue drift
-within comparable scene groups. Visual comparison remains the primary
-perceptual validation method for this stage. In addition, the Stage 2
-scripting layer is intended to record relevant pre- and
-post-normalization adjustment values — such as
-[exposure](../../docs/terminology.md#exposure), [contrast](../../docs/terminology.md#contrast), highlights / whites, shadows / blacks, color
-temperature, tint, and hue-related changes — so observable image
-results can be paired with structured validation and reproducibility
-data.
-
-<br>
-
-### Baseline Handoff Validation
-
-The baseline handoff can be validated by testing alternate edit directions on
-Virtual Copies and recording whether the editor can return to a known
-good baseline without manual untangling. The central engineering
-question is whether branching and rollback materially reduce edit-state
-drift during look-matching.
-
-Validation here is primarily visual and workflow-observable: can the
-editor compare alternate directions, revert to the known-good baseline,
-and preserve gallery consistency without manually untangling
-accumulated edits?
-
-
-<br>
-
-### Historical Workflow Reference Point
-
-> **Operational note:** A known baseline from the prior workflow is
-> approximately **42 hours of edit time** to complete a 1500-image RAW
-> gallery that was ultimately culled to 375 edited images. That
-> historical workflow included repeated global corrections, constant untraceable
-> divergence, and extensive manual adjustment.
-
-This historical reference point can remain contextual support without
-forcing a formal before/after table into the document. If stronger
-quantitative evidence is useful later, a retrospective comparison
-between workflows can be added, but the current writeup does not depend
-on it.
+In practical terms, the pipeline is intended to scale across **hundreds of RAW images per dataset**. The relevant engineering question is therefore not formal algorithmic complexity in the abstract, but rather **observed operational latency, throughput, and reduction in manual intervention** as dataset size increases.
 
 <br>
 
@@ -911,7 +797,7 @@ still produce imperfect results when scenes contain **extreme [dynamic
 range](../../docs/terminology.md#dynamic-range)**, strong backlighting,
 heavy [clipping](../../docs/terminology.md#clipping), mixed color
 temperatures, or incorrectly grouped scene comparisons. In these cases,
-automated analysis may reduce variance without fully establishing a
+automated tonal analysis may reduce variance without fully establishing a
 sufficient baseline, and residual manual per-image exposure or
 scene-level color correction may still be required.
 
@@ -921,7 +807,7 @@ example, a deliberately composed **silhouette image** — such as a
 wedding couple rendered primarily as shadow shapes with little or no
 recoverable facial or subject detail — may be interpreted by
 Lightroom’s automated tonal analysis as unintentionally underexposed and
-therefore brightened, even when the silhouette treatment was the
+therefore excessively brightened — degrading image quality — even when the silhouette treatment was the
 intended creative choice.
 
 
@@ -952,6 +838,134 @@ increase downstream instability and reduce overall consistency.
 <br>
 
 ---
+
+<br>
+
+## Observability & Validation
+
+This implementation is validated through a layered evidence model with
+two complementary proof surfaces. First, **embedded visual evidence**
+and **editor-observed workflow effects (Operational Notes)** establish
+the workflow intuition: they show what the conditioning stages are doing
+and why the resulting image behavior is operationally useful. Second,
+**RAW/XMP-linked analysis**, manifests, and runnable script/test support
+provide the structured validation layer that can formalize those claims
+quantitatively.
+
+These layers are not substitutes for one another. The workflow and
+visual artifacts establish the qualitative behavior first; the
+RAW/XMP-linked validation layer is what turns that behavior into a
+more mathematical proof surface. Because perceptual coherence, hue
+alignment, and cleanup-artifact detection still matter at the rendered
+image level, visual review remains a required complement even with the
+RAW/XMP-linked validation support.
+
+<br>
+
+### Qualitative Validation Surface
+
+The qualitative validation surface is carried by the workflow images,
+diagrams, before/after examples, and Operational Notes embedded
+throughout this stage. These artifacts establish the workflow intuition
+first: they show how the conditioning steps behave, where the review
+boundaries sit, and why the resulting baseline is operationally useful
+alongside the quantitative validation layer.
+
+This matters because the final workflow claim is partly perceptual. The
+editor ultimately needs to confirm image coherence, hue alignment, and
+artifact-free cleanup in the rendered outputs, not only in extracted
+metadata or adjustment values.
+
+<br>
+
+### Quantitative Validation Surface
+
+The quantitative validation surface for this stage is the combination of
+RAW source signal, XMP edit parameters, and later rendered-output or
+pixel-level measurements where needed. This makes it possible to
+distinguish between:
+
+- source-signal variance in the captured RAW images
+- edit-parameter convergence or dispersion after normalization
+- rendered-output behavior after the RAW signal and XMP transforms are combined
+
+Useful workflow metrics may still include:
+
+- total editing time per dataset
+- editing time per delivered image
+- number of residual local defect or straightening corrections after Operation 1
+- number of residual manual exposure or scene-level color corrections after Operation 2
+- number of virtual-copy branches or reversions required when alternate
+  edit directions fail after the baseline handoff
+
+Together, these measurements would help quantify whether the pipeline
+reduces manual intervention and improves throughput in practice, while
+the RAW/XMP-linked analysis would provide the stronger mathematical
+validation layer for the normalization claims themselves.
+
+<br>
+
+### Operation 1 Validation
+
+Operation 1 is validated primarily through visual and
+workflow-observable evidence. The relevant proof surface is the
+dust/distraction cleanup and Auto Transform review evidence already
+embedded in the section above. For dust cleanup, the central question is
+whether repeated local defects are removed without introducing visible
+repair artifacts or unnecessary changes to unaffected images. For Auto
+Transform, the central question is whether the automated straightening
+pass is useful enough at dataset scale to justify batch application
+under explicit manual review rather than as a fully trusted automatic
+transform.
+
+The Auto Transform before/after review set provides the clearest
+validation surface here: successful outcomes are visually confirmed, the
+known failure case is explicitly marked, and the manual review boundary
+is made observable rather than assumed.
+
+Quantitative support for Operation 1 can still exist, but it is weaker
+and less central than for Operation 2. Useful numerical support here is
+mostly workflow-facing: synchronization time, reviewed pass/fail
+outcomes, residual manual corrections, and exception counts. The
+strongest proof for Operation 1 remains the visible result quality and
+the clarity of the review boundary.
+
+<br>
+
+### Operation 2 Validation
+
+A lightweight validation approach is to show representative before/after
+image subsets from the same [dataset](../../docs/terminology.md#dataset) and visually inspect
+whether automated tonal analysis reduces dataset-wide luminance variance
+and whether scene-level color normalization reduces unwanted hue drift
+within comparable scene groups. Operation 2 is validated through the
+same visual/workflow surface as Operation 1, but with stronger
+quantitative co-support. Visual comparison remains the primary artifact
+for showing the perceptual behavior of this stage. In parallel, the
+Stage 2 scripting layer is intended to record relevant pre- and
+post-normalization adjustment values — such as
+[exposure](../../docs/terminology.md#exposure), [contrast](../../docs/terminology.md#contrast), highlights / whites, shadows / blacks, color
+temperature, tint, and hue-related changes — so observable image
+results can be paired with structured validation and reproducibility
+data. In the intended evidence model, the visual artifact establishes
+the intuition while the RAW/XMP-linked analysis layer provides the
+stronger mathematical proof surface.
+
+<br>
+
+### Baseline Handoff Validation
+
+The baseline handoff can be validated by testing alternate edit directions on
+Virtual Copies and recording whether the editor can return to a known
+good baseline without manual untangling. The central engineering
+question is whether branching and rollback materially reduce edit-state
+drift during look-matching.
+
+Validation here is primarily visual and workflow-observable: can the
+editor compare alternate directions, revert to the known-good baseline,
+and preserve gallery consistency without manually untangling
+accumulated edits?
+
 
 <br>
 
@@ -1020,11 +1034,7 @@ The workflow benefits from Lightroom’s built-in automation, but some stages de
 
 <br>
 
----
-
-<br>
-
-## Baseline Preservation Strategy
+### Baseline Preservation Strategy
 
 Virtual Copies preserve both the initial culled RAW state and later
 known-good normalized baselines while allowing derived edit paths to
@@ -1034,15 +1044,9 @@ overhead for much safer experimentation later.
 This mirrors engineering patterns such as immutable baselines,
 branchable derived states, and rollbackable experimentation.
 
----
-
 <br>
 
----
-
-<br>
-
-## Controlled Manual Overrides
+### Controlled Manual Overrides
 
 Manual per-image overrides remain available for edge cases but are
 intentionally limited. Excessive local correction increases cognitive
@@ -1056,11 +1060,7 @@ Design rationale:
 
 The workflow prioritizes addressable control rather than complete control.
 
----
-
 <br>
-
----
 
 <br>
 
@@ -1072,8 +1072,6 @@ The workflow prioritizes addressable control rather than complete control.
 - safer experimentation through rollbackable edit branches
 - reduced manual correction
 - predictable editing pipeline mechanics
-
----
 
 <br>
 
@@ -1104,9 +1102,6 @@ The workflow prioritizes addressable control rather than complete control.
 > tonal baseline and scene-level color baselines second, then hand
 > off the normalized baseline to rollbackable Virtual Copy branches.
 
----
-
-<br>
 
 ---
 
