@@ -1046,21 +1046,23 @@ branchable derived states, and rollbackable experimentation.
 
 <br>
 
-### Controlled Manual Overrides
+### Controlled Manual Overrides, Not Unlimited Manual Optionality
 
 Manual per-image overrides remain available for edge cases but are
-intentionally limited. Excessive local correction increases cognitive
-load and reduces editing speed.
+intentionally limited. Excessive local correction increases cognitive load, reducing editing speed, and directly diminishes the purpose of the pipeline.
 
-Design rationale:
+Design rationale for Controlled, not Unlimited:
 
 - overly granular control increases cognitive load
 - editing speed decreases with too many one-off overrides
 - most images need minimal manual intervention after the baseline is established
 
-The workflow prioritizes addressable control rather than complete control.
+> [!IMPORTANT]
+> **Governing Principle:** Prioritize addressable control rather than complete control.
 
 <br>
+
+---
 
 <br>
 
@@ -1092,16 +1094,7 @@ The workflow prioritizes addressable control rather than complete control.
 - controlled manual overrides for edge cases
 - cognitive-load reduction through staged workflow design
 
----
-
 <br>
-
-> [!IMPORTANT]
-> **Governing Principle:** Clean validated dust/distraction artifacts and
-> review Auto Transform straightening first, establish a dataset-wide
-> tonal baseline and scene-level color baselines second, then hand
-> off the normalized baseline to rollbackable Virtual Copy branches.
-
 
 ---
 
