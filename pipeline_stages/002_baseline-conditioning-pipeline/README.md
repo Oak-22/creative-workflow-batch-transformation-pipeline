@@ -491,7 +491,7 @@ to the executable review groupings used during implementation.
 
 <br>
 
-#### Operation 1A: Dust / Distraction Removal
+### Operation 1A: Dust / Distraction Removal
 
 The source images in this example show visible dust from either the
 camera body sensor or lens, lowering image quality. The Dust Distraction
@@ -501,9 +501,11 @@ Develop module, then synchronized across the selected images.
 ![Dust example 1](assets/images/002_operation-1-dataset-wide-cleanup/003_stage2-local-corrective-cleanup-dust-image1.png)
 
 <br>
+<br>
 
 ![Dust example 2](assets/images/002_operation-1-dataset-wide-cleanup/004_stage2-local-corrective-cleanup-dust-image2.png)
 
+<br>
 <br>
 
 ![Dust removal panel](assets/images/002_operation-1-dataset-wide-cleanup/005_stage2-local-corrective-cleanup-dust-panel.png)
@@ -524,6 +526,9 @@ Develop module, then synchronized across the selected images.
 
 *Figure: Batch synchronization time for validated dust/distraction removal across the selected working set, showing the operational cost of dataset-scale local corrective cleanup in Stage 2.*
 
+<br>
+<br>
+
 ![Dust cleanup final result](assets/images/002_operation-1-dataset-wide-cleanup/008_stage2-local-corrective-cleanup-dust-final-result-example.png)
 
 *Figure: Final result after synchronized dust/distraction cleanup. The evidence is most valuable here not as a dramatic stylistic change, but as proof that repeated local defects can be removed early so later normalization operates on cleaner inputs.*
@@ -537,6 +542,11 @@ largely unchanged. This makes it a dataset-scale cleanup step even
 though the correction itself is local to small image regions. It
 therefore enables efficient batch cleanup before the later
 normalization and downstream editing passes.
+
+> [!IMPORTANT]
+> **Governing Principle:** Indiscriminate batching is acceptable only
+> where observed fault-tolerance is high enough that unaffected images
+> remain materially unchanged.
 
 Because this kind of correction is local within each image and repeated
 across many images, it is a good candidate for early batch handling. It
@@ -554,7 +564,7 @@ normalization was meant to establish, thus, sequence order matters.
 
 <br>
 
-#### Operation 1B: Auto Transform Straightening
+### Operation 1B: Auto Transform Straightening
 
 Auto Transform straightening is also useful in Operation 1 because it
 evaluates each image independently rather than applying one fixed
@@ -619,7 +629,7 @@ feature columns.
 
 <br>
 
-#### Operation 2A: Global Tonal Baseline
+### Operation 2A: Global Tonal Baseline
 
 This stage primarily reduces large tonal variance across the dataset so
 that downstream corrections behave predictably. Although the automated
@@ -657,7 +667,7 @@ recalibration.
 
 <br>
 
-#### Operation 2B: Scene-Level Color Baseline
+### Operation 2B: Scene-Level Color Baseline
 
 Foliage is a useful Operation 2 example because it exposes the
 difference between legitimate scene variance and unwanted within-scene
