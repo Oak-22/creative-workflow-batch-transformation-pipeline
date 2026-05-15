@@ -53,7 +53,13 @@ The ability to return to a known-good prior state without discarding
 valuable completed work. In this project, rollback safety is supported
 by stage boundaries and non-destructive edit branches.
 
-### Image Workflow Concepts
+<br>
+
+---
+
+<br>
+
+## Image Workflow Concepts
 
 <a id="dataset"></a>
 ### Dataset
@@ -105,7 +111,13 @@ look.
 A non-destructive derived edit state that preserves an independent edit
 timeline while referencing the same underlying source image.
 
-### Metadata And AI Concepts
+<br>
+
+---
+
+<br>
+
+## Metadata And AI Concepts
 
 ### Metadata Application
 
@@ -140,6 +152,12 @@ meaningful regions or object classes. In this project, segmentation
 output is useful but probabilistic, so it requires qualification and
 human review.
 
+<br>
+
+---
+
+<br>
+
 ### Pipeline Concepts
 
 <a id="reference-image"></a>
@@ -163,9 +181,18 @@ transformations. Tonal analysis is used to establish a dataset-wide
 tonal baseline; color analysis is constrained to scene-level
 comparisons so natural environmental hue differences are not flattened.
 
+<br>
+
+---
+
+<br>
+
 ## Stage 1 Terms
 
-### Metadata Architecture
+**Metadata Architecture**
+
+Grouping for the Stage 1 metadata-layer terms that describe how ingest,
+domain, and semantic fields are separated.
 
 ### Identity Layer
 
@@ -186,21 +213,30 @@ refinement cases such as `Contact > Job Title`.
 The revisable descriptive metadata added after import, including domain
 context, captions, classifications, accessibility text, and keywords.
 
-### Keyword Design
+**Keyword Design**
+
+Grouping for the Stage 1 keyword-structure terms that define how
+hierarchy and queryable keyword dimensions are organized.
+
+### Keyword List
+
+The concrete Lightroom keyword workspace and hierarchical keyword tree
+used to store, display, and manage applied keyword relationships within
+the catalog.
 
 ### Keyword Taxonomy
 
-A hierarchical keyword design used to classify images through reusable
-parent-child relationships. In this workflow, hierarchy is only helpful
-when the child truly depends on the parent for meaning; otherwise, terms
-should remain as separate queryable dimensions.
+The conceptual design of a keyword system, including when hierarchy is useful and when flatter queryable dimensions are better.
 
 <br>
-<br>
+
+---
+
+<br
 
 ## Stage 2 Terms
 
-### Dataset And Structural Concepts
+**Dataset And Structural Concepts**
 
 <a id="visual-tone"></a>
 ### Visual Tone
