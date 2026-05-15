@@ -269,8 +269,6 @@ Compare, Keep, or Revert
 After Stage 2 conditioning, additional Virtual Copy branches preserve
 the normalized baseline while allowing additional, alternate editing paths.
 
----
-
 <br>
 
 ---
@@ -409,6 +407,8 @@ These conditions introduce variance in:
 - color temperature (e.g., cool, warm)
 - foliage and environmental tone (e.g., light, medium, dark)
 
+<br>
+
 ### Naive Approach: Multiple Global Editing Passes
 
 A naive global editing strategy (e.g., applying identical exposure
@@ -451,8 +451,7 @@ editor must repeatedly rematch a chosen look across related images in
 order to keep the gallery coherent.
 
 > [!IMPORTANT]
-> **Governing Principle:** Treat broad shared-state mutation as the
-> exception; prefer bounded transformations over a stable baseline.
+> **Governing Principle:** Broad shared-state mutation is a poor strategy; prefer bounded transformations over a stable baseline.
 
 The workflow goals are:
 
@@ -487,9 +486,12 @@ not to a narrow subset of the dataset. In this workflow, the validated
 cleanup operations were dust/distraction removal and Auto Transform
 straightening.
 
+The subsection labels below mirror the Lightroom collection naming used in the working catalog: Operation 1A/1B and Operation 2A/2B correspond
+to the executable review groupings used during implementation.
+
 <br>
 
-### Dust / Distraction Removal
+#### Operation 1A: Dust / Distraction Removal
 
 The source images in this example show visible dust from either the
 camera body sensor or lens, lowering image quality. The Dust Distraction
@@ -552,7 +554,7 @@ normalization was meant to establish, thus, sequence order matters.
 
 <br>
 
-### Auto Transform Straightening
+#### Operation 1B: Auto Transform Straightening
 
 Auto Transform straightening is also useful in Operation 1 because it
 evaluates each image independently rather than applying one fixed
@@ -617,7 +619,7 @@ feature columns.
 
 <br>
 
-### Global Tonal Normalization
+#### Operation 2A: Global Tonal Baseline
 
 This stage primarily reduces large tonal variance across the dataset so
 that downstream corrections behave predictably. Although the automated
@@ -655,7 +657,7 @@ recalibration.
 
 <br>
 
-### Foliage Hue Normalization
+#### Operation 2B: Scene-Level Color Baseline
 
 Foliage is a useful Operation 2 example because it exposes the
 difference between legitimate scene variance and unwanted within-scene
@@ -810,9 +812,11 @@ Lightroom’s automated tonal analysis as unintentionally underexposed and
 therefore excessively brightened — degrading image quality — even when the silhouette treatment was the
 intended creative choice.
 
+<br>
+
 ![Auto tonal analysis failure for intentional creative treatment](assets/images/004_failure-modes/001_stage2-auto-tonal-analysis-creative-intent-failure.png)
 
-*Figure: Failure mode for automated tonal analysis under intentional creative treatment. The left image preserves the intended low-key result, while the right image shows quality degradation after the automation interprets the scene as unintentionally underexposed and brightens it too aggressively.*
+*Figure: Failure mode for automated tonal analysis under intentional creative treatment. The left image preserves the intended low-key result, while the right image shows quality degradation after the automation interprets the scene as unintentionally underexposed and brightens it too aggressively. Inspect the wedding attire of both the bride and groom for visible, undesirable pixelation.*
 
 
 <br>
@@ -852,17 +856,19 @@ two complementary proof surfaces. First, **embedded visual evidence**
 and **editor-observed workflow effects (Operational Notes)** establish
 the workflow intuition: they show what the conditioning stages are doing
 and why the resulting image behavior is operationally useful. Second,
-**RAW/XMP-linked analysis**, manifests, and runnable script/test support
+**RAW/XMP-linked analysis**, rendered outputs, manifests, and runnable
+script/test support
 provide the structured validation layer that can formalize those claims
 quantitatively.
 
 These layers are not substitutes for one another. The workflow and
 visual artifacts establish the qualitative behavior first; the
-RAW/XMP-linked validation layer is what turns that behavior into a
+RAW-to-XMP-to-rendered-output validation layer is what turns that
+behavior into a
 more mathematical proof surface. Because perceptual coherence, hue
 alignment, and cleanup-artifact detection still matter at the rendered
 image level, visual review remains a required complement even with the
-RAW/XMP-linked validation support.
+RAW-to-XMP-to-rendered-output validation support.
 
 <br>
 
@@ -884,9 +890,9 @@ metadata or adjustment values.
 
 ### Quantitative Validation Surface
 
-The quantitative validation surface for this stage is the combination of
-RAW source signal, XMP edit parameters, and later rendered-output or
-pixel-level measurements where needed. This makes it possible to
+The quantitative validation surface for this stage is the
+RAW-to-XMP-to-rendered-output chain: RAW source signal, XMP edit
+parameters, and the rendered outputs generated from them. This makes it possible to
 distinguish between:
 
 - source-signal variance in the captured RAW images
@@ -904,8 +910,8 @@ Useful workflow metrics may still include:
 
 Together, these measurements would help quantify whether the pipeline
 reduces manual intervention and improves throughput in practice, while
-the RAW/XMP-linked analysis would provide the stronger mathematical
-validation layer for the normalization claims themselves.
+the RAW-to-XMP-to-rendered-output analysis chain provides the stronger
+mathematical validation layer for the normalization claims themselves.
 
 <br>
 
@@ -952,8 +958,8 @@ post-normalization adjustment values — such as
 temperature, tint, and hue-related changes — so observable image
 results can be paired with structured validation and reproducibility
 data. In the intended evidence model, the visual artifact establishes
-the intuition while the RAW/XMP-linked analysis layer provides the
-stronger mathematical proof surface.
+the intuition while the RAW-to-XMP-to-rendered-output analysis chain
+provides the stronger mathematical proof surface.
 
 <br>
 
