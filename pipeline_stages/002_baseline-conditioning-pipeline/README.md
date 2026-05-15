@@ -283,7 +283,7 @@ In contrast, **RAW images preserve the camera sensor's unnormalized luminance an
 
 RAW capture therefore increases [dataset](../../docs/terminology.md#dataset) variance but enables **controlled, user‑defined normalization during post‑processing**, which motivates the normalization operation described in this stage.
 
-Shooting in RAW is a deliberate decision because it preserves recoverable signal that would otherwise be lost in JPEG. RAW files retain significantly more highlight and shadow information from the sensor, allowing the editor to recover details from images that might initially appear unusable (see [clipping](#clipping)). For example, a frame with blown highlights or deep shadows can often be salvaged by recovering clipped highlight detail or lifting shadow information. In contrast, JPEG compression discards much of this recoverable signal and locks the image into a specific tone curve and color profile, making such recovery far more limited. 
+Shooting in RAW is a deliberate decision because it preserves recoverable signal that would otherwise be lost in JPEG. RAW files retain significantly more highlight and shadow information from the sensor, allowing the editor to recover details from images that might initially appear unusable (see [clipping](../../docs/terminology.md#clipping)). For example, a frame with blown highlights or deep shadows can often be salvaged by recovering clipped highlight detail or lifting shadow information. In contrast, JPEG compression discards much of this recoverable signal and locks the image into a specific tone curve and color profile, making such recovery far more limited. 
 
 > [!IMPORTANT]
 > **Governing Principle:** Don't throw away potentially usable signal prematurely.
@@ -771,6 +771,26 @@ In practical terms, the pipeline is intended to scale across **hundreds of RAW i
 
 <br>
 
+### Local Workflow Scope
+
+The current implementation is optimized for a local Lightroom workflow
+controlled by a single editor. This makes it practical and immediately
+useful, but it also means the system is not designed for distributed
+execution, real-time serving, or cloud-native orchestration. However,
+the principles and pipeline design demonstrated here can be adopted and
+tuned for similarly purposed workflows.
+
+<br>
+
+### Vendor-Controlled Automation Limits Transparency
+
+The workflow benefits from Lightroom's built-in automation, but some
+stages depend on vendor-controlled black-box heuristics. This improves
+usability and speed while limiting transparency into the exact internal
+logic of automated tonal analysis.
+
+<br>
+
 ---
 
 <br>
@@ -994,28 +1014,10 @@ accumulated edits?
 
 ## Design Tradeoffs
 
-The pipeline improves consistency and throughput, but it does so through explicit tradeoffs rather than through full automation.
-
-<br>
-
-### Automation vs Editorial Control
-
-Operations 1 and 2 automate high-frequency repetitive operations, while
-the baseline handoff remains intentionally editor-guided because branch
-selection, comparison, and rollback still depend on editorial judgment.
-
-This tradeoff is especially important when the editor is comparing
-multiple plausible looks. A purely linear history makes it harder to
-test alternatives safely; a branchable workflow preserves control
-without forcing every experiment to overwrite the baseline.
-
-See the `Lineage Setup Value: Protected Working State` section above for the visual example of this branching pattern.
-
-<br>
-
-### Consistency vs Authentic Scene Variation
-
-The system is designed to reduce unwanted variance, not to eliminate all variance. Over-normalization would flatten meaningful differences between [scenes](../../docs/terminology.md#scene), especially when time-of-day lighting or environmental color legitimately changes the mood of an image.
+The pipeline improves consistency and throughput, but it does so through
+explicit tradeoffs rather than through full automation. The tradeoffs
+below are ordered to follow the same step-wise progression as Stage 2
+itself.
 
 <br>
 
@@ -1033,46 +1035,24 @@ re-correct near-identical images and re-compare them against the rest of
 the gallery. That raises both cognitive load and the chance of
 inconsistent edits.
 
-
 <br>
 
-### Rollback Safety vs Branch Sprawl
+### Consistency vs Authentic Scene Variation
 
-The rollback boundary gains safety by making alternate directions
-recoverable, but that also introduces the need for disciplined branch
-naming, comparison, and pruning. Too many unmanaged branches can create
-their own form of operator confusion.
-
-<br>
-
-### Local Workflow Efficiency vs Cloud-Native Scalability
-
-The current implementation is optimized for a local Lightroom workflow controlled by a single editor. This makes it practical and immediately useful, but it also means the system is not designed for distributed execution, real-time serving, or cloud-native orchestration. However, the principles and pipeline design demonstrated here can be adopted and tuned for similarly purposed workflows.
-
-<br>
-
-### Vendor Heuristics vs Full Transparency
-
-The workflow benefits from Lightroom’s built-in automation, but some stages depend on vendor-controlled black-box heuristics. This improves usability and speed while limiting transparency into the exact internal logic of automated tonal analysis.
-
-<br>
-
-### Baseline Preservation Strategy
-
-Virtual Copies preserve both the initial culled RAW state and later
-known-good normalized baselines while allowing derived edit paths to
-evolve independently. This trades a small amount of branch-management
-overhead for much safer experimentation later.
-
-This mirrors engineering patterns such as immutable baselines,
-branchable derived states, and rollbackable experimentation.
+The system is designed to reduce unwanted variance, not to eliminate all
+variance. Over-normalization would flatten meaningful differences
+between [scenes](../../docs/terminology.md#scene), especially when
+time-of-day lighting or environmental color legitimately changes the
+mood of an image.
 
 <br>
 
 ### Controlled Manual Overrides, Not Unlimited Manual Optionality
 
 Manual per-image overrides remain available for edge cases but are
-intentionally limited. Excessive local correction increases cognitive load, reducing editing speed, and directly diminishes the purpose of the pipeline.
+intentionally limited. Excessive local correction increases cognitive
+load, reducing editing speed, and directly diminishes the purpose of the
+pipeline.
 
 Design rationale for Controlled, not Unlimited:
 
@@ -1084,6 +1064,34 @@ Design rationale for Controlled, not Unlimited:
 > **Governing Principle:** Prioritize addressable control rather than complete control.
 
 <br>
+
+### Baseline Preservation and Rollback Safety vs Branch-Management Overhead
+
+Virtual Copies preserve both the initial culled RAW state and later
+known-good normalized baselines while allowing derived edit paths to
+evolve independently. This trades a small amount of branch-management
+overhead for safer experimentation and rollback later.
+
+This mirrors engineering patterns such as immutable baselines,
+branchable derived states, and rollbackable experimentation.
+
+The rollback boundary gains safety by making alternate directions
+recoverable, but that also introduces the need for disciplined branch
+naming, comparison, and pruning. Too many unmanaged branches can create
+their own form of operator confusion.
+
+<br>
+
+### Automation vs Editorial Control
+
+Operations 1 and 2 automate high-frequency repetitive operations, while
+the baseline handoff remains intentionally editor-guided because branch
+selection, comparison, and rollback still depend on editorial judgment.
+
+This tradeoff is especially important when the editor is comparing
+multiple plausible looks. A purely linear history makes it harder to
+test alternatives safely; a branchable workflow preserves control
+without forcing every experiment to overwrite the baseline.
 
 ---
 
