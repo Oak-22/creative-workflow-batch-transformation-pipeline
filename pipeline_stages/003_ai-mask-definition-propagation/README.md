@@ -9,7 +9,7 @@ Part of the **Creative Workflow Batch Transformation Pipeline** umbrella project
 This stage evaluates whether AI-generated semantic masks can be treated
 as reusable batch artifacts rather than one-off, image-specific edits, similarly to Stage 2.
 The workflow defines mask logic once on a [canonical image](../../docs/terminology.md#canonical-image),
-then applies that logic across a full gallery to test whether Lightroom
+then applies that logic across the full [gallery](../../docs/terminology.md#gallery) to test whether Lightroom
 recomputes the masks per image reliably enough for production-scale use.
 The value is reduced repetitive masking effort while preserving a clear
 boundary for operator review when semantic detection fails or degrades.
@@ -22,13 +22,9 @@ reviewed by a human operator.
 
 <br>
 
----
-
-<br>
-
 ## Problem
 
-Manual semantic masking is expensive at gallery scale. When similar
+Manual semantic masking is expensive at [gallery](../../docs/terminology.md#gallery) scale. When similar
 adjustments are needed across hundreds of photos, manually brushing each
 semantic region image by image becomes a throughput bottleneck. Without
 a reusable mask-definition workflow, repeated local edits remain tied to
@@ -45,24 +41,16 @@ rework.
 
 <br>
 
----
-
-<br>
-
 ## Solution Overview
 
 The workflow selects a canonical image containing many relevant
 semantic categories, defines the mask logic once on that image, and then
-batch-pastes those definitions across the gallery. Lightroom recomputes
+batch-pastes those definitions across the [gallery](../../docs/terminology.md#gallery). Lightroom recomputes
 the masks per target image using dynamic semantic segmentation rather
 than copying static mask pixels. This implementation scales that feature
 from single-image editing into a batch workflow, then evaluates the
 mechanism qualitatively by examining mask quality, omission behavior,
 and operational usefulness relative to the alternative — manual masking.
-
-<br>
-
----
 
 <br>
 
@@ -77,14 +65,11 @@ and operational usefulness relative to the alternative — manual masking.
 
 <br>
 
----
-
-<br>
-
 ## Technical Design & Implementation
 
-This stage defines mask logic once, then applies it across the dataset
-as a batch workflow. Lightroom recomputes semantic masks per image for
+This stage defines mask logic once, then applies it across the
+[gallery](../../docs/terminology.md#gallery) as a batch workflow.
+Lightroom recomputes semantic masks per image for
 people, sky, vegetation, and other detectable regions rather than
 copying static pixels. That makes propagation scalable, but it also
 means outcomes are only partially deterministic: a mask may bind
@@ -133,7 +118,7 @@ usable for downstream edits with bounded human review.
 
 
 ### Canonical Image Selection
-From a [culled gallery](../../docs/terminology.md#culling), a single [canonical image](../../docs/terminology.md#canonical-image) was
+From the [gallery](../../docs/terminology.md#gallery), a single [canonical image](../../docs/terminology.md#canonical-image) was
 selected using the criteria defined below
 
 ### Canonical Image Selection Criteria
@@ -142,7 +127,8 @@ This follows a similar batch-enabling pattern to the Stage 2 reference
 image, but the function and scope are different. A Stage 2 reference
 image acts as a visual target for normalization within a comparable
 scene group. A Stage 3 canonical image acts as a semantic source for
-mask definition propagation across the broader dataset.
+mask definition propagation across the broader
+[gallery](../../docs/terminology.md#gallery).
 
 As established in Stage 2, exposure and scene conditions can vary across
 otherwise related images due to camera setting changes, camera position,
@@ -260,7 +246,7 @@ image chosen specifically for stronger artificial-ground signal.
 <br>
 <br>
 
-In a side-by-side comparison across the target dataset of 64 images,
+In a side-by-side comparison across the target gallery of 64 images,
 artificial-ground propagation from the canonical source and from the
 alternate source produced no observable difference in mask quality. In
 addition, neither approach produced meaningfully better target-image
@@ -297,10 +283,6 @@ Purpose: Document the artificial-ground source-definition comparison and its con
 
 <br>
 
----
-
-<br>
-
 ## Evidence/Example Application of Mask Propagation (w/ Images)
 
 ### Mask Definition Phase
@@ -318,9 +300,11 @@ Only the mask definitions from the canonical image were copied. The
 Stage 2 tonal and hue adjustments were already complete and were not
 part of this paste operation.
 
-These mask definitions were then pasted across all images in the gallery, without regard to whether the same semantic categories existed in each image.
+These mask definitions were then pasted across all images in the
+[gallery](../../docs/terminology.md#gallery), without regard to whether
+the same semantic categories existed in each image.
 
-Examples of variation within the dataset include:
+Examples of variation within the gallery include:
 
 - images containing fewer people than the canonical image
 - images containing sky but no foliage
@@ -369,10 +353,6 @@ Only a subset of the theoretical 448 mask operations were generated.
 
 The final mask set applied to each image depended entirely on the semantic content of that image, confirming that Lightroom’s masking pipeline copies procedural mask definitions and recomputes them per image using AI-driven segmentation.
 
-
-<br>
-
----
 
 <br>
 
@@ -449,7 +429,7 @@ operation.*
 <br>
 
 The Synchronize All Masks operation can be applied across all selected
-images, such as the full culled gallery. Like the Stage 2 dust-removal
+images, such as the full [gallery](../../docs/terminology.md#gallery). Like the Stage 2 dust-removal
 sync, this batch operation is fault-tolerant enough to apply broadly,
 with any remaining artifacts reviewed and refined later during the
 manual editing stage that follows the pipeline.
@@ -476,7 +456,7 @@ mask := detect_people(image)
 apply_adjustment(mask)
 
 Instead of copying results, the system copies the procedure and executes
-it across a dataset.
+it across the gallery.
 
 
 
@@ -489,7 +469,7 @@ even when no corresponding mask is meaningfully drawn in the image.*
 <br>
 <br>
 
-In another image from the same dataset, Foliage, Sky, and Background
+In another image from the same gallery, Foliage, Sky, and Background
 were generated successfully after mask-definition propagation, while
 Mask 1-3 are not meaningfully present as editable subject regions. That
 end state is expected and should be treated as success, not failure,
@@ -512,10 +492,6 @@ image requires its own recomputed semantic segmentation result.*
 In the three images above, batch mask propagation correctly identifies
 the most important person subjects as desired.
 
-
-<br>
-
----
 
 <br>
 
@@ -552,10 +528,6 @@ That works out to:
 
 <br>
 
----
-
-<br>
-
 ## Engineering Concepts Demonstrated
 
 - procedural definition reuse rather than static result copying
@@ -573,10 +545,6 @@ That works out to:
 > **Governing Principle:** Propagate procedural semantic definitions only
 > after qualification, and treat human review as a required boundary
 > around probabilistic AI outputs rather than as optional cleanup.
-
-<br>
-
----
 
 <br>
 

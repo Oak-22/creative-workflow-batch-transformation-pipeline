@@ -80,7 +80,8 @@ across images with reliable results using either Stage 2 conditioning
 techniques or Stage 3 mask propagation techniques.
 
 Once a Stage 3 mask definition has been qualified, propagation across
-the gallery is a batch application in the same economic sense as Stage 2
+the [gallery](./terminology.md#gallery) is a batch application in the
+same economic sense as Stage 2
 cleanup or normalization: the operation is applied at multi-image scale,
 then reviewed. The difference is that probabilistic semantic detection
 can create a higher exception-review burden because generated masks may
@@ -121,7 +122,8 @@ and protects it with Virtual Copy branches.
 
 Stage 3 focuses on semantic operations whose behavior depends on
 probabilistic AI segmentation. The savings come from defining reusable
-mask logic once, propagating it across the gallery, and reviewing
+mask logic once, propagating it across the
+[gallery](./terminology.md#gallery), and reviewing
 generated results instead of manually brushing each semantic region on
 each image.
 

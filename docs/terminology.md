@@ -15,18 +15,18 @@ task, visual defect, variance problem, semantic region, exception case,
 or editorial decision that must be handled before the image set can move
 forward.
 
-### Deterministic Orchestration
-
-A workflow design pattern that makes the order of operations, inputs,
-outputs, validation points, and rollback boundaries explicit, even when
-the underlying data or tool behavior is variable.
-
 ### Uncertain Inputs
 
 Inputs whose exact state or behavior cannot be fully predicted before
 runtime. In this project, the main uncertain inputs are image variance
 from changing capture conditions at source and AI-generated semantic
 masks whose quality depends on image content.
+
+### Deterministic Orchestration
+
+A workflow design pattern that makes the order of operations, inputs,
+outputs, validation points, and rollback boundaries explicit, even when
+the underlying data or tool behavior is variable.
 
 ### Stage Boundary
 
@@ -73,6 +73,13 @@ session.
 The review step where the full capture set is narrowed to images worth
 carrying forward based on focus, subject relevance, aesthetic value, and
 edit potential.
+
+<a id="gallery"></a>
+### Gallery
+
+A post-cull working subset of a dataset carried forward for editing,
+review, and delivery. In this repository, `gallery` refers to the
+culled working image set rather than the full capture set. (dataset -> (cull) --> gallery)
 
 <a id="scene"></a>
 ### Scene
@@ -161,7 +168,7 @@ human review.
 ### Pipeline Concepts
 
 <a id="reference-image"></a>
-### Reference Image
+#### Reference Image
 
 A representative image selected from a comparable scene group and used
 as the visual target for normalization decisions. In Operation 2,
@@ -171,7 +178,7 @@ A reference image is scoped to the scene or normalization concern it
 represents; it is not a global target for the entire dataset.
 
 <a id="automated-tonal-color-analysis"></a>
-### Automated Tonal And Color Analysis
+#### Automated Tonal And Color Analysis
 
 A normalization operation that analyzes image luminance and color
 distribution, then applies coordinated adjustments to exposure,
@@ -189,18 +196,15 @@ comparisons so natural environmental hue differences are not flattened.
 
 ## Stage 1 Terms
 
-**Metadata Architecture**
+### Metadata Architecture
 
-Grouping for the Stage 1 metadata-layer terms that describe how ingest,
-domain, and semantic fields are separated.
-
-### Identity Layer
+#### Identity Layer
 
 The protected ownership and authorship metadata established at ingest.
 This layer functions as the authoritative metadata baseline for the rest
 of the workflow.
 
-### Domain-Specific Layer
+#### Domain-Specific Layer
 
 A post-import metadata preset that writes descriptive or contextual
 fields associated with a domain such as weddings, graduation, or
@@ -208,23 +212,20 @@ marketing. These presets are designed to avoid destructive overlap with
 the ingest-time identity baseline, except for narrowly documented
 refinement cases such as `Contact > Job Title`.
 
-### Semantic Layer
+#### Semantic Layer
 
 The revisable descriptive metadata added after import, including domain
 context, captions, classifications, accessibility text, and keywords.
 
-**Keyword Design**
+### Keyword Design
 
-Grouping for the Stage 1 keyword-structure terms that define how
-hierarchy and queryable keyword dimensions are organized.
-
-### Keyword List
+#### Keyword List
 
 The concrete Lightroom keyword workspace and hierarchical keyword tree
 used to store, display, and manage applied keyword relationships within
 the catalog.
 
-### Keyword Taxonomy
+#### Keyword Taxonomy
 
 The conceptual design of a keyword system, including when hierarchy is useful and when flatter queryable dimensions are better.
 
@@ -232,14 +233,14 @@ The conceptual design of a keyword system, including when hierarchy is useful an
 
 ---
 
-<br
+<br>
 
 ## Stage 2 Terms
 
-**Dataset And Structural Concepts**
+### Dataset And Structural Concepts
 
 <a id="visual-tone"></a>
-### Visual Tone
+#### Visual Tone
 
 The combined luminance, contrast, and color characteristics of an image
 that determine its perceived brightness, warmth/coolness, and overall
@@ -248,20 +249,20 @@ visual consistency.
 ### Luminance Transformation Primitives
 
 <a id="exposure"></a>
-### Exposure
+#### Exposure
 
 A global adjustment controlling overall image brightness by shifting the
 luminance distribution uniformly across all pixels.
 
 <a id="contrast"></a>
-### Contrast
+#### Contrast
 
 A global adjustment controlling the separation between light and dark
 regions in an image, increasing or decreasing the intensity difference
 across the luminance distribution.
 
 <a id="clipping"></a>
-### Clipping
+#### Clipping
 
 Loss of recoverable image detail in highlights or shadows due to sensor
 saturation or underexposure, where pixel values are driven to their
@@ -269,13 +270,18 @@ minimum or maximum limits and no additional tonal information can be
 retrieved.
 
 <a id="dynamic-range"></a>
-### Dynamic Range
+#### Dynamic Range
 
 The span between the darkest and brightest image regions that still
 retain recoverable detail. In practical terms, it describes how much
 shadow and highlight information can be captured or preserved before
 those regions collapse into clipped blacks or blown highlights.
 
+<br>
+
+---
+
+<br>
 
 ## Stage 3 Terms
 

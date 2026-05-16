@@ -10,7 +10,8 @@ Large photo sets captured across changing lighting conditions often feel
 visually inconsistent even when subject matter remains similar. This
 stage defines a baseline-conditioning workflow that combines local
 corrective cleanup applied per frame across the working set, dataset-wide tonal normalization, and
-scene-level color normalization so the final gallery reads as coherent
+scene-level color normalization so the final
+[gallery](../../docs/terminology.md#gallery) reads as coherent
 rather than ad hoc. Post-cull Virtual Copy lineage protects the working
 set before conditioning, and rollbackable output branches preserve the
 normalized baseline for later experimentation. Just as importantly, the
@@ -44,7 +45,8 @@ These lighting differences change the [visual tone](../../docs/terminology.md#vi
 image, causing otherwise related photos to feel visually inconsistent.
 Without a stable baseline, later adjustments interact differently with
 each image, leading to visual divergence. In addition, that technical instability
-produces a second-order effect: repeated manual attempts to match a preferred gallery
+produces a second-order effect: repeated manual attempts to match a preferred
+[gallery](../../docs/terminology.md#gallery)
 look can introduce operator-driven drift across the dataset, especially
 when rollback to an earlier edit state is weak or costly.
 
