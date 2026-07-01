@@ -3,6 +3,7 @@ engineering_learning_workspace/engineering_learning_notes
 .DS_Store
 __pycache__/
 *.py[cod]
+.venv/
 *.tfvars
 !*.tfvars.example
 
