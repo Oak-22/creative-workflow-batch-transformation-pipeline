@@ -35,21 +35,23 @@ Recommended artifact model:
 
 Derived analysis artifacts belong under `outputs/stage3/`. The manifest
 stays at the stage root as the employer-facing review index, while the
-verbose support artifacts are grouped by review role:
+verbose support artifacts are grouped by review role. The core pipeline
+includes both mask-definition persistence and masked local-edit
+persistence.
 
 ```text
 outputs/stage3/
   stage3_manifest.json
 
   pipeline/
-    stage3_extracted_presegmentation_mask_state.json
-    stage3_extracted_postmasking_no_local_adjustment_mask_state.json
-    stage3_mask_state_postmasking_no_local_adjustment_comparison.json
+    stage3_premasking_mask_state.json
+    stage3_postmasking_mask_state.json
+    stage3_premasking_vs_postmasking_mask_state_comparison.json
+    stage3_postlocal_adjustment_mask_state.json
+    stage3_postmasking_vs_postlocal_adjustment_mask_state_comparison.json
 
   probes/
     stage3_mask_state_spike_report.json
-    stage3_extracted_postlocal_adjustment_mask_state.json
-    stage3_mask_state_postlocal_adjustment_comparison.json
     stage3_extracted_postglobal_point_color_mask_state.json
     stage3_mask_state_postglobal_point_color_comparison.json
 ```

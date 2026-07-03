@@ -1,22 +1,20 @@
 {
   "comparison_model": "postlocal_adjustment_vs_postglobal_point_color",
   "inputs": {
-    "postmasking": "outputs/stage3/probes/stage3_extracted_postglobal_point_color_mask_state.json",
-    "presegmentation": "outputs/stage3/probes/stage3_extracted_postlocal_adjustment_mask_state.json"
+    "after_state": "outputs/stage3/probes/stage3_extracted_postglobal_point_color_mask_state.json",
+    "before_state": "outputs/stage3/pipeline/stage3_postlocal_adjustment_mask_state.json"
   },
   "missing_assets": {
-    "postmasking": [],
-    "presegmentation": []
+    "after_state": [],
+    "before_state": []
   },
   "notes": {
-    "comparison_boundary": "This artifact compares Stage 3 postlocal-adjustment Lightroom sidecars against the later global point-color checkpoint.",
-    "observability_boundary": "This isolates asset-level global point-color state from prior masked local adjustment state."
+    "comparison_boundary": "This artifact compares the formal post-local-adjustment sidecar state against the post-global-Point-Color behavior-probe sidecar state.",
+    "observability_boundary": "This separates local masked Point Color state from asset-level global Point Color state."
   },
   "records": [
     {
-      "asset_key": "JB107456",
-      "changed": true,
-      "postmasking": {
+      "after_state": {
         "acr_path": "data/stage3/conditioned_state/lightroom_sidecars_postglobal_point_color/JB107456.acr",
         "acr_sha256": "a6b6ae3426e6fb154e4aa85cb8eeda2c8e8fe2ac1b7bd1d8fd619ab54c47f829",
         "mask_entry_count": 7,
@@ -173,7 +171,8 @@
         "xmp_path": "data/stage3/conditioned_state/lightroom_sidecars_postglobal_point_color/JB107456.xmp",
         "xmp_sha256": "04d0dac5358c491421b12f09dda9660b9999221d7f491abf4ad280a284ea4a83"
       },
-      "presegmentation": {
+      "asset_key": "JB107456",
+      "before_state": {
         "acr_path": "data/stage3/conditioned_state/lightroom_sidecars_postlocal_adjustment/JB107456.acr",
         "acr_sha256": "a6b6ae3426e6fb154e4aa85cb8eeda2c8e8fe2ac1b7bd1d8fd619ab54c47f829",
         "mask_entry_count": 7,
@@ -329,12 +328,11 @@
         },
         "xmp_path": "data/stage3/conditioned_state/lightroom_sidecars_postlocal_adjustment/JB107456.xmp",
         "xmp_sha256": "a06091efb444d73ee58c4e3d8dbc744dd763d2dbe70bc19d55574e423502dd89"
-      }
+      },
+      "changed": true
     },
     {
-      "asset_key": "JB107468",
-      "changed": true,
-      "postmasking": {
+      "after_state": {
         "acr_path": "data/stage3/conditioned_state/lightroom_sidecars_postglobal_point_color/JB107468.acr",
         "acr_sha256": "97d3182257835a03dc0025e4d7df225d85edeaada2627d7449ffdf5f0f6a45ba",
         "mask_entry_count": 7,
@@ -492,7 +490,8 @@
         "xmp_path": "data/stage3/conditioned_state/lightroom_sidecars_postglobal_point_color/JB107468.xmp",
         "xmp_sha256": "60ea1b3e2b189564cffa7ca4e7e3359aa80df52a8a0418cc03131b875ed5d222"
       },
-      "presegmentation": {
+      "asset_key": "JB107468",
+      "before_state": {
         "acr_path": "data/stage3/conditioned_state/lightroom_sidecars_postlocal_adjustment/JB107468.acr",
         "acr_sha256": "97d3182257835a03dc0025e4d7df225d85edeaada2627d7449ffdf5f0f6a45ba",
         "mask_entry_count": 7,
@@ -649,12 +648,11 @@
         },
         "xmp_path": "data/stage3/conditioned_state/lightroom_sidecars_postlocal_adjustment/JB107468.xmp",
         "xmp_sha256": "194c64f8ec0a82421c3a9548b8b19a71a8f3d6c02948d242856bba568e2e7074"
-      }
+      },
+      "changed": true
     },
     {
-      "asset_key": "JB107504",
-      "changed": false,
-      "postmasking": {
+      "after_state": {
         "acr_path": "data/stage3/conditioned_state/lightroom_sidecars_postglobal_point_color/JB107504.acr",
         "acr_sha256": "d09f2be0582c0583561b3cc5f53ac76e72169ad279ff605949f8f83ead662d6f",
         "mask_entry_count": 7,
@@ -821,7 +819,8 @@
         "xmp_path": "data/stage3/conditioned_state/lightroom_sidecars_postglobal_point_color/JB107504.xmp",
         "xmp_sha256": "22c3c91140e113611838be53d25a385f082b7b15e47bdce5f34cb32cd6ed422f"
       },
-      "presegmentation": {
+      "asset_key": "JB107504",
+      "before_state": {
         "acr_path": "data/stage3/conditioned_state/lightroom_sidecars_postlocal_adjustment/JB107504.acr",
         "acr_sha256": "d09f2be0582c0583561b3cc5f53ac76e72169ad279ff605949f8f83ead662d6f",
         "mask_entry_count": 7,
@@ -987,18 +986,23 @@
         },
         "xmp_path": "data/stage3/conditioned_state/lightroom_sidecars_postlocal_adjustment/JB107504.xmp",
         "xmp_sha256": "22c3c91140e113611838be53d25a385f082b7b15e47bdce5f34cb32cd6ed422f"
-      }
+      },
+      "changed": false
     }
   ],
   "stage": "stage3_semantic_local_conditioning",
+  "state_labels": {
+    "after_state": "postglobal_point_color",
+    "before_state": "postlocal_adjustment"
+  },
   "status": "complete",
   "summary": {
+    "after_state_mask_entry_count": 21,
+    "after_state_mask_group_count": 18,
     "asset_count": 3,
     "changed_asset_count": 2,
-    "missing_postmasking_asset_count": 0,
-    "missing_presegmentation_asset_count": 0,
-    "postmasking_mask_entry_count": 21,
-    "postmasking_mask_group_count": 18,
+    "missing_after_state_asset_count": 0,
+    "missing_before_state_asset_count": 0,
     "unchanged_asset_count": 1
   }
 }

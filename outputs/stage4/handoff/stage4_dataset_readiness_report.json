@@ -1,17 +1,17 @@
 {
   "stage": "stage4_ml_readiness_handoff",
   "status": "handoff_ready_model_training_not_ready",
-  "pipeline_step": "03_build_dataset_readiness_report",
-  "purpose": "State honestly what the current artifacts can support: a structured handoff to an ML team, not a model-training claim.",
-  "inputs": {
-    "feature_inventory": "outputs/stage4/features/stage4_feature_inventory.json"
-  },
-  "readiness_summary": {
+  "summary": {
     "handoff_readiness": "ready_for_ml_team_discovery",
     "model_training_readiness": "not_ready",
     "reason": "The repository has structured lineage, feature-family evidence, and RAW signal metrics, but it does not yet have enough labeled examples or target definitions for credible training.",
     "asset_count": 12,
     "complete_handoff_feature_asset_count": 3
+  },
+  "pipeline_step": "03_build_dataset_readiness_report",
+  "purpose": "State honestly what the current artifacts can support: a structured handoff to an ML team, not a model-training claim.",
+  "inputs": {
+    "feature_inventory": "outputs/stage4/features/stage4_feature_inventory.json"
   },
   "readiness_checks": [
     {

@@ -2,36 +2,56 @@
   "stage": "stage3_semantic_local_conditioning",
   "status": "validated",
   "pipeline_step": "05_build_stage3_manifest",
-  "purpose": "Compact index for Stage 3 generated evidence. This manifest separates the formal mask-persistence pipeline proof from exploratory Lightroom write-behavior probes.",
+  "purpose": "Compact index for Stage 3 generated evidence. This manifest separates the formal mask definition and mask-edit pipeline proof from exploratory Lightroom write-behavior probes.",
   "core_pipeline_artifact_sequence": [
     {
       "order": 1,
-      "role": "presegmentation_mask_state_extract",
+      "role": "premasking_mask_state_extract",
       "produced_by": "scripts/python/stage3/01_extract_mask_state.py",
       "artifact": {
-        "path": "outputs/stage3/pipeline/stage3_extracted_presegmentation_mask_state.json",
+        "path": "outputs/stage3/pipeline/stage3_premasking_mask_state.json",
         "sha256": "f0bcf211349c51d8322af5d1c46b2a02bec2a246083d4680faa3a2dd2b3271b6",
         "size_bytes": 6996
       }
     },
     {
       "order": 2,
-      "role": "postmasking_no_local_adjustment_mask_state_extract",
+      "role": "postmasking_mask_state_extract",
       "produced_by": "scripts/python/stage3/01_extract_mask_state.py",
       "artifact": {
-        "path": "outputs/stage3/pipeline/stage3_extracted_postmasking_no_local_adjustment_mask_state.json",
+        "path": "outputs/stage3/pipeline/stage3_postmasking_mask_state.json",
         "sha256": "e4c59d0af11a6ed6eb2a72b9300348f2a74b413887fe10a7efee03f016cec7d0",
         "size_bytes": 53018
       }
     },
     {
       "order": 3,
-      "role": "presegmentation_vs_postmasking_no_local_adjustment_comparison",
+      "role": "premasking_vs_postmasking_comparison",
       "produced_by": "scripts/python/stage3/02_compare_mask_state.py",
       "artifact": {
-        "path": "outputs/stage3/pipeline/stage3_mask_state_postmasking_no_local_adjustment_comparison.json",
-        "sha256": "ef104205f2afebb957e8d7d9047574c4c89a33279d339c1ebddffe0f1e106331",
-        "size_bytes": 21592
+        "path": "outputs/stage3/pipeline/stage3_premasking_vs_postmasking_mask_state_comparison.json",
+        "sha256": "f532f9bac95141d5b86c8f65155bd0d45745d9aa88765b4a6b6be72af85bfa1d",
+        "size_bytes": 21545
+      }
+    },
+    {
+      "order": 4,
+      "role": "postlocal_adjustment_mask_state_extract",
+      "produced_by": "scripts/python/stage3/01_extract_mask_state.py",
+      "artifact": {
+        "path": "outputs/stage3/pipeline/stage3_postlocal_adjustment_mask_state.json",
+        "sha256": "581578ad53f84eb13ecec899be783e79f8ffda56d5fd60284716d2aa14f0a18a",
+        "size_bytes": 54160
+      }
+    },
+    {
+      "order": 5,
+      "role": "postmasking_vs_postlocal_adjustment_comparison",
+      "produced_by": "scripts/python/stage3/02_compare_mask_state.py",
+      "artifact": {
+        "path": "outputs/stage3/pipeline/stage3_postmasking_vs_postlocal_adjustment_mask_state_comparison.json",
+        "sha256": "efddce10136a7ef54378d8602254cd3cce70532b14dad61d7f2cbae8a419d1d8",
+        "size_bytes": 35847
       }
     }
   ],
@@ -48,26 +68,6 @@
     },
     {
       "order": 2,
-      "role": "postlocal_adjustment_mask_state_extract",
-      "produced_by": "scripts/python/stage3/01_extract_mask_state.py",
-      "artifact": {
-        "path": "outputs/stage3/probes/stage3_extracted_postlocal_adjustment_mask_state.json",
-        "sha256": "581578ad53f84eb13ecec899be783e79f8ffda56d5fd60284716d2aa14f0a18a",
-        "size_bytes": 54160
-      }
-    },
-    {
-      "order": 3,
-      "role": "postmasking_no_local_adjustment_vs_postlocal_adjustment_comparison",
-      "produced_by": "scripts/python/stage3/02_compare_mask_state.py",
-      "artifact": {
-        "path": "outputs/stage3/probes/stage3_mask_state_postlocal_adjustment_comparison.json",
-        "sha256": "9289a200c506c2d59a37c305d394433293ef3a14e8be99bd04f9138ccdd42006",
-        "size_bytes": 35883
-      }
-    },
-    {
-      "order": 4,
       "role": "postglobal_point_color_mask_state_extract",
       "produced_by": "scripts/python/stage3/01_extract_mask_state.py",
       "artifact": {
@@ -77,26 +77,30 @@
       }
     },
     {
-      "order": 5,
+      "order": 3,
       "role": "postlocal_adjustment_vs_postglobal_point_color_comparison",
       "produced_by": "scripts/python/stage3/02_compare_mask_state.py",
       "artifact": {
         "path": "outputs/stage3/probes/stage3_mask_state_postglobal_point_color_comparison.json",
-        "sha256": "553bcadbd3306bb780fc15cd03ee2c1d2174f1369bc75fe4a5ee7f054c44b6ed",
-        "size_bytes": 36949
+        "sha256": "33f27bf1d135cb261ee319d6375ba6bc463466b9f56c34050a84cad2e0eebb5c",
+        "size_bytes": 37048
       }
     }
   ],
   "validation": {
     "status": "validated",
-    "core_comparison_status": "complete",
+    "mask_definition_comparison_status": "complete",
+    "mask_edit_comparison_status": "complete",
     "missing_core_compared_asset_count": 0
   },
   "summary": {
     "core_asset_count": 3,
-    "core_changed_asset_count": 3,
-    "core_mask_group_count": 18,
-    "core_mask_entry_count": 21,
-    "exploratory_probe_artifact_count": 5
+    "mask_definition_changed_asset_count": 3,
+    "mask_edit_changed_asset_count": 3,
+    "postmasking_mask_group_count": 18,
+    "postmasking_mask_entry_count": 21,
+    "postlocal_adjustment_mask_group_count": 18,
+    "postlocal_adjustment_mask_entry_count": 21,
+    "exploratory_probe_artifact_count": 3
   }
 }

@@ -14,21 +14,17 @@ if __package__ in {None, ""}:
 from scripts.python.common import ensure_parent_dir, read_json
 
 
-DEFAULT_PRESEGMENTATION_EXTRACT = (
-    "outputs/stage3/pipeline/stage3_extracted_presegmentation_mask_state.json"
-)
-DEFAULT_POSTMASKING_EXTRACT = (
-    "outputs/stage3/pipeline/stage3_extracted_postmasking_no_local_adjustment_mask_state.json"
-)
+DEFAULT_PRESEGMENTATION_EXTRACT = "outputs/stage3/pipeline/stage3_premasking_mask_state.json"
+DEFAULT_POSTMASKING_EXTRACT = "outputs/stage3/pipeline/stage3_postmasking_mask_state.json"
 DEFAULT_POSTMASKING_COMPARISON = (
-    "outputs/stage3/pipeline/stage3_mask_state_postmasking_no_local_adjustment_comparison.json"
+    "outputs/stage3/pipeline/stage3_premasking_vs_postmasking_mask_state_comparison.json"
 )
 DEFAULT_SPIKE_REPORT = "outputs/stage3/probes/stage3_mask_state_spike_report.json"
 DEFAULT_POSTLOCAL_EXTRACT = (
-    "outputs/stage3/probes/stage3_extracted_postlocal_adjustment_mask_state.json"
+    "outputs/stage3/pipeline/stage3_postlocal_adjustment_mask_state.json"
 )
 DEFAULT_POSTLOCAL_COMPARISON = (
-    "outputs/stage3/probes/stage3_mask_state_postlocal_adjustment_comparison.json"
+    "outputs/stage3/pipeline/stage3_postmasking_vs_postlocal_adjustment_mask_state_comparison.json"
 )
 DEFAULT_POSTGLOBAL_POINT_COLOR_EXTRACT = (
     "outputs/stage3/probes/stage3_extracted_postglobal_point_color_mask_state.json"
@@ -47,20 +43,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--presegmentation-extract",
         default=DEFAULT_PRESEGMENTATION_EXTRACT,
-        help="Mask-state extract for the frozen presegmentation checkpoint.",
+        help="Mask-state extract for the frozen formal pre-mask checkpoint.",
     )
     parser.add_argument(
         "--postmasking-extract",
         default=DEFAULT_POSTMASKING_EXTRACT,
         help=(
-            "Mask-state extract after mask creation/copying and before "
-            "intentional masked local Develop changes."
+            "Mask-state extract for the frozen formal post-mask checkpoint."
         ),
     )
     parser.add_argument(
         "--postmasking-comparison",
         default=DEFAULT_POSTMASKING_COMPARISON,
-        help="Core Stage 3 presegmentation vs postmasking comparison.",
+        help="Core Stage 3 pre-mask vs post-mask comparison.",
     )
     parser.add_argument(
         "--spike-report",
@@ -70,12 +65,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--postlocal-extract",
         default=DEFAULT_POSTLOCAL_EXTRACT,
-        help="Optional postlocal-adjustment behavior-probe extract.",
+        help="Mask-state extract for the frozen formal post-local-adjustment checkpoint.",
     )
     parser.add_argument(
         "--postlocal-comparison",
         default=DEFAULT_POSTLOCAL_COMPARISON,
-        help="Optional postlocal-adjustment behavior-probe comparison.",
+        help="Core Stage 3 post-mask vs post-local-adjustment comparison.",
     )
     parser.add_argument(
         "--postglobal-point-color-extract",
@@ -144,21 +139,33 @@ def core_artifact_sequence(args: argparse.Namespace) -> list[dict[str, object]]:
     return [
         sequence_item(
             1,
-            "presegmentation_mask_state_extract",
+            "premasking_mask_state_extract",
             "scripts/python/stage3/01_extract_mask_state.py",
             artifact_ref(args.presegmentation_extract),
         ),
         sequence_item(
             2,
-            "postmasking_no_local_adjustment_mask_state_extract",
+            "postmasking_mask_state_extract",
             "scripts/python/stage3/01_extract_mask_state.py",
             artifact_ref(args.postmasking_extract),
         ),
         sequence_item(
             3,
-            "presegmentation_vs_postmasking_no_local_adjustment_comparison",
+            "premasking_vs_postmasking_comparison",
             "scripts/python/stage3/02_compare_mask_state.py",
             artifact_ref(args.postmasking_comparison),
+        ),
+        sequence_item(
+            4,
+            "postlocal_adjustment_mask_state_extract",
+            "scripts/python/stage3/01_extract_mask_state.py",
+            artifact_ref(args.postlocal_extract),
+        ),
+        sequence_item(
+            5,
+            "postmasking_vs_postlocal_adjustment_comparison",
+            "scripts/python/stage3/02_compare_mask_state.py",
+            artifact_ref(args.postlocal_comparison),
         ),
     ]
 
@@ -174,24 +181,12 @@ def probe_artifact_sequence(args: argparse.Namespace) -> list[dict[str, object]]
         ),
         sequence_item(
             2,
-            "postlocal_adjustment_mask_state_extract",
-            "scripts/python/stage3/01_extract_mask_state.py",
-            optional_artifact_ref(args.postlocal_extract),
-        ),
-        sequence_item(
-            3,
-            "postmasking_no_local_adjustment_vs_postlocal_adjustment_comparison",
-            "scripts/python/stage3/02_compare_mask_state.py",
-            optional_artifact_ref(args.postlocal_comparison),
-        ),
-        sequence_item(
-            4,
             "postglobal_point_color_mask_state_extract",
             "scripts/python/stage3/01_extract_mask_state.py",
             optional_artifact_ref(args.postglobal_point_color_extract),
         ),
         sequence_item(
-            5,
+            3,
             "postlocal_adjustment_vs_postglobal_point_color_comparison",
             "scripts/python/stage3/02_compare_mask_state.py",
             optional_artifact_ref(args.postglobal_point_color_comparison),
@@ -200,59 +195,94 @@ def probe_artifact_sequence(args: argparse.Namespace) -> list[dict[str, object]]
     return [item for item in candidates if item["artifact"] is not None]
 
 
-def build_summary(core_comparison: dict[str, object], probes: list[dict[str, object]]) -> dict[str, object]:
+def comparison_summary(payload: dict[str, object]) -> dict[str, object]:
+    """Return a comparison summary object when present."""
+    summary = payload.get("summary", {})
+    return summary if isinstance(summary, dict) else {}
+
+
+def build_summary(
+    mask_definition_comparison: dict[str, object],
+    mask_edit_comparison: dict[str, object],
+    probes: list[dict[str, object]],
+) -> dict[str, object]:
     """Build a compact Stage 3 summary from core and probe artifacts."""
-    comparison_summary = core_comparison.get("summary", {})
-    if not isinstance(comparison_summary, dict):
-        comparison_summary = {}
+    definition_summary = comparison_summary(mask_definition_comparison)
+    edit_summary = comparison_summary(mask_edit_comparison)
     return {
-        "core_asset_count": comparison_summary.get("asset_count"),
-        "core_changed_asset_count": comparison_summary.get("changed_asset_count"),
-        "core_mask_group_count": comparison_summary.get(
-            "postmasking_mask_group_count"
+        "core_asset_count": definition_summary.get("asset_count"),
+        "mask_definition_changed_asset_count": definition_summary.get(
+            "changed_asset_count"
         ),
-        "core_mask_entry_count": comparison_summary.get(
-            "postmasking_mask_entry_count"
+        "mask_edit_changed_asset_count": edit_summary.get("changed_asset_count"),
+        "postmasking_mask_group_count": definition_summary.get(
+            "after_state_mask_group_count"
+        ),
+        "postmasking_mask_entry_count": definition_summary.get(
+            "after_state_mask_entry_count"
+        ),
+        "postlocal_adjustment_mask_group_count": edit_summary.get(
+            "after_state_mask_group_count"
+        ),
+        "postlocal_adjustment_mask_entry_count": edit_summary.get(
+            "after_state_mask_entry_count"
         ),
         "exploratory_probe_artifact_count": len(probes),
     }
 
 
-def validation_status(core_comparison: dict[str, object]) -> dict[str, object]:
-    """Return manifest validation status derived from the core comparison."""
-    comparison_summary = core_comparison.get("summary", {})
-    if not isinstance(comparison_summary, dict):
-        comparison_summary = {}
-    missing_count = int(comparison_summary.get("missing_presegmentation_asset_count") or 0)
-    missing_count += int(comparison_summary.get("missing_postmasking_asset_count") or 0)
-    comparison_complete = core_comparison.get("status") == "complete"
-    status = "validated" if comparison_complete and missing_count == 0 else "review_required"
+def comparison_missing_count(payload: dict[str, object]) -> int:
+    """Return the asset mismatch count for one comparison artifact."""
+    summary = comparison_summary(payload)
+    return int(summary.get("missing_before_state_asset_count") or 0) + int(
+        summary.get("missing_after_state_asset_count") or 0
+    )
+
+
+def validation_status(
+    mask_definition_comparison: dict[str, object],
+    mask_edit_comparison: dict[str, object],
+) -> dict[str, object]:
+    """Return manifest validation status derived from core comparisons."""
+    missing_count = comparison_missing_count(mask_definition_comparison)
+    missing_count += comparison_missing_count(mask_edit_comparison)
+    comparisons_complete = (
+        mask_definition_comparison.get("status") == "complete"
+        and mask_edit_comparison.get("status") == "complete"
+    )
+    status = "validated" if comparisons_complete and missing_count == 0 else "review_required"
     return {
         "status": status,
-        "core_comparison_status": core_comparison.get("status"),
+        "mask_definition_comparison_status": mask_definition_comparison.get("status"),
+        "mask_edit_comparison_status": mask_edit_comparison.get("status"),
         "missing_core_compared_asset_count": missing_count,
     }
 
 
 def build_manifest(args: argparse.Namespace) -> dict[str, object]:
     """Build the stable Stage 3 manifest payload."""
-    core_comparison = read_json(args.postmasking_comparison)
+    mask_definition_comparison = read_json(args.postmasking_comparison)
+    mask_edit_comparison = read_json(args.postlocal_comparison)
     core_sequence = core_artifact_sequence(args)
     probe_sequence = probe_artifact_sequence(args)
-    validation = validation_status(core_comparison)
+    validation = validation_status(mask_definition_comparison, mask_edit_comparison)
     return {
         "stage": "stage3_semantic_local_conditioning",
         "status": validation["status"],
         "pipeline_step": "05_build_stage3_manifest",
         "purpose": (
             "Compact index for Stage 3 generated evidence. This manifest "
-            "separates the formal mask-persistence pipeline proof from "
+            "separates the formal mask definition and mask-edit pipeline proof from "
             "exploratory Lightroom write-behavior probes."
         ),
         "core_pipeline_artifact_sequence": core_sequence,
         "exploratory_probe_artifact_sequence": probe_sequence,
         "validation": validation,
-        "summary": build_summary(core_comparison, probe_sequence),
+        "summary": build_summary(
+            mask_definition_comparison,
+            mask_edit_comparison,
+            probe_sequence,
+        ),
     }
 
 

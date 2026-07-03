@@ -1,6 +1,12 @@
 {
   "stage": "stage4_ml_readiness_handoff",
   "status": "contract_ready_for_review",
+  "summary": {
+    "asset_count": 12,
+    "complete_handoff_feature_asset_count": 3,
+    "feature_family_count": 4,
+    "model_training_readiness": "not_ready"
+  },
   "pipeline_step": "04_build_ml_handoff_contract",
   "purpose": "Define what this repository can hand to a future ML/data-science team without overstating current model-training readiness.",
   "inputs": {
@@ -65,12 +71,16 @@
     {
       "feature_family": "semantic_local_mask_state",
       "source_stage": "stage3",
-      "artifact": "outputs/stage3/pipeline/stage3_mask_state_postmasking_no_local_adjustment_comparison.json",
+      "mask_definition_artifact": "outputs/stage3/pipeline/stage3_premasking_vs_postmasking_mask_state_comparison.json",
+      "mask_edit_artifact": "outputs/stage3/pipeline/stage3_postmasking_vs_postlocal_adjustment_mask_state_comparison.json",
       "asset_count": 3,
-      "mask_group_count": 18,
-      "mask_entry_count": 21,
+      "postmasking_mask_group_count": 18,
+      "postmasking_mask_entry_count": 21,
+      "postlocal_adjustment_mask_group_count": 18,
+      "postlocal_adjustment_mask_entry_count": 21,
+      "mask_edit_changed_asset_count": 3,
       "status": "validated",
-      "modeling_role": "semantic region availability and local-edit structure"
+      "modeling_role": "semantic region availability, local-edit structure, and mask-edit deltas"
     },
     {
       "feature_family": "raw_pixel_signal_metrics",
@@ -102,7 +112,7 @@
   "next_handoff_questions": [
     "Which business objective should define the target: editing-speed reduction, style suggestion, compute optimization, or QA?",
     "What label source will define accepted, rejected, or corrected transformations?",
-    "Will modeling consume XMP/ACR parameter state, rendered before/after images, RAW signal summaries, or all three?",
+    "Will modeling consume XMP/ACR parameter state, RAW signal summaries, Lightroom-rendered JPEG targets, or a joined multi-modal dataset?",
     "What minimum cross-shoot dataset size is required before a proof model is meaningful?"
   ]
 }

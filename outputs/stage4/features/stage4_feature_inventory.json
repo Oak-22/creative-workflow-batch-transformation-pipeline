@@ -1,6 +1,14 @@
 {
   "stage": "stage4_ml_readiness_handoff",
   "status": "complete",
+  "summary": {
+    "asset_count": 12,
+    "complete_handoff_feature_asset_count": 3,
+    "asset_identity_metadata_asset_count": 12,
+    "develop_parameter_delta_asset_count": 9,
+    "semantic_local_mask_state_asset_count": 3,
+    "raw_pixel_signal_metric_asset_count": 12
+  },
   "pipeline_step": "02_build_feature_inventory",
   "purpose": "Inventory the feature families currently materialized by Stages 1-4 so a downstream ML team can see what evidence exists before model training is proposed.",
   "inputs": {
@@ -8,7 +16,8 @@
     "stage2_manifest": "outputs/stage2/stage2_manifest.json",
     "stage2_comparison": "outputs/stage2/comparisons/stage2_develop_parameter_comparison.json",
     "stage3_manifest": "outputs/stage3/stage3_manifest.json",
-    "stage3_core_comparison": "outputs/stage3/pipeline/stage3_mask_state_postmasking_no_local_adjustment_comparison.json",
+    "stage3_mask_definition_comparison": "outputs/stage3/pipeline/stage3_premasking_vs_postmasking_mask_state_comparison.json",
+    "stage3_mask_edit_comparison": "outputs/stage3/pipeline/stage3_postmasking_vs_postlocal_adjustment_mask_state_comparison.json",
     "raw_pixel_signal_metrics": "outputs/stage4/features/stage4_raw_pixel_signal_metrics.json"
   },
   "feature_families": [
@@ -32,12 +41,16 @@
     {
       "feature_family": "semantic_local_mask_state",
       "source_stage": "stage3",
-      "artifact": "outputs/stage3/pipeline/stage3_mask_state_postmasking_no_local_adjustment_comparison.json",
+      "mask_definition_artifact": "outputs/stage3/pipeline/stage3_premasking_vs_postmasking_mask_state_comparison.json",
+      "mask_edit_artifact": "outputs/stage3/pipeline/stage3_postmasking_vs_postlocal_adjustment_mask_state_comparison.json",
       "asset_count": 3,
-      "mask_group_count": 18,
-      "mask_entry_count": 21,
+      "postmasking_mask_group_count": 18,
+      "postmasking_mask_entry_count": 21,
+      "postlocal_adjustment_mask_group_count": 18,
+      "postlocal_adjustment_mask_entry_count": 21,
+      "mask_edit_changed_asset_count": 3,
       "status": "validated",
-      "modeling_role": "semantic region availability and local-edit structure"
+      "modeling_role": "semantic region availability, local-edit structure, and mask-edit deltas"
     },
     {
       "feature_family": "raw_pixel_signal_metrics",
@@ -49,14 +62,6 @@
       "modeling_role": "source-image signal summaries and decoded-read provenance"
     }
   ],
-  "summary": {
-    "asset_count": 12,
-    "complete_handoff_feature_asset_count": 3,
-    "asset_identity_metadata_asset_count": 12,
-    "develop_parameter_delta_asset_count": 9,
-    "semantic_local_mask_state_asset_count": 3,
-    "raw_pixel_signal_metric_asset_count": 12
-  },
   "asset_feature_matrix": [
     {
       "asset_key": "JB107456",

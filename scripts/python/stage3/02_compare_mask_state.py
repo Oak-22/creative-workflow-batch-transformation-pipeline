@@ -12,14 +12,10 @@ if __package__ in {None, ""}:
 from scripts.python.common import read_json, write_json
 
 
-DEFAULT_PRESEGMENTATION_EXTRACT = (
-    "outputs/stage3/pipeline/stage3_extracted_presegmentation_mask_state.json"
-)
-DEFAULT_POSTMASKING_EXTRACT = (
-    "outputs/stage3/pipeline/stage3_extracted_postmasking_no_local_adjustment_mask_state.json"
-)
+DEFAULT_PRESEGMENTATION_EXTRACT = "outputs/stage3/pipeline/stage3_premasking_mask_state.json"
+DEFAULT_POSTMASKING_EXTRACT = "outputs/stage3/pipeline/stage3_postmasking_mask_state.json"
 DEFAULT_OUTPUT = (
-    "outputs/stage3/pipeline/stage3_mask_state_postmasking_no_local_adjustment_comparison.json"
+    "outputs/stage3/pipeline/stage3_premasking_vs_postmasking_mask_state_comparison.json"
 )
 
 
@@ -31,12 +27,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--presegmentation",
         default=DEFAULT_PRESEGMENTATION_EXTRACT,
-        help="Presegmentation mask-state extract JSON.",
+        help="Pre-mask mask-state extract JSON.",
     )
     parser.add_argument(
         "--postmasking",
         default=DEFAULT_POSTMASKING_EXTRACT,
-        help="Postmasking mask-state extract JSON.",
+        help="Post-mask mask-state extract JSON.",
     )
     parser.add_argument(
         "--output",
@@ -45,15 +41,14 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--comparison-model",
-        default="presegmentation_vs_postmasking_no_local_adjustment",
+        default="premasking_vs_postmasking",
         help="Machine-readable label for the compared Stage 3 states.",
     )
     parser.add_argument(
         "--comparison-boundary",
         default=(
-            "This artifact compares Stage 3 presegmentation Lightroom "
-            "sidecars against postmasking sidecars created before any "
-            "intentional masked local Develop adjustments."
+            "This artifact compares the Stage 3 formal pre-mask sidecar "
+            "state against the formal post-mask sidecar state."
         ),
         help="Human-readable boundary represented by this comparison.",
     )
@@ -64,6 +59,16 @@ def parse_args() -> argparse.Namespace:
             "masked local adjustment parameter changes."
         ),
         help="Human-readable statement of what this comparison makes observable.",
+    )
+    parser.add_argument(
+        "--before-label",
+        default="premasking",
+        help="Machine-readable label for the before-state artifact.",
+    )
+    parser.add_argument(
+        "--after-label",
+        default="postmasking",
+        help="Machine-readable label for the after-state artifact.",
     )
     return parser.parse_args()
 
@@ -138,7 +143,7 @@ def compare_asset(
     return {
         "asset_key": asset_key,
         "changed": pre_signature != post_signature,
-        "presegmentation": {
+        "before_state": {
             "xmp_path": pre_record.get("xmp_path"),
             "xmp_sha256": pre_record.get("xmp_sha256"),
             "acr_path": pre_record.get("acr_path"),
@@ -147,7 +152,7 @@ def compare_asset(
             "mask_entry_count": pre_record.get("mask_entry_count"),
             "state_signature": pre_signature,
         },
-        "postmasking": {
+        "after_state": {
             "xmp_path": post_record.get("xmp_path"),
             "xmp_sha256": post_record.get("xmp_sha256"),
             "acr_path": post_record.get("acr_path"),
@@ -162,18 +167,18 @@ def compare_asset(
 def build_summary(records: list[dict[str, object]], missing: dict[str, list[str]]) -> dict[str, object]:
     """Build a Stage 3 mask-state comparison summary."""
     changed_records = [record for record in records if record["changed"]]
-    post_records = [record["postmasking"] for record in records]
+    after_records = [record["after_state"] for record in records]
     return {
         "asset_count": len(records),
         "changed_asset_count": len(changed_records),
         "unchanged_asset_count": len(records) - len(changed_records),
-        "missing_presegmentation_asset_count": len(missing["presegmentation"]),
-        "missing_postmasking_asset_count": len(missing["postmasking"]),
-        "postmasking_mask_group_count": sum(
-            int(record.get("mask_group_count") or 0) for record in post_records
+        "missing_before_state_asset_count": len(missing["before_state"]),
+        "missing_after_state_asset_count": len(missing["after_state"]),
+        "after_state_mask_group_count": sum(
+            int(record.get("mask_group_count") or 0) for record in after_records
         ),
-        "postmasking_mask_entry_count": sum(
-            int(record.get("mask_entry_count") or 0) for record in post_records
+        "after_state_mask_entry_count": sum(
+            int(record.get("mask_entry_count") or 0) for record in after_records
         ),
     }
 
@@ -189,8 +194,8 @@ def build_comparison(args: argparse.Namespace) -> dict[str, object]:
     post_keys = set(post_records)
     compared_keys = sorted(pre_keys & post_keys)
     missing = {
-        "presegmentation": sorted(post_keys - pre_keys),
-        "postmasking": sorted(pre_keys - post_keys),
+        "before_state": sorted(post_keys - pre_keys),
+        "after_state": sorted(pre_keys - post_keys),
     }
     records = [
         compare_asset(asset_key, pre_records[asset_key], post_records[asset_key])
@@ -198,16 +203,20 @@ def build_comparison(args: argparse.Namespace) -> dict[str, object]:
     ]
     status = (
         "complete"
-        if not missing["presegmentation"] and not missing["postmasking"]
+        if not missing["before_state"] and not missing["after_state"]
         else "complete_with_asset_mismatch"
     )
     return {
         "stage": "stage3_semantic_local_conditioning",
         "comparison_model": args.comparison_model,
         "status": status,
+        "state_labels": {
+            "before_state": args.before_label,
+            "after_state": args.after_label,
+        },
         "inputs": {
-            "presegmentation": args.presegmentation,
-            "postmasking": args.postmasking,
+            "before_state": args.presegmentation,
+            "after_state": args.postmasking,
         },
         "notes": {
             "comparison_boundary": args.comparison_boundary,

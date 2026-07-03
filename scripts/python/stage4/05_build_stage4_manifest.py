@@ -88,7 +88,7 @@ def artifact_sequence(args: argparse.Namespace) -> list[dict[str, object]]:
 def validation_status(readiness_report: dict[str, object]) -> dict[str, object]:
     """Return Stage 4 validation status from the readiness report."""
     validation = readiness_report.get("validation", {})
-    readiness_summary = readiness_report.get("readiness_summary", {})
+    readiness_summary = readiness_report.get("summary", {})
     if not isinstance(validation, dict):
         validation = {}
     if not isinstance(readiness_summary, dict):
@@ -119,18 +119,6 @@ def build_manifest(args: argparse.Namespace) -> dict[str, object]:
     return {
         "stage": "stage4_ml_readiness_handoff",
         "status": validation["status"],
-        "pipeline_step": "05_build_stage4_manifest",
-        "purpose": (
-            "Compact index for Stage 4 generated evidence. This manifest frames "
-            "Stage 4 as an ML-readiness handoff package, not as a model-training result."
-        ),
-        "artifact_sequence": artifact_sequence(args),
-        "upstream_stage_manifests": [
-            "outputs/stage1/stage1_manifest.json",
-            "outputs/stage2/stage2_manifest.json",
-            "outputs/stage3/stage3_manifest.json",
-        ],
-        "validation": validation,
         "summary": {
             "asset_count": inventory_summary.get("asset_count"),
             "complete_handoff_feature_asset_count": inventory_summary.get(
@@ -140,6 +128,18 @@ def build_manifest(args: argparse.Namespace) -> dict[str, object]:
             "handoff_claim_count": len(handoff_contract.get("approved_claims", [])),
             "non_claim_count": len(handoff_contract.get("non_claims", [])),
         },
+        "pipeline_step": "05_build_stage4_manifest",
+        "purpose": (
+            "Compact index for Stage 4 generated evidence. This manifest frames "
+            "Stage 4 as an ML-readiness handoff package, not as a model-training result."
+        ),
+        "upstream_stage_manifests": [
+            "outputs/stage1/stage1_manifest.json",
+            "outputs/stage2/stage2_manifest.json",
+            "outputs/stage3/stage3_manifest.json",
+        ],
+        "validation": validation,
+        "artifact_sequence": artifact_sequence(args),
     }
 
 

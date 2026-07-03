@@ -111,6 +111,8 @@ pixel-signal metrics:
 outputs/stage1/stage1_manifest.json
 outputs/stage2/stage2_manifest.json
 outputs/stage3/stage3_manifest.json
+outputs/stage3/pipeline/stage3_premasking_vs_postmasking_mask_state_comparison.json
+outputs/stage3/pipeline/stage3_postmasking_vs_postlocal_adjustment_mask_state_comparison.json
 outputs/stage4/features/stage4_raw_pixel_signal_metrics.json
 ```
 

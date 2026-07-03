@@ -1,8 +1,28 @@
 {
   "stage": "stage4_ml_readiness_handoff",
   "status": "validated_for_handoff",
+  "summary": {
+    "asset_count": 12,
+    "complete_handoff_feature_asset_count": 3,
+    "feature_family_count": 4,
+    "handoff_claim_count": 4,
+    "non_claim_count": 4
+  },
   "pipeline_step": "05_build_stage4_manifest",
   "purpose": "Compact index for Stage 4 generated evidence. This manifest frames Stage 4 as an ML-readiness handoff package, not as a model-training result.",
+  "upstream_stage_manifests": [
+    "outputs/stage1/stage1_manifest.json",
+    "outputs/stage2/stage2_manifest.json",
+    "outputs/stage3/stage3_manifest.json"
+  ],
+  "validation": {
+    "status": "validated_for_handoff",
+    "dataset_readiness_status": "handoff_ready_model_training_not_ready",
+    "handoff_readiness": "ready_for_ml_team_discovery",
+    "model_training_readiness": "not_ready",
+    "blocking_readiness_check_count": 2,
+    "blocking_modeling_gap_count": 6
+  },
   "artifact_sequence": [
     {
       "order": 1,
@@ -20,8 +40,8 @@
       "produced_by": "scripts/python/stage4/02_build_feature_inventory.py",
       "artifact": {
         "path": "outputs/stage4/features/stage4_feature_inventory.json",
-        "sha256": "b3ab4fb37d204284dada37197c917cf7c2ad5e158e748d16fb83bcd8426c48a4",
-        "size_bytes": 43349
+        "sha256": "1b97a2c095d1766a16f5af54ab48eab2ed040cf198e4bb6dc404ec23572cb297",
+        "size_bytes": 43808
       }
     },
     {
@@ -30,8 +50,8 @@
       "produced_by": "scripts/python/stage4/03_build_dataset_readiness_report.py",
       "artifact": {
         "path": "outputs/stage4/handoff/stage4_dataset_readiness_report.json",
-        "sha256": "1e02d8f2972cb65a337d94ecc6210161c2f63721002848dacb347f7bbf5522e9",
-        "size_bytes": 2606
+        "sha256": "a916dfa782bf6c14ff972e57acd073424ff38a1bad0b37d11460898fd9bd6d44",
+        "size_bytes": 2596
       }
     },
     {
@@ -40,29 +60,9 @@
       "produced_by": "scripts/python/stage4/04_build_ml_handoff_contract.py",
       "artifact": {
         "path": "outputs/stage4/handoff/stage4_ml_handoff_contract.json",
-        "sha256": "91eac5125032ef50e8fa29fa6cb24b4d6f882ea4c7a8dc4dbaeeccfe7352a6de",
-        "size_bytes": 4489
+        "sha256": "8b9624c1ca67a42a3edff0ab860778f63073148977f8f32c82e55aef33c0c7bc",
+        "size_bytes": 4998
       }
     }
-  ],
-  "upstream_stage_manifests": [
-    "outputs/stage1/stage1_manifest.json",
-    "outputs/stage2/stage2_manifest.json",
-    "outputs/stage3/stage3_manifest.json"
-  ],
-  "validation": {
-    "status": "validated_for_handoff",
-    "dataset_readiness_status": "handoff_ready_model_training_not_ready",
-    "handoff_readiness": "ready_for_ml_team_discovery",
-    "model_training_readiness": "not_ready",
-    "blocking_readiness_check_count": 2,
-    "blocking_modeling_gap_count": 6
-  },
-  "summary": {
-    "asset_count": 12,
-    "complete_handoff_feature_asset_count": 3,
-    "feature_family_count": 4,
-    "handoff_claim_count": 4,
-    "non_claim_count": 4
-  }
+  ]
 }

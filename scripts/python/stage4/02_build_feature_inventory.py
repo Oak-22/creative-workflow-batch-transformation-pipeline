@@ -19,8 +19,11 @@ DEFAULT_STAGE2_COMPARISON = (
     "outputs/stage2/comparisons/stage2_develop_parameter_comparison.json"
 )
 DEFAULT_STAGE3_MANIFEST = "outputs/stage3/stage3_manifest.json"
-DEFAULT_STAGE3_CORE_COMPARISON = (
-    "outputs/stage3/pipeline/stage3_mask_state_postmasking_no_local_adjustment_comparison.json"
+DEFAULT_STAGE3_MASK_DEFINITION_COMPARISON = (
+    "outputs/stage3/pipeline/stage3_premasking_vs_postmasking_mask_state_comparison.json"
+)
+DEFAULT_STAGE3_MASK_EDIT_COMPARISON = (
+    "outputs/stage3/pipeline/stage3_postmasking_vs_postlocal_adjustment_mask_state_comparison.json"
 )
 DEFAULT_RAW_METRICS = "outputs/stage4/features/stage4_raw_pixel_signal_metrics.json"
 DEFAULT_OUTPUT = "outputs/stage4/features/stage4_feature_inventory.json"
@@ -36,7 +39,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--stage2-comparison", default=DEFAULT_STAGE2_COMPARISON)
     parser.add_argument("--stage3-manifest", default=DEFAULT_STAGE3_MANIFEST)
     parser.add_argument(
-        "--stage3-core-comparison", default=DEFAULT_STAGE3_CORE_COMPARISON
+        "--stage3-mask-definition-comparison",
+        default=DEFAULT_STAGE3_MASK_DEFINITION_COMPARISON,
+    )
+    parser.add_argument(
+        "--stage3-mask-edit-comparison",
+        default=DEFAULT_STAGE3_MASK_EDIT_COMPARISON,
     )
     parser.add_argument("--raw-metrics", default=DEFAULT_RAW_METRICS)
     parser.add_argument("--output", default=DEFAULT_OUTPUT)
@@ -81,7 +89,7 @@ def stage2_changed_settings(stage2_comparison: dict[str, object]) -> dict[str, i
 
 
 def stage3_mask_counts(stage3_comparison: dict[str, object]) -> dict[str, dict[str, int]]:
-    """Return postmasking mask counts by Stage 3 asset key."""
+    """Return after-state mask counts by Stage 3 asset key."""
     records = stage3_comparison.get("records", [])
     if not isinstance(records, list):
         return {}
@@ -89,12 +97,12 @@ def stage3_mask_counts(stage3_comparison: dict[str, object]) -> dict[str, dict[s
     for record in records:
         if not isinstance(record, dict) or not record.get("asset_key"):
             continue
-        postmasking = record.get("postmasking", {})
-        if not isinstance(postmasking, dict):
-            postmasking = {}
+        after_state = record.get("after_state", {})
+        if not isinstance(after_state, dict):
+            after_state = {}
         counts[str(record["asset_key"])] = {
-            "mask_group_count": int(postmasking.get("mask_group_count") or 0),
-            "mask_entry_count": int(postmasking.get("mask_entry_count") or 0),
+            "mask_group_count": int(after_state.get("mask_group_count") or 0),
+            "mask_entry_count": int(after_state.get("mask_entry_count") or 0),
         }
     return counts
 
@@ -149,6 +157,7 @@ def build_feature_families(
     stage2_manifest: dict[str, object],
     stage2_comparison: dict[str, object],
     stage3_manifest: dict[str, object],
+    stage3_mask_edit_comparison: dict[str, object],
     raw_metrics: dict[str, object],
     args: argparse.Namespace,
 ) -> list[dict[str, object]]:
@@ -162,6 +171,9 @@ def build_feature_families(
         raw_summary = {}
     if not isinstance(stage3_summary, dict):
         stage3_summary = {}
+    mask_edit_summary = stage3_mask_edit_comparison.get("summary", {})
+    if not isinstance(mask_edit_summary, dict):
+        mask_edit_summary = {}
     return [
         {
             "feature_family": "asset_identity_metadata",
@@ -183,12 +195,26 @@ def build_feature_families(
         {
             "feature_family": "semantic_local_mask_state",
             "source_stage": "stage3",
-            "artifact": args.stage3_core_comparison,
+            "mask_definition_artifact": args.stage3_mask_definition_comparison,
+            "mask_edit_artifact": args.stage3_mask_edit_comparison,
             "asset_count": stage3_summary.get("core_asset_count"),
-            "mask_group_count": stage3_summary.get("core_mask_group_count"),
-            "mask_entry_count": stage3_summary.get("core_mask_entry_count"),
+            "postmasking_mask_group_count": stage3_summary.get(
+                "postmasking_mask_group_count"
+            ),
+            "postmasking_mask_entry_count": stage3_summary.get(
+                "postmasking_mask_entry_count"
+            ),
+            "postlocal_adjustment_mask_group_count": stage3_summary.get(
+                "postlocal_adjustment_mask_group_count"
+            ),
+            "postlocal_adjustment_mask_entry_count": stage3_summary.get(
+                "postlocal_adjustment_mask_entry_count"
+            ),
+            "mask_edit_changed_asset_count": mask_edit_summary.get(
+                "changed_asset_count"
+            ),
             "status": stage3_manifest.get("status"),
-            "modeling_role": "semantic region availability and local-edit structure",
+            "modeling_role": "semantic region availability, local-edit structure, and mask-edit deltas",
         },
         {
             "feature_family": "raw_pixel_signal_metrics",
@@ -210,12 +236,13 @@ def build_inventory(args: argparse.Namespace) -> dict[str, object]:
     stage2_manifest = read_json(args.stage2_manifest)
     stage2_comparison = read_json(args.stage2_comparison)
     stage3_manifest = read_json(args.stage3_manifest)
-    stage3_comparison = read_json(args.stage3_core_comparison)
+    stage3_mask_definition_comparison = read_json(args.stage3_mask_definition_comparison)
+    stage3_mask_edit_comparison = read_json(args.stage3_mask_edit_comparison)
     raw_metrics = read_json(args.raw_metrics)
 
     stage1_by_asset = stage1_assets(stage1_manifest)
     stage2_by_asset = stage2_changed_settings(stage2_comparison)
-    stage3_by_asset = stage3_mask_counts(stage3_comparison)
+    stage3_by_asset = stage3_mask_counts(stage3_mask_edit_comparison)
     raw_by_asset = raw_metric_summaries(raw_metrics)
     asset_keys = sorted(
         set(stage1_by_asset) | set(stage2_by_asset) | set(stage3_by_asset) | set(raw_by_asset)
@@ -247,28 +274,6 @@ def build_inventory(args: argparse.Namespace) -> dict[str, object]:
     return {
         "stage": "stage4_ml_readiness_handoff",
         "status": "complete",
-        "pipeline_step": "02_build_feature_inventory",
-        "purpose": (
-            "Inventory the feature families currently materialized by Stages 1-4 "
-            "so a downstream ML team can see what evidence exists before model "
-            "training is proposed."
-        ),
-        "inputs": {
-            "stage1_manifest": args.stage1_manifest,
-            "stage2_manifest": args.stage2_manifest,
-            "stage2_comparison": args.stage2_comparison,
-            "stage3_manifest": args.stage3_manifest,
-            "stage3_core_comparison": args.stage3_core_comparison,
-            "raw_pixel_signal_metrics": args.raw_metrics,
-        },
-        "feature_families": build_feature_families(
-            stage1_manifest,
-            stage2_manifest,
-            stage2_comparison,
-            stage3_manifest,
-            raw_metrics,
-            args,
-        ),
         "summary": {
             "asset_count": len(asset_matrix),
             "complete_handoff_feature_asset_count": sum(
@@ -287,6 +292,30 @@ def build_inventory(args: argparse.Namespace) -> dict[str, object]:
                 asset_matrix, "raw_pixel_signal_metrics"
             ),
         },
+        "pipeline_step": "02_build_feature_inventory",
+        "purpose": (
+            "Inventory the feature families currently materialized by Stages 1-4 "
+            "so a downstream ML team can see what evidence exists before model "
+            "training is proposed."
+        ),
+        "inputs": {
+            "stage1_manifest": args.stage1_manifest,
+            "stage2_manifest": args.stage2_manifest,
+            "stage2_comparison": args.stage2_comparison,
+            "stage3_manifest": args.stage3_manifest,
+            "stage3_mask_definition_comparison": args.stage3_mask_definition_comparison,
+            "stage3_mask_edit_comparison": args.stage3_mask_edit_comparison,
+            "raw_pixel_signal_metrics": args.raw_metrics,
+        },
+        "feature_families": build_feature_families(
+            stage1_manifest,
+            stage2_manifest,
+            stage2_comparison,
+            stage3_manifest,
+            stage3_mask_edit_comparison,
+            raw_metrics,
+            args,
+        ),
         "asset_feature_matrix": asset_matrix,
     }
 

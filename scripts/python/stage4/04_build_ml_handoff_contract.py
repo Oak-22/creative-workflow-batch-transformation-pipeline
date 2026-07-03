@@ -34,7 +34,7 @@ def build_contract(args: argparse.Namespace) -> dict[str, object]:
     inventory = read_json(args.feature_inventory)
     readiness = read_json(args.readiness_report)
     inventory_summary = inventory.get("summary", {})
-    readiness_summary = readiness.get("readiness_summary", {})
+    readiness_summary = readiness.get("summary", {})
     if not isinstance(inventory_summary, dict):
         inventory_summary = {}
     if not isinstance(readiness_summary, dict):
@@ -43,6 +43,16 @@ def build_contract(args: argparse.Namespace) -> dict[str, object]:
     return {
         "stage": "stage4_ml_readiness_handoff",
         "status": "contract_ready_for_review",
+        "summary": {
+            "asset_count": inventory_summary.get("asset_count"),
+            "complete_handoff_feature_asset_count": inventory_summary.get(
+                "complete_handoff_feature_asset_count"
+            ),
+            "feature_family_count": len(inventory.get("feature_families", [])),
+            "model_training_readiness": readiness_summary.get(
+                "model_training_readiness"
+            ),
+        },
         "pipeline_step": "04_build_ml_handoff_contract",
         "purpose": (
             "Define what this repository can hand to a future ML/data-science team "
@@ -120,7 +130,7 @@ def build_contract(args: argparse.Namespace) -> dict[str, object]:
         "next_handoff_questions": [
             "Which business objective should define the target: editing-speed reduction, style suggestion, compute optimization, or QA?",
             "What label source will define accepted, rejected, or corrected transformations?",
-            "Will modeling consume XMP/ACR parameter state, rendered before/after images, RAW signal summaries, or all three?",
+            "Will modeling consume XMP/ACR parameter state, RAW signal summaries, Lightroom-rendered JPEG targets, or a joined multi-modal dataset?",
             "What minimum cross-shoot dataset size is required before a proof model is meaningful?",
         ],
     }

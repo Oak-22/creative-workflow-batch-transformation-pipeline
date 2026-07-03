@@ -94,15 +94,7 @@ def build_report(args: argparse.Namespace) -> dict[str, object]:
     return {
         "stage": "stage4_ml_readiness_handoff",
         "status": "handoff_ready_model_training_not_ready",
-        "pipeline_step": "03_build_dataset_readiness_report",
-        "purpose": (
-            "State honestly what the current artifacts can support: a structured "
-            "handoff to an ML team, not a model-training claim."
-        ),
-        "inputs": {
-            "feature_inventory": args.feature_inventory,
-        },
-        "readiness_summary": {
+        "summary": {
             "handoff_readiness": "ready_for_ml_team_discovery",
             "model_training_readiness": "not_ready",
             "reason": (
@@ -114,6 +106,14 @@ def build_report(args: argparse.Namespace) -> dict[str, object]:
             "complete_handoff_feature_asset_count": summary.get(
                 "complete_handoff_feature_asset_count"
             ),
+        },
+        "pipeline_step": "03_build_dataset_readiness_report",
+        "purpose": (
+            "State honestly what the current artifacts can support: a structured "
+            "handoff to an ML team, not a model-training claim."
+        ),
+        "inputs": {
+            "feature_inventory": args.feature_inventory,
         },
         "readiness_checks": checks,
         "blocking_modeling_gaps": [
