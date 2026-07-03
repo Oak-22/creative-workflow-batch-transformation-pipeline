@@ -33,6 +33,8 @@ Example:
 python3 scripts/python/stage2/01_build_checkpoint_manifest.py
 ```
 
-Derived analysis artifacts belong under `outputs/stage2/`, including
-checkpoint manifests, develop-setting extracts, parameter audit reports,
-comparison reports, and the Stage 2 manifest.
+Derived analysis artifacts belong under `outputs/stage2/`. The compact
+review index stays at `outputs/stage2/stage2_manifest.json`; verbose
+support artifacts are grouped into `checkpoints/`, `extracts/`, and
+`comparisons/` so readers can understand the evidence role before
+opening a JSON file.

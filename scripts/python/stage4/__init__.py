@@ -1,1 +1,1 @@
-"""Stage 4 pixel-signal metric extraction."""
+"""Stage 4 ML-readiness handoff utilities."""

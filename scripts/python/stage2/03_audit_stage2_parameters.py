@@ -13,18 +13,18 @@ from scripts.python.common import read_json, write_json
 
 
 DEFAULT_PRECONDITIONING_EXTRACT = (
-    "outputs/stage2/stage2_extracted_preconditioning_develop_settings.json"
+    "outputs/stage2/extracts/stage2_extracted_preconditioning_develop_settings.json"
 )
 DEFAULT_POSTCONDITIONING_EXTRACT = (
-    "outputs/stage2/stage2_extracted_postconditioning_develop_settings.json"
+    "outputs/stage2/extracts/stage2_extracted_postconditioning_develop_settings.json"
 )
 DEFAULT_PRECONDITIONING_MANIFEST = (
-    "outputs/stage2/stage2_preconditioning_checkpoint_manifest.json"
+    "outputs/stage2/checkpoints/stage2_preconditioning_checkpoint_manifest.json"
 )
 DEFAULT_POSTCONDITIONING_MANIFEST = (
-    "outputs/stage2/stage2_postconditioning_checkpoint_manifest.json"
+    "outputs/stage2/checkpoints/stage2_postconditioning_checkpoint_manifest.json"
 )
-DEFAULT_OUTPUT = "outputs/stage2/stage2_develop_parameter_comparison.json"
+DEFAULT_OUTPUT = "outputs/stage2/comparisons/stage2_develop_parameter_comparison.json"
 
 
 def parse_args() -> argparse.Namespace:

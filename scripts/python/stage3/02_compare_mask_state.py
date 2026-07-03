@@ -13,13 +13,13 @@ from scripts.python.common import read_json, write_json
 
 
 DEFAULT_PRESEGMENTATION_EXTRACT = (
-    "outputs/stage3/stage3_extracted_presegmentation_mask_state.json"
+    "outputs/stage3/pipeline/stage3_extracted_presegmentation_mask_state.json"
 )
 DEFAULT_POSTMASKING_EXTRACT = (
-    "outputs/stage3/stage3_extracted_postmasking_no_local_adjustment_mask_state.json"
+    "outputs/stage3/pipeline/stage3_extracted_postmasking_no_local_adjustment_mask_state.json"
 )
 DEFAULT_OUTPUT = (
-    "outputs/stage3/stage3_mask_state_postmasking_no_local_adjustment_comparison.json"
+    "outputs/stage3/pipeline/stage3_mask_state_postmasking_no_local_adjustment_comparison.json"
 )
 
 

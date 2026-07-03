@@ -100,14 +100,22 @@ same evidence snapshot that was manifested.
 The initial implementation is
 `scripts/python/stage2/01_build_checkpoint_manifest.py`.
 
-The first generated checkpoint manifest is:
+The first generated checkpoint manifest originally lived at:
 
 ```text
 outputs/stage2/stage2_preconditioning_checkpoint_manifest.json
 ```
 
-The expected postconditioning manifest path is:
+The originally expected postconditioning manifest path was:
 
 ```text
 outputs/stage2/stage2_postconditioning_checkpoint_manifest.json
+```
+
+After the later review-layout refactor, both manifests live under the
+Stage 2 checkpoint artifact folder:
+
+```text
+outputs/stage2/checkpoints/stage2_preconditioning_checkpoint_manifest.json
+outputs/stage2/checkpoints/stage2_postconditioning_checkpoint_manifest.json
 ```

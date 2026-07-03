@@ -1,0 +1,67 @@
+{
+  "stage": "stage4_ml_readiness_handoff",
+  "status": "handoff_ready_model_training_not_ready",
+  "pipeline_step": "03_build_dataset_readiness_report",
+  "purpose": "State honestly what the current artifacts can support: a structured handoff to an ML team, not a model-training claim.",
+  "inputs": {
+    "feature_inventory": "outputs/stage4/features/stage4_feature_inventory.json"
+  },
+  "readiness_summary": {
+    "handoff_readiness": "ready_for_ml_team_discovery",
+    "model_training_readiness": "not_ready",
+    "reason": "The repository has structured lineage, feature-family evidence, and RAW signal metrics, but it does not yet have enough labeled examples or target definitions for credible training.",
+    "asset_count": 12,
+    "complete_handoff_feature_asset_count": 3
+  },
+  "readiness_checks": [
+    {
+      "check": "cross_stage_feature_inventory_exists",
+      "status": "pass",
+      "evidence": "Stage 4 feature inventory was generated."
+    },
+    {
+      "check": "asset_identity_contract_exists",
+      "status": "pass",
+      "evidence": "Stage 1 assets provide the shared asset_key identity surface."
+    },
+    {
+      "check": "raw_signal_metrics_exist",
+      "status": "pass",
+      "evidence": "12 of 12 inventory assets have RAW pixel-signal metrics."
+    },
+    {
+      "check": "complete_cross_stage_training_rows_exist",
+      "status": "review",
+      "evidence": "3 assets currently have all implemented feature families."
+    },
+    {
+      "check": "sample_size_supports_model_training",
+      "status": "fail",
+      "evidence": "Current asset counts are enough for schema validation and handoff design, not for credible model training."
+    },
+    {
+      "check": "supervised_targets_exist",
+      "status": "fail",
+      "evidence": "No accepted/rejected suggestions, editing-time records, final human ratings, or rendered before/after target dataset is materialized yet."
+    }
+  ],
+  "blocking_modeling_gaps": [
+    "small sample size",
+    "missing accepted/rejected suggestion labels",
+    "missing edit-time and intervention telemetry",
+    "missing rendered before/after targets for visual-output learning",
+    "limited cross-shoot and cross-lighting diversity",
+    "no model-evaluation protocol or holdout split"
+  ],
+  "recommended_next_artifacts": [
+    "stage4_rendered_before_after_manifest.json",
+    "stage4_manual_review_labels.json",
+    "stage4_edit_session_telemetry.json",
+    "stage4_train_validation_split_manifest.json"
+  ],
+  "validation": {
+    "status": "review_required",
+    "blocking_check_count": 2,
+    "review_check_count": 1
+  }
+}

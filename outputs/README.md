@@ -12,19 +12,19 @@ stage1/
 
 stage2/
   stage2_manifest.json as the compact review index
-  frozen Develop-state checkpoints
-  -> Develop-setting extracts
-  -> pre/post Develop comparison
+  checkpoints/ for frozen Develop-state checkpoint manifests
+  extracts/ for Develop-setting extracts
+  comparisons/ for pre/post Develop comparison
 
 stage3/
   stage3_manifest.json as the compact review index
-  frozen semantic/local sidecar checkpoints
-  -> mask-state extracts
-  -> adjacent checkpoint comparisons
-  -> exploratory Lightroom write-behavior probes
+  pipeline/ for the formal mask-state proof path
+  probes/ for exploratory Lightroom write-behavior probes
 
 stage4/
-  RAW pixel-signal metrics
+  stage4_manifest.json as the compact review index
+  features/ for RAW signal metrics and cross-stage feature inventory
+  handoff/ for dataset readiness and ML handoff contract
 
 lightroom_sdk/
   exploratory Lightroom SDK export artifacts

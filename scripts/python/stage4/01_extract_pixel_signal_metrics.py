@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import sys
 from pathlib import Path
 from typing import Any
@@ -11,11 +12,11 @@ from typing import Any
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
-from scripts.python.common import write_json
+from scripts.python.common import ensure_parent_dir
 
 
 DEFAULT_INPUT_ROOT = "data/live_workspace"
-DEFAULT_OUTPUT = "outputs/stage4/stage4_extracted_pixel_signal_metrics.json"
+DEFAULT_OUTPUT = "outputs/stage4/features/stage4_raw_pixel_signal_metrics.json"
 DEFAULT_INPUT_MODEL = "stage4_live_workspace_raw_pixel_signal_probe"
 
 
@@ -193,7 +194,9 @@ def rendered_preview_metrics(np: Any, raw: Any, bins: int) -> dict[str, object]:
     blue = rgb_float[:, :, 2]
     luminance = (0.2126 * red) + (0.7152 * green) + (0.0722 * blue)
     saturation_proxy = rgb_float.max(axis=2) - rgb_float.min(axis=2)
+    red_cast_proxy = red - ((green + blue) / 2.0)
     green_cast_proxy = green - ((red + blue) / 2.0)
+    blue_cast_proxy = blue - ((red + green) / 2.0)
     return {
         "render_model": "rawpy_half_size_camera_wb_no_auto_bright_8bit",
         "shape": [int(value) for value in rgb.shape],
@@ -206,7 +209,11 @@ def rendered_preview_metrics(np: Any, raw: Any, bins: int) -> dict[str, object]:
         "luminance_summary": numeric_summary(np, luminance),
         "luminance_histogram": histogram_summary(np, luminance, bins, (0.0, 1.0)),
         "saturation_proxy_summary": numeric_summary(np, saturation_proxy),
-        "green_cast_proxy_summary": numeric_summary(np, green_cast_proxy),
+        "channel_cast_proxy_summaries": {
+            "red": numeric_summary(np, red_cast_proxy),
+            "green": numeric_summary(np, green_cast_proxy),
+            "blue": numeric_summary(np, blue_cast_proxy),
+        },
     }
 
 
@@ -234,7 +241,7 @@ def size_metadata(raw: Any) -> dict[str, object]:
     }
 
 
-def build_record(rawpy: Any, np: Any, raw_path: Path, input_root: Path, input_model: str, bins: int) -> dict[str, object]:
+def build_record(rawpy: Any, np: Any, raw_path: Path, bins: int) -> dict[str, object]:
     """Build one Stage 4 pixel-signal metric record from a RAW source file."""
     with rawpy.imread(str(raw_path)) as raw:
         raw_full = np.ascontiguousarray(raw.raw_image.copy())
@@ -254,12 +261,10 @@ def build_record(rawpy: Any, np: Any, raw_path: Path, input_root: Path, input_mo
 
         return {
             "asset_key": raw_path.stem,
-            "input_model": input_model,
-            "input_root": str(input_root),
             "raw_path": str(raw_path),
             "file_provenance": {
-                "file_size_bytes": raw_path.stat().st_size,
                 "file_sha256": sha256_file(raw_path),
+                "file_size_bytes": raw_path.stat().st_size,
             },
             "decoder_provenance": {
                 "decoder": "rawpy",
@@ -320,8 +325,6 @@ def build_output(args: argparse.Namespace) -> dict[str, object]:
             rawpy,
             np,
             raw_path,
-            input_root,
-            args.input_model,
             args.histogram_bins,
         )
         for raw_path in raw_paths(input_root)
@@ -337,43 +340,50 @@ def build_output(args: argparse.Namespace) -> dict[str, object]:
     return {
         "stage": "stage4_pixel_signal_metrics",
         "status": "complete",
+        "summary": {
+            "asset_count": len(records),
+            "complete_coverage_asset_count": coverage_counts["complete"],
+            "histogram_bins": args.histogram_bins,
+            "incomplete_coverage_asset_count": coverage_counts["incomplete"],
+        },
         "input_model": args.input_model,
         "input_root": str(input_root),
         "notes": {
             "scope": (
                 "Stage 4 extracts numeric pixel-signal metrics from RAW source "
-                "assets. It does not perform semantic computer vision or object "
-                "recognition."
+                "assets for ML handoff feature evidence."
             ),
             "observability_boundary": (
-                "The output does not print every pixel. Instead, it records the "
-                "source file hash, decoded full RAW mosaic hash, decoded visible "
-                "RAW mosaic hash, raster shapes, pixel counts, and histogram "
-                "coverage checks so reviewers can verify the read boundary and "
-                "the summarized visible-pixel population."
+                "The artifact records source file hashes, decoded full RAW "
+                "mosaic hashes, decoded visible RAW mosaic hashes, raster "
+                "shapes, pixel counts, and histogram coverage checks so "
+                "reviewers can verify the read boundary and summarized "
+                "visible-pixel population."
             ),
             "metric_boundary": (
                 "RAW mosaic metrics summarize sensor-domain values. Rendered "
                 "preview metrics summarize a half-size camera-white-balance RGB "
-                "render and should be treated as a derived view, not as Lightroom's "
-                "final edited rendering."
+                "render as a derived view of the source signal."
             ),
-        },
-        "summary": {
-            "asset_count": len(records),
-            "complete_coverage_asset_count": coverage_counts["complete"],
-            "incomplete_coverage_asset_count": coverage_counts["incomplete"],
-            "histogram_bins": args.histogram_bins,
         },
         "records": records,
     }
+
+
+def write_ordered_json(path: str | Path, payload: dict[str, object]) -> Path:
+    """Write JSON while preserving semantic insertion order."""
+    target = ensure_parent_dir(path)
+    with target.open("w", encoding="utf-8") as handle:
+        json.dump(payload, handle, indent=2)
+        handle.write("\n")
+    return target
 
 
 def main() -> None:
     """Extract Stage 4 pixel-signal metrics."""
     args = parse_args()
     output = build_output(args)
-    write_json(args.output, output)
+    write_ordered_json(args.output, output)
     print(
         f"Wrote {args.output} with "
         f"{output['summary']['asset_count']} RAW assets and "

@@ -21,7 +21,7 @@ DEFAULT_INPUT_ROOT = (
 DEFAULT_REFERENCE_ROOT = (
     "data/stage3/spikes/proof_of_capability_mask_sidecar_parsing/presegmentation"
 )
-DEFAULT_OUTPUT = "outputs/stage3/stage3_mask_state_spike_report.json"
+DEFAULT_OUTPUT = "outputs/stage3/probes/stage3_mask_state_spike_report.json"
 DEFAULT_INPUT_MODEL = "stage3_postsegmentation_spike"
 DEFAULT_REFERENCE_MODEL = "stage2_postconditioning_state_as_stage3_presegmentation"
 RDF_NS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"

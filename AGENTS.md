@@ -1,5 +1,7 @@
 # Agent Instructions
 
+Routing: Read this file fully before repo changes to find the canonical instruction discovery path and load-report requirements.
+
 Load repository instructions from `.github/agent_instructions/` before
 making code, documentation, data-layout, or Git changes in this repo.
 Before making changes, report the instruction files read for this task.
@@ -39,6 +41,13 @@ order.
 3. `.github/agent_instructions/global/README.md`
 4. `.github/agent_instructions/repo/README.md`
 5. Task-relevant files referenced by those indexes
+
+## Routing Sentences
+
+Instruction files may begin with a `Routing:` sentence. Agents should
+use routing sentences to decide which optional task-relevant files need
+full loading, while still fully loading the canonical files above before
+repository changes.
 
 ## Layer Model
 

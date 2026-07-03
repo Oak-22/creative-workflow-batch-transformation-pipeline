@@ -1,0 +1,68 @@
+{
+  "stage": "stage4_ml_readiness_handoff",
+  "status": "validated_for_handoff",
+  "pipeline_step": "05_build_stage4_manifest",
+  "purpose": "Compact index for Stage 4 generated evidence. This manifest frames Stage 4 as an ML-readiness handoff package, not as a model-training result.",
+  "artifact_sequence": [
+    {
+      "order": 1,
+      "role": "raw_pixel_signal_metrics",
+      "produced_by": "scripts/python/stage4/01_extract_pixel_signal_metrics.py",
+      "artifact": {
+        "path": "outputs/stage4/features/stage4_raw_pixel_signal_metrics.json",
+        "sha256": "3da6885b75e5306767740fd3a058d381fb41bbd7746687f3bc2f69ffd77d7db5",
+        "size_bytes": 115126
+      }
+    },
+    {
+      "order": 2,
+      "role": "feature_inventory",
+      "produced_by": "scripts/python/stage4/02_build_feature_inventory.py",
+      "artifact": {
+        "path": "outputs/stage4/features/stage4_feature_inventory.json",
+        "sha256": "b3ab4fb37d204284dada37197c917cf7c2ad5e158e748d16fb83bcd8426c48a4",
+        "size_bytes": 43349
+      }
+    },
+    {
+      "order": 3,
+      "role": "dataset_readiness_report",
+      "produced_by": "scripts/python/stage4/03_build_dataset_readiness_report.py",
+      "artifact": {
+        "path": "outputs/stage4/handoff/stage4_dataset_readiness_report.json",
+        "sha256": "1e02d8f2972cb65a337d94ecc6210161c2f63721002848dacb347f7bbf5522e9",
+        "size_bytes": 2606
+      }
+    },
+    {
+      "order": 4,
+      "role": "ml_handoff_contract",
+      "produced_by": "scripts/python/stage4/04_build_ml_handoff_contract.py",
+      "artifact": {
+        "path": "outputs/stage4/handoff/stage4_ml_handoff_contract.json",
+        "sha256": "91eac5125032ef50e8fa29fa6cb24b4d6f882ea4c7a8dc4dbaeeccfe7352a6de",
+        "size_bytes": 4489
+      }
+    }
+  ],
+  "upstream_stage_manifests": [
+    "outputs/stage1/stage1_manifest.json",
+    "outputs/stage2/stage2_manifest.json",
+    "outputs/stage3/stage3_manifest.json"
+  ],
+  "validation": {
+    "status": "validated_for_handoff",
+    "dataset_readiness_status": "handoff_ready_model_training_not_ready",
+    "handoff_readiness": "ready_for_ml_team_discovery",
+    "model_training_readiness": "not_ready",
+    "blocking_readiness_check_count": 2,
+    "blocking_modeling_gap_count": 6
+  },
+  "summary": {
+    "asset_count": 12,
+    "complete_handoff_feature_asset_count": 3,
+    "feature_family_count": 4,
+    "handoff_claim_count": 4,
+    "non_claim_count": 4
+  }
+}

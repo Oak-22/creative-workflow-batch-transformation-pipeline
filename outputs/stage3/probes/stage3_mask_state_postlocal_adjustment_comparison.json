@@ -1,8 +1,8 @@
 {
   "comparison_model": "postmasking_no_local_adjustment_vs_postlocal_adjustment",
   "inputs": {
-    "postmasking": "outputs/stage3/stage3_extracted_postlocal_adjustment_mask_state.json",
-    "presegmentation": "outputs/stage3/stage3_extracted_postmasking_no_local_adjustment_mask_state.json"
+    "postmasking": "outputs/stage3/probes/stage3_extracted_postlocal_adjustment_mask_state.json",
+    "presegmentation": "outputs/stage3/pipeline/stage3_extracted_postmasking_no_local_adjustment_mask_state.json"
   },
   "missing_assets": {
     "postmasking": [],

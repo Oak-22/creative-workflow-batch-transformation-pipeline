@@ -2,7 +2,7 @@
 
 This directory contains stage-scoped Python helpers for extracting,
 auditing, validating, and materializing workflow artifacts across the
-three documented pipeline stages.
+documented pipeline stages.
 
 The scripts are not intended to replace the documented workflow or its
 embedded visual evidence. Their role is to make the workflow more
@@ -67,13 +67,20 @@ scripts/python/
 │   ├── 02_extract_develop_settings.py
 │   ├── 03_audit_stage2_parameters.py
 │   └── 04_build_stage2_manifest.py
-└── stage3/
+├── stage3/
+│   ├── __init__.py
+│   ├── 01_extract_mask_state.py
+│   ├── 02_compare_mask_state.py
+│   ├── 03_create_stage3_review_sheet.py
+│   ├── 04_ingest_stage3_review_results.py
+│   └── 05_build_stage3_manifest.py
+└── stage4/
     ├── __init__.py
-    ├── 01_extract_mask_state.py
-    ├── 02_compare_mask_state.py
-    ├── 03_create_stage3_review_sheet.py
-    ├── 04_ingest_stage3_review_results.py
-    └── 05_build_stage3_manifest.py
+    ├── 01_extract_pixel_signal_metrics.py
+    ├── 02_build_feature_inventory.py
+    ├── 03_build_dataset_readiness_report.py
+    ├── 04_build_ml_handoff_contract.py
+    └── 05_build_stage4_manifest.py
 ```
 
 <br>
@@ -86,9 +93,11 @@ scripts/python/
   manifest generation
 - `stage3/`: review-sheet creation, review-result ingestion, and
   manifest generation
+- `stage4/`: RAW pixel-signal extraction, feature inventory, dataset
+  readiness, ML handoff contract, and manifest generation
 
-These files are currently lightweight entrypoint stubs so the package
-structure exists before implementation details are filled in.
+These files are CLI entrypoints for producing and validating the
+machine-readable evidence that complements the stage prose.
 
 <br>
 
@@ -149,7 +158,7 @@ This means the scripts can eventually support claims at multiple levels:
 
 ## Intended Outputs
 
-Future outputs may include:
+Outputs include:
 
 - normalized metadata extracts
 - stage validation reports
@@ -163,12 +172,17 @@ Example output locations:
 - `outputs/stage1/extracted_stage1_metadata.json`
 - `outputs/stage1/stage1_metadata_validation_report.json`
 - `outputs/stage1/stage1_manifest.json`
-- `outputs/stage2/stage2_preconditioning_checkpoint_manifest.json`
-- `outputs/stage2/stage2_postconditioning_checkpoint_manifest.json`
-- `outputs/stage2/stage2_extracted_preconditioning_develop_settings.json`
+- `outputs/stage2/checkpoints/stage2_preconditioning_checkpoint_manifest.json`
+- `outputs/stage2/checkpoints/stage2_postconditioning_checkpoint_manifest.json`
+- `outputs/stage2/extracts/stage2_extracted_preconditioning_develop_settings.json`
+- `outputs/stage2/comparisons/stage2_develop_parameter_comparison.json`
 - `outputs/stage2/stage2_manifest.json`
 - `outputs/stage3/stage3_manifest.json`
-- `outputs/stage3/`
+- `outputs/stage3/pipeline/`
+- `outputs/stage3/probes/`
+- `outputs/stage4/stage4_manifest.json`
+- `outputs/stage4/features/`
+- `outputs/stage4/handoff/`
 
 Stage 2 checkpoint manifests can be regenerated with:
 
@@ -185,7 +199,7 @@ python3 scripts/python/stage2/01_build_checkpoint_manifest.py \
   --checkpoint-root data/stage2/conditioned_state/xmp_postconditioning \
   --checkpoint-label stage2_postconditioning_state \
   --mutable-origin-root data/live_workspace \
-  --output outputs/stage2/stage2_postconditioning_checkpoint_manifest.json
+  --output outputs/stage2/checkpoints/stage2_postconditioning_checkpoint_manifest.json
 ```
 
 After Stage 2 checkpoint manifests, extracts, and comparison artifacts
@@ -202,17 +216,23 @@ Stage 3 review manifest with:
 python3 scripts/python/stage3/05_build_stage3_manifest.py
 ```
 
+After Stage 4 RAW metrics and handoff artifacts are current, generate
+the compact Stage 4 review manifest with:
+
+```bash
+python3 scripts/python/stage4/05_build_stage4_manifest.py
+```
+
 <br>
 
 ## CLI Philosophy
 
-These scripts are currently stubs. Each script is structured as a future
-CLI entrypoint with:
+Each script is structured as a focused CLI entrypoint with:
 
 - argument parsing
 - clear responsibility
-- TODO scaffolding
-- conservative placeholder output
+- conservative defaults
+- durable JSON output
 
 <br>
 
@@ -241,6 +261,9 @@ The cleanest current strategy is:
    workflow boundary.
 3. **Stage 3:** XMP sidecars plus review manifests, with optional
    rendered exports for side-by-side inspection
+4. **Stage 4:** cross-stage feature inventory and ML-readiness handoff.
+   Stage 4 packages evidence for future modeling review, but does not
+   train or claim a model.
 
 <br>
 

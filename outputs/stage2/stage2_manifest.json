@@ -9,7 +9,7 @@
       "role": "preconditioning_checkpoint_manifest",
       "produced_by": "scripts/python/stage2/01_build_checkpoint_manifest.py",
       "artifact": {
-        "path": "outputs/stage2/stage2_preconditioning_checkpoint_manifest.json",
+        "path": "outputs/stage2/checkpoints/stage2_preconditioning_checkpoint_manifest.json",
         "sha256": "41208b5bb939e5cf92e158f8e85d9010097d9a9928c55f6d17e1c7a7a715b9e5",
         "size_bytes": 6247
       }
@@ -19,7 +19,7 @@
       "role": "preconditioning_develop_settings_extract",
       "produced_by": "scripts/python/stage2/02_extract_develop_settings.py",
       "artifact": {
-        "path": "outputs/stage2/stage2_extracted_preconditioning_develop_settings.json",
+        "path": "outputs/stage2/extracts/stage2_extracted_preconditioning_develop_settings.json",
         "sha256": "b903aec35650c84af9a983351a1f77dcd4414b1dc05c185a3f118defa1aea4e1",
         "size_bytes": 26011
       }
@@ -29,7 +29,7 @@
       "role": "postconditioning_checkpoint_manifest",
       "produced_by": "scripts/python/stage2/01_build_checkpoint_manifest.py",
       "artifact": {
-        "path": "outputs/stage2/stage2_postconditioning_checkpoint_manifest.json",
+        "path": "outputs/stage2/checkpoints/stage2_postconditioning_checkpoint_manifest.json",
         "sha256": "027f44cddd0e5809c9695e93dbc4bd986fdb3dc94a0ef24d2bfe8201d3f82ead",
         "size_bytes": 6292
       }
@@ -39,7 +39,7 @@
       "role": "postconditioning_develop_settings_extract",
       "produced_by": "scripts/python/stage2/02_extract_develop_settings.py",
       "artifact": {
-        "path": "outputs/stage2/stage2_extracted_postconditioning_develop_settings.json",
+        "path": "outputs/stage2/extracts/stage2_extracted_postconditioning_develop_settings.json",
         "sha256": "3396079262cb4d98892d058a6fc0f8f8e604f8360c68f78082d20901cfb20e54",
         "size_bytes": 33156
       }
@@ -49,9 +49,9 @@
       "role": "develop_parameter_comparison",
       "produced_by": "scripts/python/stage2/03_audit_stage2_parameters.py",
       "artifact": {
-        "path": "outputs/stage2/stage2_develop_parameter_comparison.json",
-        "sha256": "dcdead0f0881f885eb39123c2b8c89f614e7a147d8ee0d62bf019a9481fdf4f3",
-        "size_bytes": 58976
+        "path": "outputs/stage2/comparisons/stage2_develop_parameter_comparison.json",
+        "sha256": "d89080dd9ca3d170ca404ee97d18543e97faacfda92c46981375faee8277de09",
+        "size_bytes": 59018
       }
     }
   ],

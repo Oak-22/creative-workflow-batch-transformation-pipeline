@@ -18,7 +18,7 @@ from scripts.python.common import ensure_parent_dir
 DEFAULT_CHECKPOINT_ROOT = "data/stage2/reference_state/xmp_preconditioning"
 DEFAULT_MUTABLE_ORIGIN_ROOT = "data/live_workspace"
 DEFAULT_CHECKPOINT_LABEL = "stage2_preconditioning_reference"
-DEFAULT_OUTPUT = "outputs/stage2/stage2_preconditioning_checkpoint_manifest.json"
+DEFAULT_OUTPUT = "outputs/stage2/checkpoints/stage2_preconditioning_checkpoint_manifest.json"
 
 
 def parse_args() -> argparse.Namespace:

@@ -15,7 +15,7 @@ from scripts.python.common import write_json
 
 
 DEFAULT_INPUT_ROOT = "data/stage2/reference_state/xmp_preconditioning"
-DEFAULT_OUTPUT = "outputs/stage2/stage2_extracted_preconditioning_develop_settings.json"
+DEFAULT_OUTPUT = "outputs/stage2/extracts/stage2_extracted_preconditioning_develop_settings.json"
 INPUT_MODEL = "stage2_preconditioning_reference"
 DEVELOP_FIELDS = [
     "-FileName",

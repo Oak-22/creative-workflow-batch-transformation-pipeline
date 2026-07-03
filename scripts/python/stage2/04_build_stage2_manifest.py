@@ -15,18 +15,18 @@ from scripts.python.common import ensure_parent_dir, read_json
 
 
 DEFAULT_PRECONDITIONING_CHECKPOINT_MANIFEST = (
-    "outputs/stage2/stage2_preconditioning_checkpoint_manifest.json"
+    "outputs/stage2/checkpoints/stage2_preconditioning_checkpoint_manifest.json"
 )
 DEFAULT_POSTCONDITIONING_CHECKPOINT_MANIFEST = (
-    "outputs/stage2/stage2_postconditioning_checkpoint_manifest.json"
+    "outputs/stage2/checkpoints/stage2_postconditioning_checkpoint_manifest.json"
 )
 DEFAULT_PRECONDITIONING_EXTRACT = (
-    "outputs/stage2/stage2_extracted_preconditioning_develop_settings.json"
+    "outputs/stage2/extracts/stage2_extracted_preconditioning_develop_settings.json"
 )
 DEFAULT_POSTCONDITIONING_EXTRACT = (
-    "outputs/stage2/stage2_extracted_postconditioning_develop_settings.json"
+    "outputs/stage2/extracts/stage2_extracted_postconditioning_develop_settings.json"
 )
-DEFAULT_COMPARISON = "outputs/stage2/stage2_develop_parameter_comparison.json"
+DEFAULT_COMPARISON = "outputs/stage2/comparisons/stage2_develop_parameter_comparison.json"
 DEFAULT_OUTPUT = "outputs/stage2/stage2_manifest.json"
 
 

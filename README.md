@@ -51,8 +51,9 @@ without reading every stage writeup in full:
 5. [Stage 1](pipeline_stages/001_metadata-application-enrichment-query/README.md)
 6. [Stage 2](pipeline_stages/002_baseline-conditioning/README.md)
 7. [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md)
-8. [Case Studies](docs/case-studies)
-9. [Scripts](scripts) and [Tests](tests)
+8. [Stage 4](pipeline_stages/004_ml-readiness-handoff/README.md)
+9. [Case Studies](docs/case-studies)
+10. [Scripts](scripts) and [Tests](tests)
 
 ### Extensive Path (30 mins)
 
@@ -66,11 +67,12 @@ evidence, and implementation rationale:
 5. [Stage 1](pipeline_stages/001_metadata-application-enrichment-query/README.md)
 6. [Stage 2](pipeline_stages/002_baseline-conditioning/README.md)
 7. [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md)
-8. [Batchability Cost Model](docs/batchability-cost-model.md)
-9. [Future Work](docs/future-work)
-10. [Case Studies](docs/case-studies)
-11. [Scripts](scripts) and [Tests](tests)
-12. [Architecture Decision Records](docs/adr)
+8. [Stage 4](pipeline_stages/004_ml-readiness-handoff/README.md)
+9. [Batchability Cost Model](docs/batchability-cost-model.md)
+10. [Future Work](docs/future-work)
+11. [Case Studies](docs/case-studies)
+12. [Scripts](scripts) and [Tests](tests)
+13. [Architecture Decision Records](docs/adr)
 
 <br>
 
@@ -126,11 +128,12 @@ non-binary failure modes.
 
 ## Solution Overview
 
-The workflow addresses that problem through three documented stages:
+The workflow addresses that problem through four documented stages:
 
 1. Metadata application, enrichment, and query design
 2. Baseline conditioning
 3. AI mask definition propagation
+4. ML-readiness handoff
 
 Each stage isolates a specific class of transformations, defines clear
 inputs and outputs, and introduces validation boundaries before later
@@ -139,9 +142,10 @@ deterministic, easier to reason about, and safer to evolve over time.
 
 The stages build a reliability layer around increasingly uncertain
 workflow surfaces: Stage 1 establishes deterministic metadata state,
-Stage 2 controls visual variance introduced by capture conditions, and
+Stage 2 controls visual variance introduced by capture conditions,
 Stage 3 constrains probabilistic AI mask outputs through qualification,
-bounded propagation, and human review.
+bounded propagation, and human review, and Stage 4 packages the
+resulting evidence into an honest ML-readiness handoff.
 
 The pipeline does not replace the final manual editing pass. It prepares
 a cleaner, normalized, review-bounded working set so obligatory manual
@@ -301,5 +305,23 @@ Focus areas:
 > **Handoff state:** the working set carries propagated, review-bounded
 > semantic masks forward into final manual refinement rather than
 > requiring full local masking from scratch.
+
+<br>
+
+### Stage 4 – ML Readiness Handoff
+
+Packages the staged evidence into a feature inventory, readiness report,
+and handoff contract for a hypothetical ML/data-science team.
+
+Location: [Stage 4](pipeline_stages/004_ml-readiness-handoff/README.md)
+
+Focus areas:
+- cross-stage feature inventory joined by `asset_key`
+- RAW pixel-signal metrics as source-image evidence
+- explicit model-training prerequisites and scope boundaries
+- compact manifest for employer-facing review
+
+> **Boundary:** Stage 4 packages current evidence for ML discovery and
+> identifies the next artifacts required before modeling work begins.
 
 <br>

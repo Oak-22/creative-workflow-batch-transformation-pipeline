@@ -1,0 +1,4159 @@
+{
+  "stage": "stage4_pixel_signal_metrics",
+  "status": "complete",
+  "summary": {
+    "asset_count": 12,
+    "complete_coverage_asset_count": 12,
+    "histogram_bins": 16,
+    "incomplete_coverage_asset_count": 0
+  },
+  "input_model": "stage4_live_workspace_raw_pixel_signal_probe",
+  "input_root": "data/live_workspace",
+  "notes": {
+    "scope": "Stage 4 extracts numeric pixel-signal metrics from RAW source assets for ML handoff feature evidence.",
+    "observability_boundary": "The artifact records source file hashes, decoded full RAW mosaic hashes, decoded visible RAW mosaic hashes, raster shapes, pixel counts, and histogram coverage checks so reviewers can verify the read boundary and summarized visible-pixel population.",
+    "metric_boundary": "RAW mosaic metrics summarize sensor-domain values. Rendered preview metrics summarize a half-size camera-white-balance RGB render as a derived view of the source signal."
+  },
+  "records": [
+    {
+      "asset_key": "JB107456",
+      "raw_path": "data/live_workspace/JB107456.ARW",
+      "file_provenance": {
+        "file_sha256": "7fe0709b8c473a899a1d2861e9557db50203c3eb8b4ddac69f4ec382035115ab",
+        "file_size_bytes": 43226980
+      },
+      "decoder_provenance": {
+        "decoder": "rawpy",
+        "rawpy_version": "0.27.0",
+        "numpy_version": "2.5.0",
+        "raw_type": "RawType.Flat",
+        "color_desc": "RGBG",
+        "num_colors": 3,
+        "raw_pattern": [
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "black_level_per_channel": [
+          512,
+          512,
+          512,
+          512
+        ],
+        "black_level_floor_used": 512.0,
+        "white_level": 16383.0,
+        "camera_whitebalance": [
+          2452.0,
+          1024.0,
+          1776.0,
+          1024.0
+        ],
+        "daylight_whitebalance": [
+          2.553339958190918,
+          0.932383120059967,
+          1.2761650085449219,
+          0.0
+        ],
+        "sizes": {
+          "raw_height": 5320,
+          "raw_width": 8000,
+          "height": 5320,
+          "width": 7968,
+          "top_margin": 0,
+          "left_margin": 0,
+          "iheight": 5320,
+          "iwidth": 7968,
+          "pixel_aspect": 1.0,
+          "flip": 5
+        }
+      },
+      "read_coverage": {
+        "read_model": "full_decoded_raw_mosaic_with_visible_window",
+        "raw_full_shape": [
+          5320,
+          8000
+        ],
+        "raw_full_pixel_count": 42560000,
+        "raw_full_dtype": "uint16",
+        "raw_full_sha256": "025f45ca6201522ebee5be1f9f73186d93561d91fdf265f567554422d551c53c",
+        "raw_visible_shape": [
+          5320,
+          7968
+        ],
+        "raw_visible_pixel_count": 42389760,
+        "raw_visible_dtype": "uint16",
+        "raw_visible_sha256": "bf17bef2c588e3c6e8f45956f4a3ded5e72d8e02f4cb09655612428ecf35e7df",
+        "nonvisible_margin_pixel_count": 170240,
+        "raw_histogram_observed_count": 42389760,
+        "raw_histogram_expected_count": 42389760,
+        "raw_histogram_coverage_status": "complete",
+        "coverage_status": "complete"
+      },
+      "raw_mosaic_metrics": {
+        "raw_value_summary": {
+          "count": 42389760,
+          "min": 484.0,
+          "p01": 524.0,
+          "p05": 538.0,
+          "p25": 584.0,
+          "median": 692.0,
+          "p75": 976.0,
+          "p95": 2220.0,
+          "p99": 5328.0,
+          "max": 16628.0,
+          "mean": 978.4380426310505,
+          "std": 981.4520236100242
+        },
+        "normalized_value_summary": {
+          "count": 42389760,
+          "min": 0.0,
+          "p01": 0.0007560960241950727,
+          "p05": 0.0016382080524226577,
+          "p25": 0.004536576145170437,
+          "median": 0.011341440362926091,
+          "p75": 0.029235712935542814,
+          "p95": 0.10761766744376536,
+          "p99": 0.30344653771028923,
+          "max": 1.0,
+          "mean": 0.02938924494996153,
+          "std": 0.061837904768977214
+        },
+        "normalized_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            37689417,
+            3038319,
+            763708,
+            315285,
+            179289,
+            112984,
+            79319,
+            58543,
+            43869,
+            30923,
+            20095,
+            14731,
+            11600,
+            7540,
+            5784,
+            18354
+          ],
+          "observed_count": 42389760,
+          "expected_count": 42389760,
+          "coverage_status": "complete"
+        },
+        "cfa_channel_summaries": [
+          {
+            "channel_index": 0,
+            "channel_label": "R",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 484.0,
+              "p01": 520.0,
+              "p05": 532.0,
+              "p25": 558.0,
+              "median": 622.0,
+              "p75": 786.0,
+              "p95": 1482.0,
+              "p99": 3360.0,
+              "max": 16628.0,
+              "mean": 792.5867647280853,
+              "std": 587.0351189186134
+            }
+          },
+          {
+            "channel_index": 1,
+            "channel_label": "G",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 502.0,
+              "p01": 536.0,
+              "p05": 554.0,
+              "p25": 616.0,
+              "median": 774.0,
+              "p75": 1130.0,
+              "p95": 2672.0,
+              "p99": 6860.0,
+              "max": 16628.0,
+              "mean": 1138.0016356780507,
+              "std": 1211.4487207842392
+            }
+          },
+          {
+            "channel_index": 2,
+            "channel_label": "B",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 494.0,
+              "p01": 522.0,
+              "p05": 534.0,
+              "p25": 568.0,
+              "median": 652.0,
+              "p75": 842.0,
+              "p95": 1662.0,
+              "p99": 3904.0,
+              "max": 16628.0,
+              "mean": 845.5006050517861,
+              "std": 687.3626233943098
+            }
+          }
+        ]
+      },
+      "rendered_preview_metrics": {
+        "render_model": "rawpy_half_size_camera_wb_no_auto_bright_8bit",
+        "shape": [
+          3984,
+          2660,
+          3
+        ],
+        "pixel_count": 10597440,
+        "rgb_channel_means": {
+          "red": 0.12239678750384109,
+          "green": 0.11721719955156024,
+          "blue": 0.1045132253916151
+        },
+        "luminance_summary": {
+          "count": 10597440,
+          "min": 0.0,
+          "p01": 0.004755294117647059,
+          "p05": 0.010344313725490195,
+          "p25": 0.028289411764705882,
+          "median": 0.07339294117647059,
+          "p75": 0.15604,
+          "p95": 0.3512125490196078,
+          "p99": 0.6356048235294047,
+          "max": 1.0,
+          "mean": 0.11740115301586711,
+          "std": 0.12835128961060419
+        },
+        "luminance_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            4816616,
+            2202231,
+            1418314,
+            779689,
+            636942,
+            296723,
+            131441,
+            90449,
+            63887,
+            48284,
+            36609,
+            27090,
+            17902,
+            11297,
+            7167,
+            12799
+          ],
+          "observed_count": 10597440,
+          "expected_count": 10597440,
+          "coverage_status": "complete"
+        },
+        "saturation_proxy_summary": {
+          "count": 10597440,
+          "min": 0.0,
+          "p01": 0.0039215686274509665,
+          "p05": 0.00392156862745098,
+          "p25": 0.01568627450980392,
+          "median": 0.027450980392156876,
+          "p75": 0.05882352941176472,
+          "p95": 0.16862745098039217,
+          "p99": 0.2980392156862745,
+          "max": 1.0,
+          "mean": 0.04961266265119448,
+          "std": 0.05888503320039393
+        },
+        "channel_cast_proxy_summaries": {
+          "red": {
+            "count": 10597440,
+            "min": -0.9235294117647059,
+            "p01": -0.15490196078431373,
+            "p05": -0.05294117647058824,
+            "p25": -0.00980392156862745,
+            "median": 0.00784313725490196,
+            "p75": 0.029411764705882353,
+            "p95": 0.09607843137254901,
+            "p99": 0.18627450980392157,
+            "max": 0.8490196078431372,
+            "mean": 0.011531575032253442,
+            "std": 0.05401254753603727
+          },
+          "green": {
+            "count": 10597440,
+            "min": -0.6568627450980392,
+            "p01": -0.07843137254901966,
+            "p05": -0.025490196078431365,
+            "p25": -0.00784313725490196,
+            "median": 0.0,
+            "p75": 0.011764705882352941,
+            "p95": 0.050980392156862744,
+            "p99": 0.08627450980392148,
+            "max": 0.8627450980392157,
+            "mean": 0.0037621931038321057,
+            "std": 0.027405106670526504
+          },
+          "blue": {
+            "count": 10597440,
+            "min": -0.9137254901960784,
+            "p01": -0.18823529411764706,
+            "p05": -0.11372549019607843,
+            "p25": -0.03137254901960784,
+            "median": -0.00980392156862745,
+            "p75": 0.00392156862745098,
+            "p95": 0.049019607843137275,
+            "p99": 0.1843137254901961,
+            "max": 1.0,
+            "mean": -0.015293768136085547,
+            "std": 0.05564679650927687
+          }
+        }
+      }
+    },
+    {
+      "asset_key": "JB107468",
+      "raw_path": "data/live_workspace/JB107468.ARW",
+      "file_provenance": {
+        "file_sha256": "82aaa73445638735ee0ae85741cd9360fe6c1bbbe324ba79005c8309dd1ae576",
+        "file_size_bytes": 43332432
+      },
+      "decoder_provenance": {
+        "decoder": "rawpy",
+        "rawpy_version": "0.27.0",
+        "numpy_version": "2.5.0",
+        "raw_type": "RawType.Flat",
+        "color_desc": "RGBG",
+        "num_colors": 3,
+        "raw_pattern": [
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "black_level_per_channel": [
+          512,
+          512,
+          512,
+          512
+        ],
+        "black_level_floor_used": 512.0,
+        "white_level": 16383.0,
+        "camera_whitebalance": [
+          2576.0,
+          1024.0,
+          1664.0,
+          1024.0
+        ],
+        "daylight_whitebalance": [
+          2.553339958190918,
+          0.932383120059967,
+          1.2761650085449219,
+          0.0
+        ],
+        "sizes": {
+          "raw_height": 5320,
+          "raw_width": 8000,
+          "height": 5320,
+          "width": 7968,
+          "top_margin": 0,
+          "left_margin": 0,
+          "iheight": 5320,
+          "iwidth": 7968,
+          "pixel_aspect": 1.0,
+          "flip": 5
+        }
+      },
+      "read_coverage": {
+        "read_model": "full_decoded_raw_mosaic_with_visible_window",
+        "raw_full_shape": [
+          5320,
+          8000
+        ],
+        "raw_full_pixel_count": 42560000,
+        "raw_full_dtype": "uint16",
+        "raw_full_sha256": "135ca968a48c04a2a604d859f0178269da74b3dcd1959275b30175cb5e3f2a89",
+        "raw_visible_shape": [
+          5320,
+          7968
+        ],
+        "raw_visible_pixel_count": 42389760,
+        "raw_visible_dtype": "uint16",
+        "raw_visible_sha256": "e32724c9caeafef965b18e297b1471e272e2136425a60e29029f147fbbdcedb7",
+        "nonvisible_margin_pixel_count": 170240,
+        "raw_histogram_observed_count": 42389760,
+        "raw_histogram_expected_count": 42389760,
+        "raw_histogram_coverage_status": "complete",
+        "coverage_status": "complete"
+      },
+      "raw_mosaic_metrics": {
+        "raw_value_summary": {
+          "count": 42389760,
+          "min": 476.0,
+          "p01": 558.0,
+          "p05": 602.0,
+          "p25": 758.0,
+          "median": 1094.0,
+          "p75": 2144.0,
+          "p95": 6204.0,
+          "p99": 15700.0,
+          "max": 16628.0,
+          "mean": 1986.6776746082073,
+          "std": 2406.255297628357
+        },
+        "normalized_value_summary": {
+          "count": 42389760,
+          "min": 0.0,
+          "p01": 0.0028983680927477788,
+          "p05": 0.005670720181463046,
+          "p25": 0.015499968495998991,
+          "median": 0.03667065717346103,
+          "p75": 0.10282905929052989,
+          "p95": 0.35864154747652954,
+          "p99": 0.9569655346228971,
+          "max": 1.0,
+          "mean": 0.09291268184028617,
+          "std": 0.15159044618786427
+        },
+        "normalized_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            26676085,
+            6923269,
+            3256352,
+            1807782,
+            1084325,
+            666179,
+            452459,
+            304836,
+            197660,
+            148282,
+            118368,
+            98624,
+            83487,
+            70767,
+            59880,
+            441405
+          ],
+          "observed_count": 42389760,
+          "expected_count": 42389760,
+          "coverage_status": "complete"
+        },
+        "cfa_channel_summaries": [
+          {
+            "channel_index": 0,
+            "channel_label": "R",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 476.0,
+              "p01": 544.0,
+              "p05": 570.0,
+              "p25": 648.0,
+              "median": 886.0,
+              "p75": 1568.0,
+              "p95": 3696.0,
+              "p99": 9236.0,
+              "max": 16628.0,
+              "mean": 1422.173649296434,
+              "std": 1615.1349158611652
+            }
+          },
+          {
+            "channel_index": 1,
+            "channel_label": "G",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 500.0,
+              "p01": 600.0,
+              "p05": 656.0,
+              "p25": 872.0,
+              "median": 1400.0,
+              "p75": 2980.0,
+              "p95": 7756.0,
+              "p99": 16372.0,
+              "max": 16628.0,
+              "mean": 2502.969407894737,
+              "std": 2837.384053868406
+            }
+          },
+          {
+            "channel_index": 2,
+            "channel_label": "B",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 492.0,
+              "p01": 560.0,
+              "p05": 596.0,
+              "p25": 722.0,
+              "median": 942.0,
+              "p75": 1552.0,
+              "p95": 3968.0,
+              "p99": 11444.0,
+              "max": 16628.0,
+              "mean": 1518.8932164749222,
+              "std": 1838.8463100557915
+            }
+          }
+        ]
+      },
+      "rendered_preview_metrics": {
+        "render_model": "rawpy_half_size_camera_wb_no_auto_bright_8bit",
+        "shape": [
+          3984,
+          2660,
+          3
+        ],
+        "pixel_count": 10597440,
+        "rgb_channel_means": {
+          "red": 0.27803800155657277,
+          "green": 0.27277376533999775,
+          "blue": 0.20614209528664562
+        },
+        "luminance_summary": {
+          "count": 10597440,
+          "min": 0.0005662745098039216,
+          "p01": 0.022428235294117645,
+          "p05": 0.03869176470588235,
+          "p25": 0.09749333333333333,
+          "median": 0.20638039215686277,
+          "p75": 0.39096470588235294,
+          "p95": 0.6982996078431373,
+          "p99": 1.0,
+          "max": 1.0,
+          "mean": 0.26908213538178954,
+          "std": 0.21715914451335858
+        },
+        "luminance_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            1260100,
+            2463945,
+            1264149,
+            997525,
+            906744,
+            861026,
+            739323,
+            600121,
+            440616,
+            297772,
+            206409,
+            142797,
+            88680,
+            67233,
+            55810,
+            205190
+          ],
+          "observed_count": 10597440,
+          "expected_count": 10597440,
+          "coverage_status": "complete"
+        },
+        "saturation_proxy_summary": {
+          "count": 10597440,
+          "min": 0.0,
+          "p01": 0.0,
+          "p05": 0.011764705882352941,
+          "p25": 0.03529411764705882,
+          "median": 0.07450980392156863,
+          "p75": 0.1607843137254902,
+          "p95": 0.34509803921568627,
+          "p99": 0.49411764705882355,
+          "max": 1.0,
+          "mean": 0.1150985613543663,
+          "std": 0.11080599326507051
+        },
+        "channel_cast_proxy_summaries": {
+          "red": {
+            "count": 10597440,
+            "min": -1.0,
+            "p01": -0.17254901960784313,
+            "p05": -0.06862745098039218,
+            "p25": -0.011764705882352941,
+            "median": 0.025490196078431372,
+            "p75": 0.08235294117647057,
+            "p95": 0.18823529411764706,
+            "p99": 0.3313725490196079,
+            "max": 0.8862745098039215,
+            "mean": 0.03858007124325105,
+            "std": 0.09058510134481336
+          },
+          "green": {
+            "count": 10597440,
+            "min": -0.6274509803921569,
+            "p01": -0.0980392156862745,
+            "p05": -0.039215686274509776,
+            "p25": -0.0058823529411764705,
+            "median": 0.013725490196078438,
+            "p75": 0.050980392156862786,
+            "p95": 0.16078431372549018,
+            "p99": 0.23529411764705882,
+            "max": 0.8745098039215686,
+            "mean": 0.03068371691838858,
+            "std": 0.06388438812210204
+          },
+          "blue": {
+            "count": 10597440,
+            "min": -0.9666666666666667,
+            "p01": -0.4196078431372549,
+            "p05": -0.2960784313725491,
+            "p25": -0.11960784313725487,
+            "median": -0.03921568627450982,
+            "p75": 0.0,
+            "p95": 0.054901960784313725,
+            "p99": 0.1784313725490196,
+            "max": 0.903921568627451,
+            "mean": -0.06926378816163964,
+            "std": 0.11325257863884347
+          }
+        }
+      }
+    },
+    {
+      "asset_key": "JB107504",
+      "raw_path": "data/live_workspace/JB107504.ARW",
+      "file_provenance": {
+        "file_sha256": "d92a1c70ad9bd9a25a1ab56e3d65da92e717309c487e98124a96e21c6e4963b1",
+        "file_size_bytes": 43000208
+      },
+      "decoder_provenance": {
+        "decoder": "rawpy",
+        "rawpy_version": "0.27.0",
+        "numpy_version": "2.5.0",
+        "raw_type": "RawType.Flat",
+        "color_desc": "RGBG",
+        "num_colors": 3,
+        "raw_pattern": [
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "black_level_per_channel": [
+          512,
+          512,
+          512,
+          512
+        ],
+        "black_level_floor_used": 512.0,
+        "white_level": 16383.0,
+        "camera_whitebalance": [
+          2952.0,
+          1024.0,
+          1388.0,
+          1024.0
+        ],
+        "daylight_whitebalance": [
+          2.553339958190918,
+          0.932383120059967,
+          1.2761650085449219,
+          0.0
+        ],
+        "sizes": {
+          "raw_height": 5320,
+          "raw_width": 8000,
+          "height": 5320,
+          "width": 7968,
+          "top_margin": 0,
+          "left_margin": 0,
+          "iheight": 5320,
+          "iwidth": 7968,
+          "pixel_aspect": 1.0,
+          "flip": 5
+        }
+      },
+      "read_coverage": {
+        "read_model": "full_decoded_raw_mosaic_with_visible_window",
+        "raw_full_shape": [
+          5320,
+          8000
+        ],
+        "raw_full_pixel_count": 42560000,
+        "raw_full_dtype": "uint16",
+        "raw_full_sha256": "85702890bfe86af138495485ec3b82cd2b8a726625b1bbff41cdc9618bb7e4a0",
+        "raw_visible_shape": [
+          5320,
+          7968
+        ],
+        "raw_visible_pixel_count": 42389760,
+        "raw_visible_dtype": "uint16",
+        "raw_visible_sha256": "a0bd26201b5e2f9c6305f1722c3669a9890b9654f94b3c122ac81f5b7d93dfba",
+        "nonvisible_margin_pixel_count": 170240,
+        "raw_histogram_observed_count": 42389760,
+        "raw_histogram_expected_count": 42389760,
+        "raw_histogram_coverage_status": "complete",
+        "coverage_status": "complete"
+      },
+      "raw_mosaic_metrics": {
+        "raw_value_summary": {
+          "count": 42389760,
+          "min": 476.0,
+          "p01": 536.0,
+          "p05": 568.0,
+          "p25": 778.0,
+          "median": 1796.0,
+          "p75": 16372.0,
+          "p95": 16372.0,
+          "p99": 16372.0,
+          "max": 16628.0,
+          "mean": 6419.00555638909,
+          "std": 6909.009705799889
+        },
+        "normalized_value_summary": {
+          "count": 42389760,
+          "min": 0.0,
+          "p01": 0.0015121920483901455,
+          "p05": 0.0035284481129103395,
+          "p25": 0.016760128536324113,
+          "median": 0.08090227458887278,
+          "p75": 0.9993069119778212,
+          "p95": 0.9993069119778212,
+          "p99": 0.9993069119778212,
+          "max": 1.0,
+          "mean": 0.37217776315912904,
+          "std": 0.4353071060748274
+        },
+        "normalized_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            19404162,
+            4479283,
+            1438498,
+            799301,
+            588861,
+            262710,
+            267058,
+            288712,
+            336422,
+            391925,
+            504020,
+            407510,
+            339230,
+            281137,
+            225210,
+            12375721
+          ],
+          "observed_count": 42389760,
+          "expected_count": 42389760,
+          "coverage_status": "complete"
+        },
+        "cfa_channel_summaries": [
+          {
+            "channel_index": 0,
+            "channel_label": "R",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 476.0,
+              "p01": 522.0,
+              "p05": 544.0,
+              "p25": 640.0,
+              "median": 1124.0,
+              "p75": 10388.0,
+              "p95": 16372.0,
+              "p99": 16372.0,
+              "max": 16628.0,
+              "mean": 5041.283312384878,
+              "std": 5836.135730600584
+            }
+          },
+          {
+            "channel_index": 1,
+            "channel_label": "G",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 488.0,
+              "p01": 550.0,
+              "p05": 616.0,
+              "p25": 878.0,
+              "median": 2144.0,
+              "p75": 16372.0,
+              "p95": 16372.0,
+              "p99": 16372.0,
+              "max": 16628.0,
+              "mean": 6974.301316166923,
+              "std": 7141.113054587557
+            }
+          },
+          {
+            "channel_index": 2,
+            "channel_label": "B",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 488.0,
+              "p01": 542.0,
+              "p05": 590.0,
+              "p25": 778.0,
+              "median": 1594.0,
+              "p75": 16372.0,
+              "p95": 16372.0,
+              "p99": 16372.0,
+              "max": 16628.0,
+              "mean": 6688.469738163179,
+              "std": 7232.424567854269
+            }
+          }
+        ]
+      },
+      "rendered_preview_metrics": {
+        "render_model": "rawpy_half_size_camera_wb_no_auto_bright_8bit",
+        "shape": [
+          3984,
+          2660,
+          3
+        ],
+        "pixel_count": 10597440,
+        "rgb_channel_means": {
+          "red": 0.4890686011775245,
+          "green": 0.484312494708304,
+          "blue": 0.4734095152539984
+        },
+        "luminance_summary": {
+          "count": 10597440,
+          "min": 0.0002831372549019608,
+          "p01": 0.008697254901960782,
+          "p05": 0.026617254901960784,
+          "p25": 0.10081882352941175,
+          "median": 0.30021019607843136,
+          "p75": 1.0,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 1.0,
+          "mean": 0.48453644782705935,
+          "std": 0.40768385924492095
+        },
+        "luminance_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            1862877,
+            1174304,
+            820656,
+            712439,
+            840804,
+            377839,
+            280900,
+            278248,
+            229138,
+            76553,
+            42091,
+            32158,
+            28076,
+            27560,
+            37063,
+            3776734
+          ],
+          "observed_count": 10597440,
+          "expected_count": 10597440,
+          "coverage_status": "complete"
+        },
+        "saturation_proxy_summary": {
+          "count": 10597440,
+          "min": 0.0,
+          "p01": 0.0,
+          "p05": 0.0,
+          "p25": 0.0,
+          "median": 0.0196078431372549,
+          "p75": 0.054901960784313725,
+          "p95": 0.16470588235294117,
+          "p99": 0.21176470588235297,
+          "max": 1.0,
+          "mean": 0.04083490493005488,
+          "std": 0.05665347661310373
+        },
+        "channel_cast_proxy_summaries": {
+          "red": {
+            "count": 10597440,
+            "min": -1.0,
+            "p01": -0.1254901960784314,
+            "p05": -0.058823529411764705,
+            "p25": -0.007843137254901933,
+            "median": 0.0,
+            "p75": 0.017647058823529405,
+            "p95": 0.1215686274509804,
+            "p99": 0.1568627450980392,
+            "max": 0.7058823529411764,
+            "mean": 0.010207596196373285,
+            "std": 0.05361984363481938
+          },
+          "green": {
+            "count": 10597440,
+            "min": -0.40588235294117647,
+            "p01": -0.0431372549019608,
+            "p05": -0.021568627450980427,
+            "p25": -0.0019607843137254832,
+            "median": 0.0,
+            "p75": 0.00784313725490196,
+            "p95": 0.033333333333333326,
+            "p99": 0.07450980392156864,
+            "max": 0.6803921568627451,
+            "mean": 0.003073436492542483,
+            "std": 0.019198311918292865
+          },
+          "blue": {
+            "count": 10597440,
+            "min": -0.9215686274509804,
+            "p01": -0.15490196078431379,
+            "p05": -0.11764705882352938,
+            "p25": -0.0196078431372549,
+            "median": 0.0,
+            "p75": 0.00392156862745098,
+            "p95": 0.03921568627450983,
+            "p99": 0.09019607843137256,
+            "max": 0.7607843137254902,
+            "mean": -0.01328103268891577,
+            "std": 0.047715720706332336
+          }
+        }
+      }
+    },
+    {
+      "asset_key": "JB107505",
+      "raw_path": "data/live_workspace/JB107505.ARW",
+      "file_provenance": {
+        "file_sha256": "78bf32df13c49ddfd44760995cb46465ae9a3b0d1996514b48590fe33bc1a6e5",
+        "file_size_bytes": 85812688
+      },
+      "decoder_provenance": {
+        "decoder": "rawpy",
+        "rawpy_version": "0.27.0",
+        "numpy_version": "2.5.0",
+        "raw_type": "RawType.Flat",
+        "color_desc": "RGBG",
+        "num_colors": 3,
+        "raw_pattern": [
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "black_level_per_channel": [
+          512,
+          512,
+          512,
+          512
+        ],
+        "black_level_floor_used": 512.0,
+        "white_level": 16383.0,
+        "camera_whitebalance": [
+          2668.0,
+          1024.0,
+          1584.0,
+          1024.0
+        ],
+        "daylight_whitebalance": [
+          2.553339958190918,
+          0.932383120059967,
+          1.2761650085449219,
+          0.0
+        ],
+        "sizes": {
+          "raw_height": 5320,
+          "raw_width": 8000,
+          "height": 5320,
+          "width": 7968,
+          "top_margin": 0,
+          "left_margin": 0,
+          "iheight": 5320,
+          "iwidth": 7968,
+          "pixel_aspect": 1.0,
+          "flip": 0
+        }
+      },
+      "read_coverage": {
+        "read_model": "full_decoded_raw_mosaic_with_visible_window",
+        "raw_full_shape": [
+          5320,
+          8000
+        ],
+        "raw_full_pixel_count": 42560000,
+        "raw_full_dtype": "uint16",
+        "raw_full_sha256": "3b437039da3a3e15046b517ae6bda06faacba1e31e62bdc5679740e9aa64c027",
+        "raw_visible_shape": [
+          5320,
+          7968
+        ],
+        "raw_visible_pixel_count": 42389760,
+        "raw_visible_dtype": "uint16",
+        "raw_visible_sha256": "a38d53830ec1d5496597f106cb1d8707e1f1030aede96d11a734f8b34c9f9b1c",
+        "nonvisible_margin_pixel_count": 170240,
+        "raw_histogram_observed_count": 42389760,
+        "raw_histogram_expected_count": 42389760,
+        "raw_histogram_coverage_status": "complete",
+        "coverage_status": "complete"
+      },
+      "raw_mosaic_metrics": {
+        "raw_value_summary": {
+          "count": 42389760,
+          "min": 582.0,
+          "p01": 665.0,
+          "p05": 732.0,
+          "p25": 998.0,
+          "median": 1422.0,
+          "p75": 2968.0,
+          "p95": 16383.0,
+          "p99": 16383.0,
+          "max": 16383.0,
+          "mean": 3550.8186098482274,
+          "std": 4805.767254941918
+        },
+        "normalized_value_summary": {
+          "count": 42389760,
+          "min": 0.004410560141137924,
+          "p01": 0.009640224308487178,
+          "p05": 0.013861760443576334,
+          "p25": 0.03062188897990045,
+          "median": 0.057337281834793016,
+          "p75": 0.15474765295192489,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 1.0,
+          "mean": 0.19146988909635357,
+          "std": 0.3028017928890377
+        },
+        "normalized_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            22697521,
+            7551295,
+            3008254,
+            1366052,
+            871580,
+            587892,
+            418440,
+            322278,
+            252484,
+            217818,
+            184520,
+            156486,
+            140196,
+            135056,
+            128451,
+            4351437
+          ],
+          "observed_count": 42389760,
+          "expected_count": 42389760,
+          "coverage_status": "complete"
+        },
+        "cfa_channel_summaries": [
+          {
+            "channel_index": 0,
+            "channel_label": "R",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 582.0,
+              "p01": 637.0,
+              "p05": 674.0,
+              "p25": 777.0,
+              "median": 956.0,
+              "p75": 1812.0,
+              "p95": 16383.0,
+              "p99": 16383.0,
+              "max": 16383.0,
+              "mean": 2758.4400437275417,
+              "std": 4321.234975828469
+            }
+          },
+          {
+            "channel_index": 1,
+            "channel_label": "G",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 717.0,
+              "p01": 877.0,
+              "p05": 968.0,
+              "p25": 1242.0,
+              "median": 1731.0,
+              "p75": 3772.0,
+              "p95": 16383.0,
+              "p99": 16383.0,
+              "max": 16383.0,
+              "mean": 4082.6892288137515,
+              "std": 4951.697250157769
+            }
+          },
+          {
+            "channel_index": 2,
+            "channel_label": "B",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 607.0,
+              "p01": 682.0,
+              "p05": 740.0,
+              "p25": 915.0,
+              "median": 1216.0,
+              "p75": 2175.0,
+              "p95": 16383.0,
+              "p99": 16383.0,
+              "max": 16383.0,
+              "mean": 3282.249888935441,
+              "std": 4840.090545215557
+            }
+          }
+        ]
+      },
+      "rendered_preview_metrics": {
+        "render_model": "rawpy_half_size_camera_wb_no_auto_bright_8bit",
+        "shape": [
+          2660,
+          3984,
+          3
+        ],
+        "pixel_count": 10597440,
+        "rgb_channel_means": {
+          "red": 0.3646838859196183,
+          "green": 0.37616828770189115,
+          "blue": 0.3314817855381425
+        },
+        "luminance_summary": {
+          "count": 10597440,
+          "min": 0.04293176470588235,
+          "p01": 0.10194980392156862,
+          "p05": 0.12325019607843135,
+          "p25": 0.17589333333333335,
+          "median": 0.2470792156862745,
+          "p75": 0.4538141176470588,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 1.0,
+          "mean": 0.3705003384267573,
+          "std": 0.2798096975437904
+        },
+        "luminance_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            5,
+            586598,
+            2662964,
+            2109903,
+            1080153,
+            791090,
+            619081,
+            368064,
+            307097,
+            244399,
+            188291,
+            139678,
+            99639,
+            71393,
+            51596,
+            1277489
+          ],
+          "observed_count": 10597440,
+          "expected_count": 10597440,
+          "coverage_status": "complete"
+        },
+        "saturation_proxy_summary": {
+          "count": 10597440,
+          "min": 0.0,
+          "p01": 0.0,
+          "p05": 0.0,
+          "p25": 0.023529411764705882,
+          "median": 0.043137254901960784,
+          "p75": 0.0823529411764706,
+          "p95": 0.24705882352941178,
+          "p99": 0.4274509803921569,
+          "max": 1.0,
+          "mean": 0.07059673013149458,
+          "std": 0.0852430337633204
+        },
+        "channel_cast_proxy_summaries": {
+          "red": {
+            "count": 10597440,
+            "min": -1.0,
+            "p01": -0.12352941176470594,
+            "p05": -0.060784313725490174,
+            "p25": -0.01568627450980392,
+            "median": 0.0,
+            "p75": 0.021568627450980385,
+            "p95": 0.1352941176470588,
+            "p99": 0.2431372549019608,
+            "max": 0.8980392156862745,
+            "mean": 0.010858849299601474,
+            "std": 0.0673169199592714
+          },
+          "green": {
+            "count": 10597440,
+            "min": -0.8313725490196079,
+            "p01": -0.06470588235294117,
+            "p05": -0.00784313725490196,
+            "p25": 0.0039215686274509665,
+            "median": 0.017647058823529405,
+            "p75": 0.03725490196078432,
+            "p95": 0.11372549019607842,
+            "p99": 0.2117647058823529,
+            "max": 0.8352941176470589,
+            "mean": 0.028085451973010725,
+            "std": 0.0454281794940229
+          },
+          "blue": {
+            "count": 10597440,
+            "min": -0.9666666666666667,
+            "p01": -0.3764705882352941,
+            "p05": -0.20588235294117646,
+            "p25": -0.05686274509803922,
+            "median": -0.0196078431372549,
+            "p75": 0.0,
+            "p95": 0.0431372549019608,
+            "p99": 0.09411764705882353,
+            "max": 0.9529411764705882,
+            "mean": -0.0389443012726122,
+            "std": 0.08225230944330918
+          }
+        }
+      }
+    },
+    {
+      "asset_key": "JB107506",
+      "raw_path": "data/live_workspace/JB107506.ARW",
+      "file_provenance": {
+        "file_sha256": "89864b5eec73c4ccc6472af9e233cbdd415ace68c824ebc862a8c23804cbfb79",
+        "file_size_bytes": 85662796
+      },
+      "decoder_provenance": {
+        "decoder": "rawpy",
+        "rawpy_version": "0.27.0",
+        "numpy_version": "2.5.0",
+        "raw_type": "RawType.Flat",
+        "color_desc": "RGBG",
+        "num_colors": 3,
+        "raw_pattern": [
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "black_level_per_channel": [
+          512,
+          512,
+          512,
+          512
+        ],
+        "black_level_floor_used": 512.0,
+        "white_level": 16383.0,
+        "camera_whitebalance": [
+          2652.0,
+          1024.0,
+          1592.0,
+          1024.0
+        ],
+        "daylight_whitebalance": [
+          2.553339958190918,
+          0.932383120059967,
+          1.2761650085449219,
+          0.0
+        ],
+        "sizes": {
+          "raw_height": 5320,
+          "raw_width": 8000,
+          "height": 5320,
+          "width": 7968,
+          "top_margin": 0,
+          "left_margin": 0,
+          "iheight": 5320,
+          "iwidth": 7968,
+          "pixel_aspect": 1.0,
+          "flip": 5
+        }
+      },
+      "read_coverage": {
+        "read_model": "full_decoded_raw_mosaic_with_visible_window",
+        "raw_full_shape": [
+          5320,
+          8000
+        ],
+        "raw_full_pixel_count": 42560000,
+        "raw_full_dtype": "uint16",
+        "raw_full_sha256": "9c3bb2a7ff347720735b402dfecdca031dc20243dda833bfeff1d0b45fe126e0",
+        "raw_visible_shape": [
+          5320,
+          7968
+        ],
+        "raw_visible_pixel_count": 42389760,
+        "raw_visible_dtype": "uint16",
+        "raw_visible_sha256": "b64cfccd74f3ff8e1ac5f1236bbc1a363271cbdb4464c88b11dc9a2274d4970f",
+        "nonvisible_margin_pixel_count": 170240,
+        "raw_histogram_observed_count": 42389760,
+        "raw_histogram_expected_count": 42389760,
+        "raw_histogram_coverage_status": "complete",
+        "coverage_status": "complete"
+      },
+      "raw_mosaic_metrics": {
+        "raw_value_summary": {
+          "count": 42389760,
+          "min": 581.0,
+          "p01": 656.0,
+          "p05": 731.0,
+          "p25": 1061.0,
+          "median": 2066.0,
+          "p75": 7793.0,
+          "p95": 16383.0,
+          "p99": 16383.0,
+          "max": 16383.0,
+          "mean": 5047.230485640872,
+          "std": 5447.26263015539
+        },
+        "normalized_value_summary": {
+          "count": 42389760,
+          "min": 0.004347552139121668,
+          "p01": 0.009073152290340874,
+          "p05": 0.013798752441560078,
+          "p25": 0.03459139310692458,
+          "median": 0.09791443513326192,
+          "p75": 0.4587612626803604,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 1.0,
+          "mean": 0.28575581158344604,
+          "std": 0.3432211347839072
+        },
+        "normalized_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            17174489,
+            5798090,
+            2923874,
+            1835076,
+            1415677,
+            1156214,
+            1121186,
+            1081320,
+            989846,
+            795977,
+            680568,
+            588974,
+            519499,
+            451838,
+            385791,
+            5471341
+          ],
+          "observed_count": 42389760,
+          "expected_count": 42389760,
+          "coverage_status": "complete"
+        },
+        "cfa_channel_summaries": [
+          {
+            "channel_index": 0,
+            "channel_label": "R",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 581.0,
+              "p01": 635.0,
+              "p05": 663.0,
+              "p25": 795.0,
+              "median": 1415.0,
+              "p75": 3725.0,
+              "p95": 14352.0,
+              "p99": 16383.0,
+              "max": 16383.0,
+              "mean": 3303.1885062807623,
+              "std": 4071.188552014768
+            }
+          },
+          {
+            "channel_index": 1,
+            "channel_label": "G",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 700.0,
+              "p01": 862.0,
+              "p05": 939.0,
+              "p25": 1283.0,
+              "median": 2788.0,
+              "p75": 10002.0,
+              "p95": 16383.0,
+              "p99": 16383.0,
+              "max": 16383.0,
+              "mean": 5950.965661612616,
+              "std": 5793.088454997616
+            }
+          },
+          {
+            "channel_index": 2,
+            "channel_label": "B",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 610.0,
+              "p01": 712.0,
+              "p05": 751.0,
+              "p25": 955.0,
+              "median": 1690.0,
+              "p75": 7982.0,
+              "p95": 16383.0,
+              "p99": 16383.0,
+              "max": 16383.0,
+              "mean": 4983.150348857837,
+              "std": 5505.743008170106
+            }
+          }
+        ]
+      },
+      "rendered_preview_metrics": {
+        "render_model": "rawpy_half_size_camera_wb_no_auto_bright_8bit",
+        "shape": [
+          3984,
+          2660,
+          3
+        ],
+        "pixel_count": 10597440,
+        "rgb_channel_means": {
+          "red": 0.45240899318932815,
+          "green": 0.4766941246483798,
+          "blue": 0.47452344539591357
+        },
+        "luminance_summary": {
+          "count": 10597440,
+          "min": 0.044452549019607844,
+          "p01": 0.09610431372549019,
+          "p05": 0.11485176470588235,
+          "p25": 0.18132941176470588,
+          "median": 0.3675937254901961,
+          "p75": 0.7393468627450981,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 1.0,
+          "mean": 0.4713743826581573,
+          "std": 0.3203143503284572
+        },
+        "luminance_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            48,
+            888128,
+            1907931,
+            1218210,
+            824982,
+            517458,
+            479047,
+            468898,
+            439775,
+            413344,
+            461289,
+            387864,
+            304857,
+            248628,
+            184887,
+            1852094
+          ],
+          "observed_count": 10597440,
+          "expected_count": 10597440,
+          "coverage_status": "complete"
+        },
+        "saturation_proxy_summary": {
+          "count": 10597440,
+          "min": 0.0,
+          "p01": 0.0,
+          "p05": 0.0,
+          "p25": 0.019607843137254943,
+          "median": 0.047058823529411764,
+          "p75": 0.1411764705882353,
+          "p95": 0.29411764705882354,
+          "p99": 0.3176470588235295,
+          "max": 1.0,
+          "mean": 0.09213044682045297,
+          "std": 0.09899843346881342
+        },
+        "channel_cast_proxy_summaries": {
+          "red": {
+            "count": 10597440,
+            "min": -1.0,
+            "p01": -0.22745098039215683,
+            "p05": -0.20980392156862737,
+            "p25": -0.03725490196078429,
+            "median": 0.0,
+            "p75": 0.01568627450980392,
+            "p95": 0.103921568627451,
+            "p99": 0.16862745098039217,
+            "max": 0.7490196078431373,
+            "mean": -0.02319979183281853,
+            "std": 0.09150524206055823
+          },
+          "green": {
+            "count": 10597440,
+            "min": -0.9411764705882353,
+            "p01": -0.07058823529411767,
+            "p05": -0.027450980392156876,
+            "p25": 0.0,
+            "median": 0.009803921568627444,
+            "p75": 0.02745098039215685,
+            "p95": 0.07058823529411762,
+            "p99": 0.12352941176470589,
+            "max": 1.0,
+            "mean": 0.013227905355758874,
+            "std": 0.035764594372423374
+          },
+          "blue": {
+            "count": 10597440,
+            "min": -1.0,
+            "p01": -0.22352941176470587,
+            "p05": -0.14313725490196078,
+            "p25": -0.03725490196078432,
+            "median": 0.0,
+            "p75": 0.023529411764705882,
+            "p95": 0.22941176470588232,
+            "p99": 0.24509803921568618,
+            "max": 1.0,
+            "mean": 0.009971886477059648,
+            "std": 0.10528232173895838
+          }
+        }
+      }
+    },
+    {
+      "asset_key": "JB107507",
+      "raw_path": "data/live_workspace/JB107507.ARW",
+      "file_provenance": {
+        "file_sha256": "8f0782da8fca469d85ebbf73804b60209d63393de30c5e8d18af17cd3d7ede38",
+        "file_size_bytes": 85645598
+      },
+      "decoder_provenance": {
+        "decoder": "rawpy",
+        "rawpy_version": "0.27.0",
+        "numpy_version": "2.5.0",
+        "raw_type": "RawType.Flat",
+        "color_desc": "RGBG",
+        "num_colors": 3,
+        "raw_pattern": [
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "black_level_per_channel": [
+          512,
+          512,
+          512,
+          512
+        ],
+        "black_level_floor_used": 512.0,
+        "white_level": 16383.0,
+        "camera_whitebalance": [
+          2652.0,
+          1024.0,
+          1592.0,
+          1024.0
+        ],
+        "daylight_whitebalance": [
+          2.553339958190918,
+          0.932383120059967,
+          1.2761650085449219,
+          0.0
+        ],
+        "sizes": {
+          "raw_height": 5320,
+          "raw_width": 8000,
+          "height": 5320,
+          "width": 7968,
+          "top_margin": 0,
+          "left_margin": 0,
+          "iheight": 5320,
+          "iwidth": 7968,
+          "pixel_aspect": 1.0,
+          "flip": 5
+        }
+      },
+      "read_coverage": {
+        "read_model": "full_decoded_raw_mosaic_with_visible_window",
+        "raw_full_shape": [
+          5320,
+          8000
+        ],
+        "raw_full_pixel_count": 42560000,
+        "raw_full_dtype": "uint16",
+        "raw_full_sha256": "298f9ad07dfc02fa1a1c96cceaf5f945aa776458f7a684e1ea7a3fd793be5dc5",
+        "raw_visible_shape": [
+          5320,
+          7968
+        ],
+        "raw_visible_pixel_count": 42389760,
+        "raw_visible_dtype": "uint16",
+        "raw_visible_sha256": "1c871ff728821de4d00846c7572d36d7f1037a9cf7e99e3f44fb5fc9853cbc69",
+        "nonvisible_margin_pixel_count": 170240,
+        "raw_histogram_observed_count": 42389760,
+        "raw_histogram_expected_count": 42389760,
+        "raw_histogram_coverage_status": "complete",
+        "coverage_status": "complete"
+      },
+      "raw_mosaic_metrics": {
+        "raw_value_summary": {
+          "count": 42389760,
+          "min": 558.0,
+          "p01": 622.0,
+          "p05": 706.0,
+          "p25": 970.0,
+          "median": 1444.0,
+          "p75": 7698.0,
+          "p95": 16383.0,
+          "p99": 16383.0,
+          "max": 16383.0,
+          "mean": 4731.2262935907165,
+          "std": 5604.355201919856
+        },
+        "normalized_value_summary": {
+          "count": 42389760,
+          "min": 0.0028983680927477788,
+          "p01": 0.006930880221788167,
+          "p05": 0.012223552391153676,
+          "p25": 0.028857664923445277,
+          "median": 0.058723457879150655,
+          "p75": 0.4527755024888161,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 1.0,
+          "mean": 0.26584501881360445,
+          "std": 0.3531192238623814
+        },
+        "normalized_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            21792784,
+            4796661,
+            1867163,
+            1207696,
+            697345,
+            601450,
+            656452,
+            738980,
+            783816,
+            761519,
+            752225,
+            683013,
+            610589,
+            530737,
+            442645,
+            5466685
+          ],
+          "observed_count": 42389760,
+          "expected_count": 42389760,
+          "coverage_status": "complete"
+        },
+        "cfa_channel_summaries": [
+          {
+            "channel_index": 0,
+            "channel_label": "R",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 558.0,
+              "p01": 601.0,
+              "p05": 634.0,
+              "p25": 727.0,
+              "median": 1017.0,
+              "p75": 3905.0,
+              "p95": 14890.0,
+              "p99": 16383.0,
+              "max": 16383.0,
+              "mean": 3122.5527329241777,
+              "std": 4120.135953905451
+            }
+          },
+          {
+            "channel_index": 1,
+            "channel_label": "G",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 679.0,
+              "p01": 789.0,
+              "p05": 862.0,
+              "p25": 1134.0,
+              "median": 1799.0,
+              "p75": 10834.0,
+              "p95": 16383.0,
+              "p99": 16383.0,
+              "max": 16383.0,
+              "mean": 5558.27043106637,
+              "std": 6055.764050946655
+            }
+          },
+          {
+            "channel_index": 2,
+            "channel_label": "B",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 609.0,
+              "p01": 704.0,
+              "p05": 743.0,
+              "p25": 915.0,
+              "median": 1255.0,
+              "p75": 8554.0,
+              "p95": 16383.0,
+              "p99": 16383.0,
+              "max": 16383.0,
+              "mean": 4686.436934863515,
+              "std": 5600.011022468922
+            }
+          }
+        ]
+      },
+      "rendered_preview_metrics": {
+        "render_model": "rawpy_half_size_camera_wb_no_auto_bright_8bit",
+        "shape": [
+          3984,
+          2660,
+          3
+        ],
+        "pixel_count": 10597440,
+        "rgb_channel_means": {
+          "red": 0.4096512472564591,
+          "green": 0.4358128848136169,
+          "blue": 0.4359516823004831
+        },
+        "luminance_summary": {
+          "count": 10597440,
+          "min": 0.04328862745098039,
+          "p01": 0.07206039215686275,
+          "p05": 0.09331999999999999,
+          "p25": 0.15163372549019608,
+          "median": 0.25844156862745093,
+          "p75": 0.768393725490196,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 1.0,
+          "mean": 0.43026094184751684,
+          "std": 0.3387044541830097
+        },
+        "luminance_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            11094,
+            1068306,
+            2983022,
+            1127041,
+            766787,
+            466287,
+            382726,
+            252628,
+            131029,
+            161069,
+            215844,
+            283625,
+            328562,
+            293468,
+            222980,
+            1902972
+          ],
+          "observed_count": 10597440,
+          "expected_count": 10597440,
+          "coverage_status": "complete"
+        },
+        "saturation_proxy_summary": {
+          "count": 10597440,
+          "min": 0.0,
+          "p01": 0.0,
+          "p05": 0.0,
+          "p25": 0.019607843137254888,
+          "median": 0.0392156862745098,
+          "p75": 0.08627450980392157,
+          "p95": 0.2784313725490196,
+          "p99": 0.30980392156862746,
+          "max": 1.0,
+          "mean": 0.07410467685277451,
+          "std": 0.0883217875388089
+        },
+        "channel_cast_proxy_summaries": {
+          "red": {
+            "count": 10597440,
+            "min": -1.0,
+            "p01": -0.22352941176470598,
+            "p05": -0.1960784313725491,
+            "p25": -0.04117647058823529,
+            "median": -0.009803921568627444,
+            "p75": 0.00392156862745098,
+            "p95": 0.08431372549019606,
+            "p99": 0.15098039215686276,
+            "max": 0.7705882352941176,
+            "mean": -0.026231036300590833,
+            "std": 0.07819303660279163
+          },
+          "green": {
+            "count": 10597440,
+            "min": -0.6352941176470588,
+            "p01": -0.0372549019607844,
+            "p05": -0.019607843137254943,
+            "p25": 0.0,
+            "median": 0.00784313725490196,
+            "p75": 0.0215686274509804,
+            "p95": 0.06274509803921569,
+            "p99": 0.1215686274509804,
+            "max": 0.8274509803921568,
+            "mean": 0.013011420035145743,
+            "std": 0.028787704980599634
+          },
+          "blue": {
+            "count": 10597440,
+            "min": -1.0,
+            "p01": -0.23333333333333336,
+            "p05": -0.11764705882352933,
+            "p25": -0.019607843137254888,
+            "median": 0.0,
+            "p75": 0.02941176470588236,
+            "p95": 0.20980392156862737,
+            "p99": 0.2333333333333334,
+            "max": 1.0,
+            "mean": 0.013219616265445095,
+            "std": 0.08872662679328634
+          }
+        }
+      }
+    },
+    {
+      "asset_key": "JB107508",
+      "raw_path": "data/live_workspace/JB107508.ARW",
+      "file_provenance": {
+        "file_sha256": "1b06b0707ec1340ba46246e9f948c630f09df270cb72413d243f62a163fdb49b",
+        "file_size_bytes": 43272358
+      },
+      "decoder_provenance": {
+        "decoder": "rawpy",
+        "rawpy_version": "0.27.0",
+        "numpy_version": "2.5.0",
+        "raw_type": "RawType.Flat",
+        "color_desc": "RGBG",
+        "num_colors": 3,
+        "raw_pattern": [
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "black_level_per_channel": [
+          512,
+          512,
+          512,
+          512
+        ],
+        "black_level_floor_used": 512.0,
+        "white_level": 16383.0,
+        "camera_whitebalance": [
+          2692.0,
+          1024.0,
+          1592.0,
+          1024.0
+        ],
+        "daylight_whitebalance": [
+          2.553339958190918,
+          0.932383120059967,
+          1.2761650085449219,
+          0.0
+        ],
+        "sizes": {
+          "raw_height": 5320,
+          "raw_width": 8000,
+          "height": 5320,
+          "width": 7968,
+          "top_margin": 0,
+          "left_margin": 0,
+          "iheight": 5320,
+          "iwidth": 7968,
+          "pixel_aspect": 1.0,
+          "flip": 5
+        }
+      },
+      "read_coverage": {
+        "read_model": "full_decoded_raw_mosaic_with_visible_window",
+        "raw_full_shape": [
+          5320,
+          8000
+        ],
+        "raw_full_pixel_count": 42560000,
+        "raw_full_dtype": "uint16",
+        "raw_full_sha256": "d750ddbf3af8ae46e9a4dc7e79ad1492e54f0678c71e770a8c52aa9c904a5c1e",
+        "raw_visible_shape": [
+          5320,
+          7968
+        ],
+        "raw_visible_pixel_count": 42389760,
+        "raw_visible_dtype": "uint16",
+        "raw_visible_sha256": "96663f16b02089a760eafa6a025dc0bec6ec782c3d794b5dcb3bcda88449d491",
+        "nonvisible_margin_pixel_count": 170240,
+        "raw_histogram_observed_count": 42389760,
+        "raw_histogram_expected_count": 42389760,
+        "raw_histogram_coverage_status": "complete",
+        "coverage_status": "complete"
+      },
+      "raw_mosaic_metrics": {
+        "raw_value_summary": {
+          "count": 42389760,
+          "min": 502.0,
+          "p01": 524.0,
+          "p05": 536.0,
+          "p25": 568.0,
+          "median": 636.0,
+          "p75": 872.0,
+          "p95": 2096.0,
+          "p99": 5072.0,
+          "max": 16628.0,
+          "mean": 935.723057361023,
+          "std": 1137.665105640064
+        },
+        "normalized_value_summary": {
+          "count": 42389760,
+          "min": 0.0,
+          "p01": 0.0007560960241950727,
+          "p05": 0.0015121920483901455,
+          "p25": 0.0035284481129103395,
+          "median": 0.007812992250015752,
+          "p75": 0.022682880725852183,
+          "p95": 0.09980467519374961,
+          "p99": 0.28731648919412767,
+          "max": 1.0,
+          "mean": 0.026697560841296913,
+          "std": 0.07167678935388089
+        },
+        "normalized_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            38404506,
+            2439816,
+            719718,
+            300057,
+            148813,
+            81484,
+            53571,
+            36389,
+            25057,
+            19293,
+            16117,
+            14317,
+            12621,
+            11647,
+            9292,
+            97062
+          ],
+          "observed_count": 42389760,
+          "expected_count": 42389760,
+          "coverage_status": "complete"
+        },
+        "cfa_channel_summaries": [
+          {
+            "channel_index": 0,
+            "channel_label": "R",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 504.0,
+              "p01": 520.0,
+              "p05": 530.0,
+              "p25": 550.0,
+              "median": 580.0,
+              "p75": 704.0,
+              "p95": 1252.0,
+              "p99": 2768.0,
+              "max": 16628.0,
+              "mean": 736.0210796192288,
+              "std": 675.0495647891362
+            }
+          },
+          {
+            "channel_index": 1,
+            "channel_label": "G",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 508.0,
+              "p01": 538.0,
+              "p05": 558.0,
+              "p25": 612.0,
+              "median": 690.0,
+              "p75": 1052.0,
+              "p95": 2588.0,
+              "p99": 6204.0,
+              "max": 16628.0,
+              "mean": 1079.8954105897274,
+              "std": 1327.0231635551847
+            }
+          },
+          {
+            "channel_index": 2,
+            "channel_label": "B",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 502.0,
+              "p01": 522.0,
+              "p05": 530.0,
+              "p25": 548.0,
+              "median": 584.0,
+              "p75": 772.0,
+              "p95": 1798.0,
+              "p99": 4560.0,
+              "max": 16628.0,
+              "mean": 846.7196526708337,
+              "std": 1051.432512909283
+            }
+          }
+        ]
+      },
+      "rendered_preview_metrics": {
+        "render_model": "rawpy_half_size_camera_wb_no_auto_bright_8bit",
+        "shape": [
+          3984,
+          2660,
+          3
+        ],
+        "pixel_count": 10597440,
+        "rgb_channel_means": {
+          "red": 0.09957321139193365,
+          "green": 0.10780101831474505,
+          "blue": 0.07719858314283226
+        },
+        "luminance_summary": {
+          "count": 10597440,
+          "min": 0.0,
+          "p01": 0.005609411764705882,
+          "p05": 0.012032156862745096,
+          "p25": 0.028839999999999998,
+          "median": 0.05263686274509804,
+          "p75": 0.13885333333333333,
+          "p95": 0.33420792156862567,
+          "p99": 0.589973505882352,
+          "max": 1.0,
+          "mean": 0.10384229074354323,
+          "std": 0.12458485064548538
+        },
+        "luminance_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            5896374,
+            1806095,
+            998598,
+            784248,
+            475528,
+            256878,
+            135317,
+            81299,
+            44411,
+            25817,
+            19220,
+            13458,
+            9456,
+            8083,
+            7640,
+            35018
+          ],
+          "observed_count": 10597440,
+          "expected_count": 10597440,
+          "coverage_status": "complete"
+        },
+        "saturation_proxy_summary": {
+          "count": 10597440,
+          "min": 0.0,
+          "p01": 0.00392156862745098,
+          "p05": 0.00784313725490196,
+          "p25": 0.0196078431372549,
+          "median": 0.039215686274509776,
+          "p75": 0.07450980392156863,
+          "p95": 0.2196078431372549,
+          "p99": 0.43137254901960786,
+          "max": 1.0,
+          "mean": 0.06633688742882483,
+          "std": 0.08839291222207746
+        },
+        "channel_cast_proxy_summaries": {
+          "red": {
+            "count": 10597440,
+            "min": -1.0,
+            "p01": -0.2725490196078431,
+            "p05": -0.09607843137254904,
+            "p25": -0.00196078431372549,
+            "median": 0.00980392156862745,
+            "p75": 0.025490196078431372,
+            "p95": 0.08431372549019611,
+            "p99": 0.17058823529411765,
+            "max": 0.8568627450980393,
+            "mean": 0.007073410663144986,
+            "std": 0.0717236346988235
+          },
+          "green": {
+            "count": 10597440,
+            "min": -0.8392156862745098,
+            "p01": -0.06470588235294117,
+            "p05": -0.017647058823529405,
+            "p25": 0.00196078431372549,
+            "median": 0.011764705882352941,
+            "p75": 0.02745098039215685,
+            "p95": 0.08823529411764705,
+            "p99": 0.1588235294117647,
+            "max": 0.7568627450980392,
+            "mean": 0.019415121047362083,
+            "std": 0.038772305407381046
+          },
+          "blue": {
+            "count": 10597440,
+            "min": -1.0,
+            "p01": -0.2372549019607843,
+            "p05": -0.1392156862745098,
+            "p25": -0.04901960784313726,
+            "median": -0.023529411764705882,
+            "p75": -0.005882352941176464,
+            "p95": 0.06078431372549031,
+            "p99": 0.2803921568627451,
+            "max": 1.0,
+            "mean": -0.02648853171050707,
+            "std": 0.08323220671014066
+          }
+        }
+      }
+    },
+    {
+      "asset_key": "JB107509",
+      "raw_path": "data/live_workspace/JB107509.ARW",
+      "file_provenance": {
+        "file_sha256": "20a06492be7549806f288ba263a5a5d1879a3067c2b8d9029e92f93505e10094",
+        "file_size_bytes": 43348576
+      },
+      "decoder_provenance": {
+        "decoder": "rawpy",
+        "rawpy_version": "0.27.0",
+        "numpy_version": "2.5.0",
+        "raw_type": "RawType.Flat",
+        "color_desc": "RGBG",
+        "num_colors": 3,
+        "raw_pattern": [
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "black_level_per_channel": [
+          512,
+          512,
+          512,
+          512
+        ],
+        "black_level_floor_used": 512.0,
+        "white_level": 16383.0,
+        "camera_whitebalance": [
+          2672.0,
+          1024.0,
+          1580.0,
+          1024.0
+        ],
+        "daylight_whitebalance": [
+          2.553339958190918,
+          0.932383120059967,
+          1.2761650085449219,
+          0.0
+        ],
+        "sizes": {
+          "raw_height": 5320,
+          "raw_width": 8000,
+          "height": 5320,
+          "width": 7968,
+          "top_margin": 0,
+          "left_margin": 0,
+          "iheight": 5320,
+          "iwidth": 7968,
+          "pixel_aspect": 1.0,
+          "flip": 5
+        }
+      },
+      "read_coverage": {
+        "read_model": "full_decoded_raw_mosaic_with_visible_window",
+        "raw_full_shape": [
+          5320,
+          8000
+        ],
+        "raw_full_pixel_count": 42560000,
+        "raw_full_dtype": "uint16",
+        "raw_full_sha256": "44ea5b988511f5890ff4637ae8f8d99623fd6726f03a67ba1e8f3c237f550de7",
+        "raw_visible_shape": [
+          5320,
+          7968
+        ],
+        "raw_visible_pixel_count": 42389760,
+        "raw_visible_dtype": "uint16",
+        "raw_visible_sha256": "5dbb5f55624eaa6a69c565e91d7ea72fba056fff31ffe06ee97f4c989efb282f",
+        "nonvisible_margin_pixel_count": 170240,
+        "raw_histogram_observed_count": 42389760,
+        "raw_histogram_expected_count": 42389760,
+        "raw_histogram_coverage_status": "complete",
+        "coverage_status": "complete"
+      },
+      "raw_mosaic_metrics": {
+        "raw_value_summary": {
+          "count": 42389760,
+          "min": 502.0,
+          "p01": 532.0,
+          "p05": 560.0,
+          "p25": 926.0,
+          "median": 2512.0,
+          "p75": 7036.0,
+          "p95": 16372.0,
+          "p99": 16372.0,
+          "max": 16628.0,
+          "mean": 5067.721791913897,
+          "std": 5388.766151131591
+        },
+        "normalized_value_summary": {
+          "count": 42389760,
+          "min": 0.0,
+          "p01": 0.0012601600403251212,
+          "p05": 0.003024384096780291,
+          "p25": 0.02608531283473001,
+          "median": 0.12601600403251212,
+          "p75": 0.41106420515405456,
+          "p95": 0.9993069119778212,
+          "p99": 0.9993069119778212,
+          "max": 1.0,
+          "mean": 0.2870358169915092,
+          "std": 0.3395119752926624
+        },
+        "normalized_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            16126580,
+            4999770,
+            2991258,
+            3099738,
+            2476982,
+            1521608,
+            908565,
+            574323,
+            427874,
+            395074,
+            395519,
+            697522,
+            1305645,
+            1265605,
+            1013450,
+            4190247
+          ],
+          "observed_count": 42389760,
+          "expected_count": 42389760,
+          "coverage_status": "complete"
+        },
+        "cfa_channel_summaries": [
+          {
+            "channel_index": 0,
+            "channel_label": "R",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 502.0,
+              "p01": 522.0,
+              "p05": 538.0,
+              "p25": 750.0,
+              "median": 1774.0,
+              "p75": 4032.0,
+              "p95": 6204.0,
+              "p99": 8404.0,
+              "max": 16628.0,
+              "mean": 2524.710665405985,
+              "std": 2128.3835474821144
+            }
+          },
+          {
+            "channel_index": 1,
+            "channel_label": "G",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 518.0,
+              "p01": 548.0,
+              "p05": 596.0,
+              "p25": 1196.0,
+              "median": 3968.0,
+              "p75": 12500.0,
+              "p95": 16372.0,
+              "p99": 16372.0,
+              "max": 16628.0,
+              "mean": 6375.76810135278,
+              "std": 5819.321149358276
+            }
+          },
+          {
+            "channel_index": 2,
+            "channel_label": "B",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 512.0,
+              "p01": 536.0,
+              "p05": 566.0,
+              "p25": 822.0,
+              "median": 1634.0,
+              "p75": 10164.0,
+              "p95": 16372.0,
+              "p99": 16372.0,
+              "max": 16628.0,
+              "mean": 4995.390401832896,
+              "std": 5830.973131827659
+            }
+          }
+        ]
+      },
+      "rendered_preview_metrics": {
+        "render_model": "rawpy_half_size_camera_wb_no_auto_bright_8bit",
+        "shape": [
+          3984,
+          2660,
+          3
+        ],
+        "pixel_count": 10597440,
+        "rgb_channel_means": {
+          "red": 0.4334534940587946,
+          "green": 0.5086298100406936,
+          "blue": 0.40633154614625394
+        },
+        "luminance_summary": {
+          "count": 10597440,
+          "min": 0.0005662745098039216,
+          "p01": 0.007292549019607843,
+          "p05": 0.01996941176470588,
+          "p25": 0.16715764705882355,
+          "median": 0.4695411764705882,
+          "p75": 0.8151741176470588,
+          "p95": 0.9841443137254902,
+          "p99": 1.0,
+          "max": 1.0,
+          "mean": 0.4852613906097633,
+          "std": 0.3347381997025635
+        },
+        "luminance_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            1523645,
+            688552,
+            633619,
+            602274,
+            494910,
+            514712,
+            553074,
+            570086,
+            587520,
+            501605,
+            367931,
+            337562,
+            540453,
+            688168,
+            577298,
+            1416031
+          ],
+          "observed_count": 10597440,
+          "expected_count": 10597440,
+          "coverage_status": "complete"
+        },
+        "saturation_proxy_summary": {
+          "count": 10597440,
+          "min": 0.0,
+          "p01": 0.0,
+          "p05": 0.00392156862745098,
+          "p25": 0.07058823529411762,
+          "median": 0.19607843137254902,
+          "p75": 0.33333333333333337,
+          "p95": 0.49019607843137253,
+          "p99": 0.6549019607843137,
+          "max": 1.0,
+          "mean": 0.21358430145467613,
+          "std": 0.16263276188737266
+        },
+        "channel_cast_proxy_summaries": {
+          "red": {
+            "count": 10597440,
+            "min": -1.0,
+            "p01": -0.35686274509803917,
+            "p05": -0.3274509803921569,
+            "p25": -0.10196078431372546,
+            "median": 0.0,
+            "p75": 0.084313725490196,
+            "p95": 0.19019607843137257,
+            "p99": 0.2764705882352941,
+            "max": 0.692156862745098,
+            "mean": -0.024027184034679176,
+            "std": 0.15969562421254027
+          },
+          "green": {
+            "count": 10597440,
+            "min": -0.5980392156862745,
+            "p01": -0.047058823529411764,
+            "p05": -0.01568627450980392,
+            "p25": 0.011764705882352941,
+            "median": 0.06862745098039214,
+            "p75": 0.13529411764705884,
+            "p95": 0.2784313725490196,
+            "p99": 0.3725490196078431,
+            "max": 0.5686274509803921,
+            "mean": 0.0887372899381693,
+            "std": 0.09365286339146986
+          },
+          "blue": {
+            "count": 10597440,
+            "min": -1.0,
+            "p01": -0.603921568627451,
+            "p05": -0.4372549019607842,
+            "p25": -0.20980392156862748,
+            "median": -0.025490196078431372,
+            "p75": 0.0725490196078431,
+            "p95": 0.2647058823529411,
+            "p99": 0.33529411764705885,
+            "max": 1.0,
+            "mean": -0.06471010590349012,
+            "std": 0.21124050773552966
+          }
+        }
+      }
+    },
+    {
+      "asset_key": "JB107510",
+      "raw_path": "data/live_workspace/JB107510.ARW",
+      "file_provenance": {
+        "file_sha256": "c9ff7fcf9abeb2862996dae43d5f0da134fc87ba579b6fa741830e102c1b98cb",
+        "file_size_bytes": 43456984
+      },
+      "decoder_provenance": {
+        "decoder": "rawpy",
+        "rawpy_version": "0.27.0",
+        "numpy_version": "2.5.0",
+        "raw_type": "RawType.Flat",
+        "color_desc": "RGBG",
+        "num_colors": 3,
+        "raw_pattern": [
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "black_level_per_channel": [
+          512,
+          512,
+          512,
+          512
+        ],
+        "black_level_floor_used": 512.0,
+        "white_level": 16383.0,
+        "camera_whitebalance": [
+          2692.0,
+          1024.0,
+          1568.0,
+          1024.0
+        ],
+        "daylight_whitebalance": [
+          2.553339958190918,
+          0.932383120059967,
+          1.2761650085449219,
+          0.0
+        ],
+        "sizes": {
+          "raw_height": 5320,
+          "raw_width": 8000,
+          "height": 5320,
+          "width": 7968,
+          "top_margin": 0,
+          "left_margin": 0,
+          "iheight": 5320,
+          "iwidth": 7968,
+          "pixel_aspect": 1.0,
+          "flip": 5
+        }
+      },
+      "read_coverage": {
+        "read_model": "full_decoded_raw_mosaic_with_visible_window",
+        "raw_full_shape": [
+          5320,
+          8000
+        ],
+        "raw_full_pixel_count": 42560000,
+        "raw_full_dtype": "uint16",
+        "raw_full_sha256": "d09d59529e2cb2444f1c4b35e74d97fbea02ca18250c21bed1a347b5f362be2f",
+        "raw_visible_shape": [
+          5320,
+          7968
+        ],
+        "raw_visible_pixel_count": 42389760,
+        "raw_visible_dtype": "uint16",
+        "raw_visible_sha256": "2ffd4976d89324e74af66d9e985b153cf32797c14f5f8b07d704a528ed6688f3",
+        "nonvisible_margin_pixel_count": 170240,
+        "raw_histogram_observed_count": 42389760,
+        "raw_histogram_expected_count": 42389760,
+        "raw_histogram_coverage_status": "complete",
+        "coverage_status": "complete"
+      },
+      "raw_mosaic_metrics": {
+        "raw_value_summary": {
+          "count": 42389760,
+          "min": 504.0,
+          "p01": 554.0,
+          "p05": 596.0,
+          "p25": 754.0,
+          "median": 1142.0,
+          "p75": 3216.0,
+          "p95": 10740.0,
+          "p99": 14580.0,
+          "max": 16628.0,
+          "mean": 2764.2341073881994,
+          "std": 3317.7998326582247
+        },
+        "normalized_value_summary": {
+          "count": 42389760,
+          "min": 0.0,
+          "p01": 0.0026463360846827547,
+          "p05": 0.0052926721693655095,
+          "p25": 0.015247936487933968,
+          "median": 0.03969504127024132,
+          "p75": 0.1703736374519564,
+          "p95": 0.6444458446222671,
+          "p99": 0.8863965723646903,
+          "max": 1.0,
+          "mean": 0.14190745190416768,
+          "std": 0.2090425067544418
+        },
+        "normalized_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            25043674,
+            4487426,
+            3006433,
+            1843976,
+            1224569,
+            981995,
+            863416,
+            832111,
+            874367,
+            847283,
+            848908,
+            579858,
+            261742,
+            220547,
+            201426,
+            272029
+          ],
+          "observed_count": 42389760,
+          "expected_count": 42389760,
+          "coverage_status": "complete"
+        },
+        "cfa_channel_summaries": [
+          {
+            "channel_index": 0,
+            "channel_label": "R",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 504.0,
+              "p01": 540.0,
+              "p05": 566.0,
+              "p25": 662.0,
+              "median": 858.0,
+              "p75": 2160.0,
+              "p95": 3976.0,
+              "p99": 5440.0,
+              "max": 16596.0,
+              "mean": 1515.616199572727,
+              "std": 1253.398792619383
+            }
+          },
+          {
+            "channel_index": 1,
+            "channel_label": "G",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 520.0,
+              "p01": 588.0,
+              "p05": 672.0,
+              "p25": 906.0,
+              "median": 1434.0,
+              "p75": 5224.0,
+              "p95": 11572.0,
+              "p99": 15412.0,
+              "max": 16628.0,
+              "mean": 3508.6049608207263,
+              "std": 3779.569128768818
+            }
+          },
+          {
+            "channel_index": 2,
+            "channel_label": "B",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 514.0,
+              "p01": 550.0,
+              "p05": 586.0,
+              "p25": 690.0,
+              "median": 880.0,
+              "p75": 2484.0,
+              "p95": 10868.0,
+              "p99": 14516.0,
+              "max": 16628.0,
+              "mean": 2524.3919148398104,
+              "std": 3342.1914449886604
+            }
+          }
+        ]
+      },
+      "rendered_preview_metrics": {
+        "render_model": "rawpy_half_size_camera_wb_no_auto_bright_8bit",
+        "shape": [
+          3984,
+          2660,
+          3
+        ],
+        "pixel_count": 10597440,
+        "rgb_channel_means": {
+          "red": 0.2912371892849298,
+          "green": 0.3357151223943392,
+          "blue": 0.2640078299339182
+        },
+        "luminance_summary": {
+          "count": 10597440,
+          "min": 0.0002831372549019608,
+          "p01": 0.02101254901960784,
+          "p05": 0.041737254901960785,
+          "p25": 0.1111521568627451,
+          "median": 0.21372156862745095,
+          "p75": 0.5374078431372549,
+          "p95": 0.7920141176470588,
+          "p99": 0.9391254901960784,
+          "max": 1.0,
+          "mean": 0.3210818472996364,
+          "std": 0.2555596881719906
+        },
+        "luminance_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            1038623,
+            2076529,
+            1678780,
+            1022548,
+            591377,
+            448831,
+            415396,
+            416194,
+            443986,
+            537644,
+            628253,
+            538105,
+            309725,
+            186353,
+            155473,
+            109623
+          ],
+          "observed_count": 10597440,
+          "expected_count": 10597440,
+          "coverage_status": "complete"
+        },
+        "saturation_proxy_summary": {
+          "count": 10597440,
+          "min": 0.0,
+          "p01": 0.00784313725490196,
+          "p05": 0.023529411764705882,
+          "p25": 0.06274509803921569,
+          "median": 0.12549019607843137,
+          "p75": 0.2549019607843137,
+          "p95": 0.5176470588235293,
+          "p99": 0.6862745098039216,
+          "max": 1.0,
+          "mean": 0.18198442228296938,
+          "std": 0.16040091812643092
+        },
+        "channel_cast_proxy_summaries": {
+          "red": {
+            "count": 10597440,
+            "min": -1.0,
+            "p01": -0.38431372549019605,
+            "p05": -0.3509803921568627,
+            "p25": -0.023529411764705854,
+            "median": 0.027450980392156862,
+            "p75": 0.06470588235294117,
+            "p95": 0.1568627450980392,
+            "p99": 0.2529411764705883,
+            "max": 0.9,
+            "mean": -0.00862428687919894,
+            "std": 0.14214472088336494
+          },
+          "green": {
+            "count": 10597440,
+            "min": -0.6647058823529411,
+            "p01": -0.07058823529411762,
+            "p05": -0.04117647058823526,
+            "p25": 0.00980392156862745,
+            "median": 0.03333333333333334,
+            "p75": 0.09411764705882353,
+            "p95": 0.21372549019607845,
+            "p99": 0.37843137254901965,
+            "max": 0.6117647058823529,
+            "mean": 0.05809261278491528,
+            "std": 0.08357004365722726
+          },
+          "blue": {
+            "count": 10597440,
+            "min": -1.0,
+            "p01": -0.615686274509804,
+            "p05": -0.3352941176470588,
+            "p25": -0.1450980392156862,
+            "median": -0.05882352941176472,
+            "p75": -0.00392156862745098,
+            "p95": 0.37058823529411766,
+            "p99": 0.4392156862745098,
+            "max": 0.9764705882352941,
+            "mean": -0.04946832590571633,
+            "std": 0.19852353065923248
+          }
+        }
+      }
+    },
+    {
+      "asset_key": "JB107511",
+      "raw_path": "data/live_workspace/JB107511.ARW",
+      "file_provenance": {
+        "file_sha256": "73bc318870ef6ede36209d1552e26cf55f5c5a0658c5a9facb7a3c155651d137",
+        "file_size_bytes": 43276308
+      },
+      "decoder_provenance": {
+        "decoder": "rawpy",
+        "rawpy_version": "0.27.0",
+        "numpy_version": "2.5.0",
+        "raw_type": "RawType.Flat",
+        "color_desc": "RGBG",
+        "num_colors": 3,
+        "raw_pattern": [
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "black_level_per_channel": [
+          512,
+          512,
+          512,
+          512
+        ],
+        "black_level_floor_used": 512.0,
+        "white_level": 16383.0,
+        "camera_whitebalance": [
+          2672.0,
+          1024.0,
+          1712.0,
+          1024.0
+        ],
+        "daylight_whitebalance": [
+          2.553339958190918,
+          0.932383120059967,
+          1.2761650085449219,
+          0.0
+        ],
+        "sizes": {
+          "raw_height": 5320,
+          "raw_width": 8000,
+          "height": 5320,
+          "width": 7968,
+          "top_margin": 0,
+          "left_margin": 0,
+          "iheight": 5320,
+          "iwidth": 7968,
+          "pixel_aspect": 1.0,
+          "flip": 5
+        }
+      },
+      "read_coverage": {
+        "read_model": "full_decoded_raw_mosaic_with_visible_window",
+        "raw_full_shape": [
+          5320,
+          8000
+        ],
+        "raw_full_pixel_count": 42560000,
+        "raw_full_dtype": "uint16",
+        "raw_full_sha256": "294e0bce3db92c54bb5635662a51a39dc31c8fb8ea19fa487ddaa2b05c966e44",
+        "raw_visible_shape": [
+          5320,
+          7968
+        ],
+        "raw_visible_pixel_count": 42389760,
+        "raw_visible_dtype": "uint16",
+        "raw_visible_sha256": "3df2e3129d78b066b769975669c44578a73cd74fc11891c20777b6b901e13a9f",
+        "nonvisible_margin_pixel_count": 170240,
+        "raw_histogram_observed_count": 42389760,
+        "raw_histogram_expected_count": 42389760,
+        "raw_histogram_coverage_status": "complete",
+        "coverage_status": "complete"
+      },
+      "raw_mosaic_metrics": {
+        "raw_value_summary": {
+          "count": 42389760,
+          "min": 494.0,
+          "p01": 588.0,
+          "p05": 682.0,
+          "p25": 962.0,
+          "median": 1384.0,
+          "p75": 2172.0,
+          "p95": 4640.0,
+          "p99": 15636.0,
+          "max": 16628.0,
+          "mean": 1978.752115982728,
+          "std": 2100.4979079883383
+        },
+        "normalized_value_summary": {
+          "count": 42389760,
+          "min": 0.0,
+          "p01": 0.0047886081532354605,
+          "p05": 0.01071136034276353,
+          "p25": 0.02835360090731523,
+          "median": 0.05494297775817529,
+          "p75": 0.10459328334698506,
+          "p95": 0.26009703232310505,
+          "p99": 0.9529330224938567,
+          "max": 1.0,
+          "mean": 0.09241540828358394,
+          "std": 0.13233639716051265
+        },
+        "normalized_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            23425308,
+            10590488,
+            4431937,
+            1689129,
+            539070,
+            292293,
+            317207,
+            210248,
+            133827,
+            94451,
+            69701,
+            55448,
+            43920,
+            35639,
+            30390,
+            430704
+          ],
+          "observed_count": 42389760,
+          "expected_count": 42389760,
+          "coverage_status": "complete"
+        },
+        "cfa_channel_summaries": [
+          {
+            "channel_index": 0,
+            "channel_label": "R",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 494.0,
+              "p01": 554.0,
+              "p05": 626.0,
+              "p25": 768.0,
+              "median": 962.0,
+              "p75": 1250.0,
+              "p95": 2856.0,
+              "p99": 7916.0,
+              "max": 16628.0,
+              "mean": 1269.9937724582542,
+              "std": 1450.6713684822619
+            }
+          },
+          {
+            "channel_index": 1,
+            "channel_label": "G",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 510.0,
+              "p01": 634.0,
+              "p05": 826.0,
+              "p25": 1276.0,
+              "median": 1836.0,
+              "p75": 2708.0,
+              "p95": 6444.0,
+              "p99": 16372.0,
+              "max": 16628.0,
+              "mean": 2446.4994502445875,
+              "std": 2328.6722536451307
+            }
+          },
+          {
+            "channel_index": 2,
+            "channel_label": "B",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 510.0,
+              "p01": 594.0,
+              "p05": 694.0,
+              "p25": 918.0,
+              "median": 1250.0,
+              "p75": 1748.0,
+              "p95": 4064.0,
+              "p99": 14388.0,
+              "max": 16628.0,
+              "mean": 1752.590570930338,
+              "std": 1926.0783526051057
+            }
+          }
+        ]
+      },
+      "rendered_preview_metrics": {
+        "render_model": "rawpy_half_size_camera_wb_no_auto_bright_8bit",
+        "shape": [
+          3984,
+          2660,
+          3
+        ],
+        "pixel_count": 10597440,
+        "rgb_channel_means": {
+          "red": 0.24411079190712429,
+          "green": 0.28573481638480797,
+          "blue": 0.278739631606183
+        },
+        "luminance_summary": {
+          "count": 10597440,
+          "min": 0.0002831372549019608,
+          "p01": 0.03028705882352941,
+          "p05": 0.0809592156862745,
+          "p25": 0.17843686274509804,
+          "median": 0.2500549019607843,
+          "p75": 0.3341764705882353,
+          "p95": 0.6075875686274483,
+          "p99": 1.0,
+          "max": 1.0,
+          "mean": 0.2763804964398357,
+          "std": 0.16288438661328336
+        },
+        "luminance_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            331450,
+            1044573,
+            1553510,
+            2367789,
+            2002181,
+            1521038,
+            732762,
+            297266,
+            139759,
+            107605,
+            162736,
+            78666,
+            53611,
+            32888,
+            22944,
+            148662
+          ],
+          "observed_count": 10597440,
+          "expected_count": 10597440,
+          "coverage_status": "complete"
+        },
+        "saturation_proxy_summary": {
+          "count": 10597440,
+          "min": 0.0,
+          "p01": 0.0,
+          "p05": 0.0196078431372549,
+          "p25": 0.054901960784313725,
+          "median": 0.09019607843137255,
+          "p75": 0.16862745098039214,
+          "p95": 0.39999999999999997,
+          "p99": 0.4823529411764706,
+          "max": 1.0,
+          "mean": 0.13306637281841505,
+          "std": 0.11827474694230403
+        },
+        "channel_cast_proxy_summaries": {
+          "red": {
+            "count": 10597440,
+            "min": -1.0,
+            "p01": -0.403921568627451,
+            "p05": -0.3274509803921568,
+            "p25": -0.06862745098039225,
+            "median": 0.0058823529411764705,
+            "p75": 0.047058823529411736,
+            "p95": 0.09607843137254901,
+            "p99": 0.15294117647058825,
+            "max": 0.7666666666666667,
+            "mean": -0.03812643208837118,
+            "std": 0.13394053050325352
+          },
+          "green": {
+            "count": 10597440,
+            "min": -0.692156862745098,
+            "p01": -0.08823529411764705,
+            "p05": -0.045098039215686336,
+            "p25": -0.01372549019607841,
+            "median": 0.021568627450980427,
+            "p75": 0.0607843137254902,
+            "p95": 0.103921568627451,
+            "p99": 0.14313725490196072,
+            "max": 0.7215686274509804,
+            "mean": 0.024309604628154367,
+            "std": 0.052344060553676276
+          },
+          "blue": {
+            "count": 10597440,
+            "min": -0.9431372549019608,
+            "p01": -0.21764705882352936,
+            "p05": -0.14901960784313728,
+            "p25": -0.06470588235294114,
+            "median": -0.015686274509803894,
+            "p75": 0.07254901960784313,
+            "p95": 0.2666666666666666,
+            "p99": 0.32156862745098036,
+            "max": 1.0,
+            "mean": 0.013816827460216808,
+            "std": 0.12408066036992581
+          }
+        }
+      }
+    },
+    {
+      "asset_key": "JB107512",
+      "raw_path": "data/live_workspace/JB107512.ARW",
+      "file_provenance": {
+        "file_sha256": "bd485480e65423f2d9a03bbe71f55906e33416d0fed1f6f11456998e75070098",
+        "file_size_bytes": 43250906
+      },
+      "decoder_provenance": {
+        "decoder": "rawpy",
+        "rawpy_version": "0.27.0",
+        "numpy_version": "2.5.0",
+        "raw_type": "RawType.Flat",
+        "color_desc": "RGBG",
+        "num_colors": 3,
+        "raw_pattern": [
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "black_level_per_channel": [
+          512,
+          512,
+          512,
+          512
+        ],
+        "black_level_floor_used": 512.0,
+        "white_level": 16383.0,
+        "camera_whitebalance": [
+          2476.0,
+          1024.0,
+          1764.0,
+          1024.0
+        ],
+        "daylight_whitebalance": [
+          2.553339958190918,
+          0.932383120059967,
+          1.2761650085449219,
+          0.0
+        ],
+        "sizes": {
+          "raw_height": 5320,
+          "raw_width": 8000,
+          "height": 5320,
+          "width": 7968,
+          "top_margin": 0,
+          "left_margin": 0,
+          "iheight": 5320,
+          "iwidth": 7968,
+          "pixel_aspect": 1.0,
+          "flip": 5
+        }
+      },
+      "read_coverage": {
+        "read_model": "full_decoded_raw_mosaic_with_visible_window",
+        "raw_full_shape": [
+          5320,
+          8000
+        ],
+        "raw_full_pixel_count": 42560000,
+        "raw_full_dtype": "uint16",
+        "raw_full_sha256": "7b2b7083a3b607bd28825cd07e7f82362182f4e31b01b46206d80209467a042b",
+        "raw_visible_shape": [
+          5320,
+          7968
+        ],
+        "raw_visible_pixel_count": 42389760,
+        "raw_visible_dtype": "uint16",
+        "raw_visible_sha256": "8b530141ce32013cf9866efd86327024990e231ffc80d0c0d853c72dd7eeb696",
+        "nonvisible_margin_pixel_count": 170240,
+        "raw_histogram_observed_count": 42389760,
+        "raw_histogram_expected_count": 42389760,
+        "raw_histogram_coverage_status": "complete",
+        "coverage_status": "complete"
+      },
+      "raw_mosaic_metrics": {
+        "raw_value_summary": {
+          "count": 42389760,
+          "min": 490.0,
+          "p01": 524.0,
+          "p05": 538.0,
+          "p25": 586.0,
+          "median": 698.0,
+          "p75": 1000.0,
+          "p95": 2368.0,
+          "p99": 5852.0,
+          "max": 16628.0,
+          "mean": 1013.2749390418818,
+          "std": 1048.9259488037064
+        },
+        "normalized_value_summary": {
+          "count": 42389760,
+          "min": 0.0,
+          "p01": 0.0007560960241950727,
+          "p05": 0.0016382080524226577,
+          "p25": 0.004662592149202949,
+          "median": 0.011719488375023629,
+          "p75": 0.03074790498393296,
+          "p95": 0.11694285174217126,
+          "p99": 0.3364627307668074,
+          "max": 1.0,
+          "mean": 0.03158422952159836,
+          "std": 0.06608914444611574
+        },
+        "normalized_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            37206055,
+            3269568,
+            837817,
+            370482,
+            219822,
+            143446,
+            97986,
+            68840,
+            49528,
+            34789,
+            24831,
+            17222,
+            13680,
+            10529,
+            7332,
+            17833
+          ],
+          "observed_count": 42389760,
+          "expected_count": 42389760,
+          "coverage_status": "complete"
+        },
+        "cfa_channel_summaries": [
+          {
+            "channel_index": 0,
+            "channel_label": "R",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 490.0,
+              "p01": 522.0,
+              "p05": 532.0,
+              "p25": 560.0,
+              "median": 626.0,
+              "p75": 808.0,
+              "p95": 1598.0,
+              "p99": 3696.0,
+              "max": 16596.0,
+              "mean": 815.5879304813238,
+              "std": 624.5689307480537
+            }
+          },
+          {
+            "channel_index": 1,
+            "channel_label": "G",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 500.0,
+              "p01": 536.0,
+              "p05": 554.0,
+              "p25": 622.0,
+              "median": 780.0,
+              "p75": 1184.0,
+              "p95": 2876.0,
+              "p99": 7452.0,
+              "max": 16628.0,
+              "mean": 1186.9472315955552,
+              "std": 1299.1998653598869
+            }
+          },
+          {
+            "channel_index": 2,
+            "channel_label": "B",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 494.0,
+              "p01": 524.0,
+              "p05": 534.0,
+              "p25": 570.0,
+              "median": 656.0,
+              "p75": 864.0,
+              "p95": 1746.0,
+              "p99": 4136.0,
+              "max": 16628.0,
+              "mean": 863.827694235589,
+              "std": 718.1183052643314
+            }
+          }
+        ]
+      },
+      "rendered_preview_metrics": {
+        "render_model": "rawpy_half_size_camera_wb_no_auto_bright_8bit",
+        "shape": [
+          3984,
+          2660,
+          3
+        ],
+        "pixel_count": 10597440,
+        "rgb_channel_means": {
+          "red": 0.13020833629372272,
+          "green": 0.1234762028358162,
+          "blue": 0.10700475016681793
+        },
+        "luminance_summary": {
+          "count": 10597440,
+          "min": 0.0,
+          "p01": 0.005303011764705879,
+          "p05": 0.010930980392156862,
+          "p25": 0.029916078431372548,
+          "median": 0.07599294117647058,
+          "p75": 0.16642509803921568,
+          "p95": 0.3742478431372549,
+          "p99": 0.6717159843137218,
+          "max": 1.0,
+          "mean": 0.12371821552626548,
+          "std": 0.13591555551590254
+        },
+        "luminance_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            4738617,
+            2124967,
+            1389197,
+            812890,
+            680369,
+            323772,
+            141595,
+            102924,
+            78860,
+            61617,
+            47051,
+            34180,
+            23139,
+            14514,
+            10124,
+            13624
+          ],
+          "observed_count": 10597440,
+          "expected_count": 10597440,
+          "coverage_status": "complete"
+        },
+        "saturation_proxy_summary": {
+          "count": 10597440,
+          "min": 0.0,
+          "p01": 0.0039215686274509665,
+          "p05": 0.00392156862745098,
+          "p25": 0.01568627450980392,
+          "median": 0.03137254901960784,
+          "p75": 0.06666666666666665,
+          "p95": 0.1803921568627451,
+          "p99": 0.2980392156862745,
+          "max": 1.0,
+          "mean": 0.053191175434451954,
+          "std": 0.06130839784718235
+        },
+        "channel_cast_proxy_summaries": {
+          "red": {
+            "count": 10597440,
+            "min": -0.8411764705882353,
+            "p01": -0.14901960784313728,
+            "p05": -0.05098039215686273,
+            "p25": -0.00784313725490196,
+            "median": 0.00784313725490196,
+            "p75": 0.03333333333333333,
+            "p95": 0.10784313725490197,
+            "p99": 0.19019607843137254,
+            "max": 0.7196078431372549,
+            "mean": 0.014967859792405653,
+            "std": 0.05538351652381567
+          },
+          "green": {
+            "count": 10597440,
+            "min": -0.5215686274509804,
+            "p01": -0.07647058823529412,
+            "p05": -0.025490196078431365,
+            "p25": -0.00784313725490196,
+            "median": 0.0,
+            "p75": 0.013725490196078424,
+            "p95": 0.05490196078431374,
+            "p99": 0.0941176470588235,
+            "max": 0.7176470588235294,
+            "mean": 0.004869659605545876,
+            "std": 0.028087606975902
+          },
+          "blue": {
+            "count": 10597440,
+            "min": -0.8431372549019607,
+            "p01": -0.19803921568627458,
+            "p05": -0.13137254901960782,
+            "p25": -0.03529411764705884,
+            "median": -0.011764705882352941,
+            "p75": 0.00196078431372549,
+            "p95": 0.047058823529411764,
+            "p99": 0.18235294117647055,
+            "max": 0.8431372549019608,
+            "mean": -0.01983751939795153,
+            "std": 0.05866859831902477
+          }
+        }
+      }
+    },
+    {
+      "asset_key": "JB107513",
+      "raw_path": "data/live_workspace/JB107513.ARW",
+      "file_provenance": {
+        "file_sha256": "de25786167742e00cddd020e61fb21cea5c3e8244270f799e49bb7bad5da06d6",
+        "file_size_bytes": 43094072
+      },
+      "decoder_provenance": {
+        "decoder": "rawpy",
+        "rawpy_version": "0.27.0",
+        "numpy_version": "2.5.0",
+        "raw_type": "RawType.Flat",
+        "color_desc": "RGBG",
+        "num_colors": 3,
+        "raw_pattern": [
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "black_level_per_channel": [
+          512,
+          512,
+          512,
+          512
+        ],
+        "black_level_floor_used": 512.0,
+        "white_level": 16383.0,
+        "camera_whitebalance": [
+          2840.0,
+          1024.0,
+          1464.0,
+          1024.0
+        ],
+        "daylight_whitebalance": [
+          2.553339958190918,
+          0.932383120059967,
+          1.2761650085449219,
+          0.0
+        ],
+        "sizes": {
+          "raw_height": 5320,
+          "raw_width": 8000,
+          "height": 5320,
+          "width": 7968,
+          "top_margin": 0,
+          "left_margin": 0,
+          "iheight": 5320,
+          "iwidth": 7968,
+          "pixel_aspect": 1.0,
+          "flip": 5
+        }
+      },
+      "read_coverage": {
+        "read_model": "full_decoded_raw_mosaic_with_visible_window",
+        "raw_full_shape": [
+          5320,
+          8000
+        ],
+        "raw_full_pixel_count": 42560000,
+        "raw_full_dtype": "uint16",
+        "raw_full_sha256": "531f481384083a25c2392bac2a732bedb93800d1c603003b6e4460f87743fec6",
+        "raw_visible_shape": [
+          5320,
+          7968
+        ],
+        "raw_visible_pixel_count": 42389760,
+        "raw_visible_dtype": "uint16",
+        "raw_visible_sha256": "9f554789ac77f23f14a3eb336ba639ee24ceb87ab90cbcc47a50906b7460c756",
+        "nonvisible_margin_pixel_count": 170240,
+        "raw_histogram_observed_count": 42389760,
+        "raw_histogram_expected_count": 42389760,
+        "raw_histogram_coverage_status": "complete",
+        "coverage_status": "complete"
+      },
+      "raw_mosaic_metrics": {
+        "raw_value_summary": {
+          "count": 42389760,
+          "min": 502.0,
+          "p01": 566.0,
+          "p05": 644.0,
+          "p25": 964.0,
+          "median": 1478.0,
+          "p75": 3928.0,
+          "p95": 16372.0,
+          "p99": 16372.0,
+          "max": 16628.0,
+          "mean": 4416.413061031721,
+          "std": 5746.754531885566
+        },
+        "normalized_value_summary": {
+          "count": 42389760,
+          "min": 0.0,
+          "p01": 0.0034024321088778277,
+          "p05": 0.008317056266145801,
+          "p25": 0.02847961691134774,
+          "median": 0.06086572994770336,
+          "p75": 0.21523533488753072,
+          "p95": 0.9993069119778212,
+          "p99": 0.9993069119778212,
+          "max": 1.0,
+          "mean": 0.24600573573880266,
+          "std": 0.3620841514102863
+        },
+        "normalized_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            21552362,
+            7955604,
+            1841182,
+            853163,
+            538021,
+            551827,
+            345446,
+            262577,
+            324222,
+            244985,
+            192267,
+            181969,
+            178200,
+            176217,
+            168140,
+            7023578
+          ],
+          "observed_count": 42389760,
+          "expected_count": 42389760,
+          "coverage_status": "complete"
+        },
+        "cfa_channel_summaries": [
+          {
+            "channel_index": 0,
+            "channel_label": "R",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 502.0,
+              "p01": 546.0,
+              "p05": 574.0,
+              "p25": 780.0,
+              "median": 1034.0,
+              "p75": 2376.0,
+              "p95": 16372.0,
+              "p99": 16372.0,
+              "max": 16628.0,
+              "mean": 3565.23444190295,
+              "std": 5272.139133542385
+            }
+          },
+          {
+            "channel_index": 1,
+            "channel_label": "G",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 520.0,
+              "p01": 622.0,
+              "p05": 714.0,
+              "p25": 1234.0,
+              "median": 1836.0,
+              "p75": 5408.0,
+              "p95": 16372.0,
+              "p99": 16372.0,
+              "max": 16628.0,
+              "mean": 4884.43286963644,
+              "std": 5873.335112551602
+            }
+          },
+          {
+            "channel_index": 2,
+            "channel_label": "B",
+            "pixel_count": 10597440,
+            "raw_value_summary": {
+              "count": 10597440,
+              "min": 512.0,
+              "p01": 598.0,
+              "p05": 668.0,
+              "p25": 950.0,
+              "median": 1288.0,
+              "p75": 3664.0,
+              "p95": 16372.0,
+              "p99": 16372.0,
+              "max": 16628.0,
+              "mean": 4332.467369666637,
+              "std": 5843.726206917423
+            }
+          }
+        ]
+      },
+      "rendered_preview_metrics": {
+        "render_model": "rawpy_half_size_camera_wb_no_auto_bright_8bit",
+        "shape": [
+          3984,
+          2660,
+          3
+        ],
+        "pixel_count": 10597440,
+        "rgb_channel_means": {
+          "red": 0.4080527968426855,
+          "green": 0.39936896783655335,
+          "blue": 0.37576080046264965
+        },
+        "luminance_summary": {
+          "count": 10597440,
+          "min": 0.0008494117647058824,
+          "p01": 0.02663294117647059,
+          "p05": 0.0501356862745098,
+          "p25": 0.17703686274509806,
+          "median": 0.2677160784313725,
+          "p75": 0.5562449019607842,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 1.0,
+          "mean": 0.3995106401988612,
+          "std": 0.3278954635546008
+        },
+        "luminance_histogram": {
+          "bin_count": 16,
+          "range_min": 0.0,
+          "range_max": 1.0,
+          "bin_edges": [
+            0.0,
+            0.0625,
+            0.125,
+            0.1875,
+            0.25,
+            0.3125,
+            0.375,
+            0.4375,
+            0.5,
+            0.5625,
+            0.625,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0
+          ],
+          "counts": [
+            780624,
+            861799,
+            1287298,
+            1852885,
+            1643255,
+            862842,
+            320336,
+            189809,
+            166701,
+            175558,
+            107441,
+            102450,
+            108186,
+            63539,
+            64379,
+            2010338
+          ],
+          "observed_count": 10597440,
+          "expected_count": 10597440,
+          "coverage_status": "complete"
+        },
+        "saturation_proxy_summary": {
+          "count": 10597440,
+          "min": 0.0,
+          "p01": 0.0,
+          "p05": 0.0,
+          "p25": 0.01568627450980392,
+          "median": 0.047058823529411764,
+          "p75": 0.08627450980392154,
+          "p95": 0.16078431372549018,
+          "p99": 0.23137254901960785,
+          "max": 1.0,
+          "mean": 0.05816802740965335,
+          "std": 0.057769953411329164
+        },
+        "channel_cast_proxy_summaries": {
+          "red": {
+            "count": 10597440,
+            "min": -1.0,
+            "p01": -0.13725490196078433,
+            "p05": -0.05490196078431371,
+            "p25": 0.0,
+            "median": 0.011764705882352955,
+            "p75": 0.04901960784313725,
+            "p95": 0.10588235294117648,
+            "p99": 0.14901960784313723,
+            "max": 0.7019607843137255,
+            "mean": 0.020487912693083997,
+            "std": 0.05488104106587637
+          },
+          "green": {
+            "count": 10597440,
+            "min": -0.7117647058823529,
+            "p01": -0.0607843137254902,
+            "p05": -0.02352941176470591,
+            "p25": -0.00196078431372549,
+            "median": 0.0019607843137254832,
+            "p75": 0.017647058823529432,
+            "p95": 0.052941176470588214,
+            "p99": 0.07647058823529412,
+            "max": 0.7725490196078431,
+            "mean": 0.0074621691838857715,
+            "std": 0.026197935170007507
+          },
+          "blue": {
+            "count": 10597440,
+            "min": -0.8941176470588235,
+            "p01": -0.1745098039215686,
+            "p05": -0.11960784313725492,
+            "p25": -0.06078431372549019,
+            "median": -0.021568627450980385,
+            "p75": 0.0,
+            "p95": 0.047058823529411764,
+            "p99": 0.13725490196078427,
+            "max": 1.0,
+            "mean": -0.02795008187696977,
+            "std": 0.05707831969895966
+          }
+        }
+      }
+    }
+  ]
+}

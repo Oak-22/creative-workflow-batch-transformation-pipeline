@@ -1,0 +1,108 @@
+{
+  "stage": "stage4_ml_readiness_handoff",
+  "status": "contract_ready_for_review",
+  "pipeline_step": "04_build_ml_handoff_contract",
+  "purpose": "Define what this repository can hand to a future ML/data-science team without overstating current model-training readiness.",
+  "inputs": {
+    "feature_inventory": "outputs/stage4/features/stage4_feature_inventory.json",
+    "dataset_readiness_report": "outputs/stage4/handoff/stage4_dataset_readiness_report.json"
+  },
+  "producer": {
+    "system": "digital_asset_processing_pipeline",
+    "responsibility": "Produce stage-bounded, hash-backed, inspectable artifacts from a Lightroom-centered creative workflow."
+  },
+  "consumer": {
+    "team": "hypothetical_ml_team",
+    "responsibility": "Evaluate feature sufficiency, define targets, collect labels, and decide whether modeling is justified."
+  },
+  "stable_join_keys": [
+    {
+      "key": "asset_key",
+      "meaning": "Native asset stem used to join RAW, XMP, ACR, manifests, and derived metrics.",
+      "current_status": "implemented"
+    }
+  ],
+  "handoff_artifacts": [
+    {
+      "artifact": "outputs/stage1/stage1_manifest.json",
+      "role": "asset identity and metadata-state summary"
+    },
+    {
+      "artifact": "outputs/stage2/stage2_manifest.json",
+      "role": "global Develop transformation evidence index"
+    },
+    {
+      "artifact": "outputs/stage3/stage3_manifest.json",
+      "role": "semantic/local mask-state evidence index"
+    },
+    {
+      "artifact": "outputs/stage4/features/stage4_feature_inventory.json",
+      "role": "cross-stage feature inventory"
+    },
+    {
+      "artifact": "outputs/stage4/handoff/stage4_dataset_readiness_report.json",
+      "role": "modeling readiness and gap analysis"
+    }
+  ],
+  "feature_families": [
+    {
+      "feature_family": "asset_identity_metadata",
+      "source_stage": "stage1",
+      "artifact": "outputs/stage1/stage1_manifest.json",
+      "asset_count": 12,
+      "status": "validated",
+      "modeling_role": "asset identity, metadata state, and cohort context"
+    },
+    {
+      "feature_family": "develop_parameter_deltas",
+      "source_stage": "stage2",
+      "artifact": "outputs/stage2/comparisons/stage2_develop_parameter_comparison.json",
+      "asset_count": 9,
+      "changed_feature_count": 38,
+      "status": "validated",
+      "modeling_role": "global edit transformation labels and parameter deltas"
+    },
+    {
+      "feature_family": "semantic_local_mask_state",
+      "source_stage": "stage3",
+      "artifact": "outputs/stage3/pipeline/stage3_mask_state_postmasking_no_local_adjustment_comparison.json",
+      "asset_count": 3,
+      "mask_group_count": 18,
+      "mask_entry_count": 21,
+      "status": "validated",
+      "modeling_role": "semantic region availability and local-edit structure"
+    },
+    {
+      "feature_family": "raw_pixel_signal_metrics",
+      "source_stage": "stage4",
+      "artifact": "outputs/stage4/features/stage4_raw_pixel_signal_metrics.json",
+      "asset_count": 12,
+      "complete_coverage_asset_count": 12,
+      "status": "complete",
+      "modeling_role": "source-image signal summaries and decoded-read provenance"
+    }
+  ],
+  "dataset_scope": {
+    "asset_count": 12,
+    "complete_handoff_feature_asset_count": 3,
+    "model_training_readiness": "not_ready"
+  },
+  "approved_claims": [
+    "The repository can materialize a structured ML-readiness handoff package.",
+    "The repository can identify which feature families exist per asset.",
+    "The repository can distinguish source signal metrics from Lightroom parameter evidence.",
+    "The repository can state current modeling gaps explicitly."
+  ],
+  "non_claims": [
+    "No trained model exists in the current repository.",
+    "No model accuracy, cost reduction, or editing-style mimicry result is claimed.",
+    "RAW metrics are not equivalent to final Lightroom-rendered visual state.",
+    "Stage 3 mask state is evidence of Lightroom sidecar persistence, not proof of segmentation quality by itself."
+  ],
+  "next_handoff_questions": [
+    "Which business objective should define the target: editing-speed reduction, style suggestion, compute optimization, or QA?",
+    "What label source will define accepted, rejected, or corrected transformations?",
+    "Will modeling consume XMP/ACR parameter state, rendered before/after images, RAW signal summaries, or all three?",
+    "What minimum cross-shoot dataset size is required before a proof model is meaningful?"
+  ]
+}

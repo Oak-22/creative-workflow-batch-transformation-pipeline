@@ -121,6 +121,15 @@ outputs/stage2/stage2_extracted_postconditioning_develop_settings.json
 outputs/stage2/stage2_develop_parameter_comparison.json
 ```
 
+After the later employer-facing review-layout refactor, those same
+artifacts live in role-based folders:
+
+```text
+outputs/stage2/extracts/stage2_extracted_preconditioning_develop_settings.json
+outputs/stage2/extracts/stage2_extracted_postconditioning_develop_settings.json
+outputs/stage2/comparisons/stage2_develop_parameter_comparison.json
+```
+
 This case should later be summarized in a dedicated public AI agent
 governance repository alongside other examples of instruction-following
 drift, stale-context risk, validation blind spots, and

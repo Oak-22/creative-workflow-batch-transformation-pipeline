@@ -1,8 +1,8 @@
 {
   "comparison_model": "postlocal_adjustment_vs_postglobal_point_color",
   "inputs": {
-    "postmasking": "outputs/stage3/stage3_extracted_postglobal_point_color_mask_state.json",
-    "presegmentation": "outputs/stage3/stage3_extracted_postlocal_adjustment_mask_state.json"
+    "postmasking": "outputs/stage3/probes/stage3_extracted_postglobal_point_color_mask_state.json",
+    "presegmentation": "outputs/stage3/probes/stage3_extracted_postlocal_adjustment_mask_state.json"
   },
   "missing_assets": {
     "postmasking": [],

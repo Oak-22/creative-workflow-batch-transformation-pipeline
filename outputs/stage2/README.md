@@ -16,19 +16,19 @@ artifacts by path, size, SHA-256 hash, role, and producing script.
 Read or regenerate the JSON artifacts in this order:
 
 ```text
-1. stage2_preconditioning_checkpoint_manifest.json
+1. checkpoints/stage2_preconditioning_checkpoint_manifest.json
    proves the frozen preconditioning XMP checkpoint identity
 
-2. stage2_extracted_preconditioning_develop_settings.json
+2. extracts/stage2_extracted_preconditioning_develop_settings.json
    extracts Develop settings from the frozen preconditioning checkpoint
 
-3. stage2_postconditioning_checkpoint_manifest.json
+3. checkpoints/stage2_postconditioning_checkpoint_manifest.json
    proves the frozen postconditioning XMP checkpoint identity
 
-4. stage2_extracted_postconditioning_develop_settings.json
+4. extracts/stage2_extracted_postconditioning_develop_settings.json
    extracts Develop settings from the frozen postconditioning checkpoint
 
-5. stage2_develop_parameter_comparison.json
+5. comparisons/stage2_develop_parameter_comparison.json
    compares preconditioning vs postconditioning Develop settings
 
 6. stage2_manifest.json
@@ -38,7 +38,7 @@ Read or regenerate the JSON artifacts in this order:
 The detailed Stage 2 proof artifact is:
 
 ```text
-stage2_develop_parameter_comparison.json
+comparisons/stage2_develop_parameter_comparison.json
 ```
 
 The reader-facing Stage 2 index is:

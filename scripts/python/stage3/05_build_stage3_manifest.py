@@ -15,26 +15,26 @@ from scripts.python.common import ensure_parent_dir, read_json
 
 
 DEFAULT_PRESEGMENTATION_EXTRACT = (
-    "outputs/stage3/stage3_extracted_presegmentation_mask_state.json"
+    "outputs/stage3/pipeline/stage3_extracted_presegmentation_mask_state.json"
 )
 DEFAULT_POSTMASKING_EXTRACT = (
-    "outputs/stage3/stage3_extracted_postmasking_no_local_adjustment_mask_state.json"
+    "outputs/stage3/pipeline/stage3_extracted_postmasking_no_local_adjustment_mask_state.json"
 )
 DEFAULT_POSTMASKING_COMPARISON = (
-    "outputs/stage3/stage3_mask_state_postmasking_no_local_adjustment_comparison.json"
+    "outputs/stage3/pipeline/stage3_mask_state_postmasking_no_local_adjustment_comparison.json"
 )
-DEFAULT_SPIKE_REPORT = "outputs/stage3/stage3_mask_state_spike_report.json"
+DEFAULT_SPIKE_REPORT = "outputs/stage3/probes/stage3_mask_state_spike_report.json"
 DEFAULT_POSTLOCAL_EXTRACT = (
-    "outputs/stage3/stage3_extracted_postlocal_adjustment_mask_state.json"
+    "outputs/stage3/probes/stage3_extracted_postlocal_adjustment_mask_state.json"
 )
 DEFAULT_POSTLOCAL_COMPARISON = (
-    "outputs/stage3/stage3_mask_state_postlocal_adjustment_comparison.json"
+    "outputs/stage3/probes/stage3_mask_state_postlocal_adjustment_comparison.json"
 )
 DEFAULT_POSTGLOBAL_POINT_COLOR_EXTRACT = (
-    "outputs/stage3/stage3_extracted_postglobal_point_color_mask_state.json"
+    "outputs/stage3/probes/stage3_extracted_postglobal_point_color_mask_state.json"
 )
 DEFAULT_POSTGLOBAL_POINT_COLOR_COMPARISON = (
-    "outputs/stage3/stage3_mask_state_postglobal_point_color_comparison.json"
+    "outputs/stage3/probes/stage3_mask_state_postglobal_point_color_comparison.json"
 )
 DEFAULT_OUTPUT = "outputs/stage3/stage3_manifest.json"
 
