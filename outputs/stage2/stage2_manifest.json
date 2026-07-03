@@ -1,0 +1,114 @@
+{
+  "stage": "stage2_baseline_conditioning",
+  "status": "validated",
+  "pipeline_step": "04_build_stage2_manifest",
+  "purpose": "Compact index for Stage 2 generated evidence. This manifest references checkpoint manifests, Develop-setting extracts, and the final pre/post Develop comparison without duplicating their verbose records.",
+  "artifact_sequence": [
+    {
+      "order": 1,
+      "role": "preconditioning_checkpoint_manifest",
+      "produced_by": "scripts/python/stage2/01_build_checkpoint_manifest.py",
+      "artifact": {
+        "path": "outputs/stage2/stage2_preconditioning_checkpoint_manifest.json",
+        "sha256": "41208b5bb939e5cf92e158f8e85d9010097d9a9928c55f6d17e1c7a7a715b9e5",
+        "size_bytes": 6247
+      }
+    },
+    {
+      "order": 2,
+      "role": "preconditioning_develop_settings_extract",
+      "produced_by": "scripts/python/stage2/02_extract_develop_settings.py",
+      "artifact": {
+        "path": "outputs/stage2/stage2_extracted_preconditioning_develop_settings.json",
+        "sha256": "b903aec35650c84af9a983351a1f77dcd4414b1dc05c185a3f118defa1aea4e1",
+        "size_bytes": 26011
+      }
+    },
+    {
+      "order": 3,
+      "role": "postconditioning_checkpoint_manifest",
+      "produced_by": "scripts/python/stage2/01_build_checkpoint_manifest.py",
+      "artifact": {
+        "path": "outputs/stage2/stage2_postconditioning_checkpoint_manifest.json",
+        "sha256": "027f44cddd0e5809c9695e93dbc4bd986fdb3dc94a0ef24d2bfe8201d3f82ead",
+        "size_bytes": 6292
+      }
+    },
+    {
+      "order": 4,
+      "role": "postconditioning_develop_settings_extract",
+      "produced_by": "scripts/python/stage2/02_extract_develop_settings.py",
+      "artifact": {
+        "path": "outputs/stage2/stage2_extracted_postconditioning_develop_settings.json",
+        "sha256": "3396079262cb4d98892d058a6fc0f8f8e604f8360c68f78082d20901cfb20e54",
+        "size_bytes": 33156
+      }
+    },
+    {
+      "order": 5,
+      "role": "develop_parameter_comparison",
+      "produced_by": "scripts/python/stage2/03_audit_stage2_parameters.py",
+      "artifact": {
+        "path": "outputs/stage2/stage2_develop_parameter_comparison.json",
+        "sha256": "dcdead0f0881f885eb39123c2b8c89f614e7a147d8ee0d62bf019a9481fdf4f3",
+        "size_bytes": 58976
+      }
+    }
+  ],
+  "validation": {
+    "status": "validated",
+    "comparison_status": "complete",
+    "checkpoint_counts_match_comparison_asset_count": true,
+    "missing_compared_asset_count": 0
+  },
+  "summary": {
+    "asset_count": 9,
+    "changed_asset_count": 9,
+    "unchanged_asset_count": 0,
+    "changed_develop_setting_count": 38,
+    "changed_develop_settings": [
+      "blacks_2012",
+      "clarity_2012",
+      "color_noise_reduction",
+      "contrast_2012",
+      "crop_angle",
+      "crop_bottom",
+      "crop_constrain_to_unit_square",
+      "crop_constrain_to_warp",
+      "crop_left",
+      "crop_right",
+      "crop_top",
+      "dehaze",
+      "exposure_2012",
+      "highlights_2012",
+      "lens_manual_distortion_amount",
+      "lens_profile_enable",
+      "luminance_smoothing",
+      "parametric_darks",
+      "parametric_highlights",
+      "parametric_lights",
+      "parametric_shadows",
+      "perspective_aspect",
+      "perspective_horizontal",
+      "perspective_rotate",
+      "perspective_scale",
+      "perspective_upright",
+      "perspective_vertical",
+      "perspective_x",
+      "perspective_y",
+      "process_version",
+      "saturation",
+      "shadows_2012",
+      "sharpness",
+      "texture",
+      "tint",
+      "vibrance",
+      "white_balance",
+      "whites_2012"
+    ],
+    "preconditioning_checkpoint_artifact_count": 9,
+    "postconditioning_checkpoint_artifact_count": 9,
+    "preconditioning_checkpoint_matches_live_count": 9,
+    "postconditioning_checkpoint_matches_live_count": 9
+  }
+}

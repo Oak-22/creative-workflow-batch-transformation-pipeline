@@ -98,7 +98,7 @@ same evidence snapshot that was manifested.
 ## Notes
 
 The initial implementation is
-`scripts/python/stage2/build_checkpoint_manifest.py`.
+`scripts/python/stage2/01_build_checkpoint_manifest.py`.
 
 The first generated checkpoint manifest is:
 

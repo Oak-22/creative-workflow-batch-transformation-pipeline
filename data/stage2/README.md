@@ -30,7 +30,7 @@ before deriving durable comparison claims from them.
 Example:
 
 ```bash
-python3 scripts/python/stage2/build_checkpoint_manifest.py
+python3 scripts/python/stage2/01_build_checkpoint_manifest.py
 ```
 
 Derived analysis artifacts belong under `outputs/stage2/`, including

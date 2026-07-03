@@ -63,15 +63,17 @@ scripts/python/
 │   └── 04_build_stage1_manifest.py
 ├── stage2/
 │   ├── __init__.py
-│   ├── build_checkpoint_manifest.py
-│   ├── extract_develop_settings.py
-│   ├── audit_stage2_parameters.py
-│   └── build_stage2_manifest.py
+│   ├── 01_build_checkpoint_manifest.py
+│   ├── 02_extract_develop_settings.py
+│   ├── 03_audit_stage2_parameters.py
+│   └── 04_build_stage2_manifest.py
 └── stage3/
     ├── __init__.py
-    ├── create_stage3_review_sheet.py
-    ├── ingest_stage3_review_results.py
-    └── build_stage3_manifest.py
+    ├── 01_extract_mask_state.py
+    ├── 02_compare_mask_state.py
+    ├── 03_create_stage3_review_sheet.py
+    ├── 04_ingest_stage3_review_results.py
+    └── 05_build_stage3_manifest.py
 ```
 
 <br>
@@ -164,12 +166,14 @@ Example output locations:
 - `outputs/stage2/stage2_preconditioning_checkpoint_manifest.json`
 - `outputs/stage2/stage2_postconditioning_checkpoint_manifest.json`
 - `outputs/stage2/stage2_extracted_preconditioning_develop_settings.json`
+- `outputs/stage2/stage2_manifest.json`
+- `outputs/stage3/stage3_manifest.json`
 - `outputs/stage3/`
 
 Stage 2 checkpoint manifests can be regenerated with:
 
 ```bash
-python3 scripts/python/stage2/build_checkpoint_manifest.py
+python3 scripts/python/stage2/01_build_checkpoint_manifest.py
 ```
 
 After Lightroom Develop edits are applied and postconditioning sidecars
@@ -177,11 +181,25 @@ are copied into `data/stage2/conditioned_state/xmp_postconditioning/`,
 generate the postconditioning manifest with:
 
 ```bash
-python3 scripts/python/stage2/build_checkpoint_manifest.py \
+python3 scripts/python/stage2/01_build_checkpoint_manifest.py \
   --checkpoint-root data/stage2/conditioned_state/xmp_postconditioning \
   --checkpoint-label stage2_postconditioning_state \
   --mutable-origin-root data/live_workspace \
   --output outputs/stage2/stage2_postconditioning_checkpoint_manifest.json
+```
+
+After Stage 2 checkpoint manifests, extracts, and comparison artifacts
+are current, generate the compact Stage 2 review manifest with:
+
+```bash
+python3 scripts/python/stage2/04_build_stage2_manifest.py
+```
+
+After Stage 3 extracts and comparisons are current, generate the compact
+Stage 3 review manifest with:
+
+```bash
+python3 scripts/python/stage3/05_build_stage3_manifest.py
 ```
 
 <br>
@@ -240,8 +258,33 @@ the workflow contract:
 4. `04_build_stage1_manifest.py`
    packages the validated Stage 1 evidence into a manifest.
 
-Later stages may adopt the same numbering convention when their script
-order becomes operationally significant.
+Stage 2 now follows the same numbering convention:
+
+1. `01_build_checkpoint_manifest.py`
+   hashes a frozen XMP checkpoint folder. This script is run for each
+   Stage 2 checkpoint boundary, including preconditioning and
+   postconditioning.
+2. `02_extract_develop_settings.py`
+   extracts Develop settings from a frozen XMP checkpoint.
+3. `03_audit_stage2_parameters.py`
+   compares preconditioning and postconditioning extracts.
+4. `04_build_stage2_manifest.py`
+   packages Stage 2 evidence once implemented.
+
+Stage 3 uses numbered scripts to distinguish executable order from the
+verbose JSON output order:
+
+1. `01_extract_mask_state.py`
+   extracts mask, local adjustment, and point-color state from a frozen
+   sidecar checkpoint.
+2. `02_compare_mask_state.py`
+   compares adjacent Stage 3 checkpoint extracts.
+3. `03_create_stage3_review_sheet.py`
+   creates human review artifacts once Stage 3 review flow is used.
+4. `04_ingest_stage3_review_results.py`
+   ingests review outcomes once available.
+5. `05_build_stage3_manifest.py`
+   packages Stage 3 evidence once implemented.
 
 Phase 1
 

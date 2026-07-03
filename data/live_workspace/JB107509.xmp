@@ -54,7 +54,7 @@
    xmp:CreatorTool="ILCE-7RM3 v3.10"
    xmp:ModifyDate="2024-06-15T15:04:43-08:00"
    xmp:CreateDate="2024-06-15T15:04:43-08:00"
-   xmp:MetadataDate="2026-06-29T15:44:43-07:00"
+   xmp:MetadataDate="2026-06-30T16:07:52-07:00"
    aux:LensInfo="350/10 1500/10 20/10 28/10"
    aux:Lens="E 35-150mm F2.0-F2.8 A058"
    aux:LensDistortInfo="1073678420/1073741824 -20543113/1073741824 -2898883/1073741824 23496307/1073741824"
@@ -69,17 +69,18 @@
    xmpMM:DocumentID="B537BE98825BFE118D06C90B3C6BB546"
    xmpMM:PreservedFileName="JB107509.ARW"
    xmpMM:OriginalDocumentID="B537BE98825BFE118D06C90B3C6BB546"
-   xmpMM:InstanceID="xmp.iid:ba113109-2b1e-4295-a34b-155744a59ece"
+   xmpMM:InstanceID="xmp.iid:cd09c414-5443-43c6-897b-911e7629f5ac"
    dc:format="image/x-sony-arw"
    crd:CameraProfile="Camera Standard"
    crd:LookName=""
    xmpRights:Marked="True"
    xmpDM:pick="0"
    crs:Version="18.1"
+   crs:CompatibleVersion="251854848"
    crs:ProcessVersion="15.4"
-   crs:WhiteBalance="As Shot"
-   crs:Temperature="5200"
-   crs:Tint="+10"
+   crs:WhiteBalance="Custom"
+   crs:Temperature="5563"
+   crs:Tint="+37"
    crs:Exposure2012="-0.78"
    crs:Contrast2012="+19"
    crs:Highlights2012="-80"
@@ -216,8 +217,8 @@
     <rdf:Seq>
      <rdf:li
       stEvt:action="saved"
-      stEvt:instanceID="xmp.iid:ba113109-2b1e-4295-a34b-155744a59ece"
-      stEvt:when="2026-06-29T15:44:43-07:00"
+      stEvt:instanceID="xmp.iid:cd09c414-5443-43c6-897b-911e7629f5ac"
+      stEvt:when="2026-06-30T16:07:52-07:00"
       stEvt:softwareAgent="Adobe Photoshop Lightroom Classic 15.1 (Macintosh)"
       stEvt:changed="/metadata"/>
     </rdf:Seq>
@@ -276,6 +277,383 @@
      <rdf:li>-50.000000</rdf:li>
     </rdf:Seq>
    </crs:ColorVariance>
+   <crs:MaskGroupBasedCorrections>
+    <rdf:Seq>
+     <rdf:li>
+      <rdf:Description
+       crs:What="Correction"
+       crs:CorrectionAmount="1"
+       crs:CorrectionActive="true"
+       crs:CorrectionName="Person 1"
+       crs:CorrectionSyncID="365FC08EAD254EA59B7B36B59804C54D"
+       crs:LocalExposure="0"
+       crs:LocalHue="0"
+       crs:LocalSaturation="0"
+       crs:LocalContrast="0"
+       crs:LocalClarity="0"
+       crs:LocalSharpness="0"
+       crs:LocalBrightness="0"
+       crs:LocalToningHue="173.945007"
+       crs:LocalToningSaturation="0"
+       crs:LocalExposure2012="0"
+       crs:LocalContrast2012="0.08"
+       crs:LocalHighlights2012="0.61"
+       crs:LocalShadows2012="0.32"
+       crs:LocalWhites2012="0"
+       crs:LocalBlacks2012="0"
+       crs:LocalClarity2012="0"
+       crs:LocalDehaze="0"
+       crs:LocalLuminanceNoise="0"
+       crs:LocalMoire="0"
+       crs:LocalDefringe="0"
+       crs:LocalTemperature="0"
+       crs:LocalTint="0"
+       crs:LocalTexture="0.01"
+       crs:LocalGrain="0"
+       crs:LocalCurveRefineSaturation="100">
+      <crs:CorrectionMasks>
+       <rdf:Seq>
+        <rdf:li
+         crs:What="Mask/Image"
+         crs:MaskActive="true"
+         crs:MaskName="Person 1"
+         crs:MaskBlendMode="0"
+         crs:MaskInverted="false"
+         crs:MaskSyncID="D784D255908443549EFE3A62C182B80B"
+         crs:MaskValue="1"
+         crs:MaskVersion="1"
+         crs:MaskSubType="0"
+         crs:MaskSubCategoryID="20036"
+         crs:ReferencePoint="0.263646 0.414565"
+         crs:InputDigest="C581ACE40A9F9977C0BD92E8158B54C9"
+         crs:InputDigestVersion="2"
+         crs:LocalInputDigest="0F69EC7191721A5DAEB9846B118CC3B4"
+         crs:LocalInputDigestVersion="1"
+         crs:MaskDigest="B998876982CA8256870066DEE7F87F9E"
+         crs:WholeImageArea="0/1,0/1,1920/1,2879/1"
+         crs:Origin="0,280"
+         crs:FullMaskSize="2879,1920"
+         crs:ModelVersion="234881976"/>
+       </rdf:Seq>
+      </crs:CorrectionMasks>
+      </rdf:Description>
+     </rdf:li>
+     <rdf:li>
+      <rdf:Description
+       crs:What="Correction"
+       crs:CorrectionAmount="1"
+       crs:CorrectionActive="true"
+       crs:CorrectionName="Background"
+       crs:CorrectionSyncID="851EBD3FC5A4440696D472C3AEF5BD3B"
+       crs:LocalExposure="0"
+       crs:LocalHue="0"
+       crs:LocalSaturation="0"
+       crs:LocalContrast="0"
+       crs:LocalClarity="0"
+       crs:LocalSharpness="0"
+       crs:LocalBrightness="0"
+       crs:LocalToningHue="173.945007"
+       crs:LocalToningSaturation="0"
+       crs:LocalExposure2012="0"
+       crs:LocalContrast2012="0"
+       crs:LocalHighlights2012="-0.87"
+       crs:LocalShadows2012="0"
+       crs:LocalWhites2012="0"
+       crs:LocalBlacks2012="0"
+       crs:LocalClarity2012="0"
+       crs:LocalDehaze="0"
+       crs:LocalLuminanceNoise="0"
+       crs:LocalMoire="0"
+       crs:LocalDefringe="0"
+       crs:LocalTemperature="0"
+       crs:LocalTint="0"
+       crs:LocalTexture="0.01"
+       crs:LocalGrain="0"
+       crs:LocalCurveRefineSaturation="100">
+      <crs:CorrectionMasks>
+       <rdf:Seq>
+        <rdf:li
+         crs:What="Mask/Image"
+         crs:MaskActive="true"
+         crs:MaskName="Background 1"
+         crs:MaskBlendMode="0"
+         crs:MaskInverted="false"
+         crs:MaskSyncID="CAEFE61A5B794CABA2B921C939E7BA2C"
+         crs:MaskValue="1"
+         crs:MaskVersion="1"
+         crs:MaskSubType="0"
+         crs:MaskSubCategoryID="22"
+         crs:ReferencePoint="0.709245 0.671960"
+         crs:InputDigest="C581ACE40A9F9977C0BD92E8158B54C9"
+         crs:InputDigestVersion="2"
+         crs:MaskDigest="B89317BAC0F0E8B34BBD8E558851A6FD"
+         crs:WholeImageArea="0/1073741824,0/1073741824,62914560/32768,94339072/32768"
+         crs:Origin="0,0"
+         crs:FullMaskSize="2879,1920"
+         crs:ModelVersion="251659306"/>
+       </rdf:Seq>
+      </crs:CorrectionMasks>
+      </rdf:Description>
+     </rdf:li>
+     <rdf:li>
+      <rdf:Description
+       crs:What="Correction"
+       crs:CorrectionAmount="1"
+       crs:CorrectionActive="true"
+       crs:CorrectionName="Person 1 - Clothes"
+       crs:CorrectionSyncID="484A6CB346C1406FABD933990077F786"
+       crs:LocalExposure="0"
+       crs:LocalHue="0"
+       crs:LocalSaturation="0"
+       crs:LocalContrast="0"
+       crs:LocalClarity="0"
+       crs:LocalSharpness="0"
+       crs:LocalBrightness="0"
+       crs:LocalToningHue="173.945007"
+       crs:LocalToningSaturation="0"
+       crs:LocalExposure2012="0"
+       crs:LocalContrast2012="0.33"
+       crs:LocalHighlights2012="0"
+       crs:LocalShadows2012="0"
+       crs:LocalWhites2012="0"
+       crs:LocalBlacks2012="0"
+       crs:LocalClarity2012="0"
+       crs:LocalDehaze="0.08"
+       crs:LocalLuminanceNoise="0"
+       crs:LocalMoire="0"
+       crs:LocalDefringe="0"
+       crs:LocalTemperature="0"
+       crs:LocalTint="0"
+       crs:LocalTexture="0.01"
+       crs:LocalGrain="0"
+       crs:LocalCurveRefineSaturation="100">
+      <crs:CorrectionMasks>
+       <rdf:Seq>
+        <rdf:li
+         crs:What="Mask/Image"
+         crs:MaskActive="true"
+         crs:MaskName="Person 1 - Clothes"
+         crs:MaskBlendMode="0"
+         crs:MaskInverted="false"
+         crs:MaskSyncID="BBFBF9C95DA54B109A580C8644C279F9"
+         crs:MaskValue="1"
+         crs:MaskVersion="1"
+         crs:MaskSubType="0"
+         crs:MaskSubCategoryID="11"
+         crs:ReferencePoint="0.044822 0.462017"
+         crs:InputDigest="C581ACE40A9F9977C0BD92E8158B54C9"
+         crs:InputDigestVersion="2"
+         crs:LocalInputDigest="0F69EC7191721A5DAEB9846B118CC3B4"
+         crs:LocalInputDigestVersion="1"
+         crs:MaskDigest="7970292F06931B8CAAC65AEF4A7A9E7D"
+         crs:WholeImageArea="0/1,0/1,1920/1,2879/1"
+         crs:Origin="0,277"
+         crs:FullMaskSize="2879,1920"
+         crs:ModelVersion="234881976"/>
+       </rdf:Seq>
+      </crs:CorrectionMasks>
+      </rdf:Description>
+     </rdf:li>
+     <rdf:li>
+      <rdf:Description
+       crs:What="Correction"
+       crs:CorrectionAmount="1"
+       crs:CorrectionActive="true"
+       crs:CorrectionName="Person 1 - Body Skin"
+       crs:CorrectionSyncID="05D4854D165E4729A16D871D63276E37"
+       crs:LocalExposure="0"
+       crs:LocalHue="0"
+       crs:LocalSaturation="0"
+       crs:LocalContrast="0"
+       crs:LocalClarity="0"
+       crs:LocalSharpness="0"
+       crs:LocalBrightness="0"
+       crs:LocalToningHue="173.945007"
+       crs:LocalToningSaturation="0"
+       crs:LocalExposure2012="0"
+       crs:LocalContrast2012="0"
+       crs:LocalHighlights2012="0"
+       crs:LocalShadows2012="0.09"
+       crs:LocalWhites2012="0"
+       crs:LocalBlacks2012="0"
+       crs:LocalClarity2012="0"
+       crs:LocalDehaze="0"
+       crs:LocalLuminanceNoise="0"
+       crs:LocalMoire="0"
+       crs:LocalDefringe="0"
+       crs:LocalTemperature="0"
+       crs:LocalTint="0"
+       crs:LocalTexture="0.01"
+       crs:LocalGrain="0"
+       crs:LocalCurveRefineSaturation="100">
+      <crs:CorrectionMasks>
+       <rdf:Seq>
+        <rdf:li
+         crs:What="Mask/Image"
+         crs:MaskActive="true"
+         crs:MaskName="Person 1 - Body Skin"
+         crs:MaskBlendMode="0"
+         crs:MaskInverted="false"
+         crs:MaskSyncID="ECE0C615957A4E6D8F5CF240421D4F4E"
+         crs:MaskValue="1"
+         crs:MaskVersion="1"
+         crs:MaskSubType="0"
+         crs:MaskSubCategoryID="4"
+         crs:ReferencePoint="0.321425 0.304152"
+         crs:InputDigest="C581ACE40A9F9977C0BD92E8158B54C9"
+         crs:InputDigestVersion="2"
+         crs:LocalInputDigest="0F69EC7191721A5DAEB9846B118CC3B4"
+         crs:LocalInputDigestVersion="1"
+         crs:MaskDigest="33FB2571CB758B2B0F90022652D47B5E"
+         crs:WholeImageArea="0/1,0/1,1920/1,2879/1"
+         crs:Origin="807,483"
+         crs:FullMaskSize="2879,1920"
+         crs:ModelVersion="234881976"/>
+       </rdf:Seq>
+      </crs:CorrectionMasks>
+      </rdf:Description>
+     </rdf:li>
+     <rdf:li>
+      <rdf:Description
+       crs:What="Correction"
+       crs:CorrectionAmount="1"
+       crs:CorrectionActive="true"
+       crs:CorrectionName="Person 1 - Facial Skin"
+       crs:CorrectionSyncID="42A23F92EECB4715A592806E768345DF"
+       crs:LocalExposure="0"
+       crs:LocalHue="0"
+       crs:LocalSaturation="0"
+       crs:LocalContrast="0"
+       crs:LocalClarity="0"
+       crs:LocalSharpness="0.43"
+       crs:LocalBrightness="0"
+       crs:LocalToningHue="173.945007"
+       crs:LocalToningSaturation="0"
+       crs:LocalExposure2012="0"
+       crs:LocalContrast2012="0"
+       crs:LocalHighlights2012="0.14"
+       crs:LocalShadows2012="0.58"
+       crs:LocalWhites2012="0"
+       crs:LocalBlacks2012="0"
+       crs:LocalClarity2012="0"
+       crs:LocalDehaze="0"
+       crs:LocalLuminanceNoise="0"
+       crs:LocalMoire="0"
+       crs:LocalDefringe="0"
+       crs:LocalTemperature="0"
+       crs:LocalTint="0"
+       crs:LocalTexture="0.01"
+       crs:LocalGrain="0"
+       crs:LocalCurveRefineSaturation="100">
+      <crs:CorrectionMasks>
+       <rdf:Seq>
+        <rdf:li
+         crs:What="Mask/Image"
+         crs:MaskActive="true"
+         crs:MaskName="Person 1 - Facial Skin"
+         crs:MaskBlendMode="0"
+         crs:MaskInverted="false"
+         crs:MaskSyncID="48A9280393504303B9E2C77F8B4BDEE1"
+         crs:MaskValue="1"
+         crs:MaskVersion="1"
+         crs:MaskSubType="0"
+         crs:MaskSubCategoryID="2"
+         crs:ReferencePoint="0.572600 0.435369"
+         crs:InputDigest="C581ACE40A9F9977C0BD92E8158B54C9"
+         crs:InputDigestVersion="2"
+         crs:LocalInputDigest="0F69EC7191721A5DAEB9846B118CC3B4"
+         crs:LocalInputDigestVersion="1"
+         crs:MaskDigest="8DCA100195C53152EC1B4753CCFFB839"
+         crs:WholeImageArea="0/1,0/1,1920/1,2879/1"
+         crs:Origin="1483,706"
+         crs:FullMaskSize="2879,1920"
+         crs:ModelVersion="234881976"/>
+       </rdf:Seq>
+      </crs:CorrectionMasks>
+      </rdf:Description>
+     </rdf:li>
+     <rdf:li>
+      <rdf:Description
+       crs:What="Correction"
+       crs:CorrectionAmount="1"
+       crs:CorrectionActive="true"
+       crs:CorrectionName="Person 1 - Eye Sclera and Teeth"
+       crs:CorrectionSyncID="AE937AF217644B6CB2D4F5AEDA592E11"
+       crs:LocalExposure="0"
+       crs:LocalHue="0"
+       crs:LocalSaturation="-0.71"
+       crs:LocalContrast="0"
+       crs:LocalClarity="0"
+       crs:LocalSharpness="0"
+       crs:LocalBrightness="0"
+       crs:LocalToningHue="173.945007"
+       crs:LocalToningSaturation="0"
+       crs:LocalExposure2012="0"
+       crs:LocalContrast2012="0"
+       crs:LocalHighlights2012="0"
+       crs:LocalShadows2012="0"
+       crs:LocalWhites2012="0"
+       crs:LocalBlacks2012="0"
+       crs:LocalClarity2012="0"
+       crs:LocalDehaze="0"
+       crs:LocalLuminanceNoise="0"
+       crs:LocalMoire="0"
+       crs:LocalDefringe="0"
+       crs:LocalTemperature="0"
+       crs:LocalTint="0"
+       crs:LocalTexture="0.01"
+       crs:LocalGrain="0"
+       crs:LocalCurveRefineSaturation="100">
+      <crs:CorrectionMasks>
+       <rdf:Seq>
+        <rdf:li
+         crs:What="Mask/Image"
+         crs:MaskActive="true"
+         crs:MaskName="Person 1 - Teeth"
+         crs:MaskBlendMode="0"
+         crs:MaskInverted="false"
+         crs:MaskSyncID="99BEAB389EDD4930A611668CB75E8312"
+         crs:MaskValue="1"
+         crs:MaskVersion="1"
+         crs:MaskSubType="0"
+         crs:MaskSubCategoryID="12"
+         crs:ReferencePoint="0.547973 0.437992"
+         crs:InputDigest="C581ACE40A9F9977C0BD92E8158B54C9"
+         crs:InputDigestVersion="2"
+         crs:LocalInputDigest="0F69EC7191721A5DAEB9846B118CC3B4"
+         crs:LocalInputDigestVersion="1"
+         crs:MaskDigest="B72DA18B3F2E8939DED16D69955080E6"
+         crs:WholeImageArea="0/1,0/1,1920/1,2879/1"
+         crs:Origin="1569,816"
+         crs:FullMaskSize="2879,1920"
+         crs:ModelVersion="234881976"/>
+        <rdf:li
+         crs:What="Mask/Image"
+         crs:MaskActive="true"
+         crs:MaskName="Person 1 - Eye Sclera"
+         crs:MaskBlendMode="0"
+         crs:MaskInverted="false"
+         crs:MaskSyncID="FF391CA859A14155BBF2D728B637144F"
+         crs:MaskValue="1"
+         crs:MaskVersion="1"
+         crs:MaskSubType="0"
+         crs:MaskSubCategoryID="8"
+         crs:ReferencePoint="0.581387 0.416940"
+         crs:InputDigest="C581ACE40A9F9977C0BD92E8158B54C9"
+         crs:InputDigestVersion="2"
+         crs:LocalInputDigest="0F69EC7191721A5DAEB9846B118CC3B4"
+         crs:LocalInputDigestVersion="1"
+         crs:MaskDigest="9ECD4EF22B39D89F47E4F0811AFCFF2E"
+         crs:WholeImageArea="0/1,0/1,1920/1,2879/1"
+         crs:Origin="1661,762"
+         crs:FullMaskSize="2879,1920"
+         crs:ModelVersion="234881976"/>
+       </rdf:Seq>
+      </crs:CorrectionMasks>
+      </rdf:Description>
+     </rdf:li>
+    </rdf:Seq>
+   </crs:MaskGroupBasedCorrections>
    <crs:Look>
     <rdf:Description
      crs:Name="Adobe Color"
