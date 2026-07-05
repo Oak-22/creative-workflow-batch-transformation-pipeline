@@ -1,9 +1,12 @@
 <mxfile host="app.diagrams.net">
   <diagram name="Page-1" id="ZORiqB2L0gApbABSuhiv">
-    <mxGraphModel dx="2568" dy="1401" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="300" pageHeight="2500" math="0" shadow="0">
+    <mxGraphModel dx="3735" dy="2038" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="300" pageHeight="2500" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="ZFb_kBIWdNfRUxyCLttW-8" parent="1" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;opacity=10;textOpacity=90;fillColor=light-dark(#121212,#5C5C5C);movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;" value="&lt;font style=&quot;line-height: 260%; font-size: 39px;&quot;&gt;Evidence, Handoff And Serving Layers&lt;/font&gt;" vertex="1">
+          <mxGeometry height="1310" width="1830" x="140" y="5850" as="geometry" />
+        </mxCell>
         <mxCell id="4Ns0TeULby68ldCUsVev-80" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0;exitDx=0;exitDy=0;">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="2045.38" y="240.00000000000114" as="sourcePoint" />
@@ -11,7 +14,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="4Ns0TeULby68ldCUsVev-25" parent="1" style="rounded=0;whiteSpace=wrap;html=1;direction=south;textOpacity=90;" value="" vertex="1">
-          <mxGeometry height="5560" width="2059.25" x="33" y="160" as="geometry" />
+          <mxGeometry height="7200" width="2059.25" x="4.310000000000001" y="190" as="geometry" />
         </mxCell>
         <mxCell id="A9GcHXLtIRmUFDPjzmzb-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;fontSize=19;" value="&lt;font&gt;Batch Ingestion (from internal drive to app catalogue&lt;/font&gt;" vertex="1">
           <mxGeometry height="80" width="240" x="890.63" y="370" as="geometry" />
@@ -23,10 +26,10 @@
           <mxGeometry height="40" width="149.86" x="1020" y="480" as="geometry" />
         </mxCell>
         <mxCell id="A9GcHXLtIRmUFDPjzmzb-10" parent="1" style="line;strokeWidth=2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
-          <mxGeometry height="8" width="2050" x="40" y="840" as="geometry" />
+          <mxGeometry height="8" width="2040" x="10" y="840" as="geometry" />
         </mxCell>
         <mxCell id="A9GcHXLtIRmUFDPjzmzb-11" parent="1" style="line;strokeWidth=2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
-          <mxGeometry height="8" width="2050" x="40" y="3050" as="geometry" />
+          <mxGeometry height="8" width="2030" x="20" y="3050" as="geometry" />
         </mxCell>
         <mxCell id="A9GcHXLtIRmUFDPjzmzb-12" parent="1" style="text;align=center;fontStyle=1;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=30;horizontal=1;whiteSpace=wrap;" value="&lt;font&gt;Stage 1 – Metadata Write, Enrich, &amp;amp; Query Pipeline&lt;/font&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="90" width="520" x="110.63" y="520" as="geometry" />
@@ -37,7 +40,7 @@
         <mxCell id="A9GcHXLtIRmUFDPjzmzb-22" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;fontSize=17;" value="Semantic Metadata Layer 2 Batch Write (Keywords)" vertex="1">
           <mxGeometry height="80" width="180" x="900.63" y="705" as="geometry" />
         </mxCell>
-        <mxCell id="4Ns0TeULby68ldCUsVev-1" parent="1" style="text;align=center;fontStyle=1;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="&lt;div&gt;&lt;font style=&quot;font-size: 47px;&quot;&gt;Creative Workflow Pipeline Overview&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="4Ns0TeULby68ldCUsVev-1" parent="1" style="text;align=center;fontStyle=1;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="&lt;div&gt;&lt;font style=&quot;font-size: 47px;&quot;&gt;Digital Asset Processing Pipeline Overview&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="66" width="850.37" x="625" y="40" as="geometry" />
         </mxCell>
         <mxCell id="4Ns0TeULby68ldCUsVev-11" parent="1" style="html=1;whiteSpace=wrap;fontSize=18;" value="&lt;font&gt;Smart Collections (Views)&lt;/font&gt;" vertex="1">
@@ -544,8 +547,8 @@
         <mxCell id="9BjrBfu6HxLdmxkNQlNZ-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 22px;&quot;&gt;Post-pipeline Gallery&lt;/font&gt;" vertex="1">
           <mxGeometry height="60" width="270" x="890" y="5330" as="geometry" />
         </mxCell>
-        <mxCell id="9BjrBfu6HxLdmxkNQlNZ-5" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=21;" value="&lt;font style=&quot;font-size: 32px;&quot;&gt;Multi-Stage&amp;nbsp;&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 32px;&quot;&gt;Pipeline Boundary (End)&lt;/font&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="70" width="360" x="1403.13" y="5350" as="geometry" />
+        <mxCell id="9BjrBfu6HxLdmxkNQlNZ-5" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=21;" value="&lt;font style=&quot;font-size: 30px;&quot;&gt;Lightroom-Centered Pipeline Boundary (End)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="360" x="1440" y="5350" as="geometry" />
         </mxCell>
         <mxCell id="9BjrBfu6HxLdmxkNQlNZ-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 19px;&quot;&gt;Final, Manual Artistic Touches&lt;/font&gt;" vertex="1">
           <mxGeometry height="60" width="320" x="870" y="5470" as="geometry" />
@@ -567,8 +570,8 @@
         </mxCell>
         <mxCell id="9BjrBfu6HxLdmxkNQlNZ-11" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeWidth=4;" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="30" y="470" as="sourcePoint" />
-            <mxPoint x="2100" y="470" as="targetPoint" />
+            <mxPoint x="10" y="470" as="sourcePoint" />
+            <mxPoint x="2050" y="470" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="9BjrBfu6HxLdmxkNQlNZ-13" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;entryX=0.517;entryY=0.004;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=4;" target="4Ns0TeULby68ldCUsVev-160" value="">
@@ -577,8 +580,39 @@
             <mxPoint x="1060" y="400" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="9BjrBfu6HxLdmxkNQlNZ-15" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=21;" value="&lt;font style=&quot;font-size: 29px;&quot;&gt;Multi-Stage&amp;nbsp;&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 29px;&quot;&gt;Pipeline Boundary (Start)&lt;/font&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="100" width="413.87" x="1475.3700000000001" y="370" as="geometry" />
+        <mxCell id="9BjrBfu6HxLdmxkNQlNZ-15" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=21;" value="&lt;font style=&quot;font-size: 32px;&quot;&gt;Lightroom-Centered Pipeline Boundary (Start)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="413.87" x="1475.37" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="ZFb_kBIWdNfRUxyCLttW-1" parent="1" style="text;align=left;fontStyle=1;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=default;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="&lt;span style=&quot;font-size: 30px; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Stage 4 — ML Readiness Handoff&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 30px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 30px; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;feature inventory, readiness report, ML contract&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="160" width="725.55" x="695" y="6440" as="geometry" />
+        </mxCell>
+        <mxCell id="ZFb_kBIWdNfRUxyCLttW-2" parent="1" style="text;align=left;fontStyle=1;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=default;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="&lt;pre&gt;&lt;code&gt;&lt;font style=&quot;font-size: 30px;&quot; face=&quot;Helvetica&quot;&gt;Stage 5 - Operational Serving Layer&lt;br&gt;&lt;br&gt;serving exports, artifact catalog, loader status records&lt;/font&gt;&lt;br&gt;&lt;/code&gt;&lt;/pre&gt;" vertex="1">
+          <mxGeometry height="150" width="801.56" x="656.99" y="6730" as="geometry" />
+        </mxCell>
+        <mxCell id="ZFb_kBIWdNfRUxyCLttW-3" parent="1" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;flipH=1;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;legacyAnchorPoints=0;direction=north;size=0.5;strokeWidth=3;" value="" vertex="1">
+          <mxGeometry height="440" width="1830" x="140" y="5570" as="geometry" />
+        </mxCell>
+        <mxCell id="ZFb_kBIWdNfRUxyCLttW-4" parent="1" style="text;align=left;fontStyle=1;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=default;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" value="&lt;span style=&quot;font-size: 30px;&quot;&gt;scripted evidence extraction and packaging&lt;/span&gt;" vertex="1">
+          <mxGeometry height="160" width="635.87" x="736.3900000000001" y="6060" as="geometry" />
+        </mxCell>
+        <mxCell id="ZFb_kBIWdNfRUxyCLttW-5" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;entryX=0.501;entryY=0.001;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=6;" target="ZFb_kBIWdNfRUxyCLttW-4" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points" />
+            <mxPoint x="1055" y="6003" as="sourcePoint" />
+            <mxPoint x="780" y="5700" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZFb_kBIWdNfRUxyCLttW-6" edge="1" parent="1" source="ZFb_kBIWdNfRUxyCLttW-4" style="endArrow=classic;html=1;rounded=0;exitX=0.513;exitY=1.002;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.502;entryY=0.001;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=6;" target="ZFb_kBIWdNfRUxyCLttW-1" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="1030" y="6260" as="sourcePoint" />
+            <mxPoint x="1031" y="6358" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZFb_kBIWdNfRUxyCLttW-7" edge="1" parent="1" source="ZFb_kBIWdNfRUxyCLttW-1" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1.024;exitDx=0;exitDy=0;exitPerimeter=0;strokeWidth=6;entryX=0.5;entryY=0.004;entryDx=0;entryDy=0;entryPerimeter=0;" target="ZFb_kBIWdNfRUxyCLttW-2" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="1711" y="6470" as="sourcePoint" />
+            <mxPoint x="1037" y="6702" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
