@@ -4,7 +4,7 @@
   "summary": {
     "asset_count": 12,
     "complete_handoff_feature_asset_count": 3,
-    "feature_family_count": 4,
+    "feature_family_count": 3,
     "model_training_readiness": "not_ready"
   },
   "pipeline_step": "04_build_ml_handoff_contract",
@@ -24,14 +24,14 @@
   "stable_join_keys": [
     {
       "key": "asset_key",
-      "meaning": "Native asset stem used to join RAW, XMP, ACR, manifests, and derived metrics.",
+      "meaning": "Camera/file-origin asset stem extracted from existing source context and used to join RAW, XMP, ACR, manifests, and derived metrics.",
       "current_status": "implemented"
     }
   ],
   "handoff_artifacts": [
     {
       "artifact": "outputs/stage1/stage1_manifest.json",
-      "role": "asset identity and metadata-state summary"
+      "role": "asset context, source availability, and metadata-state summary"
     },
     {
       "artifact": "outputs/stage2/stage2_manifest.json",
@@ -50,15 +50,16 @@
       "role": "modeling readiness and gap analysis"
     }
   ],
+  "asset_context": {
+    "context_family": "asset_context",
+    "source_stage": "stage1",
+    "artifact": "outputs/stage1/stage1_manifest.json",
+    "asset_count": 12,
+    "status": "validated",
+    "workflow_role": "Verified asset identity surface, source availability, metadata-state classification, and provenance context for joins, filtering, and audit.",
+    "important_boundary": "Stage 1 does not invent camera-written asset identity or Lightroom-managed file associations; it extracts and normalizes that existing context for pipeline use."
+  },
   "feature_families": [
-    {
-      "feature_family": "asset_identity_metadata",
-      "source_stage": "stage1",
-      "artifact": "outputs/stage1/stage1_manifest.json",
-      "asset_count": 12,
-      "status": "validated",
-      "modeling_role": "asset identity, metadata state, and cohort context"
-    },
     {
       "feature_family": "develop_parameter_deltas",
       "source_stage": "stage2",

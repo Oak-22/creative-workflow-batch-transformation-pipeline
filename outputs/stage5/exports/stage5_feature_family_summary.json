@@ -2,7 +2,7 @@
   "stage": "stage5_operational_serving_layer",
   "status": "complete",
   "summary": {
-    "feature_family_count": 4,
+    "feature_family_count": 3,
     "consumer_count": 3
   },
   "pipeline_step": "01_build_serving_exports",
@@ -25,21 +25,6 @@
     "feature_inventory": "outputs/stage4/features/stage4_feature_inventory.json"
   },
   "records": [
-    {
-      "feature_family": "asset_identity_metadata",
-      "source_stage": "stage1",
-      "summary": {
-        "asset_count": 12,
-        "status": "validated",
-        "modeling_role": "asset identity, metadata state, and cohort context"
-      },
-      "artifact_refs": [
-        {
-          "role": "artifact",
-          "path": "outputs/stage1/stage1_manifest.json"
-        }
-      ]
-    },
     {
       "feature_family": "develop_parameter_deltas",
       "source_stage": "stage2",

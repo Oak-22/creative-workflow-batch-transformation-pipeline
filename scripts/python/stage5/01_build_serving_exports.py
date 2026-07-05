@@ -110,6 +110,9 @@ def asset_summary_records(
         feature_presence = asset.get("feature_family_presence", {})
         if not isinstance(feature_presence, dict):
             feature_presence = {}
+        asset_context = asset.get("asset_context", {})
+        if not isinstance(asset_context, dict):
+            asset_context = {}
         raw_metric_summary = asset.get("stage4_raw_metric_summary", {})
         if not isinstance(raw_metric_summary, dict):
             raw_metric_summary = {}
@@ -120,13 +123,14 @@ def asset_summary_records(
                     "complete_handoff_feature_set": asset.get(
                         "complete_handoff_feature_set"
                     ),
-                    "stage1_metadata_state": asset.get("stage1_metadata_state"),
                     "rendered_target_present": rendered_target is not None,
                 },
+                "asset_context": {
+                    "present": bool(asset_context.get("present")),
+                    "metadata_state": asset_context.get("metadata_state"),
+                    "source_summary": asset_context.get("source_summary", {}),
+                },
                 "feature_family_presence": {
-                    "asset_identity_metadata": bool(
-                        feature_presence.get("asset_identity_metadata")
-                    ),
                     "develop_parameter_deltas": bool(
                         feature_presence.get("develop_parameter_deltas")
                     ),
@@ -138,7 +142,6 @@ def asset_summary_records(
                     ),
                 },
                 "supporting_evidence": {
-                    "stage1_source_summary": asset.get("stage1_source_summary", {}),
                     "stage2_changed_setting_count": asset.get(
                         "stage2_changed_setting_count"
                     ),

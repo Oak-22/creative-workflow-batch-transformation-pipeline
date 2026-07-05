@@ -79,14 +79,17 @@ def build_contract(args: argparse.Namespace) -> dict[str, object]:
         "stable_join_keys": [
             {
                 "key": "asset_key",
-                "meaning": "Native asset stem used to join RAW, XMP, ACR, manifests, and derived metrics.",
+                "meaning": (
+                    "Camera/file-origin asset stem extracted from existing source context "
+                    "and used to join RAW, XMP, ACR, manifests, and derived metrics."
+                ),
                 "current_status": "implemented",
             }
         ],
         "handoff_artifacts": [
             {
                 "artifact": "outputs/stage1/stage1_manifest.json",
-                "role": "asset identity and metadata-state summary",
+                "role": "asset context, source availability, and metadata-state summary",
             },
             {
                 "artifact": "outputs/stage2/stage2_manifest.json",
@@ -105,6 +108,7 @@ def build_contract(args: argparse.Namespace) -> dict[str, object]:
                 "role": "modeling readiness and gap analysis",
             },
         ],
+        "asset_context": inventory.get("asset_context", {}),
         "feature_families": inventory.get("feature_families", []),
         "dataset_scope": {
             "asset_count": inventory_summary.get("asset_count"),

@@ -1,9 +1,9 @@
 ## Stage 4 Output Order
 
 Stage 4 packages the earlier stage evidence into an ML-readiness
-handoff. It shows what feature families exist, which assets have
-complete cross-stage coverage, and which additional evidence is required
-before model development.
+handoff. It separates operational asset context from derived feature
+families, shows which assets have complete cross-stage coverage, and
+states which additional evidence is required before model development.
 
 The front-door artifact is:
 

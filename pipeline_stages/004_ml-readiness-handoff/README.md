@@ -10,7 +10,8 @@ a future ML team could evaluate.
 
 The prior stages create different evidence surfaces:
 
-- Stage 1 establishes asset identity and metadata state.
+- Stage 1 extracts and validates existing asset context, source
+  availability, and metadata state for pipeline use.
 - Stage 2 records global Develop-parameter changes across frozen XMP
   checkpoints.
 - Stage 3 records semantic/local mask state and Lightroom write
@@ -94,19 +95,28 @@ model_training_readiness = not_ready
 
 ## Feature Families
 
-Stage 4 currently inventories four feature families:
+Stage 4 currently separates operational asset context from three
+derived feature families.
+
+Asset context:
 
 ```text
-asset_identity_metadata
+asset_context
+```
+
+Derived feature families:
+
+```text
 develop_parameter_deltas
 semantic_local_mask_state
 raw_pixel_signal_metrics
 ```
 
 The complete cross-stage row count is lower than the total asset count
-because Stage 2 Develop deltas and Stage 3 mask-state evidence exist for
-smaller subsets. That gives a future ML team a clear coverage map before
-they decide what additional data to collect.
+because Stage 2 Develop deltas and Stage 3 mask-state evidence exist
+for smaller subsets. Stage 1 context supports joins, filtering,
+provenance, and audit; it is not treated as a peer derived feature
+family.
 
 
 ## Next Evidence Needed

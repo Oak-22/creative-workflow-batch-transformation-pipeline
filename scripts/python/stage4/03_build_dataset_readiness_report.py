@@ -42,11 +42,14 @@ def readiness_checks(inventory: dict[str, object]) -> list[dict[str, object]]:
             "evidence": "Stage 4 feature inventory was generated.",
         },
         {
-            "check": "asset_identity_contract_exists",
+            "check": "asset_context_contract_exists",
             "status": "pass"
-            if int(summary.get("asset_identity_metadata_asset_count") or 0) > 0
+            if int(summary.get("asset_context_asset_count") or 0) > 0
             else "fail",
-            "evidence": "Stage 1 assets provide the shared asset_key identity surface.",
+            "evidence": (
+                "Stage 1 extracts and validates existing asset context for joins, "
+                "filtering, provenance, and audit."
+            ),
         },
         {
             "check": "raw_signal_metrics_exist",

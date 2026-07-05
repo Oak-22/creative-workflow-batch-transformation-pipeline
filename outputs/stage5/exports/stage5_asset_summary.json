@@ -32,20 +32,22 @@
       "asset_key": "JB107456",
       "summary": {
         "complete_handoff_feature_set": true,
-        "stage1_metadata_state": "stage1_post-identity",
         "rendered_target_present": true
       },
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_post-identity",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": true,
         "raw_pixel_signal_metrics": true
       },
       "supporting_evidence": {
-        "stage1_source_summary": {
-          "raw": 1,
-          "xmp": 1
-        },
         "stage2_changed_setting_count": 34,
         "stage3_mask_counts": {
           "mask_group_count": 6,
@@ -72,20 +74,22 @@
       "asset_key": "JB107468",
       "summary": {
         "complete_handoff_feature_set": true,
-        "stage1_metadata_state": "stage1_post-identity",
         "rendered_target_present": true
       },
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_post-identity",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": true,
         "raw_pixel_signal_metrics": true
       },
       "supporting_evidence": {
-        "stage1_source_summary": {
-          "raw": 1,
-          "xmp": 1
-        },
         "stage2_changed_setting_count": 35,
         "stage3_mask_counts": {
           "mask_group_count": 6,
@@ -112,20 +116,22 @@
       "asset_key": "JB107504",
       "summary": {
         "complete_handoff_feature_set": true,
-        "stage1_metadata_state": "stage1_post-identity",
         "rendered_target_present": true
       },
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_post-identity",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": true,
         "raw_pixel_signal_metrics": true
       },
       "supporting_evidence": {
-        "stage1_source_summary": {
-          "raw": 1,
-          "xmp": 1
-        },
         "stage2_changed_setting_count": 38,
         "stage3_mask_counts": {
           "mask_group_count": 6,
@@ -152,19 +158,21 @@
       "asset_key": "JB107505",
       "summary": {
         "complete_handoff_feature_set": false,
-        "stage1_metadata_state": "stage1_pre-identity",
         "rendered_target_present": true
       },
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_pre-identity",
+        "source_summary": {
+          "raw": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": false,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "supporting_evidence": {
-        "stage1_source_summary": {
-          "raw": 1
-        },
         "stage2_changed_setting_count": null,
         "stage3_mask_counts": null,
         "stage4_raw_metric_summary": {
@@ -188,19 +196,21 @@
       "asset_key": "JB107506",
       "summary": {
         "complete_handoff_feature_set": false,
-        "stage1_metadata_state": "stage1_pre-identity",
         "rendered_target_present": true
       },
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_pre-identity",
+        "source_summary": {
+          "raw": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": false,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "supporting_evidence": {
-        "stage1_source_summary": {
-          "raw": 1
-        },
         "stage2_changed_setting_count": null,
         "stage3_mask_counts": null,
         "stage4_raw_metric_summary": {
@@ -224,19 +234,21 @@
       "asset_key": "JB107507",
       "summary": {
         "complete_handoff_feature_set": false,
-        "stage1_metadata_state": "stage1_pre-identity",
         "rendered_target_present": true
       },
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_pre-identity",
+        "source_summary": {
+          "raw": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": false,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "supporting_evidence": {
-        "stage1_source_summary": {
-          "raw": 1
-        },
         "stage2_changed_setting_count": null,
         "stage3_mask_counts": null,
         "stage4_raw_metric_summary": {
@@ -260,20 +272,22 @@
       "asset_key": "JB107508",
       "summary": {
         "complete_handoff_feature_set": false,
-        "stage1_metadata_state": "stage1_identity_domain",
         "rendered_target_present": true
       },
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_identity_domain",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "supporting_evidence": {
-        "stage1_source_summary": {
-          "raw": 1,
-          "xmp": 1
-        },
         "stage2_changed_setting_count": 34,
         "stage3_mask_counts": null,
         "stage4_raw_metric_summary": {
@@ -297,20 +311,22 @@
       "asset_key": "JB107509",
       "summary": {
         "complete_handoff_feature_set": false,
-        "stage1_metadata_state": "stage1_identity_domain",
         "rendered_target_present": true
       },
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_identity_domain",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "supporting_evidence": {
-        "stage1_source_summary": {
-          "raw": 1,
-          "xmp": 1
-        },
         "stage2_changed_setting_count": 33,
         "stage3_mask_counts": null,
         "stage4_raw_metric_summary": {
@@ -334,20 +350,22 @@
       "asset_key": "JB107510",
       "summary": {
         "complete_handoff_feature_set": false,
-        "stage1_metadata_state": "stage1_identity_domain",
         "rendered_target_present": true
       },
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_identity_domain",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "supporting_evidence": {
-        "stage1_source_summary": {
-          "raw": 1,
-          "xmp": 1
-        },
         "stage2_changed_setting_count": 35,
         "stage3_mask_counts": null,
         "stage4_raw_metric_summary": {
@@ -371,20 +389,22 @@
       "asset_key": "JB107511",
       "summary": {
         "complete_handoff_feature_set": false,
-        "stage1_metadata_state": "stage1_identity_domain_keywords",
         "rendered_target_present": true
       },
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_identity_domain_keywords",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "supporting_evidence": {
-        "stage1_source_summary": {
-          "raw": 1,
-          "xmp": 1
-        },
         "stage2_changed_setting_count": 34,
         "stage3_mask_counts": null,
         "stage4_raw_metric_summary": {
@@ -408,20 +428,22 @@
       "asset_key": "JB107512",
       "summary": {
         "complete_handoff_feature_set": false,
-        "stage1_metadata_state": "stage1_identity_domain_keywords",
         "rendered_target_present": true
       },
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_identity_domain_keywords",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "supporting_evidence": {
-        "stage1_source_summary": {
-          "raw": 1,
-          "xmp": 1
-        },
         "stage2_changed_setting_count": 33,
         "stage3_mask_counts": null,
         "stage4_raw_metric_summary": {
@@ -445,20 +467,22 @@
       "asset_key": "JB107513",
       "summary": {
         "complete_handoff_feature_set": false,
-        "stage1_metadata_state": "stage1_identity_domain_keywords",
         "rendered_target_present": true
       },
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_identity_domain_keywords",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "supporting_evidence": {
-        "stage1_source_summary": {
-          "raw": 1,
-          "xmp": 1
-        },
         "stage2_changed_setting_count": 34,
         "stage3_mask_counts": null,
         "stage4_raw_metric_summary": {

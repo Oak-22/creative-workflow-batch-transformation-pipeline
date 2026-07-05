@@ -8,7 +8,7 @@ exports for downstream operational consumers.
 
 Stages 1-4 preserve detailed evidence:
 
-- asset identity and metadata state
+- asset context, source availability, and metadata state
 - Develop-parameter deltas
 - mask definition and mask-edit state
 - RAW pixel signal metrics

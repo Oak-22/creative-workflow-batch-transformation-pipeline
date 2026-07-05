@@ -4,7 +4,7 @@
   "summary": {
     "asset_count": 12,
     "complete_handoff_feature_asset_count": 3,
-    "feature_family_count": 4,
+    "feature_family_count": 3,
     "handoff_claim_count": 4,
     "non_claim_count": 4
   },
@@ -40,8 +40,8 @@
       "produced_by": "scripts/python/stage4/02_build_feature_inventory.py",
       "artifact": {
         "path": "outputs/stage4/features/stage4_feature_inventory.json",
-        "sha256": "1b97a2c095d1766a16f5af54ab48eab2ed040cf198e4bb6dc404ec23572cb297",
-        "size_bytes": 43808
+        "sha256": "851c0d045b55db3db5d66219c88bd3aec345899e6cd1ad47eea72a758f2399fa",
+        "size_bytes": 44212
       }
     },
     {
@@ -50,8 +50,8 @@
       "produced_by": "scripts/python/stage4/03_build_dataset_readiness_report.py",
       "artifact": {
         "path": "outputs/stage4/handoff/stage4_dataset_readiness_report.json",
-        "sha256": "a916dfa782bf6c14ff972e57acd073424ff38a1bad0b37d11460898fd9bd6d44",
-        "size_bytes": 2596
+        "sha256": "f1e1b194ab760c226e519ea23322f4b6471b380088f217e04757c68f9715dd01",
+        "size_bytes": 2632
       }
     },
     {
@@ -60,8 +60,8 @@
       "produced_by": "scripts/python/stage4/04_build_ml_handoff_contract.py",
       "artifact": {
         "path": "outputs/stage4/handoff/stage4_ml_handoff_contract.json",
-        "sha256": "8b9624c1ca67a42a3edff0ab860778f63073148977f8f32c82e55aef33c0c7bc",
-        "size_bytes": 4998
+        "sha256": "3144ca793ccf906b075fb3713d2bea33e4fece38bbdc4e393d694af175668ffe",
+        "size_bytes": 5345
       }
     }
   ]

@@ -4,13 +4,13 @@
   "summary": {
     "asset_count": 12,
     "complete_handoff_feature_asset_count": 3,
-    "asset_identity_metadata_asset_count": 12,
+    "asset_context_asset_count": 12,
     "develop_parameter_delta_asset_count": 9,
     "semantic_local_mask_state_asset_count": 3,
     "raw_pixel_signal_metric_asset_count": 12
   },
   "pipeline_step": "02_build_feature_inventory",
-  "purpose": "Inventory the feature families currently materialized by Stages 1-4 so a downstream ML team can see what evidence exists before model training is proposed.",
+  "purpose": "Inventory Stage 1 asset context and derived feature families so a downstream ML team can see what evidence exists before model training is proposed.",
   "inputs": {
     "stage1_manifest": "outputs/stage1/stage1_manifest.json",
     "stage2_manifest": "outputs/stage2/stage2_manifest.json",
@@ -20,15 +20,16 @@
     "stage3_mask_edit_comparison": "outputs/stage3/pipeline/stage3_postmasking_vs_postlocal_adjustment_mask_state_comparison.json",
     "raw_pixel_signal_metrics": "outputs/stage4/features/stage4_raw_pixel_signal_metrics.json"
   },
+  "asset_context": {
+    "context_family": "asset_context",
+    "source_stage": "stage1",
+    "artifact": "outputs/stage1/stage1_manifest.json",
+    "asset_count": 12,
+    "status": "validated",
+    "workflow_role": "Verified asset identity surface, source availability, metadata-state classification, and provenance context for joins, filtering, and audit.",
+    "important_boundary": "Stage 1 does not invent camera-written asset identity or Lightroom-managed file associations; it extracts and normalizes that existing context for pipeline use."
+  },
   "feature_families": [
-    {
-      "feature_family": "asset_identity_metadata",
-      "source_stage": "stage1",
-      "artifact": "outputs/stage1/stage1_manifest.json",
-      "asset_count": 12,
-      "status": "validated",
-      "modeling_role": "asset identity, metadata state, and cohort context"
-    },
     {
       "feature_family": "develop_parameter_deltas",
       "source_stage": "stage2",
@@ -65,18 +66,20 @@
   "asset_feature_matrix": [
     {
       "asset_key": "JB107456",
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_post-identity",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": true,
         "raw_pixel_signal_metrics": true
       },
       "complete_handoff_feature_set": true,
-      "stage1_metadata_state": "stage1_post-identity",
-      "stage1_source_summary": {
-        "raw": 1,
-        "xmp": 1
-      },
       "stage2_changed_setting_count": 34,
       "stage3_mask_counts": {
         "mask_group_count": 6,
@@ -167,18 +170,20 @@
     },
     {
       "asset_key": "JB107468",
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_post-identity",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": true,
         "raw_pixel_signal_metrics": true
       },
       "complete_handoff_feature_set": true,
-      "stage1_metadata_state": "stage1_post-identity",
-      "stage1_source_summary": {
-        "raw": 1,
-        "xmp": 1
-      },
       "stage2_changed_setting_count": 35,
       "stage3_mask_counts": {
         "mask_group_count": 6,
@@ -269,18 +274,20 @@
     },
     {
       "asset_key": "JB107504",
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_post-identity",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": true,
         "raw_pixel_signal_metrics": true
       },
       "complete_handoff_feature_set": true,
-      "stage1_metadata_state": "stage1_post-identity",
-      "stage1_source_summary": {
-        "raw": 1,
-        "xmp": 1
-      },
       "stage2_changed_setting_count": 38,
       "stage3_mask_counts": {
         "mask_group_count": 6,
@@ -371,17 +378,19 @@
     },
     {
       "asset_key": "JB107505",
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_pre-identity",
+        "source_summary": {
+          "raw": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": false,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "complete_handoff_feature_set": false,
-      "stage1_metadata_state": "stage1_pre-identity",
-      "stage1_source_summary": {
-        "raw": 1
-      },
       "stage2_changed_setting_count": null,
       "stage3_mask_counts": null,
       "stage4_raw_metric_summary": {
@@ -469,17 +478,19 @@
     },
     {
       "asset_key": "JB107506",
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_pre-identity",
+        "source_summary": {
+          "raw": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": false,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "complete_handoff_feature_set": false,
-      "stage1_metadata_state": "stage1_pre-identity",
-      "stage1_source_summary": {
-        "raw": 1
-      },
       "stage2_changed_setting_count": null,
       "stage3_mask_counts": null,
       "stage4_raw_metric_summary": {
@@ -567,17 +578,19 @@
     },
     {
       "asset_key": "JB107507",
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_pre-identity",
+        "source_summary": {
+          "raw": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": false,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "complete_handoff_feature_set": false,
-      "stage1_metadata_state": "stage1_pre-identity",
-      "stage1_source_summary": {
-        "raw": 1
-      },
       "stage2_changed_setting_count": null,
       "stage3_mask_counts": null,
       "stage4_raw_metric_summary": {
@@ -665,18 +678,20 @@
     },
     {
       "asset_key": "JB107508",
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_identity_domain",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "complete_handoff_feature_set": false,
-      "stage1_metadata_state": "stage1_identity_domain",
-      "stage1_source_summary": {
-        "raw": 1,
-        "xmp": 1
-      },
       "stage2_changed_setting_count": 34,
       "stage3_mask_counts": null,
       "stage4_raw_metric_summary": {
@@ -764,18 +779,20 @@
     },
     {
       "asset_key": "JB107509",
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_identity_domain",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "complete_handoff_feature_set": false,
-      "stage1_metadata_state": "stage1_identity_domain",
-      "stage1_source_summary": {
-        "raw": 1,
-        "xmp": 1
-      },
       "stage2_changed_setting_count": 33,
       "stage3_mask_counts": null,
       "stage4_raw_metric_summary": {
@@ -863,18 +880,20 @@
     },
     {
       "asset_key": "JB107510",
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_identity_domain",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "complete_handoff_feature_set": false,
-      "stage1_metadata_state": "stage1_identity_domain",
-      "stage1_source_summary": {
-        "raw": 1,
-        "xmp": 1
-      },
       "stage2_changed_setting_count": 35,
       "stage3_mask_counts": null,
       "stage4_raw_metric_summary": {
@@ -962,18 +981,20 @@
     },
     {
       "asset_key": "JB107511",
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_identity_domain_keywords",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "complete_handoff_feature_set": false,
-      "stage1_metadata_state": "stage1_identity_domain_keywords",
-      "stage1_source_summary": {
-        "raw": 1,
-        "xmp": 1
-      },
       "stage2_changed_setting_count": 34,
       "stage3_mask_counts": null,
       "stage4_raw_metric_summary": {
@@ -1061,18 +1082,20 @@
     },
     {
       "asset_key": "JB107512",
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_identity_domain_keywords",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "complete_handoff_feature_set": false,
-      "stage1_metadata_state": "stage1_identity_domain_keywords",
-      "stage1_source_summary": {
-        "raw": 1,
-        "xmp": 1
-      },
       "stage2_changed_setting_count": 33,
       "stage3_mask_counts": null,
       "stage4_raw_metric_summary": {
@@ -1160,18 +1183,20 @@
     },
     {
       "asset_key": "JB107513",
+      "asset_context": {
+        "present": true,
+        "metadata_state": "stage1_identity_domain_keywords",
+        "source_summary": {
+          "raw": 1,
+          "xmp": 1
+        }
+      },
       "feature_family_presence": {
-        "asset_identity_metadata": true,
         "develop_parameter_deltas": true,
         "semantic_local_mask_state": false,
         "raw_pixel_signal_metrics": true
       },
       "complete_handoff_feature_set": false,
-      "stage1_metadata_state": "stage1_identity_domain_keywords",
-      "stage1_source_summary": {
-        "raw": 1,
-        "xmp": 1
-      },
       "stage2_changed_setting_count": 34,
       "stage3_mask_counts": null,
       "stage4_raw_metric_summary": {

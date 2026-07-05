@@ -1,4 +1,4 @@
-"""Stage 4 step 02: build a feature inventory across stage evidence."""
+"""Stage 4 step 02: build an asset-context and feature inventory."""
 
 from __future__ import annotations
 
@@ -32,7 +32,7 @@ DEFAULT_OUTPUT = "outputs/stage4/features/stage4_feature_inventory.json"
 def parse_args() -> argparse.Namespace:
     """Parse CLI arguments for Stage 4 feature inventory generation."""
     parser = argparse.ArgumentParser(
-        description="Build a cross-stage feature inventory for ML handoff review."
+        description="Build a cross-stage asset-context and feature inventory for ML handoff review."
     )
     parser.add_argument("--stage1-manifest", default=DEFAULT_STAGE1_MANIFEST)
     parser.add_argument("--stage2-manifest", default=DEFAULT_STAGE2_MANIFEST)
@@ -142,8 +142,8 @@ def raw_metric_summaries(raw_metrics: dict[str, object]) -> dict[str, dict[str, 
     return summaries
 
 
-def coverage_count(matrix: list[dict[str, object]], family_key: str) -> int:
-    """Count assets where a feature family is present."""
+def feature_coverage_count(matrix: list[dict[str, object]], family_key: str) -> int:
+    """Count assets where a derived feature family is present."""
     return sum(
         1
         for asset in matrix
@@ -152,8 +152,43 @@ def coverage_count(matrix: list[dict[str, object]], family_key: str) -> int:
     )
 
 
-def build_feature_families(
+def asset_context_count(matrix: list[dict[str, object]]) -> int:
+    """Count assets with Stage 1 operational context."""
+    return sum(
+        1
+        for asset in matrix
+        if isinstance(asset.get("asset_context"), dict)
+        and asset["asset_context"].get("present")
+    )
+
+
+def build_asset_context(
     stage1_manifest: dict[str, object],
+    args: argparse.Namespace,
+) -> dict[str, object]:
+    """Return the Stage 1 operational context descriptor."""
+    summary = stage1_manifest.get("summary", {})
+    if not isinstance(summary, dict):
+        summary = {}
+    return {
+        "context_family": "asset_context",
+        "source_stage": "stage1",
+        "artifact": args.stage1_manifest,
+        "asset_count": summary.get("asset_count"),
+        "status": stage1_manifest.get("status"),
+        "workflow_role": (
+            "Verified asset identity surface, source availability, metadata-state "
+            "classification, and provenance context for joins, filtering, and audit."
+        ),
+        "important_boundary": (
+            "Stage 1 does not invent camera-written asset identity or Lightroom-managed "
+            "file associations; it extracts and normalizes that existing context for "
+            "pipeline use."
+        ),
+    }
+
+
+def build_feature_families(
     stage2_manifest: dict[str, object],
     stage2_comparison: dict[str, object],
     stage3_manifest: dict[str, object],
@@ -175,14 +210,6 @@ def build_feature_families(
     if not isinstance(mask_edit_summary, dict):
         mask_edit_summary = {}
     return [
-        {
-            "feature_family": "asset_identity_metadata",
-            "source_stage": "stage1",
-            "artifact": args.stage1_manifest,
-            "asset_count": stage1_manifest.get("summary", {}).get("asset_count"),
-            "status": stage1_manifest.get("status"),
-            "modeling_role": "asset identity, metadata state, and cohort context",
-        },
         {
             "feature_family": "develop_parameter_deltas",
             "source_stage": "stage2",
@@ -253,7 +280,6 @@ def build_inventory(args: argparse.Namespace) -> dict[str, object]:
         stage1_asset = stage1_by_asset.get(asset_key, {})
         raw_summary = raw_by_asset.get(asset_key, {})
         presence = {
-            "asset_identity_metadata": asset_key in stage1_by_asset,
             "develop_parameter_deltas": asset_key in stage2_by_asset,
             "semantic_local_mask_state": asset_key in stage3_by_asset,
             "raw_pixel_signal_metrics": asset_key in raw_by_asset,
@@ -261,10 +287,13 @@ def build_inventory(args: argparse.Namespace) -> dict[str, object]:
         asset_matrix.append(
             {
                 "asset_key": asset_key,
+                "asset_context": {
+                    "present": asset_key in stage1_by_asset,
+                    "metadata_state": stage1_asset.get("metadata_state"),
+                    "source_summary": stage1_asset.get("source_summary", {}),
+                },
                 "feature_family_presence": presence,
                 "complete_handoff_feature_set": all(presence.values()),
-                "stage1_metadata_state": stage1_asset.get("metadata_state"),
-                "stage1_source_summary": stage1_asset.get("source_summary", {}),
                 "stage2_changed_setting_count": stage2_by_asset.get(asset_key),
                 "stage3_mask_counts": stage3_by_asset.get(asset_key),
                 "stage4_raw_metric_summary": raw_summary,
@@ -279,23 +308,21 @@ def build_inventory(args: argparse.Namespace) -> dict[str, object]:
             "complete_handoff_feature_asset_count": sum(
                 1 for asset in asset_matrix if asset["complete_handoff_feature_set"]
             ),
-            "asset_identity_metadata_asset_count": coverage_count(
-                asset_matrix, "asset_identity_metadata"
-            ),
-            "develop_parameter_delta_asset_count": coverage_count(
+            "asset_context_asset_count": asset_context_count(asset_matrix),
+            "develop_parameter_delta_asset_count": feature_coverage_count(
                 asset_matrix, "develop_parameter_deltas"
             ),
-            "semantic_local_mask_state_asset_count": coverage_count(
+            "semantic_local_mask_state_asset_count": feature_coverage_count(
                 asset_matrix, "semantic_local_mask_state"
             ),
-            "raw_pixel_signal_metric_asset_count": coverage_count(
+            "raw_pixel_signal_metric_asset_count": feature_coverage_count(
                 asset_matrix, "raw_pixel_signal_metrics"
             ),
         },
         "pipeline_step": "02_build_feature_inventory",
         "purpose": (
-            "Inventory the feature families currently materialized by Stages 1-4 "
-            "so a downstream ML team can see what evidence exists before model "
+            "Inventory Stage 1 asset context and derived feature families so a "
+            "downstream ML team can see what evidence exists before model "
             "training is proposed."
         ),
         "inputs": {
@@ -307,8 +334,8 @@ def build_inventory(args: argparse.Namespace) -> dict[str, object]:
             "stage3_mask_edit_comparison": args.stage3_mask_edit_comparison,
             "raw_pixel_signal_metrics": args.raw_metrics,
         },
+        "asset_context": build_asset_context(stage1_manifest, args),
         "feature_families": build_feature_families(
-            stage1_manifest,
             stage2_manifest,
             stage2_comparison,
             stage3_manifest,
