@@ -12,6 +12,63 @@ locals {
   )
 }
 
+data "aws_iam_policy_document" "stage5_loader" {
+  statement {
+    sid = "ListStage5ServingExports"
+
+    actions = [
+      "s3:ListBucket",
+    ]
+
+    resources = [
+      aws_s3_bucket.source_assets.arn,
+    ]
+
+    condition {
+      test     = "StringLike"
+      variable = "s3:prefix"
+
+      values = [
+        var.serving_exports_prefix,
+        "${var.serving_exports_prefix}*",
+      ]
+    }
+  }
+
+  statement {
+    sid = "ReadStage5ServingExports"
+
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+    ]
+
+    resources = [
+      "${aws_s3_bucket.source_assets.arn}/${var.serving_exports_prefix}*",
+    ]
+  }
+
+  statement {
+    sid = "TrackStage5LoaderStatus"
+
+    actions = [
+      "dynamodb:BatchGetItem",
+      "dynamodb:BatchWriteItem",
+      "dynamodb:ConditionCheckItem",
+      "dynamodb:DeleteItem",
+      "dynamodb:DescribeTable",
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:Query",
+      "dynamodb:UpdateItem",
+    ]
+
+    resources = [
+      aws_dynamodb_table.stage5_loader_status.arn,
+    ]
+  }
+}
+
 # The full Terraform resource address is:
 #   aws_s3_bucket.source_assets
 # `source_assets` is the local Terraform name for this bucket resource.
@@ -152,4 +209,43 @@ resource "aws_s3_bucket_lifecycle_configuration" "source_assets" {
       storage_class   = "STANDARD_IA"
     }
   }
+}
+
+resource "aws_dynamodb_table" "stage5_loader_status" {
+  name         = var.loader_status_table_name
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "load_id"
+
+  attribute {
+    name = "load_id"
+    type = "S"
+  }
+
+  server_side_encryption {
+    enabled = true
+  }
+
+  point_in_time_recovery {
+    enabled = true
+  }
+
+  tags = merge(
+    local.common_tags,
+    {
+      Component = "stage5-loader-status"
+    }
+  )
+}
+
+resource "aws_iam_policy" "stage5_loader" {
+  name        = "digital-asset-stage5-loader-${var.environment}"
+  description = "Least-privilege read/status policy for future Stage 5 serving-export loaders."
+  policy      = data.aws_iam_policy_document.stage5_loader.json
+
+  tags = merge(
+    local.common_tags,
+    {
+      Component = "stage5-loader-policy"
+    }
+  )
 }

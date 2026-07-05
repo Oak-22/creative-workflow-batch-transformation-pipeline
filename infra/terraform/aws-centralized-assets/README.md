@@ -8,6 +8,8 @@ architecture recorded in ADR 0001:
   rendered JPEG companions
 - a derived serving-export prefix for Stage 5 outputs used by downstream
   cloud loaders
+- a DynamoDB table for idempotent Stage 5 loader status tracking
+- an attachable IAM policy for a future Stage 5 loader runtime
 - local scripts and analytic outputs remain outside the bucket
 
 ## What It Creates
@@ -16,6 +18,10 @@ architecture recorded in ADR 0001:
 - bucket versioning
 - bucket-wide server-side encryption
 - bucket public-access blocking
+- one DynamoDB status table with on-demand billing, encryption, and
+  point-in-time recovery
+- one IAM policy granting read-only access to Stage 5 serving exports
+  and read/write access to loader status records
 - lifecycle rules for:
   - RAW masters
   - XMP sidecars
@@ -49,8 +55,11 @@ terraform apply
 ## Notes
 
 - This module does not upload any assets.
-- It provisions the storage boundary only.
+- It provisions the storage and loader-control boundary only.
 - The Stage 1 verifier/extractor can later target the bucket and these
   prefixes directly.
 - Stage 5 exports can be synced to `outputs/stage5/` as derived serving
   inputs for a future cloud loader.
+- The module does not provision a compute runtime. A later Lambda,
+  ECS/Fargate, Glue, or Batch loader can attach the emitted IAM policy
+  and use the status table for idempotency.

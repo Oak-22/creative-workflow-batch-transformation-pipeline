@@ -39,6 +39,12 @@ variable "serving_exports_prefix" {
   default     = "outputs/stage5/"
 }
 
+variable "loader_status_table_name" {
+  description = "DynamoDB table name for idempotent Stage 5 loader status records."
+  type        = string
+  default     = "digital-asset-stage5-loader-status"
+}
+
 variable "force_destroy" {
   description = "Allow bucket destroy even when objects remain. Keep false for safety."
   type        = bool
