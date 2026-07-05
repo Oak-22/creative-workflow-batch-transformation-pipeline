@@ -473,8 +473,14 @@ The in-depth normalization logic appears later in Operation 2.
 
 ## Technical Design & Implementation
 
-Within the larger creative workflow pipeline, Stage 2 collapses multiple global edit passes into one deterministic baseline-conditioning sequence: dataset-scale local corrective cleanup applied per frame, followed by dataset-wide tonal normalization then scene-level color normalization. Virtual Copy lineage protects the working set before conditioning (pre-stage 2) and the normalized baseline after conditioning (post-stage 2) but it is treated as a boundary mechanism rather than an
-internal conditioning operation.
+Within the larger stage-bounded workflow system, Stage 2 collapses
+multiple global edit passes into one deterministic baseline-conditioning
+sequence: dataset-scale local corrective cleanup applied per frame,
+followed by dataset-wide tonal normalization then scene-level color
+normalization. Virtual Copy lineage protects the working set before
+conditioning (pre-stage 2) and the normalized baseline after
+conditioning (post-stage 2) but it is treated as a boundary mechanism
+rather than an internal conditioning operation.
 
 <br>
 
@@ -1123,9 +1129,9 @@ without forcing every experiment to overwrite the baseline.
 
 ## Takeaway
 
-This photography workflow becomes a data transformation pipeline design
-problem. By separating local cleanup, dataset-wide tonal
-normalization, scene-level color normalization, and rollbackable
-experimentation boundaries, the system achieves dataset
-consistency and editing efficiency without sacrificing image fidelity,
-natural scene variance, or processing flexibility.
+This photography workflow becomes a stage-boundary design problem. By
+separating local cleanup, dataset-wide tonal normalization, scene-level
+color normalization, and rollbackable experimentation boundaries, the
+system achieves dataset consistency and editing efficiency without
+sacrificing image fidelity, natural scene variance, or processing
+flexibility.

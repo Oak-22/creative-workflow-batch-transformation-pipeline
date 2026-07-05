@@ -5,9 +5,9 @@
 ## Purpose
 
 This document defines the product-level problem, operator need,
-constraints, and success criteria for the creative workflow batch
-transformation pipeline. It sits between the high-level project
-[README](../README.md) and the stage-specific pipeline writeups.
+constraints, and success criteria for the stage-bounded workflow system.
+It sits between the high-level project [README](../README.md) and the
+stage-specific pipeline writeups.
 
 The goal is not to replace the README or restate every stage in full.
 Its role is to make the requirements surface explicit: what the system

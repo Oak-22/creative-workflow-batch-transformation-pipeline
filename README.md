@@ -1,16 +1,17 @@
 # Digital Asset Processing Pipeline
 
-Systems engineering project showing how ambiguous, ad hoc creative production workflows can be structured as deterministic, scalable pipelines.  
+A systems-engineering case study for turning GUI-based photo editing
+work into explicit, stage-bounded workflow infrastructure.
 
 <br>
 
 ## Executive Summary
 
-Creative production work is modeled as a reproducible, multi-stage
-pipeline with explicit boundaries, non-destructive state
-transitions, and validation checkpoints. Even when executed inside
-GUI-based tools, the workflow is designed with production system qualities rather
-than an ad hoc editing sequence.
+The repository models the workflow as a reproducible, multi-stage
+system with explicit boundaries, non-destructive state transitions, and
+validation checkpoints. Even when executed inside GUI-based tools, the
+workflow is designed with production system qualities rather than an ad
+hoc editing sequence.
 
 The core engineering pattern is deterministic orchestration around
 uncertain inputs: creative image variance from heterogeneous capture
@@ -46,14 +47,13 @@ without reading every stage writeup in full:
 
 1. [Shared terminology](docs/terminology.md)
 2. [Pipeline Overview Diagram](docs/creative-workflow-pipeline-overview-diagram-v02.png)
-3. [Project Abstract](docs/abstract.md)
-4. [Batchability Cost Model](docs/batchability-cost-model.md)
-5. [Stage 1](pipeline_stages/001_metadata-application-enrichment-query/README.md)
-6. [Stage 2](pipeline_stages/002_baseline-conditioning/README.md)
-7. [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md)
-8. [Stage 4](pipeline_stages/004_ml-readiness-handoff/README.md)
-9. [Case Studies](docs/case-studies)
-10. [Scripts](scripts) and [Tests](tests)
+3. [Batchability Cost Model](docs/batchability-cost-model.md)
+4. [Stage 1](pipeline_stages/001_metadata-application-enrichment-query/README.md)
+5. [Stage 2](pipeline_stages/002_baseline-conditioning/README.md)
+6. [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md)
+7. [Stage 4](pipeline_stages/004_ml-readiness-handoff/README.md)
+8. [Case Studies](docs/case-studies)
+9. [Scripts](scripts) and [Tests](tests)
 
 ### Extensive Path (30 mins)
 
@@ -62,17 +62,16 @@ evidence, and implementation rationale:
 
 1. [Shared terminology](docs/terminology.md)
 2. [Pipeline Overview Diagram](docs/creative-workflow-pipeline-overview-diagram-v02.png)
-3. [Project Abstract](docs/abstract.md)
-4. [Product Requirements](docs/product-requirements.md)
-5. [Stage 1](pipeline_stages/001_metadata-application-enrichment-query/README.md)
-6. [Stage 2](pipeline_stages/002_baseline-conditioning/README.md)
-7. [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md)
-8. [Stage 4](pipeline_stages/004_ml-readiness-handoff/README.md)
-9. [Batchability Cost Model](docs/batchability-cost-model.md)
-10. [Future Work](docs/future-work)
-11. [Case Studies](docs/case-studies)
-12. [Scripts](scripts) and [Tests](tests)
-13. [Architecture Decision Records](docs/adr)
+3. [Product Requirements](docs/product-requirements.md)
+4. [Stage 1](pipeline_stages/001_metadata-application-enrichment-query/README.md)
+5. [Stage 2](pipeline_stages/002_baseline-conditioning/README.md)
+6. [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md)
+7. [Stage 4](pipeline_stages/004_ml-readiness-handoff/README.md)
+8. [Batchability Cost Model](docs/batchability-cost-model.md)
+9. [Future Work](docs/future-work)
+10. [Case Studies](docs/case-studies)
+11. [Scripts](scripts) and [Tests](tests)
+12. [Architecture Decision Records](docs/adr)
 
 <br>
 
