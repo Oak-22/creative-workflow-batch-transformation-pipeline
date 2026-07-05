@@ -1,0 +1,65 @@
+{
+  "stage": "stage5_operational_serving_layer",
+  "status": "complete",
+  "summary": {
+    "asset_count": 12,
+    "rendered_target_asset_count": 12,
+    "feature_family_count": 4,
+    "artifact_count": 21,
+    "consumer_count": 3
+  },
+  "pipeline_step": "02_build_stage5_manifest",
+  "purpose": "Compact index for Stage 5 serving exports. Stage 5 produces file-based exports; database tables and views belong to a later infrastructure layer.",
+  "consumers": [
+    {
+      "consumer": "ml_data_science_team",
+      "decision_surface": "feature sufficiency, target definition, and modeling feasibility"
+    },
+    {
+      "consumer": "business_operations_stakeholder",
+      "decision_surface": "readiness, workflow leverage, and operational impact"
+    },
+    {
+      "consumer": "audit_compliance_governance_stakeholder",
+      "decision_surface": "provenance, claims, non-claims, and reproducibility"
+    }
+  ],
+  "upstream_stage_manifests": [
+    "outputs/stage1/stage1_manifest.json",
+    "outputs/stage2/stage2_manifest.json",
+    "outputs/stage3/stage3_manifest.json",
+    "outputs/stage4/stage4_manifest.json"
+  ],
+  "export_sequence": [
+    {
+      "order": 1,
+      "role": "asset_summary_export",
+      "produced_by": "scripts/python/stage5/01_build_serving_exports.py",
+      "artifact": {
+        "path": "outputs/stage5/exports/stage5_asset_summary.json",
+        "sha256": "2cf5366c55ded11462795c347eb2d18571fb56053b0333879c72a81d99717963",
+        "size_bytes": 21179
+      }
+    },
+    {
+      "order": 2,
+      "role": "feature_family_summary_export",
+      "produced_by": "scripts/python/stage5/01_build_serving_exports.py",
+      "artifact": {
+        "path": "outputs/stage5/exports/stage5_feature_family_summary.json",
+        "sha256": "5233a1a126e90cf5a63a00d1ecd0c88f747a97d6efab4c24630ba6720d47881e",
+        "size_bytes": 3964
+      }
+    },
+    {
+      "order": 3,
+      "role": "artifact_catalog_export",
+      "produced_by": "scripts/python/stage5/01_build_serving_exports.py",
+      "artifact": {
+        "path": "outputs/stage5/exports/stage5_artifact_catalog.json",
+        "sha256": "0520756f0758a1f80ec9a5885ab454fffe10c831efa067a83fff247441d6327f",
+        "size_bytes": 10236
+      }
+    }
+  ]
+}

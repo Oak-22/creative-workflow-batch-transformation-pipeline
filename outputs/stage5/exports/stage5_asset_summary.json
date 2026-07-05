@@ -1,0 +1,542 @@
+{
+  "stage": "stage5_operational_serving_layer",
+  "status": "complete",
+  "summary": {
+    "asset_count": 12,
+    "complete_handoff_feature_asset_count": 3,
+    "rendered_target_asset_count": 12,
+    "consumer_count": 3
+  },
+  "pipeline_step": "01_build_serving_exports",
+  "purpose": "Asset-level serving export for operational consumers.",
+  "consumers": [
+    {
+      "consumer": "ml_data_science_team",
+      "decision_surface": "feature sufficiency, target definition, and modeling feasibility"
+    },
+    {
+      "consumer": "business_operations_stakeholder",
+      "decision_surface": "readiness, workflow leverage, and operational impact"
+    },
+    {
+      "consumer": "audit_compliance_governance_stakeholder",
+      "decision_surface": "provenance, claims, non-claims, and reproducibility"
+    }
+  ],
+  "inputs": {
+    "feature_inventory": "outputs/stage4/features/stage4_feature_inventory.json",
+    "rendered_target_root": "data/stage4/rendered_targets/lightroom_jpeg_exports"
+  },
+  "records": [
+    {
+      "asset_key": "JB107456",
+      "summary": {
+        "complete_handoff_feature_set": true,
+        "stage1_metadata_state": "stage1_post-identity",
+        "rendered_target_present": true
+      },
+      "feature_family_presence": {
+        "asset_identity_metadata": true,
+        "develop_parameter_deltas": true,
+        "semantic_local_mask_state": true,
+        "raw_pixel_signal_metrics": true
+      },
+      "supporting_evidence": {
+        "stage1_source_summary": {
+          "raw": 1,
+          "xmp": 1
+        },
+        "stage2_changed_setting_count": 34,
+        "stage3_mask_counts": {
+          "mask_group_count": 6,
+          "mask_entry_count": 7
+        },
+        "stage4_raw_metric_summary": {
+          "coverage_status": "complete",
+          "raw_visible_pixel_count": 42389760,
+          "raw_visible_shape": [
+            5320,
+            7968
+          ],
+          "raw_full_sha256": "025f45ca6201522ebee5be1f9f73186d93561d91fdf265f567554422d551c53c",
+          "raw_visible_sha256": "bf17bef2c588e3c6e8f45956f4a3ded5e72d8e02f4cb09655612428ecf35e7df"
+        },
+        "rendered_target_artifact": {
+          "path": "data/stage4/rendered_targets/lightroom_jpeg_exports/JB107456.jpg",
+          "sha256": "ecf9abce4ede53362b87c172744745fd43b9dc372206852694cb94e97ef74551",
+          "size_bytes": 8005835
+        }
+      },
+      "consumer_relevance": {
+        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
+        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
+        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
+      }
+    },
+    {
+      "asset_key": "JB107468",
+      "summary": {
+        "complete_handoff_feature_set": true,
+        "stage1_metadata_state": "stage1_post-identity",
+        "rendered_target_present": true
+      },
+      "feature_family_presence": {
+        "asset_identity_metadata": true,
+        "develop_parameter_deltas": true,
+        "semantic_local_mask_state": true,
+        "raw_pixel_signal_metrics": true
+      },
+      "supporting_evidence": {
+        "stage1_source_summary": {
+          "raw": 1,
+          "xmp": 1
+        },
+        "stage2_changed_setting_count": 35,
+        "stage3_mask_counts": {
+          "mask_group_count": 6,
+          "mask_entry_count": 7
+        },
+        "stage4_raw_metric_summary": {
+          "coverage_status": "complete",
+          "raw_visible_pixel_count": 42389760,
+          "raw_visible_shape": [
+            5320,
+            7968
+          ],
+          "raw_full_sha256": "135ca968a48c04a2a604d859f0178269da74b3dcd1959275b30175cb5e3f2a89",
+          "raw_visible_sha256": "e32724c9caeafef965b18e297b1471e272e2136425a60e29029f147fbbdcedb7"
+        },
+        "rendered_target_artifact": {
+          "path": "data/stage4/rendered_targets/lightroom_jpeg_exports/JB107468.jpg",
+          "sha256": "f53313c2a711f725872d1635282e933c1431ac4cb1017e242b84e5ab0a0b5d25",
+          "size_bytes": 8569803
+        }
+      },
+      "consumer_relevance": {
+        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
+        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
+        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
+      }
+    },
+    {
+      "asset_key": "JB107504",
+      "summary": {
+        "complete_handoff_feature_set": true,
+        "stage1_metadata_state": "stage1_post-identity",
+        "rendered_target_present": true
+      },
+      "feature_family_presence": {
+        "asset_identity_metadata": true,
+        "develop_parameter_deltas": true,
+        "semantic_local_mask_state": true,
+        "raw_pixel_signal_metrics": true
+      },
+      "supporting_evidence": {
+        "stage1_source_summary": {
+          "raw": 1,
+          "xmp": 1
+        },
+        "stage2_changed_setting_count": 38,
+        "stage3_mask_counts": {
+          "mask_group_count": 6,
+          "mask_entry_count": 7
+        },
+        "stage4_raw_metric_summary": {
+          "coverage_status": "complete",
+          "raw_visible_pixel_count": 42389760,
+          "raw_visible_shape": [
+            5320,
+            7968
+          ],
+          "raw_full_sha256": "85702890bfe86af138495485ec3b82cd2b8a726625b1bbff41cdc9618bb7e4a0",
+          "raw_visible_sha256": "a0bd26201b5e2f9c6305f1722c3669a9890b9654f94b3c122ac81f5b7d93dfba"
+        },
+        "rendered_target_artifact": {
+          "path": "data/stage4/rendered_targets/lightroom_jpeg_exports/JB107504.jpg",
+          "sha256": "99eae09a996caa85d558e2e740db71afa86046ad4d9cdf8de48f854ee32c2e0a",
+          "size_bytes": 5728015
+        }
+      },
+      "consumer_relevance": {
+        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
+        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
+        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
+      }
+    },
+    {
+      "asset_key": "JB107505",
+      "summary": {
+        "complete_handoff_feature_set": false,
+        "stage1_metadata_state": "stage1_pre-identity",
+        "rendered_target_present": true
+      },
+      "feature_family_presence": {
+        "asset_identity_metadata": true,
+        "develop_parameter_deltas": false,
+        "semantic_local_mask_state": false,
+        "raw_pixel_signal_metrics": true
+      },
+      "supporting_evidence": {
+        "stage1_source_summary": {
+          "raw": 1
+        },
+        "stage2_changed_setting_count": null,
+        "stage3_mask_counts": null,
+        "stage4_raw_metric_summary": {
+          "coverage_status": "complete",
+          "raw_visible_pixel_count": 42389760,
+          "raw_visible_shape": [
+            5320,
+            7968
+          ],
+          "raw_full_sha256": "3b437039da3a3e15046b517ae6bda06faacba1e31e62bdc5679740e9aa64c027",
+          "raw_visible_sha256": "a38d53830ec1d5496597f106cb1d8707e1f1030aede96d11a734f8b34c9f9b1c"
+        },
+        "rendered_target_artifact": {
+          "path": "data/stage4/rendered_targets/lightroom_jpeg_exports/JB107505.jpg",
+          "sha256": "4d21a7026a4fad554906e6909438a2574a4254a475fbd7e796de01764d1dccea",
+          "size_bytes": 6664061
+        }
+      },
+      "consumer_relevance": {
+        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
+        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
+        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
+      }
+    },
+    {
+      "asset_key": "JB107506",
+      "summary": {
+        "complete_handoff_feature_set": false,
+        "stage1_metadata_state": "stage1_pre-identity",
+        "rendered_target_present": true
+      },
+      "feature_family_presence": {
+        "asset_identity_metadata": true,
+        "develop_parameter_deltas": false,
+        "semantic_local_mask_state": false,
+        "raw_pixel_signal_metrics": true
+      },
+      "supporting_evidence": {
+        "stage1_source_summary": {
+          "raw": 1
+        },
+        "stage2_changed_setting_count": null,
+        "stage3_mask_counts": null,
+        "stage4_raw_metric_summary": {
+          "coverage_status": "complete",
+          "raw_visible_pixel_count": 42389760,
+          "raw_visible_shape": [
+            5320,
+            7968
+          ],
+          "raw_full_sha256": "9c3bb2a7ff347720735b402dfecdca031dc20243dda833bfeff1d0b45fe126e0",
+          "raw_visible_sha256": "b64cfccd74f3ff8e1ac5f1236bbc1a363271cbdb4464c88b11dc9a2274d4970f"
+        },
+        "rendered_target_artifact": {
+          "path": "data/stage4/rendered_targets/lightroom_jpeg_exports/JB107506.jpg",
+          "sha256": "d159fa518c76a12cbb390ed4a2a3aec964adee9d9fe41f7c5cc232642d2db3a2",
+          "size_bytes": 5587363
+        }
+      },
+      "consumer_relevance": {
+        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
+        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
+        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
+      }
+    },
+    {
+      "asset_key": "JB107507",
+      "summary": {
+        "complete_handoff_feature_set": false,
+        "stage1_metadata_state": "stage1_pre-identity",
+        "rendered_target_present": true
+      },
+      "feature_family_presence": {
+        "asset_identity_metadata": true,
+        "develop_parameter_deltas": false,
+        "semantic_local_mask_state": false,
+        "raw_pixel_signal_metrics": true
+      },
+      "supporting_evidence": {
+        "stage1_source_summary": {
+          "raw": 1
+        },
+        "stage2_changed_setting_count": null,
+        "stage3_mask_counts": null,
+        "stage4_raw_metric_summary": {
+          "coverage_status": "complete",
+          "raw_visible_pixel_count": 42389760,
+          "raw_visible_shape": [
+            5320,
+            7968
+          ],
+          "raw_full_sha256": "298f9ad07dfc02fa1a1c96cceaf5f945aa776458f7a684e1ea7a3fd793be5dc5",
+          "raw_visible_sha256": "1c871ff728821de4d00846c7572d36d7f1037a9cf7e99e3f44fb5fc9853cbc69"
+        },
+        "rendered_target_artifact": {
+          "path": "data/stage4/rendered_targets/lightroom_jpeg_exports/JB107507.jpg",
+          "sha256": "d475f12ec4153142e71771789e0be0d3bf252d889a5e97a1a4b6dde94858c73e",
+          "size_bytes": 5228374
+        }
+      },
+      "consumer_relevance": {
+        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
+        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
+        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
+      }
+    },
+    {
+      "asset_key": "JB107508",
+      "summary": {
+        "complete_handoff_feature_set": false,
+        "stage1_metadata_state": "stage1_identity_domain",
+        "rendered_target_present": true
+      },
+      "feature_family_presence": {
+        "asset_identity_metadata": true,
+        "develop_parameter_deltas": true,
+        "semantic_local_mask_state": false,
+        "raw_pixel_signal_metrics": true
+      },
+      "supporting_evidence": {
+        "stage1_source_summary": {
+          "raw": 1,
+          "xmp": 1
+        },
+        "stage2_changed_setting_count": 34,
+        "stage3_mask_counts": null,
+        "stage4_raw_metric_summary": {
+          "coverage_status": "complete",
+          "raw_visible_pixel_count": 42389760,
+          "raw_visible_shape": [
+            5320,
+            7968
+          ],
+          "raw_full_sha256": "d750ddbf3af8ae46e9a4dc7e79ad1492e54f0678c71e770a8c52aa9c904a5c1e",
+          "raw_visible_sha256": "96663f16b02089a760eafa6a025dc0bec6ec782c3d794b5dcb3bcda88449d491"
+        },
+        "rendered_target_artifact": {
+          "path": "data/stage4/rendered_targets/lightroom_jpeg_exports/JB107508.jpg",
+          "sha256": "efd11ddf81aa9660458d8e773dfad2429d3159a50c8bb8125a36353051a511ba",
+          "size_bytes": 7960109
+        }
+      },
+      "consumer_relevance": {
+        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
+        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
+        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
+      }
+    },
+    {
+      "asset_key": "JB107509",
+      "summary": {
+        "complete_handoff_feature_set": false,
+        "stage1_metadata_state": "stage1_identity_domain",
+        "rendered_target_present": true
+      },
+      "feature_family_presence": {
+        "asset_identity_metadata": true,
+        "develop_parameter_deltas": true,
+        "semantic_local_mask_state": false,
+        "raw_pixel_signal_metrics": true
+      },
+      "supporting_evidence": {
+        "stage1_source_summary": {
+          "raw": 1,
+          "xmp": 1
+        },
+        "stage2_changed_setting_count": 33,
+        "stage3_mask_counts": null,
+        "stage4_raw_metric_summary": {
+          "coverage_status": "complete",
+          "raw_visible_pixel_count": 42389760,
+          "raw_visible_shape": [
+            5320,
+            7968
+          ],
+          "raw_full_sha256": "44ea5b988511f5890ff4637ae8f8d99623fd6726f03a67ba1e8f3c237f550de7",
+          "raw_visible_sha256": "5dbb5f55624eaa6a69c565e91d7ea72fba056fff31ffe06ee97f4c989efb282f"
+        },
+        "rendered_target_artifact": {
+          "path": "data/stage4/rendered_targets/lightroom_jpeg_exports/JB107509.jpg",
+          "sha256": "9e98e32138a6f8465e054c1f729f44beebeb80791f9e2b6019fcc38f012e3e77",
+          "size_bytes": 5900291
+        }
+      },
+      "consumer_relevance": {
+        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
+        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
+        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
+      }
+    },
+    {
+      "asset_key": "JB107510",
+      "summary": {
+        "complete_handoff_feature_set": false,
+        "stage1_metadata_state": "stage1_identity_domain",
+        "rendered_target_present": true
+      },
+      "feature_family_presence": {
+        "asset_identity_metadata": true,
+        "develop_parameter_deltas": true,
+        "semantic_local_mask_state": false,
+        "raw_pixel_signal_metrics": true
+      },
+      "supporting_evidence": {
+        "stage1_source_summary": {
+          "raw": 1,
+          "xmp": 1
+        },
+        "stage2_changed_setting_count": 35,
+        "stage3_mask_counts": null,
+        "stage4_raw_metric_summary": {
+          "coverage_status": "complete",
+          "raw_visible_pixel_count": 42389760,
+          "raw_visible_shape": [
+            5320,
+            7968
+          ],
+          "raw_full_sha256": "d09d59529e2cb2444f1c4b35e74d97fbea02ca18250c21bed1a347b5f362be2f",
+          "raw_visible_sha256": "2ffd4976d89324e74af66d9e985b153cf32797c14f5f8b07d704a528ed6688f3"
+        },
+        "rendered_target_artifact": {
+          "path": "data/stage4/rendered_targets/lightroom_jpeg_exports/JB107510.jpg",
+          "sha256": "ceb5d393c4caf8a8366a7afe95337da10d149a93e9267ecbc2bde6ba81cfa40b",
+          "size_bytes": 5450428
+        }
+      },
+      "consumer_relevance": {
+        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
+        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
+        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
+      }
+    },
+    {
+      "asset_key": "JB107511",
+      "summary": {
+        "complete_handoff_feature_set": false,
+        "stage1_metadata_state": "stage1_identity_domain_keywords",
+        "rendered_target_present": true
+      },
+      "feature_family_presence": {
+        "asset_identity_metadata": true,
+        "develop_parameter_deltas": true,
+        "semantic_local_mask_state": false,
+        "raw_pixel_signal_metrics": true
+      },
+      "supporting_evidence": {
+        "stage1_source_summary": {
+          "raw": 1,
+          "xmp": 1
+        },
+        "stage2_changed_setting_count": 34,
+        "stage3_mask_counts": null,
+        "stage4_raw_metric_summary": {
+          "coverage_status": "complete",
+          "raw_visible_pixel_count": 42389760,
+          "raw_visible_shape": [
+            5320,
+            7968
+          ],
+          "raw_full_sha256": "294e0bce3db92c54bb5635662a51a39dc31c8fb8ea19fa487ddaa2b05c966e44",
+          "raw_visible_sha256": "3df2e3129d78b066b769975669c44578a73cd74fc11891c20777b6b901e13a9f"
+        },
+        "rendered_target_artifact": {
+          "path": "data/stage4/rendered_targets/lightroom_jpeg_exports/JB107511.jpg",
+          "sha256": "1ebaf887a321d5e8e2d6a66a4a335dbfb48a16a5132aa02de2818a76332ffdde",
+          "size_bytes": 6128181
+        }
+      },
+      "consumer_relevance": {
+        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
+        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
+        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
+      }
+    },
+    {
+      "asset_key": "JB107512",
+      "summary": {
+        "complete_handoff_feature_set": false,
+        "stage1_metadata_state": "stage1_identity_domain_keywords",
+        "rendered_target_present": true
+      },
+      "feature_family_presence": {
+        "asset_identity_metadata": true,
+        "develop_parameter_deltas": true,
+        "semantic_local_mask_state": false,
+        "raw_pixel_signal_metrics": true
+      },
+      "supporting_evidence": {
+        "stage1_source_summary": {
+          "raw": 1,
+          "xmp": 1
+        },
+        "stage2_changed_setting_count": 33,
+        "stage3_mask_counts": null,
+        "stage4_raw_metric_summary": {
+          "coverage_status": "complete",
+          "raw_visible_pixel_count": 42389760,
+          "raw_visible_shape": [
+            5320,
+            7968
+          ],
+          "raw_full_sha256": "7b2b7083a3b607bd28825cd07e7f82362182f4e31b01b46206d80209467a042b",
+          "raw_visible_sha256": "8b530141ce32013cf9866efd86327024990e231ffc80d0c0d853c72dd7eeb696"
+        },
+        "rendered_target_artifact": {
+          "path": "data/stage4/rendered_targets/lightroom_jpeg_exports/JB107512.jpg",
+          "sha256": "1edeaa215d159848c2f67ebb7dc8b595b12146fb4169e22a87030424a3828fad",
+          "size_bytes": 7800055
+        }
+      },
+      "consumer_relevance": {
+        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
+        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
+        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
+      }
+    },
+    {
+      "asset_key": "JB107513",
+      "summary": {
+        "complete_handoff_feature_set": false,
+        "stage1_metadata_state": "stage1_identity_domain_keywords",
+        "rendered_target_present": true
+      },
+      "feature_family_presence": {
+        "asset_identity_metadata": true,
+        "develop_parameter_deltas": true,
+        "semantic_local_mask_state": false,
+        "raw_pixel_signal_metrics": true
+      },
+      "supporting_evidence": {
+        "stage1_source_summary": {
+          "raw": 1,
+          "xmp": 1
+        },
+        "stage2_changed_setting_count": 34,
+        "stage3_mask_counts": null,
+        "stage4_raw_metric_summary": {
+          "coverage_status": "complete",
+          "raw_visible_pixel_count": 42389760,
+          "raw_visible_shape": [
+            5320,
+            7968
+          ],
+          "raw_full_sha256": "531f481384083a25c2392bac2a732bedb93800d1c603003b6e4460f87743fec6",
+          "raw_visible_sha256": "9f554789ac77f23f14a3eb336ba639ee24ceb87ab90cbcc47a50906b7460c756"
+        },
+        "rendered_target_artifact": {
+          "path": "data/stage4/rendered_targets/lightroom_jpeg_exports/JB107513.jpg",
+          "sha256": "f29c358606330b24c039efa72803663860dc6d209ab52c7ff1af74cc6635ee3c",
+          "size_bytes": 4480670
+        }
+      },
+      "consumer_relevance": {
+        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
+        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
+        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
+      }
+    }
+  ]
+}

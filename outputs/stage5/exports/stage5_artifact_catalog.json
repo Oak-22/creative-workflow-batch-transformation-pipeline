@@ -1,0 +1,264 @@
+{
+  "stage": "stage5_operational_serving_layer",
+  "status": "complete",
+  "summary": {
+    "artifact_count": 21,
+    "stage_count": 4,
+    "consumer_count": 3
+  },
+  "pipeline_step": "01_build_serving_exports",
+  "purpose": "Artifact catalog export for provenance and loading workflows.",
+  "consumers": [
+    {
+      "consumer": "ml_data_science_team",
+      "decision_surface": "feature sufficiency, target definition, and modeling feasibility"
+    },
+    {
+      "consumer": "business_operations_stakeholder",
+      "decision_surface": "readiness, workflow leverage, and operational impact"
+    },
+    {
+      "consumer": "audit_compliance_governance_stakeholder",
+      "decision_surface": "provenance, claims, non-claims, and reproducibility"
+    }
+  ],
+  "inputs": {
+    "stage1": "outputs/stage1/stage1_manifest.json",
+    "stage2": "outputs/stage2/stage2_manifest.json",
+    "stage3": "outputs/stage3/stage3_manifest.json",
+    "stage4": "outputs/stage4/stage4_manifest.json"
+  },
+  "records": [
+    {
+      "stage": "stage1",
+      "role": "stage_manifest",
+      "artifact": {
+        "path": "outputs/stage1/stage1_manifest.json",
+        "sha256": "17ab7d85d097404d573888b8233be880de5f6089f4b6def7a3e0cb9e490a940f",
+        "size_bytes": 6701
+      },
+      "produced_by": null,
+      "catalog_source": "outputs/stage1/stage1_manifest.json"
+    },
+    {
+      "stage": "stage2",
+      "role": "stage_manifest",
+      "artifact": {
+        "path": "outputs/stage2/stage2_manifest.json",
+        "sha256": "80d83cd6604066799f95f0e797a892dd6b3ef5428377fb3e0487b5ff7a45487f",
+        "size_bytes": 3884
+      },
+      "produced_by": null,
+      "catalog_source": "outputs/stage2/stage2_manifest.json"
+    },
+    {
+      "stage": "stage2",
+      "role": "preconditioning_checkpoint_manifest",
+      "artifact": {
+        "path": "outputs/stage2/checkpoints/stage2_preconditioning_checkpoint_manifest.json",
+        "sha256": "41208b5bb939e5cf92e158f8e85d9010097d9a9928c55f6d17e1c7a7a715b9e5",
+        "size_bytes": 6247
+      },
+      "produced_by": "scripts/python/stage2/01_build_checkpoint_manifest.py",
+      "catalog_source": "outputs/stage2/stage2_manifest.json"
+    },
+    {
+      "stage": "stage2",
+      "role": "preconditioning_develop_settings_extract",
+      "artifact": {
+        "path": "outputs/stage2/extracts/stage2_extracted_preconditioning_develop_settings.json",
+        "sha256": "b903aec35650c84af9a983351a1f77dcd4414b1dc05c185a3f118defa1aea4e1",
+        "size_bytes": 26011
+      },
+      "produced_by": "scripts/python/stage2/02_extract_develop_settings.py",
+      "catalog_source": "outputs/stage2/stage2_manifest.json"
+    },
+    {
+      "stage": "stage2",
+      "role": "postconditioning_checkpoint_manifest",
+      "artifact": {
+        "path": "outputs/stage2/checkpoints/stage2_postconditioning_checkpoint_manifest.json",
+        "sha256": "027f44cddd0e5809c9695e93dbc4bd986fdb3dc94a0ef24d2bfe8201d3f82ead",
+        "size_bytes": 6292
+      },
+      "produced_by": "scripts/python/stage2/01_build_checkpoint_manifest.py",
+      "catalog_source": "outputs/stage2/stage2_manifest.json"
+    },
+    {
+      "stage": "stage2",
+      "role": "postconditioning_develop_settings_extract",
+      "artifact": {
+        "path": "outputs/stage2/extracts/stage2_extracted_postconditioning_develop_settings.json",
+        "sha256": "3396079262cb4d98892d058a6fc0f8f8e604f8360c68f78082d20901cfb20e54",
+        "size_bytes": 33156
+      },
+      "produced_by": "scripts/python/stage2/02_extract_develop_settings.py",
+      "catalog_source": "outputs/stage2/stage2_manifest.json"
+    },
+    {
+      "stage": "stage2",
+      "role": "develop_parameter_comparison",
+      "artifact": {
+        "path": "outputs/stage2/comparisons/stage2_develop_parameter_comparison.json",
+        "sha256": "d89080dd9ca3d170ca404ee97d18543e97faacfda92c46981375faee8277de09",
+        "size_bytes": 59018
+      },
+      "produced_by": "scripts/python/stage2/03_audit_stage2_parameters.py",
+      "catalog_source": "outputs/stage2/stage2_manifest.json"
+    },
+    {
+      "stage": "stage3",
+      "role": "stage_manifest",
+      "artifact": {
+        "path": "outputs/stage3/stage3_manifest.json",
+        "sha256": "108f68724cace8ff5e4d59f838933a63bf9a0131545c206f1a6d6f684c44ac67",
+        "size_bytes": 4101
+      },
+      "produced_by": null,
+      "catalog_source": "outputs/stage3/stage3_manifest.json"
+    },
+    {
+      "stage": "stage3",
+      "role": "premasking_mask_state_extract",
+      "artifact": {
+        "path": "outputs/stage3/pipeline/stage3_premasking_mask_state.json",
+        "sha256": "f0bcf211349c51d8322af5d1c46b2a02bec2a246083d4680faa3a2dd2b3271b6",
+        "size_bytes": 6996
+      },
+      "produced_by": "scripts/python/stage3/01_extract_mask_state.py",
+      "catalog_source": "outputs/stage3/stage3_manifest.json"
+    },
+    {
+      "stage": "stage3",
+      "role": "postmasking_mask_state_extract",
+      "artifact": {
+        "path": "outputs/stage3/pipeline/stage3_postmasking_mask_state.json",
+        "sha256": "e4c59d0af11a6ed6eb2a72b9300348f2a74b413887fe10a7efee03f016cec7d0",
+        "size_bytes": 53018
+      },
+      "produced_by": "scripts/python/stage3/01_extract_mask_state.py",
+      "catalog_source": "outputs/stage3/stage3_manifest.json"
+    },
+    {
+      "stage": "stage3",
+      "role": "premasking_vs_postmasking_comparison",
+      "artifact": {
+        "path": "outputs/stage3/pipeline/stage3_premasking_vs_postmasking_mask_state_comparison.json",
+        "sha256": "f532f9bac95141d5b86c8f65155bd0d45745d9aa88765b4a6b6be72af85bfa1d",
+        "size_bytes": 21545
+      },
+      "produced_by": "scripts/python/stage3/02_compare_mask_state.py",
+      "catalog_source": "outputs/stage3/stage3_manifest.json"
+    },
+    {
+      "stage": "stage3",
+      "role": "postlocal_adjustment_mask_state_extract",
+      "artifact": {
+        "path": "outputs/stage3/pipeline/stage3_postlocal_adjustment_mask_state.json",
+        "sha256": "581578ad53f84eb13ecec899be783e79f8ffda56d5fd60284716d2aa14f0a18a",
+        "size_bytes": 54160
+      },
+      "produced_by": "scripts/python/stage3/01_extract_mask_state.py",
+      "catalog_source": "outputs/stage3/stage3_manifest.json"
+    },
+    {
+      "stage": "stage3",
+      "role": "postmasking_vs_postlocal_adjustment_comparison",
+      "artifact": {
+        "path": "outputs/stage3/pipeline/stage3_postmasking_vs_postlocal_adjustment_mask_state_comparison.json",
+        "sha256": "efddce10136a7ef54378d8602254cd3cce70532b14dad61d7f2cbae8a419d1d8",
+        "size_bytes": 35847
+      },
+      "produced_by": "scripts/python/stage3/02_compare_mask_state.py",
+      "catalog_source": "outputs/stage3/stage3_manifest.json"
+    },
+    {
+      "stage": "stage3",
+      "role": "proof_of_capability_mask_sidecar_parsing_spike",
+      "artifact": {
+        "path": "outputs/stage3/probes/stage3_mask_state_spike_report.json",
+        "sha256": "63e55d994bd554e9ba1bccacb874ecaec9e32d4dc9c15e6a1a6dab58614f271b",
+        "size_bytes": 16869
+      },
+      "produced_by": "scripts/python/stage3/01_extract_mask_state.py",
+      "catalog_source": "outputs/stage3/stage3_manifest.json"
+    },
+    {
+      "stage": "stage3",
+      "role": "postglobal_point_color_mask_state_extract",
+      "artifact": {
+        "path": "outputs/stage3/probes/stage3_extracted_postglobal_point_color_mask_state.json",
+        "sha256": "1cf87ab0f5a16d91541b289266a3f5e05cd4143c41f6061dee61b68912a692fb",
+        "size_bytes": 54059
+      },
+      "produced_by": "scripts/python/stage3/01_extract_mask_state.py",
+      "catalog_source": "outputs/stage3/stage3_manifest.json"
+    },
+    {
+      "stage": "stage3",
+      "role": "postlocal_adjustment_vs_postglobal_point_color_comparison",
+      "artifact": {
+        "path": "outputs/stage3/probes/stage3_mask_state_postglobal_point_color_comparison.json",
+        "sha256": "33f27bf1d135cb261ee319d6375ba6bc463466b9f56c34050a84cad2e0eebb5c",
+        "size_bytes": 37048
+      },
+      "produced_by": "scripts/python/stage3/02_compare_mask_state.py",
+      "catalog_source": "outputs/stage3/stage3_manifest.json"
+    },
+    {
+      "stage": "stage4",
+      "role": "stage_manifest",
+      "artifact": {
+        "path": "outputs/stage4/stage4_manifest.json",
+        "sha256": "1406b4364a553c9088d3f7857cf73ca8a6db2a4322d0af745c7b9df2a9c0420f",
+        "size_bytes": 2444
+      },
+      "produced_by": null,
+      "catalog_source": "outputs/stage4/stage4_manifest.json"
+    },
+    {
+      "stage": "stage4",
+      "role": "raw_pixel_signal_metrics",
+      "artifact": {
+        "path": "outputs/stage4/features/stage4_raw_pixel_signal_metrics.json",
+        "sha256": "3da6885b75e5306767740fd3a058d381fb41bbd7746687f3bc2f69ffd77d7db5",
+        "size_bytes": 115126
+      },
+      "produced_by": "scripts/python/stage4/01_extract_pixel_signal_metrics.py",
+      "catalog_source": "outputs/stage4/stage4_manifest.json"
+    },
+    {
+      "stage": "stage4",
+      "role": "feature_inventory",
+      "artifact": {
+        "path": "outputs/stage4/features/stage4_feature_inventory.json",
+        "sha256": "1b97a2c095d1766a16f5af54ab48eab2ed040cf198e4bb6dc404ec23572cb297",
+        "size_bytes": 43808
+      },
+      "produced_by": "scripts/python/stage4/02_build_feature_inventory.py",
+      "catalog_source": "outputs/stage4/stage4_manifest.json"
+    },
+    {
+      "stage": "stage4",
+      "role": "dataset_readiness_report",
+      "artifact": {
+        "path": "outputs/stage4/handoff/stage4_dataset_readiness_report.json",
+        "sha256": "a916dfa782bf6c14ff972e57acd073424ff38a1bad0b37d11460898fd9bd6d44",
+        "size_bytes": 2596
+      },
+      "produced_by": "scripts/python/stage4/03_build_dataset_readiness_report.py",
+      "catalog_source": "outputs/stage4/stage4_manifest.json"
+    },
+    {
+      "stage": "stage4",
+      "role": "ml_handoff_contract",
+      "artifact": {
+        "path": "outputs/stage4/handoff/stage4_ml_handoff_contract.json",
+        "sha256": "8b9624c1ca67a42a3edff0ab860778f63073148977f8f32c82e55aef33c0c7bc",
+        "size_bytes": 4998
+      },
+      "produced_by": "scripts/python/stage4/04_build_ml_handoff_contract.py",
+      "catalog_source": "outputs/stage4/stage4_manifest.json"
+    }
+  ]
+}

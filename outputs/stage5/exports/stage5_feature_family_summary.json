@@ -1,0 +1,113 @@
+{
+  "stage": "stage5_operational_serving_layer",
+  "status": "complete",
+  "summary": {
+    "feature_family_count": 4,
+    "consumer_count": 3
+  },
+  "pipeline_step": "01_build_serving_exports",
+  "purpose": "Feature-family serving export for operational consumers.",
+  "consumers": [
+    {
+      "consumer": "ml_data_science_team",
+      "decision_surface": "feature sufficiency, target definition, and modeling feasibility"
+    },
+    {
+      "consumer": "business_operations_stakeholder",
+      "decision_surface": "readiness, workflow leverage, and operational impact"
+    },
+    {
+      "consumer": "audit_compliance_governance_stakeholder",
+      "decision_surface": "provenance, claims, non-claims, and reproducibility"
+    }
+  ],
+  "inputs": {
+    "feature_inventory": "outputs/stage4/features/stage4_feature_inventory.json"
+  },
+  "records": [
+    {
+      "feature_family": "asset_identity_metadata",
+      "source_stage": "stage1",
+      "summary": {
+        "asset_count": 12,
+        "status": "validated",
+        "modeling_role": "asset identity, metadata state, and cohort context"
+      },
+      "artifact_refs": [
+        {
+          "role": "artifact",
+          "path": "outputs/stage1/stage1_manifest.json"
+        }
+      ],
+      "consumer_relevance": {
+        "ml_data_science_team": "Feature availability and modeling-role review.",
+        "business_operations_stakeholder": "Coverage and operational leverage review.",
+        "audit_compliance_governance_stakeholder": "Traceability to source evidence."
+      }
+    },
+    {
+      "feature_family": "develop_parameter_deltas",
+      "source_stage": "stage2",
+      "summary": {
+        "asset_count": 9,
+        "status": "validated",
+        "modeling_role": "global edit transformation labels and parameter deltas"
+      },
+      "artifact_refs": [
+        {
+          "role": "artifact",
+          "path": "outputs/stage2/comparisons/stage2_develop_parameter_comparison.json"
+        }
+      ],
+      "consumer_relevance": {
+        "ml_data_science_team": "Feature availability and modeling-role review.",
+        "business_operations_stakeholder": "Coverage and operational leverage review.",
+        "audit_compliance_governance_stakeholder": "Traceability to source evidence."
+      }
+    },
+    {
+      "feature_family": "semantic_local_mask_state",
+      "source_stage": "stage3",
+      "summary": {
+        "asset_count": 3,
+        "status": "validated",
+        "modeling_role": "semantic region availability, local-edit structure, and mask-edit deltas"
+      },
+      "artifact_refs": [
+        {
+          "role": "mask_definition_artifact",
+          "path": "outputs/stage3/pipeline/stage3_premasking_vs_postmasking_mask_state_comparison.json"
+        },
+        {
+          "role": "mask_edit_artifact",
+          "path": "outputs/stage3/pipeline/stage3_postmasking_vs_postlocal_adjustment_mask_state_comparison.json"
+        }
+      ],
+      "consumer_relevance": {
+        "ml_data_science_team": "Feature availability and modeling-role review.",
+        "business_operations_stakeholder": "Coverage and operational leverage review.",
+        "audit_compliance_governance_stakeholder": "Traceability to source evidence."
+      }
+    },
+    {
+      "feature_family": "raw_pixel_signal_metrics",
+      "source_stage": "stage4",
+      "summary": {
+        "asset_count": 12,
+        "status": "complete",
+        "modeling_role": "source-image signal summaries and decoded-read provenance"
+      },
+      "artifact_refs": [
+        {
+          "role": "artifact",
+          "path": "outputs/stage4/features/stage4_raw_pixel_signal_metrics.json"
+        }
+      ],
+      "consumer_relevance": {
+        "ml_data_science_team": "Feature availability and modeling-role review.",
+        "business_operations_stakeholder": "Coverage and operational leverage review.",
+        "audit_compliance_governance_stakeholder": "Traceability to source evidence."
+      }
+    }
+  ]
+}
