@@ -38,12 +38,7 @@
           "role": "artifact",
           "path": "outputs/stage1/stage1_manifest.json"
         }
-      ],
-      "consumer_relevance": {
-        "ml_data_science_team": "Feature availability and modeling-role review.",
-        "business_operations_stakeholder": "Coverage and operational leverage review.",
-        "audit_compliance_governance_stakeholder": "Traceability to source evidence."
-      }
+      ]
     },
     {
       "feature_family": "develop_parameter_deltas",
@@ -58,12 +53,7 @@
           "role": "artifact",
           "path": "outputs/stage2/comparisons/stage2_develop_parameter_comparison.json"
         }
-      ],
-      "consumer_relevance": {
-        "ml_data_science_team": "Feature availability and modeling-role review.",
-        "business_operations_stakeholder": "Coverage and operational leverage review.",
-        "audit_compliance_governance_stakeholder": "Traceability to source evidence."
-      }
+      ]
     },
     {
       "feature_family": "semantic_local_mask_state",
@@ -82,12 +72,7 @@
           "role": "mask_edit_artifact",
           "path": "outputs/stage3/pipeline/stage3_postmasking_vs_postlocal_adjustment_mask_state_comparison.json"
         }
-      ],
-      "consumer_relevance": {
-        "ml_data_science_team": "Feature availability and modeling-role review.",
-        "business_operations_stakeholder": "Coverage and operational leverage review.",
-        "audit_compliance_governance_stakeholder": "Traceability to source evidence."
-      }
+      ]
     },
     {
       "feature_family": "raw_pixel_signal_metrics",
@@ -102,12 +87,7 @@
           "role": "artifact",
           "path": "outputs/stage4/features/stage4_raw_pixel_signal_metrics.json"
         }
-      ],
-      "consumer_relevance": {
-        "ml_data_science_team": "Feature availability and modeling-role review.",
-        "business_operations_stakeholder": "Coverage and operational leverage review.",
-        "audit_compliance_governance_stakeholder": "Traceability to source evidence."
-      }
+      ]
     }
   ]
 }

@@ -37,8 +37,8 @@
       "produced_by": "scripts/python/stage5/01_build_serving_exports.py",
       "artifact": {
         "path": "outputs/stage5/exports/stage5_asset_summary.json",
-        "sha256": "2cf5366c55ded11462795c347eb2d18571fb56053b0333879c72a81d99717963",
-        "size_bytes": 21179
+        "sha256": "fa65b1cc4380c8a00b0d8ed4018415c0d91a899531e9e772d22f774b7f6edc5f",
+        "size_bytes": 16823
       }
     },
     {
@@ -47,8 +47,8 @@
       "produced_by": "scripts/python/stage5/01_build_serving_exports.py",
       "artifact": {
         "path": "outputs/stage5/exports/stage5_feature_family_summary.json",
-        "sha256": "5233a1a126e90cf5a63a00d1ecd0c88f747a97d6efab4c24630ba6720d47881e",
-        "size_bytes": 3964
+        "sha256": "6bf1e6560342f1a5842fdbb70a73c5f520734d78c020d37c9223758279d3eac7",
+        "size_bytes": 2784
       }
     },
     {

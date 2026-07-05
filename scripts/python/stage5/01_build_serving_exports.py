@@ -158,19 +158,6 @@ def asset_summary_records(
                     },
                     "rendered_target_artifact": rendered_target,
                 },
-                "consumer_relevance": {
-                    "ml_data_science_team": (
-                        "Candidate row for feature sufficiency review and target "
-                        "definition."
-                    ),
-                    "business_operations_stakeholder": (
-                        "Asset-level coverage row for readiness and workflow-impact "
-                        "analysis."
-                    ),
-                    "audit_compliance_governance_stakeholder": (
-                        "Asset-level index into traceable evidence artifacts."
-                    ),
-                },
             }
         )
     return records
@@ -230,11 +217,6 @@ def feature_family_records(feature_inventory: dict[str, object]) -> list[dict[st
                     "modeling_role": family.get("modeling_role"),
                 },
                 "artifact_refs": artifact_refs,
-                "consumer_relevance": {
-                    "ml_data_science_team": "Feature availability and modeling-role review.",
-                    "business_operations_stakeholder": "Coverage and operational leverage review.",
-                    "audit_compliance_governance_stakeholder": "Traceability to source evidence.",
-                },
             }
         )
     return records

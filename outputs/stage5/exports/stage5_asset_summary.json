@@ -66,11 +66,6 @@
           "sha256": "ecf9abce4ede53362b87c172744745fd43b9dc372206852694cb94e97ef74551",
           "size_bytes": 8005835
         }
-      },
-      "consumer_relevance": {
-        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
-        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
-        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
       }
     },
     {
@@ -111,11 +106,6 @@
           "sha256": "f53313c2a711f725872d1635282e933c1431ac4cb1017e242b84e5ab0a0b5d25",
           "size_bytes": 8569803
         }
-      },
-      "consumer_relevance": {
-        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
-        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
-        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
       }
     },
     {
@@ -156,11 +146,6 @@
           "sha256": "99eae09a996caa85d558e2e740db71afa86046ad4d9cdf8de48f854ee32c2e0a",
           "size_bytes": 5728015
         }
-      },
-      "consumer_relevance": {
-        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
-        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
-        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
       }
     },
     {
@@ -197,11 +182,6 @@
           "sha256": "4d21a7026a4fad554906e6909438a2574a4254a475fbd7e796de01764d1dccea",
           "size_bytes": 6664061
         }
-      },
-      "consumer_relevance": {
-        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
-        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
-        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
       }
     },
     {
@@ -238,11 +218,6 @@
           "sha256": "d159fa518c76a12cbb390ed4a2a3aec964adee9d9fe41f7c5cc232642d2db3a2",
           "size_bytes": 5587363
         }
-      },
-      "consumer_relevance": {
-        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
-        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
-        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
       }
     },
     {
@@ -279,11 +254,6 @@
           "sha256": "d475f12ec4153142e71771789e0be0d3bf252d889a5e97a1a4b6dde94858c73e",
           "size_bytes": 5228374
         }
-      },
-      "consumer_relevance": {
-        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
-        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
-        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
       }
     },
     {
@@ -321,11 +291,6 @@
           "sha256": "efd11ddf81aa9660458d8e773dfad2429d3159a50c8bb8125a36353051a511ba",
           "size_bytes": 7960109
         }
-      },
-      "consumer_relevance": {
-        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
-        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
-        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
       }
     },
     {
@@ -363,11 +328,6 @@
           "sha256": "9e98e32138a6f8465e054c1f729f44beebeb80791f9e2b6019fcc38f012e3e77",
           "size_bytes": 5900291
         }
-      },
-      "consumer_relevance": {
-        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
-        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
-        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
       }
     },
     {
@@ -405,11 +365,6 @@
           "sha256": "ceb5d393c4caf8a8366a7afe95337da10d149a93e9267ecbc2bde6ba81cfa40b",
           "size_bytes": 5450428
         }
-      },
-      "consumer_relevance": {
-        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
-        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
-        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
       }
     },
     {
@@ -447,11 +402,6 @@
           "sha256": "1ebaf887a321d5e8e2d6a66a4a335dbfb48a16a5132aa02de2818a76332ffdde",
           "size_bytes": 6128181
         }
-      },
-      "consumer_relevance": {
-        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
-        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
-        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
       }
     },
     {
@@ -489,11 +439,6 @@
           "sha256": "1edeaa215d159848c2f67ebb7dc8b595b12146fb4169e22a87030424a3828fad",
           "size_bytes": 7800055
         }
-      },
-      "consumer_relevance": {
-        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
-        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
-        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
       }
     },
     {
@@ -531,11 +476,6 @@
           "sha256": "f29c358606330b24c039efa72803663860dc6d209ab52c7ff1af74cc6635ee3c",
           "size_bytes": 4480670
         }
-      },
-      "consumer_relevance": {
-        "ml_data_science_team": "Candidate row for feature sufficiency review and target definition.",
-        "business_operations_stakeholder": "Asset-level coverage row for readiness and workflow-impact analysis.",
-        "audit_compliance_governance_stakeholder": "Asset-level index into traceable evidence artifacts."
       }
     }
   ]
