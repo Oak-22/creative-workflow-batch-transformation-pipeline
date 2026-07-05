@@ -31,7 +31,7 @@ resource "aws_s3_bucket_versioning" "source_assets" {
   bucket = aws_s3_bucket.source_assets.id
 
   versioning_configuration {
-    status="Enabled"
+    status = "Enabled"
   }
 }
 
@@ -56,7 +56,7 @@ resource "aws_s3_bucket_public_access_block" "source_assets" {
 }
 
 # These lifecycle rules operate by prefix convention inside one bucket.
-# The prefixes (`raw/`, `xmp/`, `jpeg/`) are logical separations rather
+# The prefixes (`raw/`, `xmp/`, `jpeg/`, `outputs/stage5/`) are logical separations rather
 # than separate buckets.
 # Current-version transitions and noncurrent-version transitions are
 # handled separately by S3 once versioning is enabled.
@@ -131,6 +131,25 @@ resource "aws_s3_bucket_lifecycle_configuration" "source_assets" {
 
     noncurrent_version_expiration {
       noncurrent_days = 90
+    }
+  }
+
+  rule {
+    id     = "stage5-serving-exports-lifecycle"
+    status = "Enabled"
+
+    filter {
+      prefix = var.serving_exports_prefix
+    }
+
+    transition {
+      days          = 30
+      storage_class = "STANDARD_IA"
+    }
+
+    noncurrent_version_transition {
+      noncurrent_days = 30
+      storage_class   = "STANDARD_IA"
     }
   }
 }

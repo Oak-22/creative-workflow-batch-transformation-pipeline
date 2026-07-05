@@ -6,6 +6,8 @@ architecture recorded in ADR 0001:
 - one centralized S3 bucket for source assets
 - separate logical prefixes for RAW masters, XMP sidecars, and optional
   rendered JPEG companions
+- a derived serving-export prefix for Stage 5 outputs used by downstream
+  cloud loaders
 - local scripts and analytic outputs remain outside the bucket
 
 ## What It Creates
@@ -18,6 +20,7 @@ architecture recorded in ADR 0001:
   - RAW masters
   - XMP sidecars
   - JPEG companions
+  - Stage 5 serving exports
 
 ## Prefix Convention
 
@@ -27,6 +30,7 @@ buckets by default:
 - `raw/`
 - `xmp/`
 - `jpeg/`
+- `outputs/stage5/`
 
 These prefixes are conventions for source-asset separation. S3 does not
 enforce folder semantics itself, but the outputs from this module make
@@ -48,3 +52,5 @@ terraform apply
 - It provisions the storage boundary only.
 - The Stage 1 verifier/extractor can later target the bucket and these
   prefixes directly.
+- Stage 5 exports can be synced to `outputs/stage5/` as derived serving
+  inputs for a future cloud loader.

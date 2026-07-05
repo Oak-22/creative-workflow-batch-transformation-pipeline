@@ -29,3 +29,8 @@ output "jpeg_prefix_uri" {
   description = "Canonical S3 URI for optional JPEG companions."
   value       = "s3://${aws_s3_bucket.source_assets.bucket}/${var.jpeg_prefix}"
 }
+
+output "serving_exports_prefix_uri" {
+  description = "Canonical S3 URI for derived Stage 5 serving exports."
+  value       = "s3://${aws_s3_bucket.source_assets.bucket}/${var.serving_exports_prefix}"
+}

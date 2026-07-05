@@ -3,9 +3,10 @@ bucket_name = "jb-photo-source-assets-example"
 
 environment = "research"
 
-raw_prefix  = "raw/"
-xmp_prefix  = "xmp/"
-jpeg_prefix = "jpeg/"
+raw_prefix             = "raw/"
+xmp_prefix             = "xmp/"
+jpeg_prefix            = "jpeg/"
+serving_exports_prefix = "outputs/stage5/"
 
 force_destroy = false
 

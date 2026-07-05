@@ -33,6 +33,12 @@ variable "jpeg_prefix" {
   default     = "jpeg/"
 }
 
+variable "serving_exports_prefix" {
+  description = "Prefix for derived Stage 5 serving exports used by downstream loaders."
+  type        = string
+  default     = "outputs/stage5/"
+}
+
 variable "force_destroy" {
   description = "Allow bucket destroy even when objects remain. Keep false for safety."
   type        = bool
