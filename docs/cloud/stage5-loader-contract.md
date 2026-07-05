@@ -1,17 +1,17 @@
 # Stage 5 Cloud Loader Contract
 
-## Purpose
-
 This contract defines how a future cloud loader should ingest Stage 5
 serving exports after they are uploaded to object storage.
 
 Stage 5 exports are file-based serving artifacts. The cloud loader is a
 later operational component that validates those artifacts, records load
-state, and eventually loads them into queryable storage.
+state in DynamoDB, and eventually loads them into queryable storage.
 
 This document intentionally defines the contract before choosing a
 compute runtime such as Lambda, Step Functions, Glue, ECS/Fargate, or
 Batch.
+
+<br>
 
 ## Current Boundary
 
@@ -21,7 +21,7 @@ Producer:
 local pipeline scripts
 ```
 
-Canonical local input:
+Canonical local inputs:
 
 ```text
 outputs/stage5/stage5_manifest.json
@@ -36,17 +36,23 @@ Canonical object-storage prefix:
 s3://<source-assets-bucket>/outputs/stage5/
 ```
 
+Terraform root:
+
+```text
+infra/terraform/aws-centralized-assets/
+```
+
 Terraform currently provisions:
 
 ```text
 S3 source-assets bucket
-raw/ source-asset prefix
-xmp/ sidecar prefix
-acr/ sidecar prefix for Lightroom mask/local adjustment state
-jpeg/ rendered companion prefix
+raw/ source-asset prefix convention
+xmp/ sidecar prefix convention
+acr/ sidecar prefix convention for Lightroom mask/local adjustment state
+jpeg/ rendered companion prefix convention
 outputs/stage5/ serving-export prefix convention
 DynamoDB loader status table
-IAM policy for a future loader runtime
+IAM policy for a future Stage 5 loader runtime
 ```
 
 Terraform does not currently provision loader compute.
@@ -55,6 +61,55 @@ The Stage 5 loader reads the compact `outputs/stage5/` exports. Earlier
 stage upload workflows should preserve ACR sidecars separately because
 Stage 3 mask geometry and local adjustment evidence is not fully
 represented by XMP sidecars alone.
+
+<br>
+
+---
+
+<br>
+
+## Terraform Contract Surface
+
+The Terraform module exposes the loader boundary through these values:
+
+```text
+serving_exports_prefix_uri
+loader_status_table_name
+loader_status_table_arn
+stage5_loader_policy_arn
+```
+
+The default serving-export prefix is:
+
+```text
+outputs/stage5/
+```
+
+The default DynamoDB status table name is:
+
+```text
+digital-asset-stage5-loader-status
+```
+
+The status table is provisioned with:
+
+```text
+billing mode: PAY_PER_REQUEST
+partition key: load_id
+server-side encryption: enabled
+point-in-time recovery: enabled
+```
+
+The future loader runtime should attach the emitted
+`stage5_loader_policy_arn`. That policy grants read/list access to the
+Stage 5 S3 export prefix and read/write access to the loader status
+table.
+
+<br>
+
+---
+
+<br>
 
 ## Loader Reading Order
 
@@ -79,6 +134,12 @@ Rationale:
 - the artifact catalog is the broadest provenance and hash surface
 - feature-family summary defines derived evidence categories
 - asset summary contains the row-level serving data
+
+<br>
+
+---
+
+<br>
 
 ## Required Loader Inputs
 
@@ -110,8 +171,6 @@ artifact.sha256
 artifact.size_bytes
 ```
 
-## Required Exports
-
 The loader currently expects exactly these Stage 5 export roles:
 
 ```text
@@ -129,6 +188,12 @@ outputs/stage5/exports/stage5_artifact_catalog.json
 ```
 
 Expected object keys are the same paths under the Stage 5 S3 prefix.
+
+<br>
+
+---
+
+<br>
 
 ## Validation Rules
 
@@ -148,10 +213,17 @@ The loader must fail fast if:
 The loader should treat unknown extra files under `outputs/stage5/` as
 non-blocking unless they are referenced by the manifest.
 
-## Idempotency
+<br>
+
+---
+
+<br>
+
+## DynamoDB Loader Status Records
 
 The loader must be idempotent. Running the same load more than once
-should not create duplicate downstream rows or duplicate success records.
+should not create duplicate downstream rows or duplicate success
+records.
 
 Recommended load identity:
 
@@ -163,13 +235,13 @@ This ties the load identity to the exact manifest content. If the
 manifest changes, the loader sees a new load attempt. If the manifest is
 unchanged, the loader can safely skip or re-validate the existing load.
 
-The DynamoDB status table should use:
+The DynamoDB status table uses:
 
 ```text
 partition key: load_id
 ```
 
-Recommended status fields:
+Recommended status item fields:
 
 ```text
 load_id
@@ -188,6 +260,16 @@ completed_at
 error_code
 error_message
 ```
+
+Operational status pages, dashboards, or CLI views should be derived
+from these DynamoDB records. They should not become a separate source of
+truth for loader state.
+
+<br>
+
+---
+
+<br>
 
 ## Loader Status States
 
@@ -228,8 +310,6 @@ skipped
   the same load_id was already loaded or intentionally ignored
 ```
 
-## Initial Definition Of Loaded
-
 For the first cloud-loader iteration, `loaded` may mean only:
 
 ```text
@@ -249,6 +329,12 @@ artifact catalog rows loaded
 load audit record written
 ```
 
+<br>
+
+---
+
+<br>
+
 ## Failure Behavior
 
 Validation failures should:
@@ -265,6 +351,12 @@ Load failures after validation should:
 - write `failed` status
 - allow retry with the same `load_id`
 - avoid duplicate downstream rows on retry
+
+<br>
+
+---
+
+<br>
 
 ## Runtime Selection Guidance
 
@@ -306,6 +398,12 @@ Batch becomes useful when:
 the workload shifts from small Stage 5 metadata exports to large
 compute-heavy reprocessing jobs
 ```
+
+<br>
+
+---
+
+<br>
 
 ## Non-Goals
 

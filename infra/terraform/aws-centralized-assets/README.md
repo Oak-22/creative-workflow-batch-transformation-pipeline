@@ -65,3 +65,6 @@ terraform apply
 - The module does not provision a compute runtime. A later Lambda,
   ECS/Fargate, Glue, or Batch loader can attach the emitted IAM policy
   and use the status table for idempotency.
+- The loader-side contract for the Stage 5 S3 prefix, DynamoDB status
+  records, and future status views is documented in
+  `../../../docs/cloud/stage5-loader-contract.md`.

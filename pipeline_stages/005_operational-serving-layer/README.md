@@ -67,3 +67,7 @@ scheduled loader jobs
 Terraform should provision infrastructure. Python should transform the
 stage artifacts into loadable exports. SQL migrations should define
 database tables and views.
+
+The cloud-loader contract for the planned Stage 5 serving-export prefix,
+DynamoDB status table, and future status views is documented in
+`../../docs/cloud/stage5-loader-contract.md`.
