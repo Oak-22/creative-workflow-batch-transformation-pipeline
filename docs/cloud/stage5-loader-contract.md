@@ -40,12 +40,21 @@ Terraform currently provisions:
 
 ```text
 S3 source-assets bucket
+raw/ source-asset prefix
+xmp/ sidecar prefix
+acr/ sidecar prefix for Lightroom mask/local adjustment state
+jpeg/ rendered companion prefix
 outputs/stage5/ serving-export prefix convention
 DynamoDB loader status table
 IAM policy for a future loader runtime
 ```
 
 Terraform does not currently provision loader compute.
+
+The Stage 5 loader reads the compact `outputs/stage5/` exports. Earlier
+stage upload workflows should preserve ACR sidecars separately because
+Stage 3 mask geometry and local adjustment evidence is not fully
+represented by XMP sidecars alone.
 
 ## Loader Reading Order
 
@@ -310,4 +319,3 @@ This contract does not define:
 - final choice of cloud compute runtime
 
 Those are later contracts.
-

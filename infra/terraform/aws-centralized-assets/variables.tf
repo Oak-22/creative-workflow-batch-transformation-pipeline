@@ -27,6 +27,12 @@ variable "xmp_prefix" {
   default     = "xmp/"
 }
 
+variable "acr_prefix" {
+  description = "Prefix for ACR sidecars containing Lightroom mask/local adjustment state."
+  type        = string
+  default     = "acr/"
+}
+
 variable "jpeg_prefix" {
   description = "Prefix for optional JPEG companions or rendered review assets."
   type        = string

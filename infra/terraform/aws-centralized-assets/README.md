@@ -4,8 +4,8 @@ This Terraform root module provisions a realistic baseline for the
 architecture recorded in ADR 0001:
 
 - one centralized S3 bucket for source assets
-- separate logical prefixes for RAW masters, XMP sidecars, and optional
-  rendered JPEG companions
+- separate logical prefixes for RAW masters, XMP sidecars, ACR sidecars,
+  and optional rendered JPEG companions
 - a derived serving-export prefix for Stage 5 outputs used by downstream
   cloud loaders
 - a DynamoDB table for idempotent Stage 5 loader status tracking
@@ -25,6 +25,7 @@ architecture recorded in ADR 0001:
 - lifecycle rules for:
   - RAW masters
   - XMP sidecars
+  - ACR sidecars
   - JPEG companions
   - Stage 5 serving exports
 
@@ -35,6 +36,7 @@ buckets by default:
 
 - `raw/`
 - `xmp/`
+- `acr/`
 - `jpeg/`
 - `outputs/stage5/`
 

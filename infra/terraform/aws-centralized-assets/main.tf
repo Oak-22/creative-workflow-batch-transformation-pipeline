@@ -113,8 +113,8 @@ resource "aws_s3_bucket_public_access_block" "source_assets" {
 }
 
 # These lifecycle rules operate by prefix convention inside one bucket.
-# The prefixes (`raw/`, `xmp/`, `jpeg/`, `outputs/stage5/`) are logical separations rather
-# than separate buckets.
+# The prefixes (`raw/`, `xmp/`, `acr/`, `jpeg/`, `outputs/stage5/`) are
+# logical separations rather than separate buckets.
 # Current-version transitions and noncurrent-version transitions are
 # handled separately by S3 once versioning is enabled.
 # This policy is currently archival/non-destructive: objects move to
@@ -160,6 +160,25 @@ resource "aws_s3_bucket_lifecycle_configuration" "source_assets" {
 
     filter {
       prefix = var.xmp_prefix
+    }
+
+    transition {
+      days          = 30
+      storage_class = "STANDARD_IA"
+    }
+
+    noncurrent_version_transition {
+      noncurrent_days = 30
+      storage_class   = "STANDARD_IA"
+    }
+  }
+
+  rule {
+    id     = "acr-sidecars-lifecycle"
+    status = "Enabled"
+
+    filter {
+      prefix = var.acr_prefix
     }
 
     transition {

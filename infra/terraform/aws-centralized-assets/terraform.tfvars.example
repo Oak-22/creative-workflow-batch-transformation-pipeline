@@ -5,6 +5,7 @@ environment = "research"
 
 raw_prefix             = "raw/"
 xmp_prefix             = "xmp/"
+acr_prefix             = "acr/"
 jpeg_prefix            = "jpeg/"
 serving_exports_prefix = "outputs/stage5/"
 

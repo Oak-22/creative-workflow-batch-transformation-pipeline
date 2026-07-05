@@ -25,6 +25,11 @@ output "xmp_prefix_uri" {
   value       = "s3://${aws_s3_bucket.source_assets.bucket}/${var.xmp_prefix}"
 }
 
+output "acr_prefix_uri" {
+  description = "Canonical S3 URI for ACR sidecars containing Lightroom mask/local adjustment state."
+  value       = "s3://${aws_s3_bucket.source_assets.bucket}/${var.acr_prefix}"
+}
+
 output "jpeg_prefix_uri" {
   description = "Canonical S3 URI for optional JPEG companions."
   value       = "s3://${aws_s3_bucket.source_assets.bucket}/${var.jpeg_prefix}"
