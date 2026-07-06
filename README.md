@@ -40,42 +40,54 @@ repeated manual editing.
 ## Reading Paths
 
 Readers will usually benefit from taking one of two paths through the
-repository depending on how much context they want up front.
+repository depending on how deeply they want to inspect the stage
+evidence and implementation surfaces.
 
 ### Quick Path (15 mins)
 
-Use this path if you want a condensed, high-level view of the project
-without reading every stage writeup in full:
+Use this path if you want a condensed, high-level view of the project:
 
-1. [Shared terminology](docs/terminology.md)
-2. [Pipeline Overview Diagram](docs/creative-workflow-pipeline-overview-diagram-v02.png)
+1. [README](README.md)
+2. [Shared terminology](docs/terminology.md)
 3. [Batchability Cost Model](docs/batchability-cost-model.md)
-4. [Stage 1](pipeline_stages/001_metadata-application-enrichment-query/README.md)
-5. [Stage 2](pipeline_stages/002_baseline-conditioning/README.md)
-6. [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md)
+4. [Stage 1](pipeline_stages/001_metadata-application-enrichment-query/README.md):
+   scan governing principles and read the nearby demonstration text
+5. [Stage 2](pipeline_stages/002_baseline-conditioning/README.md):
+   scan governing principles and read the nearby demonstration text
+6. [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md):
+   scan governing principles and read the nearby demonstration text
 7. [Stage 4](pipeline_stages/004_ml-readiness-handoff/README.md)
 8. [Stage 5](pipeline_stages/005_operational-serving-layer/README.md)
-9. [Case Studies](docs/case-studies)
-10. [Scripts](scripts) and [Tests](tests)
+9. [Scripts](scripts/python/README.md), [Outputs](outputs/README.md),
+   and [Tests](tests/README.md)
+10. [Terraform](infra/terraform/aws-centralized-assets/README.md)
 
 ### Extensive Path (30 mins)
 
-Use this path if you want the full systems-design argument, stage
-evidence, and implementation rationale:
+Use this path if you want the fuller systems-design argument,
+implementation rationale, and downstream operational context:
 
-1. [Shared terminology](docs/terminology.md)
-2. [Pipeline Overview Diagram](docs/creative-workflow-pipeline-overview-diagram-v02.png)
+1. [README](README.md)
+2. [Shared terminology](docs/terminology.md)
 3. [Product Requirements](docs/product-requirements.md)
-4. [Stage 1](pipeline_stages/001_metadata-application-enrichment-query/README.md)
-5. [Stage 2](pipeline_stages/002_baseline-conditioning/README.md)
-6. [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md)
-7. [Stage 4](pipeline_stages/004_ml-readiness-handoff/README.md)
-8. [Stage 5](pipeline_stages/005_operational-serving-layer/README.md)
-9. [Batchability Cost Model](docs/batchability-cost-model.md)
-10. [Future Work](docs/future-work)
-11. [Case Studies](docs/case-studies)
-12. [Scripts](scripts) and [Tests](tests)
-13. [Architecture Decision Records](docs/adr)
+4. [Pipeline Overview Diagram](docs/creative-workflow-pipeline-overview-diagram-v02.png)
+5. [Batchability Cost Model](docs/batchability-cost-model.md)
+6. [Stage 1](pipeline_stages/001_metadata-application-enrichment-query/README.md):
+   read the problem, governing principles, implementation, and takeaway
+7. [Stage 2](pipeline_stages/002_baseline-conditioning/README.md):
+   read the problem, governing principles, implementation, validation,
+   and takeaway
+8. [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md):
+   read the problem, governing principles, qualification flow,
+   validation examples, and takeaway
+9. [Stage 4](pipeline_stages/004_ml-readiness-handoff/README.md)
+10. [Stage 5](pipeline_stages/005_operational-serving-layer/README.md)
+11. [Scripts](scripts/python/README.md), [Outputs](outputs/README.md),
+    and [Tests](tests/README.md)
+12. [Terraform](infra/terraform/aws-centralized-assets/README.md)
+13. [Cloud Loader Contract](docs/cloud/stage5-loader-contract.md)
+14. [Architecture Decision Records](docs/adr)
+15. [Future Work](docs/future-work)
 
 <br>
 
