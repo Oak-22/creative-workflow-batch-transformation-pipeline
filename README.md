@@ -1,7 +1,9 @@
 # Digital Asset Processing Pipeline
 
-A systems-engineering case study for turning GUI-based photo editing
-work into explicit, stage-bounded workflow infrastructure.
+A staged digital-asset processing system that turns GUI-based photo
+editing work into evidence-backed workflow infrastructure, reducing
+solo-operator overhead while supporting review, operational serving, and
+downstream ML readiness.
 
 <br>
 
@@ -52,8 +54,9 @@ without reading every stage writeup in full:
 5. [Stage 2](pipeline_stages/002_baseline-conditioning/README.md)
 6. [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md)
 7. [Stage 4](pipeline_stages/004_ml-readiness-handoff/README.md)
-8. [Case Studies](docs/case-studies)
-9. [Scripts](scripts) and [Tests](tests)
+8. [Stage 5](pipeline_stages/005_operational-serving-layer/README.md)
+9. [Case Studies](docs/case-studies)
+10. [Scripts](scripts) and [Tests](tests)
 
 ### Extensive Path (30 mins)
 
@@ -67,11 +70,12 @@ evidence, and implementation rationale:
 5. [Stage 2](pipeline_stages/002_baseline-conditioning/README.md)
 6. [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md)
 7. [Stage 4](pipeline_stages/004_ml-readiness-handoff/README.md)
-8. [Batchability Cost Model](docs/batchability-cost-model.md)
-9. [Future Work](docs/future-work)
-10. [Case Studies](docs/case-studies)
-11. [Scripts](scripts) and [Tests](tests)
-12. [Architecture Decision Records](docs/adr)
+8. [Stage 5](pipeline_stages/005_operational-serving-layer/README.md)
+9. [Batchability Cost Model](docs/batchability-cost-model.md)
+10. [Future Work](docs/future-work)
+11. [Case Studies](docs/case-studies)
+12. [Scripts](scripts) and [Tests](tests)
+13. [Architecture Decision Records](docs/adr)
 
 <br>
 
@@ -80,14 +84,18 @@ evidence, and implementation rationale:
 The project is structured as two parts:
 
 `a) Workflow System Design`
-- **Stage prose:** primary system-design artifact
-- **Workflow evidence:** visual and operational proof carried by the documented stages
+- **Stage prose:** system-design rationale for the major workflow
+  boundaries
+- **Workflow evidence:** visual and operational proof carried by the
+  documented Lightroom-centered stages
 - **Product requirements:** project-level problem, constraints, non-goals, and success criteria
 
 `b) Executable Workflow Analysis`
 - **Scripts/tests:** co-equal analytic and validation artifacts that
   make the workflow inspectable, reproducible, and operational in
   structured form
+- **Handoff and serving exports:** compact downstream artifacts for
+  review, ML-readiness evaluation, and operational loading
 
 This pipeline is **not a packaged application**. It augments an
 existing application: Adobe Lightroom.
@@ -127,12 +135,13 @@ non-binary failure modes.
 
 ## Solution Overview
 
-The workflow addresses that problem through four documented stages:
+The workflow addresses that problem through five documented stages:
 
 1. Metadata application, enrichment, and query design
 2. Baseline conditioning
 3. AI mask definition propagation
 4. ML-readiness handoff
+5. Operational serving layer
 
 Each stage isolates a specific class of transformations, defines clear
 inputs and outputs, and introduces validation boundaries before later
@@ -144,7 +153,9 @@ workflow surfaces: Stage 1 establishes deterministic metadata state,
 Stage 2 controls visual variance introduced by capture conditions,
 Stage 3 constrains probabilistic AI mask outputs through qualification,
 bounded propagation, and human review, and Stage 4 packages the
-resulting evidence into an honest ML-readiness handoff.
+resulting evidence into an honest ML-readiness handoff. Stage 5 then
+publishes compact serving exports and loader-facing contracts for
+downstream operational consumers.
 
 The pipeline does not replace the final manual editing pass. It prepares
 a cleaner, normalized, review-bounded working set so obligatory manual
@@ -156,27 +167,23 @@ effort.
 
 ## Evidence Model
 
-This repository is documented as an applied systems-design case study.
-Its claims are supported through two complementary evidence modes: one
-for explaining the design and one for expressing the workflow in
-executable analytic form.
+This repository combines workflow-system design, executable extraction
+scripts, validation artifacts, and serving exports. Its claims are
+supported through complementary evidence modes:
 
-- **A) Workflow System Design Evidence:** the stage prose, workflow
-  image evidence, workflow operational evidence, and any stage-specific
-  experiments are used to explain why specific pipeline boundaries,
-  validation steps, review points, and design patterns exist. In the
-  stage documents, this evidence typically appears as explicit
-  `Operational note:` callouts or as `Figure` sections with embedded
-  images.
-  
-- **B) Script/Test Evidence:** scripts, tests, and sample-data
-  execution paths that serve as co-equal workflow artifacts. They make
-  the pipeline operable, inspectable, and reproducible in practice
-  rather than only described in prose.
+- **A) Workflow System Design Evidence:** stage prose, workflow images,
+  operational notes, and stage-specific experiments explain why
+  pipeline boundaries, validation steps, review points, and design
+  patterns exist.
+- **B) Executable Evidence And Contracts:** scripts, tests, manifests,
+  review outputs, handoff reports, and serving exports make the
+  pipeline operable, inspectable, and reproducible in structured form.
 
-These materials are used to justify workflow behavior and design
-choices. They are not presented as controlled benchmarks or as claims of
-universal performance beyond the documented workflow context.
+These materials are used to justify workflow behavior, support
+solo-operator efficiency claims, and expose explicit assumptions for
+downstream operational or ML/data-science evaluation. They are not
+presented as controlled benchmarks or as claims of universal performance
+beyond the documented workflow context.
 
 <br>
 
@@ -221,7 +228,9 @@ These project-level concerns are summarized more directly in
 
 ## Pipeline Stages
 
-The project is organized as a single multi-stage pipeline with supporting documentation (engineering rationale) for each major stage.
+The project is organized as a single multi-stage pipeline with
+supporting documentation, executable evidence extraction, and serving
+artifacts for each relevant stage boundary.
 
 <br>
 
@@ -234,7 +243,8 @@ Location: [Stage 1](pipeline_stages/001_metadata-application-enrichment-query/RE
 Focus areas:
 - deterministic ingest behavior under single-preset constraints
 - non-destructive metadata enrichment through non-overlapping field assignments
-- metadata-driven indexing and retrieval patterns enabling both rapid ad-hoc queries and declarative views over image records
+- metadata-driven indexing and retrieval patterns enabling rapid
+  ad-hoc queries, declarative views, and downstream discoverability
 - stable metadata state before subjective culling or image transformation begins
 
 - **Identity initialization:** Single-preset ingest establishes the protected authorship baseline
@@ -242,13 +252,15 @@ Focus areas:
 - **Query layer:** Filter-based retrieval and Smart Collections derive reusable views over image records
 
 
-> **Boundary:** culling separates metadata preparation from image
-> transformation.
+> **Interstage gate:** after Stage 1, the operator culls the full image
+> set into the working set that enters Stage 2. Culling is primarily a
+> visual and editorial judgment step, while Stage 1 ensures the selected
+> assets already carry stable identity metadata, keyword context, and
+> queryable catalog state.
 >
-> **Handoff state:** the full image set is narrowed into the working
-> set that moves forward to cleanup, normalization, and AI mask
-> propagation. Selection is based on usable focus, aesthetic
-> uniqueness, subject relevance, and edit potential.
+> **Handoff state:** Stage 2 receives a selected working set whose
+> metadata and descriptive context were established before visual
+> conditioning begins.
 
 <br>
 
@@ -322,5 +334,25 @@ Focus areas:
 
 > **Boundary:** Stage 4 packages current evidence for ML discovery and
 > identifies the next artifacts required before modeling work begins.
+
+<br>
+
+### Stage 5 – Operational Serving Layer
+
+Converts the Stage 1-4 evidence chain into compact serving exports for
+downstream operational consumers.
+
+Location: [Stage 5](pipeline_stages/005_operational-serving-layer/README.md)
+
+Focus areas:
+- asset, feature-family, and artifact-catalog serving exports
+- manifest-backed provenance for downstream loading
+- cloud-loader contract for S3 serving exports and DynamoDB status
+  records
+- clear boundary between local export generation and later cloud loader
+  compute
+
+> **Boundary:** Stage 5 publishes compact, loadable export surfaces
+> without replacing the detailed stage artifacts they summarize.
 
 <br>

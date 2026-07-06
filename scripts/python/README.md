@@ -2,13 +2,13 @@
 
 This directory contains stage-scoped Python helpers for extracting,
 auditing, validating, and materializing workflow artifacts across the
-documented pipeline stages.
+pipeline stages.
 
-The scripts are not intended to replace the documented workflow or its
-embedded visual evidence. Their role is to make the workflow more
-inspectable and reproducible by turning Lightroom-adjacent artifacts
-such as XMP sidecars, manifests, review sheets, and parameter exports
-into structured validation surfaces.
+The scripts are not intended to replace the Lightroom-centered workflow.
+Their role is to make the system inspectable, reproducible, and useful
+to downstream consumers by turning Lightroom-adjacent artifacts such as
+XMP sidecars, manifests, review sheets, parameter exports, and serving
+summaries into structured validation and handoff surfaces.
 
 Documentation screenshots and diagrams should remain in each stage's
 `assets/` tree. Machine-readable workflow artifacts should live
@@ -23,15 +23,17 @@ At the project level, the intended evidence stack is:
 
 1. workflow/system design evidence expressed through stage prose,
    workflow images, diagrams, and operational notes
-2. quantitative or semi-quantitative analysis grounded in underlying
-   workflow artifacts such as RAW files, XMP edit parameters, exported
-   manifests, and any later pixel- or render-level measurements
-3. tests and executable checks that keep those extraction and analysis
-   paths reproducible
+2. executable extraction, validation, and manifesting grounded in
+   underlying workflow artifacts such as RAW files, XMP edit parameters,
+   review sheets, and exported manifests
+3. handoff and serving artifacts that expose assumptions for downstream
+   operational or ML/data-science evaluation
+4. tests and executable checks that keep extraction, transformation, and
+   packaging paths reproducible
 
-In other words, the visual workflow artifacts usually establish the
-qualitative claim first, while the scripts in this directory are the
-bridge to mathematical or structured validation later.
+In other words, the visual workflow artifacts explain the observed tool
+behavior, while the scripts in this directory turn that behavior into
+structured validation, handoff, and serving surfaces.
 
 <br>
 
@@ -97,7 +99,8 @@ scripts/python/
   readiness, ML handoff contract, and manifest generation
 
 These files are CLI entrypoints for producing and validating the
-machine-readable evidence that complements the stage prose.
+machine-readable evidence, handoff contracts, and serving exports that
+complement the stage prose.
 
 <br>
 
