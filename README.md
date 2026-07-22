@@ -70,7 +70,7 @@ implementation rationale, and downstream operational context:
 1. [README](README.md)
 2. [Shared terminology](docs/terminology.md)
 3. [Product Requirements](docs/product-requirements.md)
-4. [Pipeline Overview Diagram](docs/creative-workflow-pipeline-overview-diagram-v02.png)
+4. [Pipeline Overview Diagram](docs/digital-asset-processing-pipeline-overview-diagram.drawio.png)
 5. [Batchability Cost Model](docs/batchability-cost-model.md)
 6. [Stage 1](pipeline_stages/001_metadata-application-enrichment-query/README.md):
    read the problem, governing principles, implementation, and takeaway
