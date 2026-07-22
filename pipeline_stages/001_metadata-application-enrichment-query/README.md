@@ -278,23 +278,44 @@ design moves back toward a flatter taxonomy in those areas.
 <br>
 <br>
 
-**Keyword Taxonomy Design: When Hierarchy Helps vs Hurts**
+**Keyword Taxonomy Design: Preventing Event-Specific Metadata Lock-In**
 
-Hierarchy is only useful when the child term truly depends on the
-parent term for meaning. The diagram below makes the threshold explicit:
-once independent dimensions are overnested under a parent such as
-`Wedding`, the taxonomy becomes less reusable and harder to query
-cleanly across adjacent domains, so the design should be normalized back
-toward a flatter, more composable structure in those areas. The
-taxonomy evolution is easier to understand when viewed side by side
-before the individual intermediate states are examined in detail.
+The business problem is metadata reuse. A photographer may first tag
+images while thinking inside one event, such as a wedding, but many of
+the useful labels are not wedding-specific: venue type, activity,
+subject role, location context, lighting condition, and scene structure
+can apply across many shoot types.
+
+If those reusable concepts are buried under `Wedding`, the catalog
+becomes harder to search, export, and reuse. A future query for outdoor
+portraits, church interiors, cocktail-hour moments, or venue details
+must either know the wedding-specific path or duplicate the same concept
+elsewhere. That creates metadata drift and weakens the catalog as a
+structured asset layer.
+
+Stage 1 treats the keyword tree like schema design: keep true
+specializations nested, but promote reusable concepts into composable
+classification dimensions that can be combined at query time.
 
 ![Keyword taxonomy semantic normalization overview](assets/diagrams/stage1-keyword-taxonomy-semantic-normalization.jpg)
 
-*Figure: Side-by-side taxonomy evolution from overnested event-centric hierarchy to a more composable semantic classification structure. The sequence shows where hierarchy adds value, where it crosses the threshold into semantic coupling, and why parts of the taxonomy are intentionally flattened back out while true specialization boundaries are retained.*
+*Figure: Keyword taxonomy normalization. The diagram shows a move away
+from event-specific metadata lock-in: reusable concepts are promoted out
+of the `Wedding` subtree, while genuinely wedding-specific
+specializations remain nested.*
 
 <br>
 <br>
+
+The resulting structure is more useful because it supports:
+
+- cleaner cross-event search
+- less duplicate keyword creation
+- safer metadata export
+- easier reuse across wedding, branding, graduation, corporate, and
+  venue work
+- better downstream interpretation by scripts or ML/data-science
+  consumers
 
 This evolution also mirrors classical schema normalization in database
 design. Early keyword hierarchies often behave like denormalized
