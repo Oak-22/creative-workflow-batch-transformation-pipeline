@@ -63,7 +63,7 @@ def build_contract(args: argparse.Namespace) -> dict[str, object]:
             "dataset_readiness_report": args.readiness_report,
         },
         "producer": {
-            "system": "digital_asset_processing_pipeline",
+            "system": "media_asset_processing_pipeline",
             "responsibility": (
                 "Produce stage-bounded, hash-backed, inspectable artifacts from a "
                 "Lightroom-centered creative workflow."
