@@ -1,6 +1,6 @@
 # Production Workflow System Design & Implementation: Baseline Conditioning
 
-Part of the **Digital Asset Processing Pipeline** umbrella project.
+Part of the **Media Asset Processing Pipeline** umbrella project.
 
 <br>
 

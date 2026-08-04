@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This note scopes a future extension to the digital asset processing
+This note scopes a future extension to the media asset processing
 pipeline: using Stage 2 conditioning and Stage 3 semantic anchors as a
 measurement surface for downstream machine-learning cost and assurance
 analysis.

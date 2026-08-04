@@ -14,7 +14,7 @@
     "dataset_readiness_report": "outputs/stage4/handoff/stage4_dataset_readiness_report.json"
   },
   "producer": {
-    "system": "digital_asset_processing_pipeline",
+    "system": "media_asset_processing_pipeline",
     "responsibility": "Produce stage-bounded, hash-backed, inspectable artifacts from a Lightroom-centered creative workflow."
   },
   "consumer": {

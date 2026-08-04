@@ -1,7 +1,7 @@
 # Case Studies
 
 This directory captures small, concrete workflow incidents that expose
-larger systems-design lessons inside the digital asset processing
+larger systems-design lessons inside the media asset processing
 pipeline.
 
 The local case studies should remain grounded in repository evidence:
