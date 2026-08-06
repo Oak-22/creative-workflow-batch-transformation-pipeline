@@ -88,7 +88,7 @@ outputs/stage5/
 The default DynamoDB status table name is:
 
 ```text
-digital-asset-stage5-loader-status
+media-asset-stage5-loader-status
 ```
 
 The status table is provisioned with:

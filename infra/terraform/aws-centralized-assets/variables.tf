@@ -48,7 +48,7 @@ variable "serving_exports_prefix" {
 variable "loader_status_table_name" {
   description = "DynamoDB table name for idempotent Stage 5 loader status records."
   type        = string
-  default     = "digital-asset-stage5-loader-status"
+  default     = "media-asset-stage5-loader-status"
 }
 
 variable "force_destroy" {
