@@ -5,6 +5,8 @@ editing work into evidence-backed workflow infrastructure, reducing
 solo-operator overhead while supporting review, operational serving, and
 downstream ML readiness.
 
+<img alt="Full five-stage media asset processing pipeline from metadata application and baseline conditioning through AI mask propagation, ML-readiness handoff, and operational serving." src="media-asset-processing-pipeline-diagram.svg">
+
 <br>
 
 ## Executive Summary
@@ -70,7 +72,7 @@ implementation rationale, and downstream operational context:
 1. [README](README.md)
 2. [Shared terminology](docs/terminology.md)
 3. [Product Requirements](docs/product-requirements.md)
-4. [Pipeline Overview Diagram](docs/media-asset-processing-pipeline-overview-diagram.drawio)
+4. [Pipeline Overview Diagram](docs/source/media-asset-processing-pipeline-overview-diagram.drawio)
 5. [Batchability Cost Model](docs/batchability-cost-model.md)
 6. [Stage 1](pipeline_stages/001_metadata-application-enrichment-query/README.md):
    read the problem, governing principles, implementation, and takeaway
