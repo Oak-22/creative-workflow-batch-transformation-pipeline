@@ -9,7 +9,7 @@ acr_prefix             = "acr/"
 jpeg_prefix            = "jpeg/"
 serving_exports_prefix = "outputs/stage5/"
 
-loader_status_table_name = "digital-asset-stage5-loader-status"
+loader_status_table_name = "media-asset-stage5-loader-status"
 
 force_destroy = false
 

@@ -3,7 +3,7 @@ locals {
   # not resource prefixes or directory namespaces.
   common_tags = merge(
     {
-      Project      = "digital_asset_processing_pipeline"
+      Project      = "media_asset_processing_pipeline"
       Architecture = "centralized-source-assets-local-analytic-outputs"
       ManagedBy    = "terraform"
       Environment  = var.environment
@@ -257,7 +257,7 @@ resource "aws_dynamodb_table" "stage5_loader_status" {
 }
 
 resource "aws_iam_policy" "stage5_loader" {
-  name        = "digital-asset-stage5-loader-${var.environment}"
+  name        = "media-asset-stage5-loader-${var.environment}"
   description = "Least-privilege read/status policy for future Stage 5 serving-export loaders."
   policy      = data.aws_iam_policy_document.stage5_loader.json
 
