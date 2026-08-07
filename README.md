@@ -29,18 +29,6 @@ repeated manual editing.
 
 <br>
 
-## AI-Assisted Engineering
-
-This repository was developed with AI coding assistance alongside manual
-Lightroom workflow work. Human review, validation, and evidence capture were
-used to evaluate where agent behavior aligned with—or drifted from—the
-intended engineering rules.
-
-See the [Agent Instruction-Output Alignment Gap](docs/case-studies/agent-instruction-output-alignment-gap.md)
-case study for one documented example.
-
-<br>
-
 ## Problem
 
 Creative production workflows often accumulate as several informal, ad hoc editing
@@ -130,15 +118,13 @@ Focus areas:
 - **Query layer:** Filter-based retrieval and Smart Collections derive reusable views over image records
 
 
-> **Interstage gate:** after Stage 1, the operator culls the full image
-> set into the working set that enters Stage 2. Culling is primarily a
-> visual and editorial judgment step, while Stage 1 ensures the selected
-> assets already carry stable identity metadata, keyword context, and
-> queryable catalog state.
+> **Boundary:** Stage 1 establishes metadata and query state before
+> subjective culling or visual conditioning begins. Culling remains a
+> separate visual and editorial judgment step.
 >
-> **Handoff state:** Stage 2 receives a selected working set whose
-> metadata and descriptive context were established before visual
-> conditioning begins.
+> **Handoff state:** Stage 2 receives a selected working set carrying
+> stable identity metadata, descriptive context, and queryable catalog
+> state.
 
 <br>
 
@@ -164,6 +150,10 @@ Focus areas:
   branching preserves the normalized baseline as a known-good handoff
   state
 
+> **Boundary:** Stage 2 contains reversible corrective and normalization
+> operations around the selected working set; it does not define semantic
+> masks or produce serving exports.
+>
 > **Handoff state:** Stage 3 receives a cleaned, normalized, and
 > lineage-protected working state rather than unresolved luminance and
 > color variance.
@@ -210,8 +200,13 @@ Focus areas:
 - explicit model-training prerequisites and scope boundaries
 - compact manifest for employer-facing review
 
-> **Boundary:** Stage 4 packages current evidence for ML discovery and
-> identifies the next artifacts required before modeling work begins.
+> **Boundary:** Stage 4 packages current evidence for ML discovery without
+> claiming a trained model, production model performance, or completed
+> downstream modeling work.
+>
+> **Handoff state:** downstream ML/data-science evaluation receives a
+> feature inventory, readiness report, and explicit handoff contract with
+> the evidence and prerequisites needed for the next modeling decision.
 
 <br>
 
@@ -230,8 +225,52 @@ Focus areas:
 - clear boundary between local export generation and later cloud loader
   compute
 
-> **Boundary:** Stage 5 publishes compact, loadable export surfaces
-> without replacing the detailed stage artifacts they summarize.
+> **Handoff state:** centralized cloud-loading work receives compact,
+> loadable serving exports, an artifact catalog, and loader-facing status
+> contracts while the detailed stage artifacts remain the source evidence.
+
+<br>
+
+## Project Structure and Evidence
+
+The project has two complementary surfaces:
+
+The pipeline has five domain stages that describe how media assets are
+transformed. A cross-stage evidence and control layer operates across those
+stages, extracting state, validating transitions, preserving lineage, and
+packaging outputs for ML-readiness and operational serving.
+
+```text
+Stage 1 ─── Stage 2 ─── Stage 3 ─── Stage 4 ─── Stage 5
+   ╲          ╲          ╲          ╲          ╲
+    └──── Cross-Stage Evidence and Control Layer ────┘
+```
+
+1. **Workflow System Design and Operation** — Stages 1–3 document the
+   Lightroom-centered workflow, its transformation boundaries, manual review
+   points, rollback behavior, and governing principles.
+
+2. **Evidence, Handoff, and Serving** — Stages 4–5, supported by the repository
+   scripts and tests, extract structured state, validate outputs, generate
+   manifests, produce ML-readiness handoffs, and package operational serving
+   exports.
+
+The scripts and tests make the workflow inspectable and reproducible without
+claiming to replace Lightroom. This repository augments Adobe Lightroom rather
+than functioning as a standalone packaged application.
+
+The project’s claims are supported by two evidence modes:
+
+- **Workflow evidence:** stage prose, workflow images, operational notes, and
+  experiments explain why the boundaries, review points, and design patterns
+  exist.
+- **Executable evidence:** scripts, tests, manifests, validation reports,
+  handoff contracts, and serving exports make the resulting state inspectable
+  and operationally testable.
+
+These artifacts support workflow-behavior and solo-operator-efficiency claims
+while exposing assumptions for downstream operational or ML/data-science
+evaluation. They are not controlled benchmarks or universal performance claims.
 
 <br>
 
@@ -289,43 +328,12 @@ implementation rationale, and downstream operational context:
 
 <br>
 
-## Project Structure and Evidence
+## AI-Assisted Engineering
 
-The project has two complementary surfaces:
+This repository was developed with AI coding assistance alongside manual
+Lightroom workflow work. Human review, validation, and evidence capture were
+used to evaluate where agent behavior aligned with—or drifted from—the
+intended engineering rules.
 
-The pipeline has five domain stages that describe how media assets are
-transformed. A cross-stage evidence and control layer operates across those
-stages, extracting state, validating transitions, preserving lineage, and
-packaging outputs for ML-readiness and operational serving.
-
-```text
-Stage 1 ─── Stage 2 ─── Stage 3 ─── Stage 4 ─── Stage 5
-   ╲          ╲          ╲          ╲          ╲
-    └──── Cross-Stage Evidence and Control Layer ────┘
-```
-
-1. **Workflow System Design and Operation** — Stages 1–3 document the
-   Lightroom-centered workflow, its transformation boundaries, manual review
-   points, rollback behavior, and governing principles.
-
-2. **Evidence, Handoff, and Serving** — Stages 4–5, supported by the repository
-   scripts and tests, extract structured state, validate outputs, generate
-   manifests, produce ML-readiness handoffs, and package operational serving
-   exports.
-
-The scripts and tests make the workflow inspectable and reproducible without
-claiming to replace Lightroom. This repository augments Adobe Lightroom rather
-than functioning as a standalone packaged application.
-
-The project’s claims are supported by two evidence modes:
-
-- **Workflow evidence:** stage prose, workflow images, operational notes, and
-  experiments explain why the boundaries, review points, and design patterns
-  exist.
-- **Executable evidence:** scripts, tests, manifests, validation reports,
-  handoff contracts, and serving exports make the resulting state inspectable
-  and operationally testable.
-
-These artifacts support workflow-behavior and solo-operator-efficiency claims
-while exposing assumptions for downstream operational or ML/data-science
-evaluation. They are not controlled benchmarks or universal performance claims.
+See the [Agent Instruction-Output Alignment Gap](docs/case-studies/agent-instruction-output-alignment-gap.md)
+case study for one documented example.
