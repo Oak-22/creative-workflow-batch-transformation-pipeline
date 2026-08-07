@@ -14,7 +14,7 @@ if __package__ in {None, ""}:
 from scripts.python.common import ensure_parent_dir, read_json
 
 
-STAGE_NAME = "stage1_metadata_application_enrichment_query"
+STAGE_NAME = "stage1_metadata_foundation_and_query"
 STAGE_PRE_IDENTITY = "stage1_pre-identity"
 STAGE_POST_IDENTITY = "stage1_post-identity"
 STAGE_IDENTITY_DOMAIN = "stage1_identity_domain"

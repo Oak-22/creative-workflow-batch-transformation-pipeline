@@ -1,4 +1,4 @@
-# Stage 4 - ML Readiness Handoff
+# Stage 4 - ML-Readiness Handoff
 
 Stage 4 converts the earlier Lightroom-centered evidence chain into a
 machine-learning handoff package. The stage organizes stage-bounded

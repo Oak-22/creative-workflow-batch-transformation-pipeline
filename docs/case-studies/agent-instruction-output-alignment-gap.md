@@ -33,30 +33,30 @@ The prompt provenance for that reusable rule was recorded as
 
 ## Evidence
 
-![Agent reported loaded instructions](assets/agent-instruction-output-alignment-gap/001-agent-reported-loaded-instructions.png)
+![Agent reported loaded instructions](assets/agent-instruction-output-alignment-gap-screenshots/001-agent-reported-loaded-instructions.png)
 
 *Figure 1: The agent reported loading the repository instruction tree,
 including artifact-formatting guidance, before executing the Stage 2
 data-layout change.*
 
-![Mixed Stage 2 output names](assets/agent-instruction-output-alignment-gap/002-agent-generated-mixed-stage2-output-names.png)
+![Mixed Stage 2 output names](assets/agent-instruction-output-alignment-gap-screenshots/002-agent-generated-mixed-stage2-output-names.png)
 
 *Figure 2: The completed change reported passing validation while
 showing a mixed Stage 2 output naming pattern.*
 
-![Artifact naming rule source](assets/agent-instruction-output-alignment-gap/003-artifact-naming-rule-source.png)
+![Artifact naming rule source](assets/agent-instruction-output-alignment-gap-screenshots/003-artifact-naming-rule-source.png)
 
 *Figure 3: The artifact-naming instruction states that related artifacts
 should use a consistent naming scheme across scope, stage, artifact
 type, derivation order, and compatibility constraints.*
 
-![Prompt instruction provenance](assets/agent-instruction-output-alignment-gap/004-prompt-instruction-log-provenance.png)
+![Prompt instruction provenance](assets/agent-instruction-output-alignment-gap-screenshots/004-prompt-instruction-log-provenance.png)
 
 *Figure 4: The prompt-to-instruction log records the earlier naming
 consistency observation that produced the reusable artifact-naming
 instruction.*
 
-![Agent attribution of the rule source](assets/agent-instruction-output-alignment-gap/005-user-asked-rule-source-and-agent-attribution.png)
+![Agent attribution of the rule source](assets/agent-instruction-output-alignment-gap-screenshots/005-user-asked-rule-source-and-agent-attribution.png)
 
 *Figure 5: The follow-up exchange traces the rule back to the loaded
 artifact-formatting guidance and exposes the gap between reported

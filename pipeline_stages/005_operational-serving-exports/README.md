@@ -1,4 +1,4 @@
-# Stage 5 - Operational Serving Layer
+# Stage 5 - Operational Serving Exports
 
 Stage 5 converts the Stage 1-4 evidence chain into compact serving
 exports for downstream operational consumers.

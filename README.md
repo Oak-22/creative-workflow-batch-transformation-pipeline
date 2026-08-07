@@ -1,11 +1,11 @@
 # Media Asset Processing Pipeline
 
-A staged media-asset processing system that turns GUI-based photo
+A staged media asset processing system that turns GUI-based, ad hoc photo
 editing work into evidence-backed workflow infrastructure, reducing
 solo-operator overhead while supporting review, operational serving, and
 downstream ML readiness.
 
-<img alt="Full five-stage media asset processing pipeline from metadata application and baseline conditioning through AI mask propagation, ML-readiness handoff, and operational serving." src="media-asset-processing-pipeline-diagram.svg">
+<img alt="Full five-stage media asset processing pipeline: Metadata Foundation and Query, Baseline Conditioning, AI Semantic Mask Definition Propagation, ML-Readiness Handoff, and Operational Serving Exports." src="docs/diagrams/media-asset-processing-pipeline-diagram.svg">
 
 <br>
 
@@ -29,120 +29,29 @@ repeated manual editing.
 
 <br>
 
-> [!IMPORTANT]
-> **Read the shared terminology first.** This repository uses
-> project-specific workflow vocabulary such as `gallery`,
-> `reference image`, and `canonical image` in narrow, technical ways.
-> Open [docs/terminology.md](docs/terminology.md) in a separate tab
-> before reading the stage writeups if you want the later diagrams and
-> handoff language to make sense on first pass.
+## AI-Assisted Engineering
 
-<br>
+This repository was developed with AI coding assistance alongside manual
+Lightroom workflow work. Human review, validation, and evidence capture were
+used to evaluate where agent behavior aligned with—or drifted from—the
+intended engineering rules.
 
-## Reading Paths
-
-Readers will usually benefit from taking one of two paths through the
-repository depending on how deeply they want to inspect the stage
-evidence and implementation surfaces.
-
-### Quick Path (15 mins)
-
-Use this path if you want a condensed, high-level view of the project:
-
-1. [README](README.md)
-2. [Shared terminology](docs/terminology.md)
-3. [Batchability Cost Model](docs/batchability-cost-model.md)
-4. [Stage 1](pipeline_stages/001_metadata-application-enrichment-query/README.md):
-   scan governing principles and read the nearby demonstration text
-5. [Stage 2](pipeline_stages/002_baseline-conditioning/README.md):
-   scan governing principles and read the nearby demonstration text
-6. [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md):
-   scan governing principles and read the nearby demonstration text
-7. [Stage 4](pipeline_stages/004_ml-readiness-handoff/README.md)
-8. [Stage 5](pipeline_stages/005_operational-serving-layer/README.md)
-9. [Scripts](scripts/python/README.md), [Outputs](outputs/README.md),
-   and [Tests](tests/README.md)
-10. [Terraform](infra/terraform/aws-centralized-assets/README.md)
-
-### Extensive Path (30 mins)
-
-Use this path if you want the fuller systems-design argument,
-implementation rationale, and downstream operational context:
-
-1. [README](README.md)
-2. [Shared terminology](docs/terminology.md)
-3. [Product Requirements](docs/product-requirements.md)
-4. [Pipeline Overview Diagram](docs/source/media-asset-processing-pipeline-overview-diagram.drawio)
-5. [Batchability Cost Model](docs/batchability-cost-model.md)
-6. [Stage 1](pipeline_stages/001_metadata-application-enrichment-query/README.md):
-   read the problem, governing principles, implementation, and takeaway
-7. [Stage 2](pipeline_stages/002_baseline-conditioning/README.md):
-   read the problem, governing principles, implementation, validation,
-   and takeaway
-8. [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md):
-   read the problem, governing principles, qualification flow,
-   validation examples, and takeaway
-9. [Stage 4](pipeline_stages/004_ml-readiness-handoff/README.md)
-10. [Stage 5](pipeline_stages/005_operational-serving-layer/README.md)
-11. [Scripts](scripts/python/README.md), [Outputs](outputs/README.md),
-    and [Tests](tests/README.md)
-12. [Terraform](infra/terraform/aws-centralized-assets/README.md)
-13. [Cloud Loader Contract](docs/cloud/stage5-loader-contract.md)
-14. [Architecture Decision Records](docs/adr)
-15. [Future Work](docs/future-work)
-
-<br>
-
-## Project Structure
-
-The project is structured as two parts:
-
-`a) Workflow System Design`
-- **Stage prose:** system-design rationale for the major workflow
-  boundaries
-- **Workflow evidence:** visual and operational proof carried by the
-  documented Lightroom-centered stages
-- **Product requirements:** project-level problem, constraints, non-goals, and success criteria
-
-`b) Executable Workflow Analysis`
-- **Scripts/tests:** co-equal analytic and validation artifacts that
-  make the workflow inspectable, reproducible, and operational in
-  structured form
-- **Handoff and serving exports:** compact downstream artifacts for
-  review, ML-readiness evaluation, and operational loading
-
-This pipeline is **not a packaged application**. It augments an
-existing application: Adobe Lightroom.
-
-<br>
-
-## Decision Records
-
-Architecture and workflow-structure decisions that need stronger
-long-lived rationale are recorded under [docs/adr](docs/adr).
-
-Related implementation and governance incidents are recorded under
-[docs/case-studies](docs/case-studies). These are smaller than ADRs:
-they preserve concrete evidence, remediation steps, and lessons that may
-later roll up into a separate AI agent governance case-study repository.
-
-Scoped extensions that are not yet active workflow stages are recorded
-under [docs/future-work](docs/future-work).
+See the [Agent Instruction-Output Alignment Gap](docs/case-studies/agent-instruction-output-alignment-gap.md)
+case study for one documented example.
 
 <br>
 
 ## Problem
 
-Creative production workflows often accumulate as several informal editing
+Creative production workflows often accumulate as several informal, ad hoc editing
 habits inside GUI tools, making them hard to reproduce, audit, and
-scale across large datasets. Without explicit stage boundaries and
-validation checkpoints, small inconsistencies can compound into operator drift causing laborous rework. Weak rollback safety then makes those inconsistencies
-more costly to contain once they spread through the working set.
+scale across large image datasets. Without explicit stage boundaries and
+validation checkpoints, small inconsistencies can compound via operator drift causing laborous rework. Weak rollback safety then makes those inconsistencies more costly to contain once they spread through the working set.
 
 The core systems problem is therefore not only how to optimally perform isolated
 editing operations, but how to organize them into a stable pipeline
 that remains batch-safe under real tooling limitations, heterogeneous
-creative input data, and AI-assisted operations with partial,
+creative input data, and AI-assisted operations (auto-masking) with partial,
 non-binary failure modes.
 
 <br>
@@ -151,11 +60,11 @@ non-binary failure modes.
 
 The workflow addresses that problem through five documented stages:
 
-1. Metadata application, enrichment, and query design
-2. Baseline conditioning
-3. AI mask definition propagation
-4. ML-readiness handoff
-5. Operational serving layer
+1. Metadata Foundation and Query
+2. Baseline Conditioning
+3. AI Semantic Mask Definition Propagation
+4. ML-Readiness Handoff
+5. Operational Serving Exports
 
 Each stage isolates a specific class of transformations, defines clear
 inputs and outputs, and introduces validation boundaries before later
@@ -178,29 +87,6 @@ effort.
 
 <br>
 
-
-## Evidence Model
-
-This repository combines workflow-system design, executable extraction
-scripts, validation artifacts, and serving exports. Its claims are
-supported through complementary evidence modes:
-
-- **A) Workflow System Design Evidence:** stage prose, workflow images,
-  operational notes, and stage-specific experiments explain why
-  pipeline boundaries, validation steps, review points, and design
-  patterns exist.
-- **B) Executable Evidence And Contracts:** scripts, tests, manifests,
-  review outputs, handoff reports, and serving exports make the
-  pipeline operable, inspectable, and reproducible in structured form.
-
-These materials are used to justify workflow behavior, support
-solo-operator efficiency claims, and expose explicit assumptions for
-downstream operational or ML/data-science evaluation. They are not
-presented as controlled benchmarks or as claims of universal performance
-beyond the documented workflow context.
-
-<br>
-
 ## Key Constraints
 
 Across the documented stages, the shared engineering constraints and
@@ -215,44 +101,22 @@ design themes are:
 
 <br>
 
-## Cross-Cutting Engineering Concepts
 
-Some of the strongest engineering and software-engineering concepts in
-this repository are broader than any one stage's governing principles
-or engineering concepts demonstrated. They shape the architecture of the
-whole project rather than only one transformation step.
-
-- business-goal-driven system design rather than isolated tool usage
-- tacit workflow knowledge converted into explicit evidence and
-  operational rules
-- deterministic orchestration around uncertain inputs and probabilistic
-  tool behavior
-- external checkpointing added where the underlying tool only provides
-  rolling mutable state
-- cost-shape modeling used to justify why batchability matters
-- stage-bounded validation and rollback logic instead of monolithic
-  editing flow
-- hybrid evidence model combining prose, diagrams, experiments,
-  artifacts, and scripts
-
-These project-level concerns are summarized more directly in
-[docs/product-requirements.md](docs/product-requirements.md).
+> [!IMPORTANT]
+> **Read the shared terminology first.** This repository uses
+> project-specific workflow vocabulary such as `gallery`,
+> `reference image`, and `canonical image` in narrow, technical ways.
+> Open [docs/terminology.md](docs/terminology.md) in a separate tab
+> before reading the stage writeups if you want the later diagrams and
+> handoff language to make sense on first pass.
 
 <br>
 
-## Pipeline Stages
-
-The project is organized as a single multi-stage pipeline with
-supporting documentation, executable evidence extraction, and serving
-artifacts for each relevant stage boundary.
-
-<br>
-
-### Stage 1 – Metadata Application, Enrichment, and Query
+### Stage 1 – Metadata Foundation and Query
 
 Establishes the metadata and query foundation for the workflow.
 
-Location: [Stage 1](pipeline_stages/001_metadata-application-enrichment-query/README.md)
+Location: [Stage 1](pipeline_stages/001_metadata-foundation-and-query/README.md)
 
 Focus areas:
 - deterministic ingest behavior under single-preset constraints
@@ -306,12 +170,12 @@ Focus areas:
 
 <br>
 
-### Stage 3 – AI Mask Definition Propagation
+### Stage 3 – AI Semantic Mask Definition Propagation
 
 Applies semantic mask definitions across the conditioned working set and
 introduces bounded review around probabilistic AI output.
 
-Location: [Stage 3](pipeline_stages/003_ai-mask-definition-propagation/README.md)
+Location: [Stage 3](pipeline_stages/003_ai-semantic-mask-definition-propagation/README.md)
 
 
 Focus areas:
@@ -333,7 +197,7 @@ Focus areas:
 
 <br>
 
-### Stage 4 – ML Readiness Handoff
+### Stage 4 – ML-Readiness Handoff
 
 Packages the staged evidence into a feature inventory, readiness report,
 and handoff contract for a hypothetical ML/data-science team.
@@ -351,12 +215,12 @@ Focus areas:
 
 <br>
 
-### Stage 5 – Operational Serving Layer
+### Stage 5 – Operational Serving Exports
 
 Converts the Stage 1-4 evidence chain into compact serving exports for
 downstream operational consumers.
 
-Location: [Stage 5](pipeline_stages/005_operational-serving-layer/README.md)
+Location: [Stage 5](pipeline_stages/005_operational-serving-exports/README.md)
 
 Focus areas:
 - asset, feature-family, and artifact-catalog serving exports
@@ -370,3 +234,98 @@ Focus areas:
 > without replacing the detailed stage artifacts they summarize.
 
 <br>
+
+## Reading Paths
+
+Readers will usually benefit from taking one of two paths through the
+repository depending on how deeply they want to inspect the stage
+evidence and implementation surfaces.
+
+### Quick Path (15 mins)
+
+Use this path if you want a condensed, high-level view of the project:
+
+1. [README](README.md)
+2. [Shared terminology](docs/terminology.md)
+3. [Batchability Cost Model](docs/batchability-cost-model.md)
+4. [Stage 1](pipeline_stages/001_metadata-foundation-and-query/README.md):
+   scan governing principles and read the nearby demonstration text
+5. [Stage 2](pipeline_stages/002_baseline-conditioning/README.md):
+   scan governing principles and read the nearby demonstration text
+6. [Stage 3](pipeline_stages/003_ai-semantic-mask-definition-propagation/README.md):
+   scan governing principles and read the nearby demonstration text
+7. [Stage 4](pipeline_stages/004_ml-readiness-handoff/README.md)
+8. [Stage 5](pipeline_stages/005_operational-serving-exports/README.md)
+9. [Scripts](scripts/python/README.md), [Outputs](outputs/README.md),
+   and [Tests](tests/README.md)
+10. [Terraform](infra/terraform/aws-centralized-assets/README.md)
+
+### Extensive Path (30 mins)
+
+Use this path if you want the fuller systems-design argument,
+implementation rationale, and downstream operational context:
+
+1. [README](README.md)
+2. [Shared terminology](docs/terminology.md)
+3. [Product Requirements](docs/product-requirements.md)
+4. [Pipeline Overview Diagram](docs/diagrams/source/media-asset-processing-pipeline-overview-diagram.drawio)
+5. [Batchability Cost Model](docs/batchability-cost-model.md)
+6. [Stage 1](pipeline_stages/001_metadata-foundation-and-query/README.md):
+   read the problem, governing principles, implementation, and takeaway
+7. [Stage 2](pipeline_stages/002_baseline-conditioning/README.md):
+   read the problem, governing principles, implementation, validation,
+   and takeaway
+8. [Stage 3](pipeline_stages/003_ai-semantic-mask-definition-propagation/README.md):
+   read the problem, governing principles, qualification flow,
+   validation examples, and takeaway
+9. [Stage 4](pipeline_stages/004_ml-readiness-handoff/README.md)
+10. [Stage 5](pipeline_stages/005_operational-serving-exports/README.md)
+11. [Scripts](scripts/python/README.md), [Outputs](outputs/README.md),
+    and [Tests](tests/README.md)
+12. [Terraform](infra/terraform/aws-centralized-assets/README.md)
+13. [Cloud Loader Contract](docs/cloud/stage5-loader-contract.md)
+14. [Architecture Decision Records](docs/adr)
+15. [Future Work](docs/future-work)
+
+<br>
+
+## Project Structure and Evidence
+
+The project has two complementary surfaces:
+
+The pipeline has five domain stages that describe how media assets are
+transformed. A cross-stage evidence and control layer operates across those
+stages, extracting state, validating transitions, preserving lineage, and
+packaging outputs for ML-readiness and operational serving.
+
+```text
+Stage 1 ─── Stage 2 ─── Stage 3 ─── Stage 4 ─── Stage 5
+   ╲          ╲          ╲          ╲          ╲
+    └──── Cross-Stage Evidence and Control Layer ────┘
+```
+
+1. **Workflow System Design and Operation** — Stages 1–3 document the
+   Lightroom-centered workflow, its transformation boundaries, manual review
+   points, rollback behavior, and governing principles.
+
+2. **Evidence, Handoff, and Serving** — Stages 4–5, supported by the repository
+   scripts and tests, extract structured state, validate outputs, generate
+   manifests, produce ML-readiness handoffs, and package operational serving
+   exports.
+
+The scripts and tests make the workflow inspectable and reproducible without
+claiming to replace Lightroom. This repository augments Adobe Lightroom rather
+than functioning as a standalone packaged application.
+
+The project’s claims are supported by two evidence modes:
+
+- **Workflow evidence:** stage prose, workflow images, operational notes, and
+  experiments explain why the boundaries, review points, and design patterns
+  exist.
+- **Executable evidence:** scripts, tests, manifests, validation reports,
+  handoff contracts, and serving exports make the resulting state inspectable
+  and operationally testable.
+
+These artifacts support workflow-behavior and solo-operator-efficiency claims
+while exposing assumptions for downstream operational or ML/data-science
+evaluation. They are not controlled benchmarks or universal performance claims.

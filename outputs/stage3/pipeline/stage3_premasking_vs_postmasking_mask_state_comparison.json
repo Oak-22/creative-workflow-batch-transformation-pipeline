@@ -569,7 +569,7 @@
       "changed": true
     }
   ],
-  "stage": "stage3_semantic_local_conditioning",
+  "stage": "stage3_ai_semantic_mask_definition_propagation",
   "state_labels": {
     "after_state": "postmasking",
     "before_state": "premasking"

@@ -267,7 +267,7 @@ def build_manifest(args: argparse.Namespace) -> dict[str, object]:
     probe_sequence = probe_artifact_sequence(args)
     validation = validation_status(mask_definition_comparison, mask_edit_comparison)
     return {
-        "stage": "stage3_semantic_local_conditioning",
+        "stage": "stage3_ai_semantic_mask_definition_propagation",
         "status": validation["status"],
         "pipeline_step": "05_build_stage3_manifest",
         "purpose": (

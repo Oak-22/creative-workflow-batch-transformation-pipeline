@@ -1,4 +1,4 @@
-# Production Workflow System Design & Implementation: AI Mask Definition Propagation
+# Production Workflow System Design & Implementation: AI Semantic Mask Definition Propagation
 
 Part of the **Media Asset Processing Pipeline** umbrella project.
 
@@ -526,7 +526,7 @@ manual editing stage that follows the pipeline.
 
 <br>
 
-![Updating AI settings progress](assets/images/004_ai-mask-definitions-propagation-progress.png)
+![Updating AI settings progress](assets/images/004_ai-semantic-mask-definition-propagation-progress.png)
 
 *Figure: Lightroom then runs the propagated AI mask definitions across
 the selected images as a batch recomputation step.*

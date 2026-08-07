@@ -94,7 +94,7 @@ binding, and mask-boundary quality as additional review surfaces.
 
 ## Stage-Level Value
 
-### Stage 1: Metadata Application, Enrichment, and Query
+### Stage 1: Metadata Foundation and Query
 
 Stage 1 shifts metadata work from repeated manual record maintenance to
 structured preset application, post-import enrichment, and reusable
@@ -117,7 +117,7 @@ manually trying to match brightness, tone, and color across many images
 late in the edit, the workflow establishes a comparable baseline early
 and protects it with Virtual Copy branches.
 
-### Stage 3: AI Mask Definition Propagation
+### Stage 3: AI Semantic Mask Definition Propagation
 
 Stage 3 focuses on semantic operations whose behavior depends on
 probabilistic AI segmentation. The savings come from defining reusable

@@ -111,6 +111,30 @@ This project does not aim to:
 
 <br>
 
+## Cross-Cutting Engineering Concepts
+
+These engineering concepts shape the architecture of the whole project
+rather than only one transformation step or stage:
+
+- business-goal-driven system design rather than isolated tool usage
+- tacit workflow knowledge converted into explicit evidence and
+  operational rules
+- deterministic orchestration around uncertain inputs and probabilistic
+  tool behavior
+- external checkpointing added where the underlying tool only provides
+  rolling mutable state
+- cost-shape modeling used to justify why batchability matters
+- stage-bounded validation and rollback logic instead of monolithic
+  editing flow
+- hybrid evidence model combining prose, diagrams, experiments,
+  artifacts, and scripts
+
+These concepts provide the architectural rationale for the stage boundaries,
+the cross-stage evidence and control layer, and the validation surfaces
+described below.
+
+<br>
+
 ## Evidence And Validation Model
 
 This project uses multiple evidence surfaces because no single type of

@@ -180,7 +180,7 @@ def build_asset_summary(args: argparse.Namespace, feature_inventory: dict[str, o
         if record["summary"].get("complete_handoff_feature_set")
     )
     return {
-        "stage": "stage5_operational_serving_layer",
+        "stage": "stage5_operational_serving_exports",
         "status": "complete",
         "summary": {
             "asset_count": len(records),
@@ -232,7 +232,7 @@ def build_feature_family_summary(
     """Build the Stage 5 feature-family serving export."""
     records = feature_family_records(feature_inventory)
     return {
-        "stage": "stage5_operational_serving_layer",
+        "stage": "stage5_operational_serving_exports",
         "status": "complete",
         "summary": {
             "feature_family_count": len(records),
@@ -301,7 +301,7 @@ def build_artifact_catalog(
     for stage, manifest in stage_manifests.items():
         records.extend(manifest_artifact_records(stage, manifest_paths[stage], manifest))
     return {
-        "stage": "stage5_operational_serving_layer",
+        "stage": "stage5_operational_serving_exports",
         "status": "complete",
         "summary": {
             "artifact_count": len(records),

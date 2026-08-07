@@ -1,5 +1,5 @@
 {
-  "stage": "stage5_operational_serving_layer",
+  "stage": "stage5_operational_serving_exports",
   "status": "complete",
   "summary": {
     "feature_family_count": 3,

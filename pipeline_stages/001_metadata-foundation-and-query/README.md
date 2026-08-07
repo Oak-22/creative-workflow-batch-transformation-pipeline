@@ -1,4 +1,4 @@
-# Production Workflow System Design & Implementation: Metadata Application, Enrichment, and Query
+# Production Workflow System Design & Implementation: Metadata Foundation and Query
 
 Part of the **Media Asset Processing Pipeline** umbrella project.
 
