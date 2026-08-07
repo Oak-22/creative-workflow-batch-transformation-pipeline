@@ -471,7 +471,7 @@ def main() -> None:
         for xmp_path in xmp_paths(input_root)
     ]
     output = {
-        "stage": "stage3_semantic_local_conditioning",
+        "stage": "stage3_ai_semantic_mask_definition_propagation",
         "spike_name": "proof_of_capability_mask_sidecar_parsing",
         "status": "complete",
         "input_model": args.input_model,

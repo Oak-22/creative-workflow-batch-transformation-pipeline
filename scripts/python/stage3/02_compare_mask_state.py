@@ -207,7 +207,7 @@ def build_comparison(args: argparse.Namespace) -> dict[str, object]:
         else "complete_with_asset_mismatch"
     )
     return {
-        "stage": "stage3_semantic_local_conditioning",
+        "stage": "stage3_ai_semantic_mask_definition_propagation",
         "comparison_model": args.comparison_model,
         "status": status,
         "state_labels": {

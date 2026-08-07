@@ -1,5 +1,5 @@
 {
-  "stage": "stage1_metadata_application_enrichment_query",
+  "stage": "stage1_metadata_foundation_and_query",
   "status": "validated",
   "pipeline_step": "04_build_stage1_manifest",
   "inputs": {

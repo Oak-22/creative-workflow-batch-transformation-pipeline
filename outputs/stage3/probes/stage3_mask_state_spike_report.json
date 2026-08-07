@@ -404,7 +404,7 @@
   "reference_model": "stage2_postconditioning_state_as_stage3_presegmentation",
   "reference_root": "data/stage3/spikes/proof_of_capability_mask_sidecar_parsing/presegmentation",
   "spike_name": "proof_of_capability_mask_sidecar_parsing",
-  "stage": "stage3_semantic_local_conditioning",
+  "stage": "stage3_ai_semantic_mask_definition_propagation",
   "status": "complete",
   "summary": {
     "acr_sidecar_count": 1,

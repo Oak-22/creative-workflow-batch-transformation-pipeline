@@ -726,7 +726,7 @@ the selected images are branched into an initial working state so cleanup
 and normalization do not overwrite the original culled selection. After
 Operation 2 establishes a stable luminance and scene-color baseline,
 additional Virtual Copy branches protect that baseline from
-operator-induced drift as the dataset progresses to the next stage (Stage 3: AI Mask Definition Propagation) and beyond.
+operator-induced drift as the dataset progresses to the next stage (Stage 3: AI Semantic Mask Definition Propagation) and beyond.
 
 Virtual Copies provide a lightweight lineage mechanism for alternate edit
 paths: instead of overwriting a single edit history, the workflow can

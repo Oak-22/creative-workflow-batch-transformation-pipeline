@@ -152,7 +152,7 @@ outputs/stage5/stage5_manifest.json
 The manifest must declare:
 
 ```text
-stage = stage5_operational_serving_layer
+stage = stage5_operational_serving_exports
 status = complete
 export_sequence[]
 summary.asset_count
@@ -201,7 +201,7 @@ The loader must fail fast if:
 
 - `stage5_manifest.json` is missing
 - the manifest is not valid JSON
-- manifest `stage` is not `stage5_operational_serving_layer`
+- manifest `stage` is not `stage5_operational_serving_exports`
 - manifest `status` is not `complete`
 - an expected export role is missing
 - an artifact path points outside `outputs/stage5/`

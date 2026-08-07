@@ -95,7 +95,7 @@ def build_manifest(args: argparse.Namespace) -> dict[str, object]:
     if not isinstance(artifact_catalog_summary, dict):
         artifact_catalog_summary = {}
     return {
-        "stage": "stage5_operational_serving_layer",
+        "stage": "stage5_operational_serving_exports",
         "status": "complete",
         "summary": {
             "asset_count": asset_summary_summary.get("asset_count"),
