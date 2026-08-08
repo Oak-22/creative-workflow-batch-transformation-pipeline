@@ -11,36 +11,43 @@ downstream ML readiness.
 
 ## Executive Summary
 
-The repository models the workflow as a reproducible, multi-stage
-system with explicit boundaries, non-destructive state transitions, and
-validation checkpoints. Even when executed inside GUI-based tools, the
-workflow is designed with production system qualities rather than an ad
-hoc editing sequence.
+This project turns a manual Lightroom workflow into a staged delivery
+pipeline with explicit boundaries, non-destructive state transitions, and
+validation checkpoints at each handoff.
 
 The core engineering pattern is deterministic orchestration around
-uncertain inputs: creative image variance from heterogeneous capture
-conditions, and probabilistic semantic segmentation behavior from AI
-masking tools.
+uncertain inputs: creative variance from heterogeneous capture conditions,
+and probabilistic behavior from AI segmentation tools. Stage 3 puts a
+number on what that buys. Propagating nine qualified mask definitions
+across a 64-image gallery took ~7 minutes of observed batch runtime
+against a modeled ~96-minute manual baseline — roughly 93% less operator
+time on that mask-application work ([batchability cost model](docs/batchability-cost-model.md#stage-3-measured-experiment),
+[Stage 3 evidence](pipeline_stages/003_ai-semantic-mask-definition-propagation/README.md)).
 
-Across the documented stages, the project demonstrates how ingest-time
-metadata application, image normalization, and semantic masking can be
-composed into a deterministic workflow that scales more reliably than
-repeated manual editing.
+The batch operations themselves run inside Lightroom. What this repository
+adds is the evidence layer around them: Python scripts extract develop
+settings and mask state from XMP sidecars, compare pre- and post-stage
+state, and generate manifests, an ML-readiness handoff, and serving
+exports. That makes each transition inspectable after the fact rather than
+inferred from memory.
 
 <br>
 
 ## Problem
 
-Creative production workflows often accumulate as several informal, ad hoc editing
-habits inside GUI tools, making them hard to reproduce, audit, and
-scale across large image datasets. Without explicit stage boundaries and
-validation checkpoints, small inconsistencies can compound via operator drift causing laborous rework. Weak rollback safety then makes those inconsistencies more costly to contain once they spread through the working set.
+Creative production workflows often accumulate as informal editing habits
+inside GUI tools, which makes them hard to reproduce, audit, and scale
+across large image datasets. Without explicit stage boundaries and
+validation checkpoints, small inconsistencies compound into operator drift
+and rework, and weak rollback safety makes them costly to contain once they
+spread through the working set.
 
-The core systems problem is therefore not only how to optimally perform isolated
-editing operations, but how to organize them into a stable pipeline
-that remains batch-safe under real tooling limitations, heterogeneous
-creative input data, and AI-assisted operations (auto-masking) with partial,
-non-binary failure modes.
+The systems problem is therefore broader than optimizing isolated editing
+operations. The workflow has to stay batch-safe under mutable GUI state,
+heterogeneous creative inputs, and AI-assisted masking with partial,
+non-binary failure modes. It also has to leave durable evidence behind, so
+a later operator, script, cloud loader, or ML reviewer can tell what
+changed, what was validated, and what remains uncertain.
 
 <br>
 
